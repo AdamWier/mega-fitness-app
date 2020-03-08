@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TextInput } from 'react-native';
+import { StyleSheet, View, TextInput, FlatList, Text } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
 import H1 from '../components/H1';
 import USDAapiHelper from '../ApiHelpers/USDAApi';
@@ -8,9 +8,11 @@ export default function Search() {
   const USDAapi = new USDAapiHelper();
 
   const [searchText, updateSearchText] = useState("");
+  const [results, updateResults] = useState([]);
 
-  const handleSubmit = () => {
-    USDAapi.search();
+  const handleSubmit = async () => {
+    const descriptions = await USDAapi.search(searchText);
+    updateResults(descriptions);
     updateSearchText("");
   }
 
@@ -19,6 +21,7 @@ export default function Search() {
         <H1 text="Search for food"/>
         <TextInput style={styles.textInput} value={searchText} onChangeText={(text) => updateSearchText(text)} />
         <PrimaryButton text="Search" onPress={() => handleSubmit()} />
+        <FlatList data={results} renderItem={(item) => <Text style={styles.text}>{'\u2B24'} {item.item}</Text>} />
     </View>
   );
 }
@@ -32,8 +35,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#fff',
-    fontSize: 30,
-    textAlign: 'center',
+    fontSize: 15,
   },
   test: {
     alignItems: 'center',
