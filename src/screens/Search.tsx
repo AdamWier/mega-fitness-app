@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import { StyleSheet, View, TextInput } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
 import H1 from '../components/H1';
+import USDAapiHelper from '../ApiHelpers/USDAApi';
 
 export default function Search() {
+  const USDAapi = new USDAapiHelper();
+
   const [searchText, updateSearchText] = useState("");
 
   const handleSubmit = () => {
-    console.log(searchText);
-    fetch(`https://swapi.co/api/people/1`).then(result => result.json().then(json => console.log(json)));
+    USDAapi.search();
     updateSearchText("");
   }
 
