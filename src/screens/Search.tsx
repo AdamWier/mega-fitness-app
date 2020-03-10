@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { StyleSheet, View, TextInput, FlatList, Text } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
 import H1 from '../components/H1';
-import USDAapiHelper from '../ApiHelpers/USDAApi';
+import USDAapiHelperImpl from '../ApiHelpers/USDAApiImpl';
 
 export default function Search() {
-  const USDAapi = new USDAapiHelper();
+  const USDAapi = new USDAapiHelperImpl();
 
   const [searchText, updateSearchText] = useState("");
   const [results, updateResults] = useState([]);

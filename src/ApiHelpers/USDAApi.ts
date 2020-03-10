@@ -1,14 +1,28 @@
-import { USDA_KEY } from 'react-native-dotenv';
+export interface Helper {
+    search(searchText: string): Promise<any>
+}
 
-export default class USDAApiHelper{
-    URI: string;
+export interface USDAApiResult {
+    foodSearchCriteria: any
+    totalHits: number
+    currentPage: number
+    totalPages: number
+    foods: USDAFood[]
+}
 
-    constructor(){
-        this.URI = `https://api.nal.usda.gov/fdc/v1/search?api_key=${USDA_KEY}`
-    }
-
-    async search(searchText: string): Promise<any>{
-        const json = await (await fetch(this.URI.concat(`&generalSearchInput=${searchText}`))).json();
-        return json.foods.map(food => food.description);
-    }
+export interface USDAFood {
+    fdcId: number
+    description: string
+    scientificName?: string
+    commonNames?: any
+    additionalDescriptions?: string
+    dataType: string
+    foodCode?: string
+    gtinUpc?: string,
+    ndbNumber?: string
+    publishedDate: string
+    brandOwner?: string
+    ingredients: string
+    allHighlightFields: string
+    score: number
 }
