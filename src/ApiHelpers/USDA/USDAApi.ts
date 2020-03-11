@@ -1,3 +1,5 @@
+import { APITypes } from "../APITypes";
+
 export interface Helper {
     search(searchText: string): Promise<any>
 }
@@ -25,4 +27,10 @@ export interface USDAFood {
     ingredients: string
     allHighlightFields: string
     score: number
+}
+
+export interface USDASearchResult {
+    description: string,
+    fdcId: number,
+    api: APITypes.USDA
 }

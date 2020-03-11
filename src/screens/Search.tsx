@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { StyleSheet, View, TextInput, FlatList, Text } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
 import H1 from '../components/H1';
-import USDAapiHelperImpl from '../ApiHelpers/USDAApiImpl';
+import USDAApiImpl from '../ApiHelpers/USDA/USDAApiImpl';
 
 export default function Search() {
-  const USDAapi = new USDAapiHelperImpl();
+  const USDAapi = new USDAApiImpl();
 
   const [searchText, updateSearchText] = useState("");
   const [results, updateResults] = useState([]);
@@ -21,7 +21,7 @@ export default function Search() {
         <H1 text="Search for food"/>
         <TextInput style={styles.textInput} value={searchText} onChangeText={(text) => updateSearchText(text)} />
         <PrimaryButton text="Search" onPress={() => handleSubmit()} />
-        <FlatList data={results} renderItem={(item) => <Text style={styles.text}>{'\u2B24'} {item.item}</Text>} />
+        <FlatList data={results} renderItem={({item}) => <Text style={styles.text}>{'\u2B24'} {item.description}</Text>} />
     </View>
   );
 }
