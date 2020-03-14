@@ -1,20 +1,29 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import Search from './screens/Search';
+import Details from './screens/Details';
 
-export default function App() {
+const Stack = createStackNavigator();
+
+function App() {
   return (
-    <View style={styles.container}>
-      <Search />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{
+          headerStyle: {
+            backgroundColor: '#375a7f',
+            flexWrap: 'wrap'
+          },
+          headerTitleStyle: {
+            color: '#fff',
+          },
+          headerTintColor: 'rgba(255, 255, 255, 0.6)'
+      }}>
+        <Stack.Screen name='Search' component={Search} />
+        <Stack.Screen name='Details' component={Details} options={({ route }) => ({ title: `${route.params.details.name.split(',')[0]} details` })} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#222222',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;

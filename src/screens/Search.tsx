@@ -4,7 +4,7 @@ import PrimaryButton from '../components/PrimaryButton';
 import H1 from '../components/H1';
 import USDAApiImpl from '../ApiHelpers/USDA/USDAApiImpl';
 
-export default function Search() {
+export default function Search({ navigation }) {
   const USDAapi = new USDAApiImpl();
 
   const [searchText, updateSearchText] = useState("");
@@ -16,12 +16,13 @@ export default function Search() {
     updateSearchText("");
   }
 
-  const goToFoodDetails = (id: number) => {
-    USDAapi.getDetails(id);
+  const goToFoodDetails = async (id: number) => {
+    const details = await USDAapi.getDetails(id);
+    navigation.navigate('Details', {details});
   }
 
   return (
-    <View style={styles.test}>
+    <View style={styles.container}>
         <H1 text="Search for food"/>
         <TextInput style={styles.textInput} value={searchText} onChangeText={(text) => updateSearchText(text)} />
         <PrimaryButton text="Search" onPress={() => handleSubmit()} />
@@ -41,8 +42,10 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 15,
   },
-  test: {
+  container: {
     alignItems: 'center',
     justifyContent: 'center',
+    flex: 1,
+    backgroundColor: '#222222',
   }
 });
