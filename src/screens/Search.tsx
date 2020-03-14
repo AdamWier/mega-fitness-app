@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TextInput, FlatList, Text } from 'react-native';
+import { StyleSheet, View, TextInput, FlatList, Text, TouchableOpacity } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
 import H1 from '../components/H1';
 import USDAApiImpl from '../ApiHelpers/USDA/USDAApiImpl';
@@ -16,12 +16,16 @@ export default function Search() {
     updateSearchText("");
   }
 
+  const goToFoodDetails = (id: number) => {
+    USDAapi.getDetails(id);
+  }
+
   return (
     <View style={styles.test}>
         <H1 text="Search for food"/>
         <TextInput style={styles.textInput} value={searchText} onChangeText={(text) => updateSearchText(text)} />
         <PrimaryButton text="Search" onPress={() => handleSubmit()} />
-        <FlatList data={results} renderItem={({item}) => <Text style={styles.text}>{'\u2B24'} {item.description}</Text>} />
+        <FlatList data={results} renderItem={({item}) => <TouchableOpacity onPress={() => goToFoodDetails(item.fdcId)}><Text style={styles.text}>{'\u2B24'} {item.description}</Text></TouchableOpacity>} />
     </View>
   );
 }
