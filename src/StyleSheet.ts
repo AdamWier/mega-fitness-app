@@ -2,7 +2,7 @@ import { Theme } from 'react-native-elements';
 import { DefaultTheme } from '@react-navigation/native';
 
 interface MyTheme extends Theme {
-  colors: {[key: string]: string}
+  colors: {[key: string]: string};
 }
 
 const colors = {
@@ -18,14 +18,14 @@ const colors = {
 export const navTheme = {
   ...DefaultTheme,
   colors,
-}
+};
 
 export const theme = {
   Text: {
     style: {
       color: colors.text,
       textAlign: 'center',
-    }
+    },
   },
   Button: {
     buttonStyle: {
@@ -35,7 +35,7 @@ export const theme = {
     containerStyle: {
       margin: 10,
       backgroundColor: colors.background,
-    } 
+    },
   },
   ListItem: {
     titleStyle: {
@@ -57,10 +57,10 @@ export const theme = {
     },
     titleStyle: {
       color: colors.text,
-    }
+    },
   },
   Slider: {
-    thumbTintColor: colors.success
+    thumbTintColor: colors.success,
   },
   colors,
 } as MyTheme;

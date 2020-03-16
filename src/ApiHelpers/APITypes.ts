@@ -1,3 +1,3 @@
 export enum APITypes{
-    USDA = "USDA"
+    USDA = 'USDA'
 }

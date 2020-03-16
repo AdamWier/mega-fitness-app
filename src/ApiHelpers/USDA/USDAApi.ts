@@ -1,4 +1,4 @@
-import { APITypes } from "../APITypes";
+import { APITypes } from '../APITypes';
 
 export interface Helper {
     search(searchText: string): Promise<USDAFood[]>;
@@ -42,11 +42,11 @@ export interface USDAFoodDetailsResult {
     changes: string;
     dataType: string;
     description: string;
-    endDate: string; 
+    endDate: string;
     fdcId: number;
     foodAttributes?: FoodAttribute[];
     // So far, always an empty array
-    foodComponents?: Array<any>;
+    foodComponents?: Array<USDAFood>;
     foodNutrients?: Nutrient[];
     foodPortions?: FoodPortion[];
     inputFoods: InputFood[];
@@ -55,7 +55,7 @@ export interface USDAFoodDetailsResult {
     wweiaFoodCategory: {
         wweiaFoodCategoryCode: number;
         wweiaFoodCategoryDescription: string;
-    }
+    };
 }
 
 export interface USDAFoodDetails {
@@ -78,22 +78,22 @@ interface InputFood {
             code: string;
             description: string;
             id: number;
-        }
+        };
     foodClass: string;
     publicationDate: string;
     tableAliasName: string;
-    }
+    };
 }
 
 interface FoodAttribute {
     id: number;
     sequenceNumber: number;
-    value: string
+    value: string;
     foodAttributeType: {
         description: string;
         id: number;
         name: FoodAttributeName;
-    }
+    };
 }
 
 enum FoodAttributeName {
@@ -110,13 +110,13 @@ interface Nutrient {
         name: NutrientName | string;
         number: string;
         rank: number;
-        unitName: Unit
+        unitName: Unit;
     };
     type: NutrientType | string;
 }
 
 enum NutrientType {
-    FoodNutrient = "FoodNutrient",
+    FoodNutrient = 'FoodNutrient',
 }
 
 enum Unit {
@@ -147,13 +147,13 @@ interface FoodPortion{
         abbreviation: string;
         id: number;
         name: string;
-    },
+    };
     modifier: string;
     portionDescription?: string;
     sequenceNumber: number;
 }
 
 export interface FormattedPortion {
-    description: string,
+    description: string;
     weight: number;
 }
