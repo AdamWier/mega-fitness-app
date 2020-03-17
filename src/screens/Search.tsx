@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TextInput, FlatList, Text, TouchableOpacity } from 'react-native';
+import { View, TextInput, FlatList, Text, TouchableOpacity } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
-import H1 from '../components/H1';
 import USDAApiImpl from '../ApiHelpers/USDA/USDAApiImpl';
+import globalStyle from '../components/StyleSheet';
 
 export default function Search({ navigation }) {
   const USDAapi = new USDAApiImpl();
@@ -11,8 +11,7 @@ export default function Search({ navigation }) {
   const [results, updateResults] = useState([]);
 
   const handleSubmit = async () => {
-    const descriptions = await USDAapi.search(searchText);
-    updateResults(descriptions);
+    updateResults(await USDAapi.search(searchText));
     updateSearchText("");
   }
 
@@ -22,30 +21,19 @@ export default function Search({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
-        <H1 text="Search for food"/>
-        <TextInput style={styles.textInput} value={searchText} onChangeText={(text) => updateSearchText(text)} />
+    <View style={globalStyle.container}>
+        <Text style={globalStyle.H1}>Search for food</Text>
+        <TextInput style={globalStyle.textInput} value={searchText} onChangeText={(text) => updateSearchText(text)} />
         <PrimaryButton text="Search" onPress={() => handleSubmit()} />
-        <FlatList data={results} renderItem={({item}) => <TouchableOpacity onPress={() => goToFoodDetails(item.fdcId)}><Text style={styles.text}>{'\u2B24'} {item.description}</Text></TouchableOpacity>} />
+        {results.length ?
+          <FlatList data={results} renderItem={({item}) => 
+            <TouchableOpacity onPress={() => goToFoodDetails(item.fdcId)}>
+              <Text style={globalStyle.text}>{'\u2B24'} {item.description}</Text>
+            </TouchableOpacity>
+          }
+          keyExtractor={(item, index) => index.toString()}
+          />
+        : null}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  textInput: {
-    height: 40,
-    width: 300,
-    backgroundColor: '#FDFFFE',
-    textAlign: 'center',
-  },
-  text: {
-    color: '#fff',
-    fontSize: 15,
-  },
-  container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    backgroundColor: '#222222',
-  }
-});

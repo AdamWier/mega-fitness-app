@@ -12,15 +12,17 @@ function App() {
       <Stack.Navigator screenOptions={{
           headerStyle: {
             backgroundColor: '#375a7f',
-            flexWrap: 'wrap'
           },
           headerTitleStyle: {
             color: '#fff',
           },
-          headerTintColor: 'rgba(255, 255, 255, 0.6)'
+          headerTintColor: 'rgba(255, 255, 255, 0.6)',
       }}>
         <Stack.Screen name='Search' component={Search} />
-        <Stack.Screen name='Details' component={Details} options={({ route }) => ({ title: `${route.params.details.name.split(',')[0]} details` })} />
+        <Stack.Screen name='Details' component={Details} 
+          options={({ route }) => ({ 
+            title: route.params.details.name, 
+          })} />
       </Stack.Navigator>
     </NavigationContainer>
   );

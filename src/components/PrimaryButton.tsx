@@ -1,17 +1,17 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import globalStyle from './StyleSheet';
 
 export default function PrimaryButton({text, onPress}) {
   return (
     <TouchableOpacity style={styles.buttonPrimary} onPress={onPress}>
-        <Text style={styles.text}>{text}</Text>
+        <Text style={[globalStyle.text, styles.text]}>{text}</Text>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   text: {
-    color: '#fff',
     fontSize: 30,
     textAlign: 'center',
   },

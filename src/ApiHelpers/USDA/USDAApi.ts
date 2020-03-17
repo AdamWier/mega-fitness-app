@@ -1,8 +1,10 @@
 import { APITypes } from "../APITypes";
 
 export interface Helper {
-    search(searchText: string): Promise<USDAFood[]>
-    getDetails(foodId: number): Promise<USDAFoodDetails>
+    search(searchText: string): Promise<USDAFood[]>;
+    getDetails(foodId: number): Promise<USDAFoodDetails>;
+    getNutrient(food: USDAFoodDetailsResult, nutrient: NutrientName): number;
+    sortFoods(a: USDAFoodSearchResult, b: USDAFoodSearchResult): number;
 }
 
 export interface USDASearchApiResult {
@@ -13,7 +15,7 @@ export interface USDASearchApiResult {
     foods: USDAFoodSearchResult[];
 }
 
-interface USDAFoodSearchResult {
+export interface USDAFoodSearchResult {
     fdcId: number;
     description: string;
     scientificName?: string;
