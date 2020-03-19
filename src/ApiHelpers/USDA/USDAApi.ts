@@ -64,6 +64,7 @@ export interface USDAFoodDetails {
     protein: number;
     fats: number;
     carbs: number;
+    portions: FormattedPortion[];
 }
 
 interface InputFood {
@@ -148,6 +149,11 @@ interface FoodPortion{
         name: string;
     },
     modifier: string;
-    portionDescription: string;
+    portionDescription?: string;
     sequenceNumber: number;
+}
+
+export interface FormattedPortion {
+    description: string,
+    weight: number;
 }
