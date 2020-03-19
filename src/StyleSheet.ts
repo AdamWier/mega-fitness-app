@@ -10,7 +10,8 @@ const colors = {
   text: '#ffffff',
   primary: '#375a7f',
   background: '#222222',
-  success: '#00bc8c'
+  success: '#00bc8c',
+  danger: '#E74C3C',
 }
 
 export const navTheme = {

@@ -1,13 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, ListItem, Slider } from 'react-native-elements';
 import { USDAFoodDetails } from '../ApiHelpers/USDA/USDAApi';
-import { ScrollView, Picker } from 'react-native';
+import { ScrollView } from 'react-native';
+import AmountPicker from '../components/AmountPicker';
 
-export default function Search({ route }) {
+export default function Details({ route }) {
 
   const details: USDAFoodDetails = route.params.details;
 
-  const [amount, changeAmount] = useState(1)
+  const calculateValues = () => {
+    const calories = Math.round(details.calories * amount * currentPortion.weight).toString();
+    const protein = Math.round(details.protein * amount * currentPortion.weight).toString();
+    const carbs = Math.round(details.carbs * amount * currentPortion.weight).toString();
+    const fats = Math.round(details.fats * amount * currentPortion.weight).toString();
+    return {
+      calories,
+      protein,
+      carbs,
+      fats
+    }
+  }
+
+  const [amount, changeAmount] = useState(1);
+  const [currentPortion, changePortion] = useState(details.portions[0]);
+  const [currentCalculations, updateCurrentCalculations] = useState(calculateValues());
+
+  useEffect(() => {
+    updateCurrentCalculations(calculateValues());
+  }, [amount, currentPortion])
 
   return (
     <ScrollView>
@@ -19,37 +39,49 @@ export default function Search({ route }) {
           />
           <ListItem
             title="Calories:"
-            subtitle={details.calories.toString()}
+            subtitle={currentCalculations.calories}
             chevron={false}
           />
           <ListItem
             title="Protein:"
-            subtitle={details.protein.toString()}
+            subtitle={currentCalculations.protein}
             chevron={false}
           />
           <ListItem
             title="Carbs:"
-            subtitle={details.carbs.toString()}
+            subtitle={currentCalculations.carbs}
             chevron={false}
           />
           <ListItem
             title="Fat:"
-            subtitle={details.fats.toString()}
+            subtitle={currentCalculations.fats}
             chevron={false}
           />
           <ListItem 
             title="Amount:"
-            subtitle={`${amount} g`}
+            subtitle={`${amount} ${currentPortion.description}`}
             chevron={false}
           />
-          <Slider 
-            step={1} 
-            minimumValue={1} 
-            maximumValue={1000} 
-            value={amount} 
-            onValueChange={value => changeAmount(value)}
+          <AmountPicker 
+            amounts={details.portions} 
+            selectedValue={currentPortion.description} 
+            onValueChange={
+              (selection) => {
+                const newPortion = details.portions.find(portion => 
+                  selection === portion.description
+                );
+                changePortion(newPortion);
+              }
+            } 
           />
-      </Card>
-    </ScrollView>
+          <Slider 
+             step={1} 
+             minimumValue={1} 
+             maximumValue={1000} 
+             value={amount} 
+             onValueChange={value => changeAmount(value)}
+           />
+       </Card>
+     </ScrollView>
   );
 }

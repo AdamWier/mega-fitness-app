@@ -64,7 +64,7 @@ export default class USDAApiImpl implements Helper{
             })), 
             {
             weight: 1,
-            description: 'grame',
+            description: 'gram',
             }
         ];
     }
