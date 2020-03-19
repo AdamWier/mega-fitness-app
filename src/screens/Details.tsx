@@ -1,20 +1,38 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { Card, ListItem } from 'react-native-elements';
 import { USDAFoodDetails } from '../ApiHelpers/USDA/USDAApi';
-import globalStyle from '../components/StyleSheet';
 
 export default function Search({ route }) {
 
   const details: USDAFoodDetails = route.params.details;
 
   return (
-    <View style={globalStyle.container}>
-        <Text style={globalStyle.H1}>Details</Text>
-        <Text style={globalStyle.text}>Name: {details.name} </Text>
-        <Text style={globalStyle.text}>Calories: {details.calories}</Text>
-        <Text style={globalStyle.text}>Protein: {details.protein}</Text>
-        <Text style={globalStyle.text}>Carbohydrates: {details.carbs}</Text>
-        <Text style={globalStyle.text}>Fats: {details.fats}</Text>
-    </View>
+    <Card title="Details">
+        <ListItem
+          title="Name:"
+          subtitle={details.name}
+          chevron={false}
+        />
+        <ListItem
+          title="Calories:"
+          subtitle={details.calories.toString()}
+          chevron={false}
+        />
+        <ListItem
+          title="Protein:"
+          subtitle={details.protein.toString()}
+          chevron={false}
+        />
+        <ListItem
+          title="Carbs:"
+          subtitle={details.carbs.toString()}
+          chevron={false}
+        />
+        <ListItem
+          title="Fat:"
+          subtitle={details.fats.toString()}
+          chevron={false}
+        />
+    </Card>
   );
 }
