@@ -5,21 +5,33 @@ interface MyTheme extends Theme {
   colors: {[key: string]: string}
 }
 
+const colors = {
+  ...DefaultTheme.colors,
+  text: '#ffffff',
+  primary: '#375a7f',
+  background: '#222222'
+}
+
+export const navTheme = {
+  ...DefaultTheme,
+  colors,
+}
+
 export const theme = {
   Text: {
     style: {
-      color: '#ffffff',
-      textAlign: 'center'
+      color: colors.text,
+      textAlign: 'center',
     }
   },
   Button: {
     buttonStyle: {
-      backgroundColor: '#375a7f',
+      backgroundColor: colors.primary,
       borderRadius: 10,
     },
     containerStyle: {
       margin: 10,
-      backgroundColor: '#222222'
+      backgroundColor: colors.background,
     } 
   },
   ListItem: {
@@ -27,30 +39,22 @@ export const theme = {
       textAlign: 'left',
     },
     subtitleStyle: {
-      color: '#ffffff',
+      color: colors.text,
       textAlign: 'right',
     },
-    containerStyle: {backgroundColor: '#222222'},
+    containerStyle: {
+      backgroundColor: colors.background,
+    },
     chevron: true,
     bottomDivider: true,
   },
   Card: {
     containerStyle: {
-      backgroundColor: '#222222'
+      backgroundColor: colors.background,
     },
     titleStyle: {
-      color: '#ffffff'
+      color: colors.text,
     }
   },
-  colors: {
-    backgroundColor: '#222222'
-  }
+  colors,
 } as MyTheme;
-
-export const navTheme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    background: theme.colors.backgroundColor
-  }
-}

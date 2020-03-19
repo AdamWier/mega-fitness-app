@@ -27,7 +27,10 @@ export default function Search({ navigation }) {
   return (
     <View>
         <Text h1>Search for food</Text>
-        <SearchBar value={searchText} onChangeText={(text) => updateSearchText(text)} />
+        <SearchBar 
+          value={searchText} 
+          onChangeText={(text) => updateSearchText(text)} 
+        />
         <Button 
           type={!searchText ? "outline" : "solid"} 
           disabled={!searchText} 

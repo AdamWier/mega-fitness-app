@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, ListItem } from 'react-native-elements'
+import { Card, ListItem } from 'react-native-elements';
 import { USDAFoodDetails } from '../ApiHelpers/USDA/USDAApi';
 
 export default function Search({ route }) {
