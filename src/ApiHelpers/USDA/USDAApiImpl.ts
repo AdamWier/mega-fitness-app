@@ -1,5 +1,5 @@
 import { USDA_KEY } from 'react-native-dotenv';
-import { USDASearchApiResult, USDAFood, Helper, USDAFoodDetails, USDAFoodDetailsResult, NutrientName, USDAFoodSearchResult } from './USDAApi';
+import { USDASearchApiResult, USDAFood, Helper, USDAFoodDetails, USDAFoodDetailsResult, NutrientName, USDAFoodSearchResult, FormattedPortion } from './USDAApi';
 import { APITypes } from '../APITypes';
 
 export default class USDAApiImpl implements Helper{
@@ -32,19 +32,21 @@ export default class USDAApiImpl implements Helper{
         const protein = this.getNutrient(food, NutrientName.Protein);
         const fats =  this.getNutrient(food, NutrientName.Fat);
         const carbs = this.getNutrient(food, NutrientName.Carbs);
+        const portions = this.getPortions(food);
         return {
             name,
             calories,
             protein,
             fats,
-            carbs, 
+            carbs,
+            portions 
         }
     }
 
     getNutrient(food: USDAFoodDetailsResult, nutrient: NutrientName): number {
         return food.foodNutrients.find(
             foodNutrient => foodNutrient.nutrient.name === nutrient
-        ).amount;
+        ).amount/100;
     }
 
     sortFoods(a: USDAFoodSearchResult, b: USDAFoodSearchResult): number {
@@ -52,5 +54,18 @@ export default class USDAApiImpl implements Helper{
         if (!a.scientificName && b.scientificName) return 1;
         if(b.score - a.score === 0) return parseInt(a.ndbNumber, 10) - parseInt(b.ndbNumber, 10);
         return b.score - a.score;
+    }
+
+    getPortions(food: USDAFoodDetailsResult): FormattedPortion[] {
+        return [
+            ...food.foodPortions.map(portion => ({
+                weight: portion.gramWeight,
+                description: portion.modifier
+            })), 
+            {
+            weight: 1,
+            description: 'gram',
+            }
+        ];
     }
 }

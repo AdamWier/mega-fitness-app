@@ -9,7 +9,9 @@ const colors = {
   ...DefaultTheme.colors,
   text: '#ffffff',
   primary: '#375a7f',
-  background: '#222222'
+  background: '#222222',
+  success: '#00bc8c',
+  danger: '#E74C3C',
 }
 
 export const navTheme = {
@@ -55,6 +57,9 @@ export const theme = {
     titleStyle: {
       color: colors.text,
     }
+  },
+  Slider: {
+    thumbTintColor: colors.success
   },
   colors,
 } as MyTheme;
