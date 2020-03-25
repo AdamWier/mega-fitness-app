@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Card, ListItem, Slider } from 'react-native-elements';
+import { Card, ListItem, Slider, Button } from 'react-native-elements';
 import { USDAFoodDetails } from '../ApiHelpers/USDA/USDAApi';
 import { ScrollView } from 'react-native';
 import AmountPicker from '../components/AmountPicker';
+import FoodCard from '../components/FoodCard';
 
-export default function Details({ route }) {
+export default function Details({ navigation, route, meal, updateMeal }) {
 
   const details: USDAFoodDetails = route.params.details;
 
@@ -18,7 +19,20 @@ export default function Details({ route }) {
       protein,
       carbs,
       fats
-    }
+    };
+  };
+
+  const addFood = () => {
+    const { calories, protein, fats, carbs } = currentCalculations;
+      updateMeal([...meal, {
+        name: details.name,
+        portion: `${amount} ${currentPortion.description}`,
+        calories,
+        protein,
+        fats,
+        carbs,
+      }]);
+    navigation.navigate("Day");
   }
 
   const [amount, changeAmount] = useState(1);
@@ -27,42 +41,19 @@ export default function Details({ route }) {
 
   useEffect(() => {
     updateCurrentCalculations(calculateValues());
-  }, [amount, currentPortion])
+  }, [amount, currentPortion]);
 
   return (
     <ScrollView>
-      <Card title="Details">
-          <ListItem
-            title="Name:"
-            subtitle={details.name}
-            chevron={false}
-          />
-          <ListItem
-            title="Calories:"
-            subtitle={currentCalculations.calories}
-            chevron={false}
-          />
-          <ListItem
-            title="Protein:"
-            subtitle={currentCalculations.protein}
-            chevron={false}
-          />
-          <ListItem
-            title="Carbs:"
-            subtitle={currentCalculations.carbs}
-            chevron={false}
-          />
-          <ListItem
-            title="Fat:"
-            subtitle={currentCalculations.fats}
-            chevron={false}
-          />
-          <ListItem 
-            title="Amount:"
-            subtitle={`${amount} ${currentPortion.description}`}
-            chevron={false}
-          />
-          <AmountPicker 
+      <FoodCard 
+        name={details.name} 
+        portion={`${amount} ${currentPortion.description}`} 
+        calories={currentCalculations.calories}
+        protein={currentCalculations.protein} 
+        carbs={currentCalculations.carbs} 
+        fats={currentCalculations.fats} 
+      >
+      <AmountPicker 
             amounts={details.portions} 
             selectedValue={currentPortion.description} 
             onValueChange={
@@ -81,7 +72,10 @@ export default function Details({ route }) {
              value={amount} 
              onValueChange={value => changeAmount(value)}
            />
-       </Card>
+           </FoodCard>
+       <Button title="Add food" onPress={() => {
+         addFood();
+       }} />
      </ScrollView>
   );
 }
