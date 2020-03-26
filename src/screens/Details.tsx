@@ -10,10 +10,10 @@ export default function Details({ navigation, route, meal, updateMeal }) {
   const details: USDAFoodDetails = route.params.details;
 
   const calculateValues = () => {
-    const calories = Math.round(details.calories * amount * currentPortion.weight).toString();
-    const protein = Math.round(details.protein * amount * currentPortion.weight).toString();
-    const carbs = Math.round(details.carbs * amount * currentPortion.weight).toString();
-    const fats = Math.round(details.fats * amount * currentPortion.weight).toString();
+    const calories = Math.round(details.calories * amount * currentPortion.weight);
+    const protein = Math.round(details.protein * amount * currentPortion.weight);
+    const carbs = Math.round(details.carbs * amount * currentPortion.weight);
+    const fats = Math.round(details.fats * amount * currentPortion.weight);
     return {
       calories,
       protein,
@@ -48,10 +48,10 @@ export default function Details({ navigation, route, meal, updateMeal }) {
       <FoodCard 
         name={details.name} 
         portion={`${amount} ${currentPortion.description}`} 
-        calories={currentCalculations.calories}
-        protein={currentCalculations.protein} 
-        carbs={currentCalculations.carbs} 
-        fats={currentCalculations.fats} 
+        calories={currentCalculations.calories.toString()}
+        protein={currentCalculations.protein.toString()} 
+        carbs={currentCalculations.carbs.toString()} 
+        fats={currentCalculations.fats.toString()} 
       >
       <AmountPicker 
             amounts={details.portions} 
