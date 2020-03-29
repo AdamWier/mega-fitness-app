@@ -8,6 +8,11 @@
     "eject": "expo eject",
     "lint": "eslint --fix src/**/*.{ts,tsx}"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint"
+    }
+  },
   "dependencies": {
     "@react-native-community/masked-view": "0.1.5",
     "@react-navigation/native": "^5.0.9",
@@ -43,6 +48,7 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.0",
     "eslint-plugin-react-native": "^3.8.1",
+    "husky": "^4.2.3",
     "prettier": "^2.0.2",
     "typescript": "~3.6.3"
   },
