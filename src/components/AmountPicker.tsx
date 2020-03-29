@@ -4,7 +4,10 @@ import { withTheme } from 'react-native-elements';
 import PropTypes from 'prop-types';
 
 function AmountPicker({
-  amounts, theme, selectedValue, onValueChange,
+  amounts,
+  theme,
+  selectedValue,
+  onValueChange,
 }): JSX.Element {
   return (
     <Picker
@@ -13,7 +16,8 @@ function AmountPicker({
       onValueChange={(value): void => onValueChange(value)}
     >
       {amounts.map(({ description }, index) => {
-        const label = description.charAt(0).toUpperCase() + description.substring(1);
+        const label =
+          description.charAt(0).toUpperCase() + description.substring(1);
         return (
           <Picker.Item
             color={theme.colors.danger}

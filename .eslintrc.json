@@ -12,7 +12,8 @@
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:import/errors",
-        "plugin:import/warnings"
+        "plugin:import/warnings",
+        "prettier"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -29,7 +30,8 @@
     "plugins": [
         "react",
         "@typescript-eslint",
-        "react-native"
+        "react-native",
+        "prettier"
     ],
     "rules": {
         "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
@@ -38,7 +40,8 @@
         "class-methods-use-this": 0,
         "import/no-unresolved": 0,
         "@typescript-eslint/no-use-before-define": 0,
-        "react/no-array-index-key": 0
+        "react/no-array-index-key": 0,
+        "prettier/prettier": ["error", {"singleQuote": true}]
     },
     "settings": {
         "import/extensions": [".js",".jsx",".ts",".tsx"],

@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { View, FlatList } from 'react-native';
-import {
-  Text, SearchBar, Button, ListItem,
-} from 'react-native-elements';
+import { Text, SearchBar, Button, ListItem } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import USDAApiImpl from '../ApiHelpers/USDA/USDAApiImpl';
 

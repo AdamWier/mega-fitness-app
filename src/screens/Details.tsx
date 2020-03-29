@@ -6,14 +6,17 @@ import AmountPicker from '../components/AmountPicker';
 import FoodCard from '../components/FoodCard';
 
 export default function Details({
-  navigation, route, meal, updateMeal,
+  navigation,
+  route,
+  meal,
+  updateMeal,
 }): JSX.Element {
   const { details } = route.params;
 
-  const calculateNutrient = (nutrient: string): number => Math.round(details[nutrient] * amount * currentPortion.weight);
+  const calculateNutrient = (nutrient: string): number =>
+    Math.round(details[nutrient] * amount * currentPortion.weight);
 
-  const calculateValues = ():
-  {
+  const calculateValues = (): {
     calories: number;
     protein: number;
     carbs: number;
@@ -33,20 +36,23 @@ export default function Details({
 
   const [amount, changeAmount] = useState(1);
   const [currentPortion, changePortion] = useState(details.portions[0]);
-  const [currentCalculations, updateCurrentCalculations] = useState(calculateValues());
+  const [currentCalculations, updateCurrentCalculations] = useState(
+    calculateValues()
+  );
 
   const addFood = (): void => {
-    const {
-      calories, protein, fats, carbs,
-    } = currentCalculations;
-    updateMeal([...meal, {
-      name: details.name,
-      portion: `${amount} ${currentPortion.description}`,
-      calories,
-      protein,
-      fats,
-      carbs,
-    }]);
+    const { calories, protein, fats, carbs } = currentCalculations;
+    updateMeal([
+      ...meal,
+      {
+        name: details.name,
+        portion: `${amount} ${currentPortion.description}`,
+        calories,
+        protein,
+        fats,
+        carbs,
+      },
+    ]);
     navigation.navigate('Day');
   };
 
@@ -67,14 +73,12 @@ export default function Details({
         <AmountPicker
           amounts={details.portions}
           selectedValue={currentPortion.description}
-          onValueChange={
-            (selection): void => {
-              const newPortion = details.portions.find(
-                (portion) => selection === portion.description,
-              );
-              changePortion(newPortion);
-            }
-          }
+          onValueChange={(selection): void => {
+            const newPortion = details.portions.find(
+              (portion) => selection === portion.description
+            );
+            changePortion(newPortion);
+          }}
         />
         <Slider
           step={1}
