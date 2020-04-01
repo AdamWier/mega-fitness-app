@@ -12,7 +12,7 @@ const colors = {
   background: '#222222',
   success: '#00bc8c',
   danger: '#E74C3C',
-  grey0: "adb5bd"
+  grey0: "#adb5bd"
 }
 
 export const navTheme = {
