@@ -7,21 +7,21 @@ import screens from './Screens';
 
 const Stack = createStackNavigator();
 
-export default function Navigation() {
+export default function Navigation(): JSX.Element {
   return (
-      <NavigationContainer theme={navTheme}>
-          <Stack.Navigator 
-            screenOptions={{
-              headerStyle: {
-                backgroundColor: navTheme.colors.primary,
-              },
-              headerTitleStyle: {
-                color: navTheme.colors.text,
-              },
-              headerTintColor: navTheme.colors.text,
-            }}
-          >
-            {StackScreenCreator(Stack, screens)}
+    <NavigationContainer theme={navTheme}>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: navTheme.colors.primary,
+          },
+          headerTitleStyle: {
+            color: navTheme.colors.text,
+          },
+          headerTintColor: navTheme.colors.text,
+        }}
+      >
+        {StackScreenCreator(Stack, screens)}
       </Stack.Navigator>
     </NavigationContainer>
   );
