@@ -62,5 +62,14 @@ export const theme = {
   Slider: {
     thumbTintColor: colors.success,
   },
+  Input: {
+    containerStyle: {
+      backgroundColor: colors.text,
+      marginVertical: 10,
+      marginHorizontal: 20,
+      width: 300,
+      padding: 0,
+    },
+  },
   colors,
 } as MyTheme;

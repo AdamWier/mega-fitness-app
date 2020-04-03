@@ -1,8 +1,16 @@
 import Day from '../screens/Day';
 import Search from '../screens/Search';
 import Details from '../screens/Details';
+import AccountCreation from '../screens/AccountCreation';
 
 export default [
+  {
+    name: 'AccountCreation',
+    component: AccountCreation,
+    options: {
+      title: 'Account Creation',
+    },
+  },
   {
     name: 'Day',
     component: Day,
