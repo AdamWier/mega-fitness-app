@@ -1,53 +1,63 @@
 import React, { useState } from 'react';
 import { Text, Input, Button } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
+import PropTypes from 'prop-types';
+import { authService } from '../Firebase';
 
-export default function AccountCreation(): JSX.Element {
-
+export default function AccountCreation({ navigation }): JSX.Element {
   const [signUpDetails, setSignUpDetails] = useState({
-    username: '',
+    email: '',
     password: '',
     passwordConfirmation: '',
-  })
+  });
+
+  const [isLoading, toggleLoading] = useState(false);
+
+  const [errors, updateErrors] = useState([]);
 
   const updateSignUpDetails = (value: string, field: string): void => {
-    setSignUpDetails(state =>({
+    setSignUpDetails((state) => ({
       ...state,
       [field]: value,
     }));
   };
 
-  const createAcount = (): any => {
-    console.log(signUpDetails);
+  const createAcount = async (): Promise<void> => {
+    toggleLoading(true);
+    const errorsMessages = await authService.createUser(signUpDetails);
+    if (errorsMessages.length) {
+      updateErrors(errorsMessages);
+    } else navigation.navigate('Search');
   };
 
   return (
     <View style={style.content}>
-      <Text>Create an account</Text>
-      <Input 
-        placeholder="Username" 
-        onChangeText={
-          (value): void => updateSignUpDetails(value, 'username')
-        }
+      {!errors.length ? (
+        <Text>Create an account</Text>
+      ) : (
+        errors.map((error) => <Text key={error}>{error}</Text>)
+      )}
+      <Input
+        placeholder="Email"
+        onChangeText={(value): void => updateSignUpDetails(value, 'email')}
       />
-      <Input 
-        placeholder="Password" 
+      <Input
+        placeholder="Password"
         secureTextEntry
-        onChangeText={
-          (value): void => updateSignUpDetails(value, 'password')
-        }
+        onChangeText={(value): void => updateSignUpDetails(value, 'password')}
       />
-      <Input 
-        placeholder="Confirm password" 
-        secureTextEntry 
-        onChangeText={
-          (value): void => updateSignUpDetails(value, 'passwordConfirmation')
-        }
+      <Input
+        placeholder="Confirm password"
+        secureTextEntry
+        onChangeText={(value): void =>
+          // prettier-ignore
+          updateSignUpDetails(value, 'passwordConfirmation')}
       />
-      <Button 
-        title="Create account" 
+      <Button
+        title="Create account"
         onPress={createAcount}
-        />
+        loading={isLoading}
+      />
     </View>
   );
 }
@@ -59,3 +69,9 @@ const style = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+AccountCreation.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};
