@@ -28,6 +28,7 @@ export default function Login({ navigation }): JSX.Element {
       try {
         const user = await authService.login(email, password);
         navigation.navigate('Search', { user });
+        toggleLoading(false);
       } catch ({ message }) {
         toggleLoading(false);
         updateError(message);
@@ -55,6 +56,15 @@ export default function Login({ navigation }): JSX.Element {
         onPress={login}
         loading={isLoading}
         disabled={isLoading}
+      />
+      <Button
+        title="Create an account"
+        onPress={(): void => {
+          navigation.navigate('AccountCreation');
+        }}
+        containerStyle={{
+          margin: 50,
+        }}
       />
     </View>
   );

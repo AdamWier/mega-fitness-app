@@ -14,8 +14,12 @@ export default class AuthService {
   async login(
     email: string,
     password: string
-  ): Promise<firebase.auth.UserCredential> {
-    return this.auth.signInWithEmailAndPassword(email, password);
+  ): Promise<{ uid: string; email: string }> {
+    const { user } = await this.auth.signInWithEmailAndPassword(
+      email,
+      password
+    );
+    return { uid: user.uid, email: user.email };
   }
 
   async createUser(
