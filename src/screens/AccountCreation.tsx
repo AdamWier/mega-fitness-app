@@ -24,7 +24,7 @@ export default function AccountCreation({ navigation }): JSX.Element {
 
   const createAcount = async (): Promise<void> => {
     toggleLoading(true);
-    const errorsMessages = await authService.checkUserDetails(signUpDetails);
+    const errorsMessages = authService.checkUserDetails(signUpDetails);
     if (errorsMessages.length) {
       toggleLoading(false);
       updateErrors(errorsMessages);

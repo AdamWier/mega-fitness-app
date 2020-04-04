@@ -11,6 +11,13 @@ export default class AuthService {
     this.firestore = firestore;
   }
 
+  async login(
+    email: string,
+    password: string
+  ): Promise<firebase.auth.UserCredential> {
+    return this.auth.signInWithEmailAndPassword(email, password);
+  }
+
   async createUser(
     email: string,
     password: string

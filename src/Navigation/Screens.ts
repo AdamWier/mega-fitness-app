@@ -2,8 +2,13 @@ import Day from '../screens/Day';
 import Search from '../screens/Search';
 import Details from '../screens/Details';
 import AccountCreation from '../screens/AccountCreation';
+import Login from '../screens/Login';
 
 export default [
+  {
+    name: 'Login',
+    component: Login,
+  },
   {
     name: 'AccountCreation',
     component: AccountCreation,
