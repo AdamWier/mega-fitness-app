@@ -24,16 +24,28 @@ export default function AccountCreation({ navigation }): JSX.Element {
 
   const createAcount = async (): Promise<void> => {
     toggleLoading(true);
-    const errorsMessages = await authService.createUser(signUpDetails);
+    const errorsMessages = await authService.checkUserDetails(signUpDetails);
     if (errorsMessages.length) {
+      toggleLoading(false);
       updateErrors(errorsMessages);
-    } else navigation.navigate('Search');
+    } else {
+      try {
+        const user = await authService.createUser(
+          signUpDetails.email,
+          signUpDetails.password
+        );
+        navigation.navigate('Search', { user });
+      } catch (message) {
+        toggleLoading(false);
+        updateErrors([message]);
+      }
+    }
   };
 
   return (
     <View style={style.content}>
       {!errors.length ? (
-        <Text>Create an account</Text>
+        <Text h1>Create an account</Text>
       ) : (
         errors.map((error) => <Text key={error}>{error}</Text>)
       )}
@@ -50,13 +62,14 @@ export default function AccountCreation({ navigation }): JSX.Element {
         placeholder="Confirm password"
         secureTextEntry
         onChangeText={(value): void =>
-          // prettier-ignore
+          /* prettier-ignore */
           updateSignUpDetails(value, 'passwordConfirmation')}
       />
       <Button
         title="Create account"
         onPress={createAcount}
         loading={isLoading}
+        disabled={isLoading}
       />
     </View>
   );

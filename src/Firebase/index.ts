@@ -20,4 +20,7 @@ const firebaseConfig = {
 // eslint-disable-next-line no-unused-expressions
 !firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
 
-export const authService = new AuthService(firebase.auth());
+export const authService = new AuthService(
+  firebase.auth(),
+  firebase.firestore()
+);

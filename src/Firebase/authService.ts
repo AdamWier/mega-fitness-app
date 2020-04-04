@@ -1,33 +1,43 @@
 export default class AuthService {
   auth: firebase.auth.Auth;
 
-  constructor(auth: firebase.auth.Auth) {
+  firestore: firebase.firestore.Firestore;
+
+  constructor(
+    auth: firebase.auth.Auth,
+    firestore: firebase.firestore.Firestore
+  ) {
     this.auth = auth;
+    this.firestore = firestore;
   }
 
-  async createUser(userInformation: {
+  async createUser(
+    email: string,
+    password: string
+  ): Promise<{ uid: string; email: string }> {
+    const credentials = await this.auth.createUserWithEmailAndPassword(
+      email,
+      password
+    );
+    const { uid } = credentials.user;
+    const user = { uid, email };
+    if (credentials) {
+      await this.firestore.collection('users').doc(uid).set(user);
+      return user;
+    }
+    throw 'There was an issue creating your account.';
+  }
+
+  checkUserDetails(userInformation: {
     email: string;
     password: string;
     passwordConfirmation: string;
-  }): Promise<string[]> {
+  }): string[] {
     const { email, password, passwordConfirmation } = userInformation;
     const errors = [
-      ...this.verifyPassword(password, passwordConfirmation),
       ...this.verifyEmail(email),
+      ...this.verifyPassword(password, passwordConfirmation),
     ];
-    if (!errors.length) {
-      try {
-        const isSuccessful = await this.auth.createUserWithEmailAndPassword(
-          email,
-          password
-        );
-        if (!isSuccessful) {
-          errors.push('There was an issue creating your account.');
-        }
-      } catch (e) {
-        errors.push('There was an issue creating your account.');
-      }
-    }
     return errors;
   }
 
