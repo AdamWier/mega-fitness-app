@@ -12,8 +12,8 @@ const colors = {
   background: '#222222',
   success: '#00bc8c',
   danger: '#E74C3C',
-  grey0: "#adb5bd"
-}
+  grey0: '#adb5bd',
+};
 
 export const navTheme = {
   ...DefaultTheme,
@@ -61,6 +61,15 @@ export const theme = {
   },
   Slider: {
     thumbTintColor: colors.success,
+  },
+  Input: {
+    containerStyle: {
+      backgroundColor: colors.text,
+      marginVertical: 10,
+      marginHorizontal: 20,
+      width: 300,
+      padding: 0,
+    },
   },
   colors,
 } as MyTheme;

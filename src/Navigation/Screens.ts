@@ -1,21 +1,36 @@
-import Day from "../screens/Day";
-import Search from "../screens/Search";
-import Details from "../screens/Details";
+import Day from '../screens/Day';
+import Search from '../screens/Search';
+import Details from '../screens/Details';
+import AccountCreation from '../screens/AccountCreation';
+import Login from '../screens/Login';
 
 export default [
-    {
-        name: "Day",
-        component: Day,
-        props: true,
-    },{
-        name: "Search",
-        component: Search,
-    },{
-        name: "Details",
-        component: Details,
-        props: true,
-        options: ({ route }) => ({ 
-            title: route.params.details.name, 
-        })
-    }
-]
+  {
+    name: 'Login',
+    component: Login,
+  },
+  {
+    name: 'AccountCreation',
+    component: AccountCreation,
+    options: {
+      title: 'Account Creation',
+    },
+  },
+  {
+    name: 'Day',
+    component: Day,
+    props: true,
+  },
+  {
+    name: 'Search',
+    component: Search,
+  },
+  {
+    name: 'Details',
+    component: Details,
+    props: true,
+    options: ({ route }): { [key: string]: string } => ({
+      title: route.params.details.name,
+    }),
+  },
+];
