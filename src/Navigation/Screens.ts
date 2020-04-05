@@ -8,6 +8,7 @@ export default [
   {
     name: 'Login',
     component: Login,
+    needsLogin: false,
   },
   {
     name: 'AccountCreation',
@@ -15,22 +16,24 @@ export default [
     options: {
       title: 'Account Creation',
     },
+    needsLogin: false,
   },
   {
     name: 'Day',
     component: Day,
-    props: true,
+    needsLogin: true,
   },
   {
     name: 'Search',
     component: Search,
+    needsLogin: true,
   },
   {
     name: 'Details',
     component: Details,
-    props: true,
     options: ({ route }): { [key: string]: string } => ({
       title: route.params.details.name,
     }),
+    needsLogin: true,
   },
 ];

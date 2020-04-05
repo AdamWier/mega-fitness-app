@@ -1,34 +1,24 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-const LOGIN = 'LOGIN';
+const UPDATE_MEAL = 'UPDATE_MEAL';
 
-const initalState = {
-  uid: 'TEST',
-  email: 'TEST',
-};
+const initalState = [];
 
-function login(userInfo: {
-  uid: string;
-  email: string;
-}): { type: string; payload: any } {
+function updateMeal(newMeal: Array<any>): { type: string; payload: any } {
   return {
-    type: LOGIN,
-    payload: userInfo,
+    type: UPDATE_MEAL,
+    payload: newMeal,
   };
 }
 
-export const userReducer = (
+export const mealReducer = (
   state = initalState,
   action: { type: string; payload: any }
 ): { [key: string]: any } => {
   switch (action.type) {
-    case LOGIN:
-      return {
-        ...state,
-        uid: action.payload.uid,
-        email: action.payload.email,
-      };
+    case UPDATE_MEAL:
+      return [...action.payload];
     default:
       return state;
   }
@@ -37,12 +27,11 @@ export const userReducer = (
 const mapStateToProps = (state: {
   [key: string]: any;
 }): { [key: string]: any } => ({
-  user: state.user,
+  meal: state.meal,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): { [key: string]: any } => ({
-  storeLogin: (payload: { uid: string; email: string }): any =>
-    dispatch(login(payload)),
+  updateMeal: (payload: Array<any>): any => dispatch(updateMeal(payload)),
 });
 
 export const container = connect(mapStateToProps, mapDispatchToProps);

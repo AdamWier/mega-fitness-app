@@ -10,6 +10,7 @@ import {
 } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import FoodCard from '../components/FoodCard';
+import { container } from '../store/reducers/Meal';
 
 const getTotal = (nutrient: string): CallableFunction => (
   accumulator,
@@ -46,10 +47,10 @@ function Day({ navigation, theme, meal }): JSX.Element {
           <FoodCard
             name={food.name}
             portion={food.portion}
-            calories={food.calories}
-            protein={food.protein}
-            carbs={food.carbs}
-            fats={food.fats}
+            calories={food.calories.toString()}
+            protein={food.protein.toString()}
+            carbs={food.carbs.toString()}
+            fats={food.fats.toString()}
             key={index}
           />
         ))
@@ -128,4 +129,4 @@ Day.propTypes = {
   meal: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-export default withTheme(Day);
+export default container(withTheme(Day));

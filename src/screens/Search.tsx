@@ -4,9 +4,7 @@ import { Text, SearchBar, Button, ListItem } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import USDAApiImpl from '../ApiHelpers/USDA/USDAApiImpl';
 
-export default function Search({ navigation, route }): JSX.Element {
-  const { user } = route.params;
-
+export default function Search({ navigation }): JSX.Element {
   const USDAapi = new USDAApiImpl();
 
   const [searchText, updateSearchText] = useState('');
@@ -29,10 +27,7 @@ export default function Search({ navigation, route }): JSX.Element {
 
   return (
     <View>
-      <Text h1>
-        Search for food with the account
-        {user.email}
-      </Text>
+      <Text h1>Search for food</Text>
       <SearchBar
         value={searchText}
         onChangeText={(text): void => updateSearchText(text)}
@@ -62,8 +57,5 @@ export default function Search({ navigation, route }): JSX.Element {
 Search.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
-  }).isRequired,
-  route: PropTypes.shape({
-    params: PropTypes.object.isRequired,
   }).isRequired,
 };
