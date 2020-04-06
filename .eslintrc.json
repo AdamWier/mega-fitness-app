@@ -43,7 +43,8 @@
         "react/no-array-index-key": 0,
         "prettier/prettier": ["error", {"singleQuote": true}],
         "react/jsx-props-no-spreading": 0,
-        "no-control-regex": 0
+        "no-control-regex": 0,
+        "@typescript-eslint/no-explicit-any": 0
     },
     "settings": {
         "import/extensions": [".js",".jsx",".ts",".tsx"],

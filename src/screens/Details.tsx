@@ -4,13 +4,9 @@ import { ScrollView } from 'react-native';
 import PropTypes from 'prop-types';
 import AmountPicker from '../components/AmountPicker';
 import FoodCard from '../components/FoodCard';
+import { container } from '../store/reducers/Meal';
 
-export default function Details({
-  navigation,
-  route,
-  meal,
-  updateMeal,
-}): JSX.Element {
+function Details({ navigation, route, meal, updateMeal }): JSX.Element {
   const { details } = route.params;
 
   const calculateNutrient = (nutrient: string): number =>
@@ -108,3 +104,5 @@ Details.propTypes = {
   meal: PropTypes.arrayOf(PropTypes.object).isRequired,
   updateMeal: PropTypes.func.isRequired,
 };
+
+export default container(Details);

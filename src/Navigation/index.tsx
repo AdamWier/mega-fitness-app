@@ -1,13 +1,15 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import PropTypes from 'prop-types';
 import { navTheme } from '../StyleSheet';
 import StackScreenCreator from './StackScreenCreator';
 import screens from './Screens';
+import { container } from '../store/reducers/User';
 
 const Stack = createStackNavigator();
 
-export default function Navigation(): JSX.Element {
+function Navigation({ user }): JSX.Element {
   return (
     <NavigationContainer theme={navTheme}>
       <Stack.Navigator
@@ -21,8 +23,17 @@ export default function Navigation(): JSX.Element {
           headerTintColor: navTheme.colors.text,
         }}
       >
-        {StackScreenCreator(Stack, screens)}
+        {StackScreenCreator(Stack, screens, !!user.uid)}
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
+Navigation.propTypes = {
+  user: PropTypes.shape({
+    uid: PropTypes.string,
+    email: PropTypes.string,
+  }).isRequired,
+};
+
+export default container(Navigation);

@@ -3,8 +3,9 @@ import { Text, Input, Button } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import { authService } from '../Firebase';
+import { container } from '../store/reducers/User';
 
-export default function Login({ navigation }): JSX.Element {
+function Login({ navigation, storeLogin }): JSX.Element {
   const [loginDetails, setLoginDetails] = useState({
     email: '',
     password: '',
@@ -27,7 +28,7 @@ export default function Login({ navigation }): JSX.Element {
     if (email && password) {
       try {
         const user = await authService.login(email, password);
-        navigation.navigate('Search', { user });
+        storeLogin(user);
         toggleLoading(false);
       } catch ({ message }) {
         toggleLoading(false);
@@ -82,4 +83,7 @@ Login.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
   }).isRequired,
+  storeLogin: PropTypes.func.isRequired,
 };
+
+export default container(Login);

@@ -3,8 +3,9 @@ import { Text, Input, Button } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import { authService } from '../Firebase';
+import { container } from '../store/reducers/User';
 
-export default function AccountCreation({ navigation }): JSX.Element {
+function AccountCreation({ navigation, storeLogin }): JSX.Element {
   const [signUpDetails, setSignUpDetails] = useState({
     email: '',
     password: '',
@@ -34,7 +35,8 @@ export default function AccountCreation({ navigation }): JSX.Element {
           signUpDetails.email,
           signUpDetails.password
         );
-        navigation.navigate('Search', { user });
+        storeLogin(user);
+        navigation.navigate('Search');
       } catch (message) {
         toggleLoading(false);
         updateErrors([message]);
@@ -87,4 +89,7 @@ AccountCreation.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
   }).isRequired,
+  storeLogin: PropTypes.func.isRequired,
 };
+
+export default container(AccountCreation);
