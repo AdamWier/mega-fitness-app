@@ -32,7 +32,10 @@ FoodCard.propTypes = {
   fats: PropTypes.string.isRequired,
   portion: PropTypes.string.isRequired,
   // eslint-disable-next-line
-  children: PropTypes.any,
+  children:  PropTypes.oneOfType([ 
+    PropTypes.element, 
+    PropTypes.arrayOf(PropTypes.element),
+  ]),
 };
 
 FoodCard.defaultProps = {
