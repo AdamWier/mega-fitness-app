@@ -1,3 +1,5 @@
+import firebase from 'firebase';
+
 export default class AuthService {
   auth: firebase.auth.Auth;
 
@@ -9,6 +11,12 @@ export default class AuthService {
   ) {
     this.auth = auth;
     this.firestore = firestore;
+    this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+  }
+
+  checkIfLoggedIn() {
+    const user = this.auth.currentUser;
+    return user ? { uid: user.uid, email: user.email } :  null;
   }
 
   async login(
