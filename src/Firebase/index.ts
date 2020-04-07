@@ -7,7 +7,8 @@ import {
   FIREBASE_DATABASE_URL,
   FIREBASE_STORAGE_BUCKET,
 } from 'react-native-dotenv';
-import AuthService from './authService';
+import AuthService from './AuthService/authServiceImpl';
+import FirestoreService from './firestoreService/FirestoreServiceImpl';
 
 const firebaseConfig = {
   apiKey: FIREBASE_API_KEY,
@@ -20,7 +21,11 @@ const firebaseConfig = {
 // eslint-disable-next-line no-unused-expressions
 !firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
 
+export const firestoreService = new FirestoreService(
+  firebase.firestore(),
+)
+
 export const authService = new AuthService(
   firebase.auth(),
-  firebase.firestore()
+  firestoreService,
 );

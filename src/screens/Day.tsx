@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, ScrollView } from 'react-native';
 import {
   Button,
@@ -7,17 +7,27 @@ import {
   Card,
   ListItem,
   withTheme,
+  Input,
 } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import FoodCard from '../components/FoodCard';
-import { container } from '../store/reducers/Meal';
+import { container as MealContainer } from '../store/reducers/Meal';
+import { container as UserContainer } from '../store/reducers/User'
+import { firestoreService } from '../Firebase';
 
 const getTotal = (nutrient: string): CallableFunction => (
   accumulator,
   currentValue
-): number => accumulator + currentValue[nutrient];
+  ): number => accumulator + currentValue[nutrient];
+  
+  function Day({ navigation, theme, meal, updateMeal, user }): JSX.Element {
 
-function Day({ navigation, theme, meal }): JSX.Element {
+  const today = new Date();
+  const title = today.toLocaleString('en');
+  navigation.setOptions({ title });
+
+  const [mealName, changeMealName] = useState('')
+
   const getTotals = (): {
     calories: number;
     protein: number;
@@ -36,9 +46,16 @@ function Day({ navigation, theme, meal }): JSX.Element {
     };
   };
 
-  const today = new Date();
-  const title = today.toLocaleString('en');
-  navigation.setOptions({ title });
+  const sendMealToFirestore = async (): Promise<void> => {
+    const calories = getTotals().calories;
+    try {
+      await firestoreService.saveMeal(meal, mealName, user.uid, today, calories);
+      updateMeal([]);
+      changeMealName('');
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return (
     <ScrollView>
@@ -112,6 +129,15 @@ function Day({ navigation, theme, meal }): JSX.Element {
               }}
             />
           </Card>
+          <Input 
+            placeholder="Enter meal name"
+            value={mealName}
+            onChangeText={(value) => changeMealName(value)} 
+          />
+          <Button
+            title="Save meal"
+            onPress={sendMealToFirestore} 
+          />
         </View>
       ) : null}
     </ScrollView>
@@ -129,4 +155,4 @@ Day.propTypes = {
   meal: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-export default container(withTheme(Day));
+export default UserContainer(MealContainer(withTheme(Day)));

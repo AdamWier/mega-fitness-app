@@ -1,13 +1,15 @@
+import AuthService from './AuthService';
+import FirestoreService from '../firestoreService/FirestoreService';
 import firebase from 'firebase';
 
-export default class AuthService {
+export default class AuthServiceImpl implements AuthService {
   auth: firebase.auth.Auth;
 
-  firestore: firebase.firestore.Firestore;
+  firestore: FirestoreService
 
   constructor(
     auth: firebase.auth.Auth,
-    firestore: firebase.firestore.Firestore
+    firestore: FirestoreService,
   ) {
     this.auth = auth;
     this.firestore = firestore;
@@ -34,17 +36,21 @@ export default class AuthService {
     email: string,
     password: string
   ): Promise<{ uid: string; email: string }> {
-    const credentials = await this.auth.createUserWithEmailAndPassword(
-      email,
-      password
-    );
-    const { uid } = credentials.user;
-    const user = { uid, email };
-    if (credentials) {
-      await this.firestore.collection('users').doc(uid).set(user);
-      return user;
+    try{
+      const credentials = await this.auth.createUserWithEmailAndPassword(
+        email,
+        password
+      );
+      const { uid } = credentials.user;
+      const user = { uid, email };
+      if (credentials) {
+        await this.firestore.saveUser(user);
+        return user;
+      }
+      throw 'There was an issue creating your account.';
+    } catch (e) {
+      throw 'There was an issue creating your account.';
     }
-    throw 'There was an issue creating your account.';
   }
 
   checkUserDetails(userInformation: {
