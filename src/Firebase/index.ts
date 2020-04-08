@@ -7,7 +7,7 @@ import {
   FIREBASE_DATABASE_URL,
   FIREBASE_STORAGE_BUCKET,
 } from 'react-native-dotenv';
-import AuthService from './AuthService/authServiceImpl';
+import AuthService from './AuthService/AuthServiceImpl';
 import FirestoreService from './firestoreService/FirestoreServiceImpl';
 
 const firebaseConfig = {

@@ -12,13 +12,13 @@ export default class FirestoreServiceImpl implements FirestoreService {
 
   saveMeal(meal: Array<any>, mealName: string, uid: string, date: Date, calories: number): Promise<void> {
     return this.firestore.collection('meals').doc(mealName+'-'+uid+'-'+date.getTime()).set({
-        meal,
-        eatenAt: date,
-        createdAt: date,
-        deleted: false,
-        uid,
-        totalCalories: calories,
-        mealName
+      meal,
+      eatenAt: date,
+      createdAt: date,
+      deleted: false,
+      uid,
+      totalCalories: calories,
+      mealName
     });
   }
 

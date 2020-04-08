@@ -33,8 +33,8 @@ FoodCard.propTypes = {
   portion: PropTypes.string.isRequired,
   // eslint-disable-next-line
   children:  PropTypes.oneOfType([ 
-    PropTypes.element, 
-    PropTypes.arrayOf(PropTypes.element),
+    PropTypes.node, 
+    PropTypes.arrayOf(PropTypes.node),
   ]),
 };
 

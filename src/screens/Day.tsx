@@ -60,7 +60,7 @@ const getTotal = (nutrient: string): CallableFunction => (
   return (
     <ScrollView>
       {meal.length ? (
-        meal.map((food, index) => (
+        meal.map((food: {[key: string]: any }, index: number) => (
           <FoodCard
             name={food.name}
             portion={food.portion}
