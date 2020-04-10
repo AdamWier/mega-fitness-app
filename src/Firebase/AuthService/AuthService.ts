@@ -1,5 +1,5 @@
 export default interface AuthService {
-    checkIfLoggedIn(): {};
+    checkIfLoggedIn(): {uid: string, email: string} | null;
     login(email: string, password: string): Promise<{ uid: string; email: string }>;
     createUser(email: string, password: string): Promise<{ uid: string; email: string }>;
     checkUserDetails(userInformation: {

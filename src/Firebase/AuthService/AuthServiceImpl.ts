@@ -16,7 +16,7 @@ export default class AuthServiceImpl implements AuthService {
     this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
   }
 
-  checkIfLoggedIn() {
+  checkIfLoggedIn(): {uid: string, email: string} | null {
     const user = this.auth.currentUser;
     return user ? { uid: user.uid, email: user.email } :  null;
   }
