@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, Alert } from 'react-native';
 import {
   Button,
   Text,
@@ -14,10 +14,11 @@ import FoodCard from '../components/FoodCard';
 import { container as MealContainer } from '../store/reducers/Meal';
 import { container as UserContainer } from '../store/reducers/User'
 import { firestoreService } from '../Firebase';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const getTotal = (nutrient: string): CallableFunction => (
-  accumulator,
-  currentValue
+  accumulator: number,
+  currentValue: {[key: string]: any}
   ): number => accumulator + currentValue[nutrient];
   
   function Day({ navigation, theme, meal, updateMeal, user }): JSX.Element {
@@ -25,6 +26,10 @@ const getTotal = (nutrient: string): CallableFunction => (
   const today = new Date();
   const title = today.toLocaleString('en');
   navigation.setOptions({ title });
+
+  const [eatenAt, changeEatenAt] = useState(today);
+
+  const [displayCalendar, toggleDisplayCalendar] = useState(false);
 
   const [mealName, changeMealName] = useState('')
 
@@ -46,15 +51,28 @@ const getTotal = (nutrient: string): CallableFunction => (
     };
   };
 
+  const getEatenAt = (): void => {
+    toggleDisplayCalendar(true);
+  }
+
   const sendMealToFirestore = async (): Promise<void> => {
     const calories = getTotals().calories;
     try {
-      await firestoreService.saveMeal(meal, mealName, user.uid, today, calories);
+      await firestoreService.saveMeal(meal, mealName, user.uid, eatenAt, calories);
       updateMeal([]);
       changeMealName('');
     } catch (e) {
       console.log(e);
     }
+  }
+
+  const setDate = (datetime: Date) => {
+    toggleDisplayCalendar(false);
+    changeEatenAt(datetime);
+    Alert.alert("Save", "Do you want to save the meal?", [
+      {text: "No", onPress: () => null},
+      {text: "Yes", onPress: () => sendMealToFirestore()},
+    ]);
   }
 
   return (
@@ -134,9 +152,17 @@ const getTotal = (nutrient: string): CallableFunction => (
             value={mealName}
             onChangeText={(value) => changeMealName(value)} 
           />
+          <DateTimePickerModal
+          isVisible={displayCalendar}
+            date={eatenAt}
+            mode="datetime"
+            onConfirm={setDate}
+            onCancel={() => toggleDisplayCalendar(false)}
+          />
+          <Text>{eatenAt.toString()}</Text>
           <Button
             title="Save meal"
-            onPress={sendMealToFirestore} 
+            onPress={getEatenAt} 
           />
         </View>
       ) : null}
