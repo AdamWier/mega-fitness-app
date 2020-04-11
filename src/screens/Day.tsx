@@ -58,12 +58,11 @@ const getTotal = (nutrient: string): CallableFunction => (
     toggleDisplayCalendar(true);
   }
 
-  const sendMealToFirestore = async (): Promise<void> => {
+  const sendMealToFirestore = async (datetime: Date): Promise<void> => {
     const calories = getTotals().calories;
     try {
-      await firestoreService.saveMeal(meal, mealName, user.uid, eatenAt, calories);
-      updateMeal([]);
-      changeMealName('');
+      await firestoreService.saveMeal(meal, mealName, user.uid, datetime, calories);
+      navigation.navigate('Calendar');
     } catch (e) {
       console.log(e);
     }
@@ -72,12 +71,15 @@ const getTotal = (nutrient: string): CallableFunction => (
   const setDate = (datetime: Date) => {
     toggleDisplayCalendar(false);
     changeEatenAt(datetime);
-    Alert.alert("Save", "Do you want to save the meal?", [
-      {text: "No", onPress: () => null},
-      {text: "Yes", onPress: () => sendMealToFirestore()},
-    ]);
+    askToSave(datetime);
   }
 
+  const askToSave = (datetime: Date): void => {
+    Alert.alert("Save", "Do you want to save the meal?", [
+      {text: "No", onPress: () => null},
+      {text: "Yes", onPress: () => sendMealToFirestore(datetime)},
+    ]);
+  }
   useEffect(() => {
     (async function (): Promise<void>{
       const data = await firestoreService.findMealsByDate(currentDate, user.uid);
