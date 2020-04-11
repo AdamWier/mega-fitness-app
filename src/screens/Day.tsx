@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Alert } from 'react-native';
 import {
   Button,
@@ -21,13 +21,14 @@ const getTotal = (nutrient: string): CallableFunction => (
   currentValue: {[key: string]: any}
   ): number => accumulator + currentValue[nutrient];
   
-  function Day({ navigation, theme, meal, updateMeal, user }): JSX.Element {
+  function Day({ navigation, route, theme, meal, updateMeal, user }): JSX.Element {
 
-  const today = new Date();
-  const title = today.toLocaleString('en');
+  const currentDate = route.params.date || new Date();
+
+  const title = currentDate.toLocaleString('en');
   navigation.setOptions({ title });
 
-  const [eatenAt, changeEatenAt] = useState(today);
+  const [eatenAt, changeEatenAt] = useState(currentDate);
 
   const [displayCalendar, toggleDisplayCalendar] = useState(false);
 
@@ -74,6 +75,22 @@ const getTotal = (nutrient: string): CallableFunction => (
       {text: "Yes", onPress: () => sendMealToFirestore()},
     ]);
   }
+
+  useEffect(() => {
+    (async function (): Promise<void>{
+      const data = await firestoreService.findMealsByDate(currentDate, user.uid);
+      if (data){
+        updateMeal(data.meal);
+        changeEatenAt(data.eatenAt);
+        changeMealName(data.mealName);
+      }
+    })();
+    return () => {
+      updateMeal("");
+      changeEatenAt(currentDate);
+      changeMealName("");
+    }
+  }, [currentDate])
 
   return (
     <ScrollView>
