@@ -6,10 +6,21 @@ import { navTheme } from '../StyleSheet';
 import StackScreenCreator from './StackScreenCreator';
 import screens from './Screens';
 import { container } from '../store/reducers/User';
+import { authService } from '../Firebase';
 
 const Stack = createStackNavigator();
 
-function Navigation({ user }): JSX.Element {
+function Navigation({ user, storeLogin }): JSX.Element {
+  // Seems functional but probably still needs to be tested
+  const Screens = StackScreenCreator(Stack, screens, !!user.uid)
+  
+  React.useEffect(() => {
+      const userCheck = authService.checkIfLoggedIn();
+      if(!user && userCheck){
+        storeLogin(userCheck);
+      }
+  }, [user])
+
   return (
     <NavigationContainer theme={navTheme}>
       <Stack.Navigator
@@ -23,7 +34,7 @@ function Navigation({ user }): JSX.Element {
           headerTintColor: navTheme.colors.text,
         }}
       >
-        {StackScreenCreator(Stack, screens, !!user.uid)}
+      {Screens}
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, ScrollView, Alert } from 'react-native';
 import {
   Button,
   Text,
@@ -7,17 +7,32 @@ import {
   Card,
   ListItem,
   withTheme,
+  Input,
 } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import FoodCard from '../components/FoodCard';
-import { container } from '../store/reducers/Meal';
+import { container as MealContainer } from '../store/reducers/Meal';
+import { container as UserContainer } from '../store/reducers/User'
+import { firestoreService } from '../Firebase';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const getTotal = (nutrient: string): CallableFunction => (
-  accumulator,
-  currentValue
-): number => accumulator + currentValue[nutrient];
+  accumulator: number,
+  currentValue: {[key: string]: any}
+  ): number => accumulator + currentValue[nutrient];
+  
+  function Day({ navigation, theme, meal, updateMeal, user }): JSX.Element {
 
-function Day({ navigation, theme, meal }): JSX.Element {
+  const today = new Date();
+  const title = today.toLocaleString('en');
+  navigation.setOptions({ title });
+
+  const [eatenAt, changeEatenAt] = useState(today);
+
+  const [displayCalendar, toggleDisplayCalendar] = useState(false);
+
+  const [mealName, changeMealName] = useState('')
+
   const getTotals = (): {
     calories: number;
     protein: number;
@@ -36,14 +51,34 @@ function Day({ navigation, theme, meal }): JSX.Element {
     };
   };
 
-  const today = new Date();
-  const title = today.toLocaleString('en');
-  navigation.setOptions({ title });
+  const getEatenAt = (): void => {
+    toggleDisplayCalendar(true);
+  }
+
+  const sendMealToFirestore = async (): Promise<void> => {
+    const calories = getTotals().calories;
+    try {
+      await firestoreService.saveMeal(meal, mealName, user.uid, eatenAt, calories);
+      updateMeal([]);
+      changeMealName('');
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const setDate = (datetime: Date) => {
+    toggleDisplayCalendar(false);
+    changeEatenAt(datetime);
+    Alert.alert("Save", "Do you want to save the meal?", [
+      {text: "No", onPress: () => null},
+      {text: "Yes", onPress: () => sendMealToFirestore()},
+    ]);
+  }
 
   return (
     <ScrollView>
       {meal.length ? (
-        meal.map((food, index) => (
+        meal.map((food: {[key: string]: any }, index: number) => (
           <FoodCard
             name={food.name}
             portion={food.portion}
@@ -112,6 +147,23 @@ function Day({ navigation, theme, meal }): JSX.Element {
               }}
             />
           </Card>
+          <Input 
+            placeholder="Enter meal name"
+            value={mealName}
+            onChangeText={(value) => changeMealName(value)} 
+          />
+          <DateTimePickerModal
+          isVisible={displayCalendar}
+            date={eatenAt}
+            mode="datetime"
+            onConfirm={setDate}
+            onCancel={() => toggleDisplayCalendar(false)}
+          />
+          <Text>{eatenAt.toString()}</Text>
+          <Button
+            title="Save meal"
+            onPress={getEatenAt} 
+          />
         </View>
       ) : null}
     </ScrollView>
@@ -129,4 +181,4 @@ Day.propTypes = {
   meal: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-export default container(withTheme(Day));
+export default UserContainer(MealContainer(withTheme(Day)));

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import AmountPicker from '../components/AmountPicker';
 import FoodCard from '../components/FoodCard';
 import { container } from '../store/reducers/Meal';
+import { FormattedPortion } from '../ApiHelpers/USDA/USDAApi';
 
 function Details({ navigation, route, meal, updateMeal }): JSX.Element {
   const { details } = route.params;
@@ -69,9 +70,9 @@ function Details({ navigation, route, meal, updateMeal }): JSX.Element {
         <AmountPicker
           amounts={details.portions}
           selectedValue={currentPortion.description}
-          onValueChange={(selection): void => {
+          onValueChange={(selection: string): void => {
             const newPortion = details.portions.find(
-              (portion) => selection === portion.description
+              (portion: FormattedPortion) => selection === portion.description
             );
             changePortion(newPortion);
           }}
