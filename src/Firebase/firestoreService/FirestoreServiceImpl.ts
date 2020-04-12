@@ -23,6 +23,28 @@ export default class FirestoreServiceImpl implements FirestoreService {
     });
   }
 
+  async findMealsByDate(dateStart: Date, uid: string): Promise<any> {
+    const dateEnd = new Date(dateStart.getTime());
+    dateEnd.setDate(dateStart.getDate() + 1);
+    const response = await this.firestore
+                      .collection('meals')
+                      .where('eatenAt', '>=', dateStart)
+                      .where('eatenAt', "<", dateEnd)
+                      .where('uid', '==', uid)
+                      .where('deleted', '==', false)
+                      .limit(1)
+                      .get();
+    if (response.docs.length){
+      const mealDoc = response.docs[0].data();
+      const { eatenAt, meal, mealName } = mealDoc
+      return {
+        eatenAt: eatenAt.toDate(),
+        meal,
+        mealName,
+      }
+    } return null
+  }
+
   saveUser(user: {uid: string, email: string}): Promise<void> {
     return this.firestore.collection('users').doc(user.uid).set(user);
   };

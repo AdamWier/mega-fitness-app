@@ -3,6 +3,7 @@ import Search from '../screens/Search';
 import Details from '../screens/Details';
 import AccountCreation from '../screens/AccountCreation';
 import Login from '../screens/Login';
+import Calendar from '../screens/Calendar';
 
 export default [
   {
@@ -17,6 +18,11 @@ export default [
       title: 'Account Creation',
     },
     needsLogin: false,
+  },
+  {
+    name: 'Calendar',
+    component: Calendar,
+    needsLogin: true,
   },
   {
     name: 'Day',

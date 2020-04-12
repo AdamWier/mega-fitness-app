@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, ScrollView, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import {
   Button,
   Text,
@@ -21,13 +21,16 @@ const getTotal = (nutrient: string): CallableFunction => (
   currentValue: {[key: string]: any}
   ): number => accumulator + currentValue[nutrient];
   
-  function Day({ navigation, theme, meal, updateMeal, user }): JSX.Element {
+  function Day({ navigation, route, theme, meal, updateMeal, user }): JSX.Element {
 
-  const today = new Date();
-  const title = today.toLocaleString('en');
+  const currentDate = route.params.date || new Date();
+
+  const title = currentDate.toLocaleString('en');
   navigation.setOptions({ title });
 
-  const [eatenAt, changeEatenAt] = useState(today);
+  const [isLoading, toggleIsLoading] = useState(true);
+
+  const [eatenAt, changeEatenAt] = useState(currentDate);
 
   const [displayCalendar, toggleDisplayCalendar] = useState(false);
 
@@ -55,12 +58,11 @@ const getTotal = (nutrient: string): CallableFunction => (
     toggleDisplayCalendar(true);
   }
 
-  const sendMealToFirestore = async (): Promise<void> => {
+  const sendMealToFirestore = async (datetime: Date): Promise<void> => {
     const calories = getTotals().calories;
     try {
-      await firestoreService.saveMeal(meal, mealName, user.uid, eatenAt, calories);
-      updateMeal([]);
-      changeMealName('');
+      await firestoreService.saveMeal(meal, mealName, user.uid, datetime, calories);
+      navigation.navigate('Calendar');
     } catch (e) {
       console.log(e);
     }
@@ -69,103 +71,129 @@ const getTotal = (nutrient: string): CallableFunction => (
   const setDate = (datetime: Date) => {
     toggleDisplayCalendar(false);
     changeEatenAt(datetime);
+    askToSave(datetime);
+  }
+
+  const askToSave = (datetime: Date): void => {
     Alert.alert("Save", "Do you want to save the meal?", [
       {text: "No", onPress: () => null},
-      {text: "Yes", onPress: () => sendMealToFirestore()},
+      {text: "Yes", onPress: () => sendMealToFirestore(datetime)},
     ]);
   }
+  useEffect(() => {
+    (async function (): Promise<void>{
+      const data = await firestoreService.findMealsByDate(currentDate, user.uid);
+      if (data){
+        updateMeal(data.meal);
+        changeEatenAt(data.eatenAt);
+        changeMealName(data.mealName);
+      }
+      toggleIsLoading(false);
+    })();
+    return () => {
+      updateMeal("");
+      changeEatenAt(currentDate);
+      changeMealName("");
+      toggleIsLoading(true);
+    }
+  }, [currentDate])
 
   return (
     <ScrollView>
-      {meal.length ? (
-        meal.map((food: {[key: string]: any }, index: number) => (
-          <FoodCard
-            name={food.name}
-            portion={food.portion}
-            calories={food.calories.toString()}
-            protein={food.protein.toString()}
-            carbs={food.carbs.toString()}
-            fats={food.fats.toString()}
-            key={index}
-          />
-        ))
-      ) : (
-        <Text>No foods added to this meal</Text>
-      )}
-      <Button
-        title="Add a food"
-        onPress={(): void => navigation.navigate('Search')}
-      />
-      {meal.length ? (
-        <View>
-          <Divider />
-          <Card
-            containerStyle={{
-              backgroundColor: theme.colors.primary,
-              marginBottom: 20,
-            }}
-            title="Totals"
-          >
-            <ListItem
-              title="Calories:"
-              subtitle={getTotals().calories.toString()}
-              chevron={false}
-              containerStyle={{
-                backgroundColor: theme.colors.primary,
-                borderRadius: 15,
-                padding: 10,
-              }}
-            />
-            <ListItem
-              title="Protein:"
-              subtitle={getTotals().protein.toString()}
-              chevron={false}
-              containerStyle={{
-                backgroundColor: theme.colors.grey0,
-                borderRadius: 15,
-                padding: 10,
-              }}
-            />
-            <ListItem
-              title="Carbs:"
-              subtitle={getTotals().carbs.toString()}
-              chevron={false}
-              containerStyle={{
-                backgroundColor: theme.colors.primary,
-                borderRadius: 15,
-                padding: 10,
-              }}
-            />
-            <ListItem
-              title="Fat:"
-              subtitle={getTotals().fats.toString()}
-              chevron={false}
-              containerStyle={{
-                backgroundColor: theme.colors.grey0,
-                borderRadius: 15,
-                padding: 10,
-              }}
-            />
-          </Card>
-          <Input 
-            placeholder="Enter meal name"
-            value={mealName}
-            onChangeText={(value) => changeMealName(value)} 
-          />
-          <DateTimePickerModal
-          isVisible={displayCalendar}
-            date={eatenAt}
-            mode="datetime"
-            onConfirm={setDate}
-            onCancel={() => toggleDisplayCalendar(false)}
-          />
-          <Text>{eatenAt.toString()}</Text>
+      {isLoading ? 
+        <ActivityIndicator size="large" /> 
+        : <View>
+          {meal.length ? (
+            meal.map((food: {[key: string]: any }, index: number) => (
+              <FoodCard
+                name={food.name}
+                portion={food.portion}
+                calories={food.calories.toString()}
+                protein={food.protein.toString()}
+                carbs={food.carbs.toString()}
+                fats={food.fats.toString()}
+                key={index}
+              />
+            ))
+          ) : (
+            <Text>No foods added to this meal</Text>
+          )}
           <Button
-            title="Save meal"
-            onPress={getEatenAt} 
+            title="Add a food"
+            onPress={(): void => navigation.navigate('Search')}
           />
+          {meal.length ? (
+            <View>
+              <Divider />
+              <Card
+                containerStyle={{
+                backgroundColor: theme.colors.primary,
+                marginBottom: 20,
+                }}
+                title="Totals"
+              >
+                <ListItem
+                  title="Calories:"
+                  subtitle={getTotals().calories.toString()}
+                  chevron={false}
+                  containerStyle={{
+                    backgroundColor: theme.colors.primary,
+                    borderRadius: 15,
+                    padding: 10,
+                  }}
+                />
+                <ListItem
+                  title="Protein:"
+                  subtitle={getTotals().protein.toString()}
+                  chevron={false}
+                  containerStyle={{
+                    backgroundColor: theme.colors.grey0,
+                    borderRadius: 15,
+                    padding: 10,
+                  }}
+                />
+                <ListItem
+                  title="Carbs:"
+                  subtitle={getTotals().carbs.toString()}
+                  chevron={false}
+                  containerStyle={{
+                    backgroundColor: theme.colors.primary,
+                    borderRadius: 15,
+                    padding: 10,
+                  }}
+                />
+                <ListItem
+                  title="Fat:"
+                  subtitle={getTotals().fats.toString()}
+                  chevron={false}
+                  containerStyle={{
+                    backgroundColor: theme.colors.grey0,
+                    borderRadius: 15,
+                    padding: 10,
+                  }}
+                />
+              </Card>
+              <Input 
+                placeholder="Enter meal name"
+                value={mealName}
+                onChangeText={(value) => changeMealName(value)} 
+              />
+              <DateTimePickerModal
+                isVisible={displayCalendar}
+                date={eatenAt}
+                mode="datetime"
+                onConfirm={setDate}
+                onCancel={() => toggleDisplayCalendar(false)}
+              />
+              <Text>{eatenAt.toString()}</Text>
+              <Button
+                title="Save meal"
+                onPress={getEatenAt} 
+              />
+            </View>
+          ) : null}
         </View>
-      ) : null}
+      }
     </ScrollView>
   );
 }
