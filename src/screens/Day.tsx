@@ -56,12 +56,16 @@ const getTotal = (nutrient: string): CallableFunction => (
     };
   };
 
+  const removeFoodFromMeal = (mealIndex: number): void => {
+    const updatedArray = meal.filter((meal: {[key:string]: any}, index: number) => index !== mealIndex);
+    updateMeal(updatedArray);
+  }
+
   const getEatenAt = (): void => {
     toggleDisplayCalendar(true);
   }
 
   const sendMealToFirestore = async (datetime: Date): Promise<void> => {
-    const calories = getTotals().calories;
     try {
       if(documentId){
         await firestoreService.updateMeal(meal, mealName, user.uid, datetime, documentId);        
@@ -137,7 +141,15 @@ const getTotal = (nutrient: string): CallableFunction => (
                 carbs={food.carbs.toString()}
                 fats={food.fats.toString()}
                 key={index}
-              />
+              >
+              <Button
+                  title="Delete food"
+                  onPress={() => removeFoodFromMeal(index)}
+                  buttonStyle={{
+                    backgroundColor: theme.colors.danger
+                  }}
+                />
+              </FoodCard>
             ))
           ) : (
             <Text>No foods added to this meal</Text>
@@ -195,7 +207,7 @@ const getTotal = (nutrient: string): CallableFunction => (
                     borderRadius: 15,
                     padding: 10,
                   }}
-                />
+                /> 
               </Card>
               <Input 
                 placeholder="Enter meal name"
