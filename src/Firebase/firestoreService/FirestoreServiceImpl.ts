@@ -10,7 +10,7 @@ export default class FirestoreServiceImpl implements FirestoreService {
     this.firestore = firestore;
   }
 
-  saveMeal(meal: Array<any>, mealName: string, uid: string, eatenAt: Date, totalCalories: number): Promise<void> {
+  createMeal(meal: Array<any>, mealName: string, uid: string, eatenAt: Date): Promise<void> {
     const createdAt = new Date();
     return this.firestore.collection('meals').doc(uid+'-'+createdAt.getTime()+'-'+mealName).set({
       meal,
@@ -18,8 +18,19 @@ export default class FirestoreServiceImpl implements FirestoreService {
       createdAt,
       deleted: false,
       uid,
-      totalCalories,
-      mealName
+      mealName,
+    });
+  }
+
+  updateMeal(meal: Array<any>, mealName: string, uid: string, eatenAt: Date, id: string): Promise<void> {
+    const updatedAt = new Date();
+    return this.firestore.collection('meals').doc(id).update({
+      meal,
+      eatenAt,
+      deleted: false,
+      uid,
+      mealName,
+      updatedAt,
     });
   }
 
@@ -36,8 +47,10 @@ export default class FirestoreServiceImpl implements FirestoreService {
                       .get();
     if (response.docs.length){
       const mealDoc = response.docs[0].data();
+      const id = response.docs[0].id;
       const { eatenAt, meal, mealName } = mealDoc
       return {
+        id,
         eatenAt: eatenAt.toDate(),
         meal,
         mealName,

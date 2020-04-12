@@ -36,6 +36,8 @@ const getTotal = (nutrient: string): CallableFunction => (
 
   const [mealName, changeMealName] = useState('')
 
+  const [documentId, setDocumentId] = useState(null);
+
   const getTotals = (): {
     calories: number;
     protein: number;
@@ -61,7 +63,11 @@ const getTotal = (nutrient: string): CallableFunction => (
   const sendMealToFirestore = async (datetime: Date): Promise<void> => {
     const calories = getTotals().calories;
     try {
-      await firestoreService.saveMeal(meal, mealName, user.uid, datetime, calories);
+      if(documentId){
+        await firestoreService.updateMeal(meal, mealName, user.uid, datetime, documentId);        
+      } else{
+        await firestoreService.createMeal(meal, mealName, user.uid, datetime);
+      }
       navigation.navigate('Calendar');
     } catch (e) {
       console.log(e);
@@ -87,6 +93,7 @@ const getTotal = (nutrient: string): CallableFunction => (
         updateMeal(data.meal);
         changeEatenAt(data.eatenAt);
         changeMealName(data.mealName);
+        setDocumentId(data.id)
       }
       toggleIsLoading(false);
     })();
@@ -95,6 +102,7 @@ const getTotal = (nutrient: string): CallableFunction => (
       changeEatenAt(currentDate);
       changeMealName("");
       toggleIsLoading(true);
+      setDocumentId(null);
     }
   }, [currentDate])
 
