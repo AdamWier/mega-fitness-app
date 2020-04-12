@@ -86,6 +86,22 @@ const getTotal = (nutrient: string): CallableFunction => (
       {text: "Yes", onPress: () => sendMealToFirestore(datetime)},
     ]);
   }
+
+  const deleteMeal = async () => {
+    try{
+      await firestoreService.deleteMeal(documentId);
+      navigation.navigate('Calendar');
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const confirmDelete = () => {
+    Alert.alert("Delete", "Do you want to delete this meal?", [
+      {text: "No", onPress: () => null},
+      {text: "Yes", onPress: () => deleteMeal()}
+    ]);
+  }
   useEffect(() => {
     (async function (): Promise<void>{
       const data = await firestoreService.findMealsByDate(currentDate, user.uid);
@@ -197,7 +213,19 @@ const getTotal = (nutrient: string): CallableFunction => (
               <Button
                 title="Save meal"
                 onPress={getEatenAt} 
+                buttonStyle={{
+                  backgroundColor: theme.colors.success
+                }}
               />
+              {documentId ? 
+                <Button
+                  title="Delete meal"
+                  onPress={confirmDelete}
+                  buttonStyle={{
+                    backgroundColor: theme.colors.danger
+                  }}
+                /> 
+              : null}
             </View>
           ) : null}
         </View>

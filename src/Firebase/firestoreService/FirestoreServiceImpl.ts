@@ -34,6 +34,14 @@ export default class FirestoreServiceImpl implements FirestoreService {
     });
   }
 
+  deleteMeal(id: string): Promise<void> {
+    const updatedAt = new Date();
+    return this.firestore.collection('meals').doc(id).update({
+      deleted: true,
+      updatedAt,
+    })
+  }
+
   async findMealsByDate(dateStart: Date, uid: string): Promise<any> {
     const dateEnd = new Date(dateStart.getTime());
     dateEnd.setDate(dateStart.getDate() + 1);
