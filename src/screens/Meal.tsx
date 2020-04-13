@@ -23,19 +23,16 @@ const getTotal = (nutrient: string): CallableFunction => (
   
 function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element {
 
-  const mealDocument = route.params.document || [];
+  const mealDocument = route.params.document;
 
   const [eatenAt, changeEatenAt] = useState(mealDocument.eatenAt);
+  const [displayCalendar, toggleDisplayCalendar] = useState(false);
+  const [mealName, changeMealName] = useState(mealDocument.mealName || '')
+  const [documentId, setDocumentId] = useState(null);
 
   const title = eatenAt.toLocaleString('en');
 
   navigation.setOptions({ title });
-
-  const [displayCalendar, toggleDisplayCalendar] = useState(false);
-
-  const [mealName, changeMealName] = useState(mealDocument.mealName || '')
-
-  const [documentId, setDocumentId] = useState(null);
 
   const getTotals = (): {
     calories: number;
