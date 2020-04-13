@@ -10,17 +10,19 @@ import {
 import PropTypes from 'prop-types';
 import { container as UserContainer } from '../store/reducers/User'
 import { firestoreService } from '../Firebase';
+import TotalCard from '../components/TotalCard';
 
 function Day({ navigation, route, theme, user }): JSX.Element {
-
   const currentDate = route.params.date || new Date();
-
+  
   const title = currentDate.toLocaleString('en');
   navigation.setOptions({ title });
-
+  
   const [isLoading, toggleIsLoading] = useState(true);
-
+  
   const [mealDocuments, setMealDocuments] = useState([]);
+  
+  const allFoods = mealDocuments.flatMap(document => document.meal);
 
   const deleteMeal = async (documentId: string): Promise<void> => {
     try{
@@ -63,26 +65,29 @@ function Day({ navigation, route, theme, user }): JSX.Element {
         <ActivityIndicator size="large" /> 
         : <View>
           {mealDocuments.length ? (
-            mealDocuments.map((document: {[key: string]: any }, index: number) => (
-              <Card
-              title={document.mealName}
-              key={document.id}
-              >
-              <ListItem 
-                key={index}
-                title={document.eatenAt.toLocaleString('en')}
-                subtitle={"Total calories: " + document.meal.reduce(getTotalCalories, 0)}
-                onPress={() => navigation.navigate("Meal", {document})}
-              />
-              <Button
-                title="Delete meal"
-                onPress={() => confirmDelete(document.id)}
-                buttonStyle={{
-                  backgroundColor: theme.colors.danger
-                }}
-              />
-              </Card>
-            ))
+            <View>
+              {mealDocuments.map((document: {[key: string]: any }, index: number) => (
+                <Card
+                title={document.mealName}
+                key={document.id}
+                >
+                <ListItem 
+                  key={index}
+                  title={document.eatenAt.toLocaleString('en')}
+                  subtitle={"Total calories: " + document.meal.reduce(getTotalCalories, 0)}
+                  onPress={() => navigation.navigate("Meal", {document})}
+                />
+                <Button
+                  title="Delete meal"
+                  onPress={() => confirmDelete(document.id)}
+                  buttonStyle={{
+                    backgroundColor: theme.colors.danger
+                  }}
+                />
+                </Card>
+              ))}
+              <TotalCard foods={allFoods} />
+            </View>
           ) : (
             <Text>No meals for this date.</Text>
           )}

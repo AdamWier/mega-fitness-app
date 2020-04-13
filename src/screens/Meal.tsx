@@ -15,12 +15,8 @@ import { container as MealContainer } from '../store/reducers/Meal';
 import { container as UserContainer } from '../store/reducers/User'
 import { firestoreService } from '../Firebase';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import TotalCard from '../components/TotalCard';
 
-const getTotal = (nutrient: string): CallableFunction => (
-  accumulator: number,
-  currentValue: {[key: string]: any}
-  ): number => accumulator + currentValue[nutrient];
-  
 function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element {
 
   const mealDocument = route.params.document;
@@ -33,24 +29,6 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
   const title = eatenAt.toLocaleString('en');
 
   navigation.setOptions({ title });
-
-  const getTotals = (): {
-    calories: number;
-    protein: number;
-    carbs: number;
-    fats: number;
-  } => {
-    const calories = meal.reduce(getTotal('calories'), 0);
-    const protein = meal.reduce(getTotal('protein'), 0);
-    const carbs = meal.reduce(getTotal('carbs'), 0);
-    const fats = meal.reduce(getTotal('fats'), 0);
-    return {
-      calories,
-      protein,
-      carbs,
-      fats,
-    };
-  };
 
   const removeFoodFromMeal = (mealIndex: number): void => {
     const updatedArray = meal.filter((meal: {[key:string]: any}, index: number) => index !== mealIndex);
@@ -143,54 +121,7 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
         {meal.length ? (
           <View>
             <Divider />
-            <Card
-              containerStyle={{
-              backgroundColor: theme.colors.primary,
-              marginBottom: 20,
-              }}
-              title="Totals"
-            >
-              <ListItem
-                title="Calories:"
-                subtitle={getTotals().calories.toString()}
-                chevron={false}
-                containerStyle={{
-                  backgroundColor: theme.colors.primary,
-                  borderRadius: 15,
-                  padding: 10,
-                }}
-              />
-              <ListItem
-                title="Protein:"
-                subtitle={getTotals().protein.toString()}
-                chevron={false}
-                containerStyle={{
-                  backgroundColor: theme.colors.grey0,
-                  borderRadius: 15,
-                  padding: 10,
-                }}
-              />
-              <ListItem
-                title="Carbs:"
-                subtitle={getTotals().carbs.toString()}
-                chevron={false}
-                containerStyle={{
-                  backgroundColor: theme.colors.primary,
-                  borderRadius: 15,
-                  padding: 10,
-                }}
-              />
-              <ListItem
-                title="Fat:"
-                subtitle={getTotals().fats.toString()}
-                chevron={false}
-                containerStyle={{
-                  backgroundColor: theme.colors.grey0,
-                  borderRadius: 15,
-                  padding: 10,
-                }}
-              /> 
-            </Card>
+            <TotalCard foods={meal} />
             <Input 
               placeholder="Enter meal name"
               value={mealName}
