@@ -4,6 +4,7 @@ import Details from '../screens/Details';
 import AccountCreation from '../screens/AccountCreation';
 import Login from '../screens/Login';
 import Calendar from '../screens/Calendar';
+import Meal from '../screens/Meal';
 
 export default [
   {
@@ -27,6 +28,11 @@ export default [
   {
     name: 'Day',
     component: Day,
+    needsLogin: true,
+  },
+  {
+    name: 'Meal',
+    component: Meal,
     needsLogin: true,
   },
   {
