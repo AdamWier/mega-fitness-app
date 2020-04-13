@@ -36,6 +36,8 @@ const getTotal = (nutrient: string): CallableFunction => (
 
   const [mealName, changeMealName] = useState('')
 
+  const [documentId, setDocumentId] = useState(null);
+
   const getTotals = (): {
     calories: number;
     protein: number;
@@ -54,14 +56,22 @@ const getTotal = (nutrient: string): CallableFunction => (
     };
   };
 
+  const removeFoodFromMeal = (mealIndex: number): void => {
+    const updatedArray = meal.filter((meal: {[key:string]: any}, index: number) => index !== mealIndex);
+    updateMeal(updatedArray);
+  }
+
   const getEatenAt = (): void => {
     toggleDisplayCalendar(true);
   }
 
   const sendMealToFirestore = async (datetime: Date): Promise<void> => {
-    const calories = getTotals().calories;
     try {
-      await firestoreService.saveMeal(meal, mealName, user.uid, datetime, calories);
+      if(documentId){
+        await firestoreService.updateMeal(meal, mealName, user.uid, datetime, documentId);        
+      } else{
+        await firestoreService.createMeal(meal, mealName, user.uid, datetime);
+      }
       navigation.navigate('Calendar');
     } catch (e) {
       console.log(e);
@@ -80,6 +90,22 @@ const getTotal = (nutrient: string): CallableFunction => (
       {text: "Yes", onPress: () => sendMealToFirestore(datetime)},
     ]);
   }
+
+  const deleteMeal = async () => {
+    try{
+      await firestoreService.deleteMeal(documentId);
+      navigation.navigate('Calendar');
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const confirmDelete = () => {
+    Alert.alert("Delete", "Do you want to delete this meal?", [
+      {text: "No", onPress: () => null},
+      {text: "Yes", onPress: () => deleteMeal()}
+    ]);
+  }
   useEffect(() => {
     (async function (): Promise<void>{
       const data = await firestoreService.findMealsByDate(currentDate, user.uid);
@@ -87,6 +113,7 @@ const getTotal = (nutrient: string): CallableFunction => (
         updateMeal(data.meal);
         changeEatenAt(data.eatenAt);
         changeMealName(data.mealName);
+        setDocumentId(data.id)
       }
       toggleIsLoading(false);
     })();
@@ -95,6 +122,7 @@ const getTotal = (nutrient: string): CallableFunction => (
       changeEatenAt(currentDate);
       changeMealName("");
       toggleIsLoading(true);
+      setDocumentId(null);
     }
   }, [currentDate])
 
@@ -113,7 +141,15 @@ const getTotal = (nutrient: string): CallableFunction => (
                 carbs={food.carbs.toString()}
                 fats={food.fats.toString()}
                 key={index}
-              />
+              >
+              <Button
+                  title="Delete food"
+                  onPress={() => removeFoodFromMeal(index)}
+                  buttonStyle={{
+                    backgroundColor: theme.colors.danger
+                  }}
+                />
+              </FoodCard>
             ))
           ) : (
             <Text>No foods added to this meal</Text>
@@ -171,7 +207,7 @@ const getTotal = (nutrient: string): CallableFunction => (
                     borderRadius: 15,
                     padding: 10,
                   }}
-                />
+                /> 
               </Card>
               <Input 
                 placeholder="Enter meal name"
@@ -189,7 +225,19 @@ const getTotal = (nutrient: string): CallableFunction => (
               <Button
                 title="Save meal"
                 onPress={getEatenAt} 
+                buttonStyle={{
+                  backgroundColor: theme.colors.success
+                }}
               />
+              {documentId ? 
+                <Button
+                  title="Delete meal"
+                  onPress={confirmDelete}
+                  buttonStyle={{
+                    backgroundColor: theme.colors.danger
+                  }}
+                /> 
+              : null}
             </View>
           ) : null}
         </View>

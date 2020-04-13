@@ -80,7 +80,7 @@ function Details({ navigation, route, meal, updateMeal }): JSX.Element {
         <Slider
           step={1}
           minimumValue={1}
-          maximumValue={1000}
+          maximumValue={currentPortion.description === "gram" ? 5000 : 20}
           value={amount}
           onValueChange={(value): void => changeAmount(value)}
         />

@@ -15,6 +15,7 @@ export default function CalendarView({ navigation }): JSX.Element {
         <View>
         <CalendarList 
             onDayPress={(day) => goToDayScreen(day.timestamp)}
+            firstDay={1}
         />
         </View>
   );
