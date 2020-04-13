@@ -1,6 +1,7 @@
 import React from 'react';
-import { Card, ListItem, withTheme } from 'react-native-elements';
+import { Card, withTheme, Text, Divider } from 'react-native-elements';
 import PropTypes from 'prop-types';
+import { View, StyleSheet } from 'react-native';
 
 const getTotal = (nutrient: string): CallableFunction => (
     accumulator: number,
@@ -11,6 +12,7 @@ function TotalCard({
   theme,
   foods
 }): JSX.Element {
+
     const getTotals = (): {
         calories: number;
         protein: number;
@@ -28,54 +30,32 @@ function TotalCard({
           fats,
         };
       };
+
   return (
     <Card
         containerStyle={{
-        backgroundColor: theme.colors.primary,
+        backgroundColor: theme.colors.info,
         marginBottom: 20,
         }}
+        titleStyle={styles.text}
         title="Totals"
     >
-        <ListItem
-        title="Calories:"
-        subtitle={getTotals().calories.toString()}
-        chevron={false}
-        containerStyle={{
-            backgroundColor: theme.colors.primary,
-            borderRadius: 15,
-            padding: 10,
-        }}
-        />
-        <ListItem
-        title="Protein:"
-        subtitle={getTotals().protein.toString()}
-        chevron={false}
-        containerStyle={{
-            backgroundColor: theme.colors.grey0,
-            borderRadius: 15,
-            padding: 10,
-        }}
-        />
-        <ListItem
-        title="Carbs:"
-        subtitle={getTotals().carbs.toString()}
-        chevron={false}
-        containerStyle={{
-            backgroundColor: theme.colors.primary,
-            borderRadius: 15,
-            padding: 10,
-        }}
-        />
-        <ListItem
-        title="Fat:"
-        subtitle={getTotals().fats.toString()}
-        chevron={false}
-        containerStyle={{
-            backgroundColor: theme.colors.grey0,
-            borderRadius: 15,
-            padding: 10,
-        }}
-        /> 
+      <TotalListItem
+        total={getTotals().calories.toString()}
+        label="Calories:"
+      />
+      <TotalListItem
+        label="Protein:"
+        total={getTotals().protein.toString()}
+      />
+      <TotalListItem
+        label="Carbs:"
+        total={getTotals().carbs.toString()}
+      />
+      <TotalListItem
+        label="Fat:"
+        total={getTotals().fats.toString()}
+      /> 
     </Card>
   );
 }
@@ -83,5 +63,32 @@ function TotalCard({
 TotalCard.propTypes = {
   foods: PropTypes.array.isRequired
 };
+
+const TotalListItem: React.FC<any> = ({label, total}) => 
+<View>
+  <View style={styles.container}>
+    <Text style={styles.text}>{`${label}`}</Text>
+    <Text style={styles.text}>{total}</Text>
+  </View>
+    <Divider/>
+</View>
+
+TotalListItem.propTypes = {
+  label: PropTypes.string.isRequired,
+  total: PropTypes.number.isRequired,
+}
+
+const styles = StyleSheet.create({
+  container: {
+    margin: 5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  text: {
+    fontSize: 20,
+    fontWeight: "bold",
+    margin: 10
+  },
+})
 
 export default withTheme(TotalCard);

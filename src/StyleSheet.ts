@@ -14,6 +14,7 @@ const colors = {
   danger: '#E74C3C',
   grey0: '#adb5bd',
   warning: '#F39C12',
+  info: '#3498DB',
 };
 
 export const navTheme = {
