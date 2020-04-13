@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Text, Input, Button } from 'react-native-elements';
+import { Text, Input, Button, withTheme } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import { authService } from '../Firebase';
 import { container } from '../store/reducers/User';
 
-function Login({ navigation, storeLogin }): JSX.Element {
+function Login({ navigation, storeLogin, theme }): JSX.Element {
   const [loginDetails, setLoginDetails] = useState({
     email: '',
     password: '',
@@ -63,8 +63,11 @@ function Login({ navigation, storeLogin }): JSX.Element {
         onPress={(): void => {
           navigation.navigate('AccountCreation');
         }}
+        buttonStyle={{
+          backgroundColor: theme.colors.info,
+        }}
         containerStyle={{
-          margin: 50,
+          margin: 25,
         }}
       />
     </View>
@@ -84,6 +87,9 @@ Login.propTypes = {
     navigate: PropTypes.func.isRequired,
   }).isRequired,
   storeLogin: PropTypes.func.isRequired,
+  theme: PropTypes.shape({
+    colors: PropTypes.object.isRequired,
+  }).isRequired,
 };
 
-export default container(Login);
+export default container(withTheme(Login));

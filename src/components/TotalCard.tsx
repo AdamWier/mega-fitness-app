@@ -2,7 +2,6 @@ import React from 'react';
 import { Card, withTheme } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import TotalListItem from '../components/TotalListItem';
-import { StyleSheet } from 'react-native';
 
 const getTotal = (nutrient: string): CallableFunction => (
     accumulator: number,
@@ -34,11 +33,11 @@ function TotalCard({
 
   return (
     <Card
-        containerStyle={{
+      containerStyle={{
         backgroundColor: theme.colors.info,
         marginBottom: 20,
-        }}
-        title="Totals"
+      }}
+      title="Totals"
     >
       <TotalListItem
         total={getTotals().calories.toString()}
@@ -67,19 +66,5 @@ function TotalCard({
 TotalCard.propTypes = {
   foods: PropTypes.array.isRequired
 };
-
-// const TotalListItem: React.FC<any> = ({label, total}) => 
-// <View>
-//   <View style={styles.container}>
-//     <Text style={styles.text}>{`${label}`}</Text>
-//     <Text style={styles.text}>{total}</Text>
-//   </View>
-//     <Divider/>
-// </View>
-
-// TotalListItem.propTypes = {
-//   label: PropTypes.string.isRequired,
-//   total: PropTypes.number.isRequired,
-// }
 
 export default withTheme(TotalCard);
