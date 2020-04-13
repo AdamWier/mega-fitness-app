@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Alert } from 'react-native';
+import { View, ScrollView, Alert, StyleSheet } from 'react-native';
 import {
   Button,
   Text,
-  Divider,
   withTheme,
   Input,
 } from 'react-native-elements';
@@ -15,6 +14,11 @@ import { firestoreService } from '../Firebase';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import TotalCard from '../components/TotalCard';
 
+const getDateTimeString = (dateTime: Date): string => {
+  const fullString = dateTime.toLocaleString();
+  return fullString.substring(0, fullString.length - 4)
+}
+
 function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element {
 
   const mealDocument = route.params.document;
@@ -24,9 +28,7 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
   const [mealName, changeMealName] = useState(mealDocument.mealName || '')
   const [documentId, setDocumentId] = useState(null);
 
-  const title = eatenAt.toLocaleString('en');
-
-  navigation.setOptions({ title });
+  navigation.setOptions({ title: mealName || "New meal" });
 
   const removeFoodFromMeal = (mealIndex: number): void => {
     const updatedArray = meal.filter((meal: {[key:string]: any}, index: number) => index !== mealIndex);
@@ -53,13 +55,12 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
   const setDate = (datetime: Date) => {
     toggleDisplayCalendar(false);
     changeEatenAt(datetime);
-    askToSave(datetime);
   }
 
-  const askToSave = (datetime: Date): void => {
+  const askToSave = (): void => {
     Alert.alert("Save", "Do you want to save the meal?", [
       {text: "No", onPress: () => null},
-      {text: "Yes", onPress: () => sendMealToFirestore(datetime)},
+      {text: "Yes", onPress: () => sendMealToFirestore(eatenAt)},
     ]);
   }
 
@@ -87,7 +88,7 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
   }, [])
 
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={styles.container}>
       <Button
           title="Add a food"
           onPress={(): void => navigation.navigate('Search')}
@@ -96,10 +97,16 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
           }}
           containerStyle={{
             marginTop: 20,
+            width: '85%'
           }}
         />
         {meal.length ? (
           <View>
+            <Input 
+              placeholder="Enter meal name"
+              value={mealName}
+              onChangeText={(value) => changeMealName(value)} 
+            />
             {meal.map((food: {[key: string]: any }, index: number) => (
               <FoodCard
                 name={food.name}
@@ -121,11 +128,6 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
               </FoodCard>
             ))}
             <TotalCard foods={meal} />
-            <Input 
-              placeholder="Enter meal name"
-              value={mealName}
-              onChangeText={(value) => changeMealName(value)} 
-            />
             <DateTimePickerModal
               isVisible={displayCalendar}
               date={eatenAt}
@@ -133,10 +135,13 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
               onConfirm={setDate}
               onCancel={() => toggleDisplayCalendar(false)}
             />
-            <Text>{eatenAt.toString()}</Text>
+            <Button
+              title={`Eaten at: ${getDateTimeString(eatenAt)}`}
+              onPress={getEatenAt} 
+            />
             <Button
               title="Save meal"
-              onPress={getEatenAt} 
+              onPress={askToSave} 
               buttonStyle={{
                 backgroundColor: theme.colors.success
               }}
@@ -156,6 +161,12 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+  },
+})
 
 Meal.propTypes = {
   navigation: PropTypes.shape({
