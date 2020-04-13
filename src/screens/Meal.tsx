@@ -117,6 +117,9 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
         <Button
           title="Add a food"
           onPress={(): void => navigation.navigate('Search')}
+          buttonStyle={{
+            backgroundColor: theme.colors.warning
+          }}
         />
         {meal.length ? (
           <View>
