@@ -42,7 +42,7 @@ export default class FirestoreServiceImpl implements FirestoreService {
     })
   }
 
-  async findMealsByDate(dateStart: Date, uid: string): Promise<any> {
+  async findMealsByDate(dateStart: Date, uid: string): Promise<Array<any>> {
     const dateEnd = new Date(dateStart.getTime());
     dateEnd.setDate(dateStart.getDate() + 1);
     const response = await this.firestore
@@ -51,18 +51,18 @@ export default class FirestoreServiceImpl implements FirestoreService {
                       .where('eatenAt', "<", dateEnd)
                       .where('uid', '==', uid)
                       .where('deleted', '==', false)
-                      .limit(1)
                       .get();
     if (response.docs.length){
-      const mealDoc = response.docs[0].data();
-      const id = response.docs[0].id;
-      const { eatenAt, meal, mealName } = mealDoc
-      return {
-        id,
-        eatenAt: eatenAt.toDate(),
-        meal,
-        mealName,
-      }
+      return response.docs.map(doc => {
+        const data = doc.data();
+        const { eatenAt, meal, mealName } = data;
+        return {
+          id: doc.id,
+          eatenAt: eatenAt.toDate(),
+          meal,
+          mealName,
+        }
+      })
     } return null
   }
 

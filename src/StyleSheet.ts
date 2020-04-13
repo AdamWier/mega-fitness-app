@@ -13,6 +13,7 @@ const colors = {
   success: '#00bc8c',
   danger: '#E74C3C',
   grey0: '#adb5bd',
+  warning: '#F39C12',
 };
 
 export const navTheme = {
