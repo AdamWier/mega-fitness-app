@@ -50,7 +50,7 @@ function Details({ navigation, route, meal, updateMeal }): JSX.Element {
         carbs,
       },
     ]);
-    navigation.navigate('Day');
+    navigation.navigate('Meal');
   };
 
   useEffect(() => {

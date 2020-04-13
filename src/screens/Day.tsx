@@ -66,13 +66,13 @@ function Day({ navigation, route, theme, user }): JSX.Element {
             mealDocuments.map((document: {[key: string]: any }, index: number) => (
               <Card
               title={document.mealName}
-              key={document.mealName}
+              key={document.id}
               >
               <ListItem 
                 key={index}
                 title={document.eatenAt.toLocaleString('en')}
                 subtitle={"Total calories: " + document.meal.reduce(getTotalCalories, 0)}
-                onPress={() => navigation.navigate("Meal", {meal: document})}
+                onPress={() => navigation.navigate("Meal", {document})}
               />
               <Button
                 title="Delete meal"
