@@ -1,6 +1,8 @@
 import React from 'react';
-import { Card, ListItem } from 'react-native-elements';
+import { Card } from 'react-native-elements';
 import PropTypes from 'prop-types';
+import { View } from 'react-native';
+import TotalListItem from '../components/TotalListItem';
 
 export default function FoodCard({
   name,
@@ -10,15 +12,21 @@ export default function FoodCard({
   fats,
   portion,
   children = null,
+  expanded = false,
 }): JSX.Element {
   return (
-    <Card>
-      <ListItem title="Name:" subtitle={name} chevron={false} />
-      <ListItem title="Calories:" subtitle={calories} chevron={false} />
-      <ListItem title="Protein:" subtitle={protein} chevron={false} />
-      <ListItem title="Carbs:" subtitle={carbs} chevron={false} />
-      <ListItem title="Fat:" subtitle={fats} chevron={false} />
-      <ListItem title="Amount:" subtitle={portion} chevron={false} />
+    <Card
+      title={name}
+    >
+      <TotalListItem label="Calories:" total={calories} chevron={false} />
+      {expanded ? 
+        <View> 
+          <TotalListItem label="Protein:" total={protein} chevron={false} />
+          <TotalListItem label="Carbs:" total={carbs} chevron={false} />
+          <TotalListItem label="Fat:" total={fats} chevron={false} />
+        </View> 
+      : null}
+      <TotalListItem label="Amount:" total={portion} chevron={false} />
       {children}
     </Card>
   );

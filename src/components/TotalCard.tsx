@@ -1,7 +1,8 @@
 import React from 'react';
-import { Card, withTheme, Text, Divider } from 'react-native-elements';
+import { Card, withTheme } from 'react-native-elements';
 import PropTypes from 'prop-types';
-import { View, StyleSheet } from 'react-native';
+import TotalListItem from '../components/TotalListItem';
+import { StyleSheet } from 'react-native';
 
 const getTotal = (nutrient: string): CallableFunction => (
     accumulator: number,
@@ -37,24 +38,27 @@ function TotalCard({
         backgroundColor: theme.colors.info,
         marginBottom: 20,
         }}
-        titleStyle={styles.text}
         title="Totals"
     >
       <TotalListItem
         total={getTotals().calories.toString()}
         label="Calories:"
+        isBig
       />
       <TotalListItem
         label="Protein:"
         total={getTotals().protein.toString()}
+        isBig
       />
       <TotalListItem
         label="Carbs:"
         total={getTotals().carbs.toString()}
+        isBig
       />
       <TotalListItem
         label="Fat:"
         total={getTotals().fats.toString()}
+        isBig
       /> 
     </Card>
   );
@@ -64,31 +68,18 @@ TotalCard.propTypes = {
   foods: PropTypes.array.isRequired
 };
 
-const TotalListItem: React.FC<any> = ({label, total}) => 
-<View>
-  <View style={styles.container}>
-    <Text style={styles.text}>{`${label}`}</Text>
-    <Text style={styles.text}>{total}</Text>
-  </View>
-    <Divider/>
-</View>
+// const TotalListItem: React.FC<any> = ({label, total}) => 
+// <View>
+//   <View style={styles.container}>
+//     <Text style={styles.text}>{`${label}`}</Text>
+//     <Text style={styles.text}>{total}</Text>
+//   </View>
+//     <Divider/>
+// </View>
 
-TotalListItem.propTypes = {
-  label: PropTypes.string.isRequired,
-  total: PropTypes.number.isRequired,
-}
-
-const styles = StyleSheet.create({
-  container: {
-    margin: 5,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  text: {
-    fontSize: 20,
-    fontWeight: "bold",
-    margin: 10
-  },
-})
+// TotalListItem.propTypes = {
+//   label: PropTypes.string.isRequired,
+//   total: PropTypes.number.isRequired,
+// }
 
 export default withTheme(TotalCard);

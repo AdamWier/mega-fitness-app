@@ -4,8 +4,6 @@ import {
   Button,
   Text,
   Divider,
-  Card,
-  ListItem,
   withTheme,
   Input,
 } from 'react-native-elements';
@@ -90,40 +88,38 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
 
   return (
     <ScrollView>
-      <View>
-        {meal.length ? (
-          meal.map((food: {[key: string]: any }, index: number) => (
-            <FoodCard
-              name={food.name}
-              portion={food.portion}
-              calories={food.calories.toString()}
-              protein={food.protein.toString()}
-              carbs={food.carbs.toString()}
-              fats={food.fats.toString()}
-              key={index}
-            >
-            <Button
-                title="Delete food"
-                onPress={() => removeFoodFromMeal(index)}
-                buttonStyle={{
-                  backgroundColor: theme.colors.danger
-                }}
-              />
-            </FoodCard>
-          ))
-        ) : (
-          <Text>No foods added to this meal</Text>
-        )}
-        <Button
+      <Button
           title="Add a food"
           onPress={(): void => navigation.navigate('Search')}
           buttonStyle={{
             backgroundColor: theme.colors.warning
           }}
+          containerStyle={{
+            marginTop: 20,
+          }}
         />
         {meal.length ? (
           <View>
-            <Divider />
+            {meal.map((food: {[key: string]: any }, index: number) => (
+              <FoodCard
+                name={food.name}
+                portion={food.portion}
+                calories={food.calories.toString()}
+                protein={food.protein.toString()}
+                carbs={food.carbs.toString()}
+                fats={food.fats.toString()}
+                key={index}
+                expanded={false}
+              >
+              <Button
+                  title="Delete food"
+                  onPress={() => removeFoodFromMeal(index)}
+                  buttonStyle={{
+                    backgroundColor: theme.colors.danger
+                  }}
+                />
+              </FoodCard>
+            ))}
             <TotalCard foods={meal} />
             <Input 
               placeholder="Enter meal name"
@@ -155,8 +151,8 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
               /> 
             : null}
           </View>
-        ) : null}
-        </View>
+        ) :  <Text>No foods added to this meal</Text>
+      }
     </ScrollView>
   );
 }
