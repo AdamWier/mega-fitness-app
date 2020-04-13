@@ -27,10 +27,13 @@ export default function Search({ navigation }): JSX.Element {
 
   return (
     <View>
-      <Text h1>Search for food</Text>
+      <Text h2>Search for a food</Text>
       <SearchBar
         value={searchText}
         onChangeText={(text): void => updateSearchText(text)}
+        containerStyle={{
+          marginVertical: 10
+        }}
       />
       <Button
         type={!searchText ? 'outline' : 'solid'}

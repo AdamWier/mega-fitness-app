@@ -74,5 +74,16 @@ export const theme = {
       padding: 0,
     },
   },
+  SearchBar: {
+    inputStyle: {
+      color: colors.text
+    },
+    containerStyle: {
+      backgroundColor: colors.background,
+    },
+    inputContainerStyle: {
+      borderRadius: 0,
+    },
+  },
   colors,
 } as MyTheme;
