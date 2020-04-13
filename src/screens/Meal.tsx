@@ -27,6 +27,7 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
   const [displayCalendar, toggleDisplayCalendar] = useState(false);
   const [mealName, changeMealName] = useState(mealDocument.mealName || '')
   const [documentId, setDocumentId] = useState(null);
+  const [expandedCard, changeExpandedCard] = useState(null);
 
   navigation.setOptions({ title: mealName || "New meal" });
 
@@ -107,8 +108,9 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
               value={mealName}
               onChangeText={(value) => changeMealName(value)} 
             />
-            {meal.map((food: {[key: string]: any }, index: number) => (
-              <FoodCard
+            {meal.map((food: {[key: string]: any }, index: number) => {
+              const isExpandedCard = index === expandedCard;
+              return <FoodCard
                 name={food.name}
                 portion={food.portion}
                 calories={food.calories.toString()}
@@ -116,17 +118,29 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
                 carbs={food.carbs.toString()}
                 fats={food.fats.toString()}
                 key={index}
-                expanded={false}
+                expanded={isExpandedCard}
               >
-              <Button
-                  title="Delete food"
-                  onPress={() => removeFoodFromMeal(index)}
-                  buttonStyle={{
-                    backgroundColor: theme.colors.danger
-                  }}
-                />
+                <View style={styles.sideBySide}>
+                  <Button
+                    title="Delete food"
+                    onPress={() => removeFoodFromMeal(index)}
+                    buttonStyle={{
+                      backgroundColor: theme.colors.danger
+                    }}
+                  />
+                  {isExpandedCard ?
+                    <Button
+                    title="Hide details"
+                    onPress={() => changeExpandedCard(null)}
+                    />
+                  : <Button
+                    title="See details"
+                    onPress={() => changeExpandedCard(index)}
+                    />
+                  }
+                </View>
               </FoodCard>
-            ))}
+            })}
             <TotalCard foods={meal} />
             <DateTimePickerModal
               isVisible={displayCalendar}
@@ -166,6 +180,10 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
   },
+  sideBySide: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  }
 })
 
 Meal.propTypes = {
