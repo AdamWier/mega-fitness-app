@@ -45,7 +45,7 @@ export const theme = {
     },
     subtitleStyle: {
       color: colors.text,
-      textAlign: 'right',
+      textAlign: 'left',
     },
     containerStyle: {
       backgroundColor: colors.background,

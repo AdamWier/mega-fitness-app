@@ -12,10 +12,18 @@ import { container as UserContainer } from '../store/reducers/User'
 import { firestoreService } from '../Firebase';
 import TotalCard from '../components/TotalCard';
 
+const getTimeString = (time: Date): string => {
+  const fullString = time.toLocaleTimeString();
+  return fullString.substring(0, fullString.length - 3)
+}
+
+const months = ["January", "February", "March", "April", "May", "June",
+"July", "August", "September", "October", "November", "December"]
+
 function Day({ navigation, route, theme, user }): JSX.Element {
-  const currentDate = route.params.date || new Date();
+  const currentDate: Date = route.params.date || new Date();
   
-  const title = currentDate.toLocaleString('en');
+  const title = `${months[currentDate.getMonth()]} ${currentDate.getDate()}, ${currentDate.getFullYear()}`;
   navigation.setOptions({ title });
   
   const [isLoading, toggleIsLoading] = useState(true);
@@ -73,7 +81,7 @@ function Day({ navigation, route, theme, user }): JSX.Element {
                 >
                 <ListItem 
                   key={index}
-                  title={document.eatenAt.toLocaleString('en')}
+                  title={getTimeString(document.eatenAt)}
                   subtitle={"Total calories: " + document.meal.reduce(getTotalCalories, 0)}
                   onPress={() => navigation.navigate("Meal", {document})}
                 />
