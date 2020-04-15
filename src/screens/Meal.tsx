@@ -25,7 +25,7 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
 
   const [eatenAt, changeEatenAt] = useState(mealDocument.eatenAt);
   const [displayCalendar, toggleDisplayCalendar] = useState(false);
-  const [mealName, changeMealName] = useState(mealDocument.name);
+  const [mealName, changeMealName] = useState(mealDocument.name || "");
   const [documentId, setDocumentId] = useState(null);
   const [expandedCard, changeExpandedCard] = useState(null);
 

@@ -29,7 +29,7 @@ export default class FirestoreServiceImpl implements FirestoreService {
       eatenAt,
       deleted: false,
       uid,
-      mealName,
+      mealName: mealName === "" ? "Untitled" :  mealName,
       updatedAt,
     });
   }
