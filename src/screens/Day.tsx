@@ -72,12 +72,21 @@ function Day({ navigation, route, theme, user }): JSX.Element {
       {isLoading ? 
         <ActivityIndicator size="large" /> 
         : <View>
+          <Button 
+            title="Add a new meal" 
+            onPress={() => navigation.navigate('Meal', {document: {
+              id: null,
+              eatenAt: new Date(),
+              meal: [],
+              name: "Untitled",
+            }})}
+          />
           {mealDocuments.length ? (
             <View>
               {mealDocuments.map((document: {[key: string]: any }, index: number) => (
                 <Card
-                title={document.mealName}
-                key={document.id}
+                  title={document.mealName}
+                  key={document.id}
                 >
                 <ListItem 
                   key={index}

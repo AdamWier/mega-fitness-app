@@ -16,7 +16,7 @@ import TotalCard from '../components/TotalCard';
 
 const getDateTimeString = (dateTime: Date): string => {
   const fullString = dateTime.toLocaleString();
-  return fullString.substring(0, fullString.length - 4)
+  return fullString.substring(0, fullString.length -  8)
 }
 
 function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element {
@@ -25,11 +25,11 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
 
   const [eatenAt, changeEatenAt] = useState(mealDocument.eatenAt);
   const [displayCalendar, toggleDisplayCalendar] = useState(false);
-  const [mealName, changeMealName] = useState(mealDocument.mealName || '')
+  const [mealName, changeMealName] = useState(mealDocument.name);
   const [documentId, setDocumentId] = useState(null);
   const [expandedCard, changeExpandedCard] = useState(null);
 
-  navigation.setOptions({ title: mealName || "New meal" });
+  navigation.setOptions({ title: mealName === "Untitled" ? "New meal" : mealName });
 
   const removeFoodFromMeal = (mealIndex: number): void => {
     const updatedArray = meal.filter((meal: {[key:string]: any}, index: number) => index !== mealIndex);
@@ -109,7 +109,6 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
               onChangeText={(value) => changeMealName(value)} 
             />
             {meal.map((food: {[key: string]: any }, index: number) => {
-              console.log(food)
               const isExpandedCard = index === expandedCard;
               return <FoodCard
                 name={food.name}

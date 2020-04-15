@@ -16,7 +16,6 @@ export default function FoodCard({
   expanded,
   children,
 }): JSX.Element {
-  console.log(amountDescription)
   return (
     <Card
       title={name}
