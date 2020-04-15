@@ -47,7 +47,7 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
       } else{
         await firestoreService.createMeal(meal, mealName, user.uid, datetime);
       }
-      navigation.navigate('Day', {date: eatenAt});
+      navigation.navigate('Calendar');
     } catch (e) {
       console.log(e);
     }
