@@ -10,10 +10,13 @@ export default function FoodCard({
   protein,
   carbs,
   fats,
-  portion,
-  children = null,
-  expanded = false,
+  amount,
+  amountDescription,
+  onAmountChange,
+  expanded,
+  children,
 }): JSX.Element {
+  console.log(amountDescription)
   return (
     <Card
       title={name}
@@ -26,7 +29,13 @@ export default function FoodCard({
           <TotalListItem label="Fat:" total={fats} chevron={false} />
         </View> 
       : null}
-      <TotalListItem label="Amount:" total={portion} chevron={false} />
+      <TotalListItem 
+        label="Amount:" 
+        total={amount} 
+        description={amountDescription} 
+        chevron={false} 
+        onValueChange={onAmountChange} 
+      />
       {children}
     </Card>
   );
@@ -38,8 +47,10 @@ FoodCard.propTypes = {
   protein: PropTypes.string.isRequired,
   carbs: PropTypes.string.isRequired,
   fats: PropTypes.string.isRequired,
-  portion: PropTypes.string.isRequired,
-  // eslint-disable-next-line
+  amount: PropTypes.string.isRequired,
+  amountDescription: PropTypes.string,
+  onAmountChange: PropTypes.func,
+  expanded: PropTypes.bool,
   children:  PropTypes.oneOfType([ 
     PropTypes.node, 
     PropTypes.arrayOf(PropTypes.node),
@@ -48,4 +59,7 @@ FoodCard.propTypes = {
 
 FoodCard.defaultProps = {
   children: null,
+  amountDescription: null,
+  onAmountChange: null,
+  expanded: false,
 };

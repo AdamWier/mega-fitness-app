@@ -43,7 +43,8 @@ function Details({ navigation, route, meal, updateMeal }): JSX.Element {
       ...meal,
       {
         name: details.name,
-        portion: `${amount} ${currentPortion.description}`,
+        amount, 
+        portionDescription: currentPortion.description,
         calories,
         protein,
         fats,
@@ -61,11 +62,14 @@ function Details({ navigation, route, meal, updateMeal }): JSX.Element {
     <ScrollView>
       <FoodCard
         name={details.name}
-        portion={`${amount} ${currentPortion.description}`}
         calories={currentCalculations.calories.toString()}
         protein={currentCalculations.protein.toString()}
         carbs={currentCalculations.carbs.toString()}
         fats={currentCalculations.fats.toString()}
+        amount={amount ? amount.toString() : ''}
+        amountDescription={currentPortion.description}
+        onAmountChange={value => changeAmount(Number(value))}
+        expanded
       >
         <AmountPicker
           amounts={details.portions}
@@ -82,7 +86,7 @@ function Details({ navigation, route, meal, updateMeal }): JSX.Element {
           minimumValue={1}
           maximumValue={currentPortion.description === "gram" ? 5000 : 20}
           value={amount}
-          onValueChange={(value): void => changeAmount(value)}
+          onValueChange={(value): void => changeAmount(Number(value))}
         />
       </FoodCard>
       <Button

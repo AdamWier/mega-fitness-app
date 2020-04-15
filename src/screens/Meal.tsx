@@ -109,10 +109,12 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
               onChangeText={(value) => changeMealName(value)} 
             />
             {meal.map((food: {[key: string]: any }, index: number) => {
+              console.log(food)
               const isExpandedCard = index === expandedCard;
               return <FoodCard
                 name={food.name}
-                portion={food.portion}
+                amount={food.amount ? food.amount.toString() : ''}
+                amountDescription={food.portionDescription}
                 calories={food.calories.toString()}
                 protein={food.protein.toString()}
                 carbs={food.carbs.toString()}

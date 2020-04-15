@@ -20,8 +20,8 @@ function AmountPicker({
           description.charAt(0).toUpperCase() + description.substring(1);
         return (
           <Picker.Item
-            color={theme.colors.danger}
-            label={label}
+            color={theme.colors.info}
+            label={`${label} ⏬`}
             value={description}
             key={index}
           />
