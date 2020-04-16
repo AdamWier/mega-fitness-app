@@ -85,7 +85,7 @@ function Day({ navigation, route, theme, user }): JSX.Element {
             <View>
               {mealDocuments.map((document: {[key: string]: any }, index: number) => (
                 <Card
-                  title={document.mealName ? document.mealName : "Untitled"}
+                  title={document.name ? document.name : "Untitled"}
                   key={document.id}
                 >
                 <ListItem 

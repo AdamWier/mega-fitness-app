@@ -22,14 +22,14 @@ export default class FirestoreServiceImpl implements FirestoreService {
     });
   }
 
-  updateMeal(meal: Array<any>, mealName: string, uid: string, eatenAt: Date, id: string): Promise<void> {
+  updateMeal(meal: Array<any>, name: string, uid: string, eatenAt: Date, id: string): Promise<void> {
     const updatedAt = new Date();
     return this.firestore.collection('meals').doc(id).update({
       meal,
       eatenAt,
       deleted: false,
       uid,
-      mealName: mealName === "" ? "Untitled" :  mealName,
+      name: name === "" ? "Untitled" :  name,
       updatedAt,
     });
   }
@@ -55,12 +55,12 @@ export default class FirestoreServiceImpl implements FirestoreService {
     if (response.docs.length){
       return response.docs.map(doc => {
         const data = doc.data();
-        const { eatenAt, meal, mealName } = data;
+        const { eatenAt, meal, name } = data;
         return {
           id: doc.id,
           eatenAt: eatenAt.toDate(),
           meal,
-          mealName,
+          name,
         }
       })
     } return null
