@@ -25,7 +25,7 @@ const TotalListItem: React.FC<any> = ({label, total, isBig, onValueChange, descr
 
 TotalListItem.propTypes = {
   label: PropTypes.string.isRequired,
-  total: PropTypes.number.isRequired,
+  total: PropTypes.string.isRequired,
   isBig: PropTypes.bool,
   onValueChange: PropTypes.func,
   description: PropTypes.string,

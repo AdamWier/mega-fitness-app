@@ -84,7 +84,7 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
   }
 
   const blurInput = () => {
-    mealName && mealNameInput.current.blur();
+    mealName.current && mealNameInput.current.blur();
   };
 
   useEffect(() => {
@@ -120,6 +120,7 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
               value={mealName}
               onChangeText={(value) => changeMealName(value)} 
               ref={mealNameInput}
+              containerStyle={styles.input}
             />
             {meal.map((food: {[key: string]: any }, index: number) => {
               const isExpandedCard = index === expandedCard;
@@ -197,6 +198,9 @@ const styles = StyleSheet.create({
   sideBySide: {
     flexDirection: 'row',
     justifyContent: 'space-between'
+  },
+  input: {
+   alignSelf: 'center'
   }
 })
 
