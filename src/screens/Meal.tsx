@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Alert, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, ScrollView, Alert, StyleSheet, Keyboard } from 'react-native';
 import {
   Button,
   Text,
@@ -20,6 +20,8 @@ const getDateTimeString = (dateTime: Date): string => {
 }
 
 function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element {
+
+  const mealNameInput = useRef(null);
 
   const mealDocument = route.params.document;
 
@@ -81,11 +83,21 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
     ]);
   }
 
+  const blurInput = () => {
+    mealName && mealNameInput.current.blur();
+  };
+
   useEffect(() => {
+    Keyboard.addListener('keyboardDidHide', blurInput)
+
     const document = route.params.document;
     updateMeal(document.meal);
     changeEatenAt(document.eatenAt);
     setDocumentId(document.id);
+
+    return () => {
+      Keyboard.removeAllListeners('keyboardDidHide');
+    }
   }, [])
 
   return (
@@ -107,6 +119,7 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
               placeholder="Enter meal name"
               value={mealName}
               onChangeText={(value) => changeMealName(value)} 
+              ref={mealNameInput}
             />
             {meal.map((food: {[key: string]: any }, index: number) => {
               const isExpandedCard = index === expandedCard;
