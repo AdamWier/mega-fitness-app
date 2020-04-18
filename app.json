@@ -22,6 +22,10 @@
     },
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "android": {
+      "package": "com.adamwier.megafitnessapp.test18042021",
+      "versionCode": 0
+    }
   }
 }
