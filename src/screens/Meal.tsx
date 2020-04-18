@@ -145,12 +145,12 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
                   />
                   {isExpandedCard ?
                     <Button
-                    title="Hide details"
-                    onPress={() => changeExpandedCard(null)}
+                      title="Hide details"
+                      onPress={() => changeExpandedCard(null)}
                     />
                   : <Button
-                    title="See details"
-                    onPress={() => changeExpandedCard(index)}
+                      title="See details"
+                      onPress={() => changeExpandedCard(index)}
                     />
                   }
                 </View>

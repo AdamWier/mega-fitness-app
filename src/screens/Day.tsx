@@ -76,7 +76,7 @@ function Day({ navigation, route, theme, user }): JSX.Element {
             title="Add a new meal" 
             onPress={() => navigation.navigate('Meal', {document: {
               id: null,
-              eatenAt: new Date(),
+              eatenAt: currentDate,
               meal: [],
               name: "Untitled",
             }})}
