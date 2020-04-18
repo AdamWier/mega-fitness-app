@@ -14,6 +14,7 @@ const colors = {
   danger: '#E74C3C',
   grey0: '#adb5bd',
   warning: '#F39C12',
+  info: '#3498DB',
 };
 
 export const navTheme = {
@@ -44,7 +45,7 @@ export const theme = {
     },
     subtitleStyle: {
       color: colors.text,
-      textAlign: 'right',
+      textAlign: 'left',
     },
     containerStyle: {
       backgroundColor: colors.background,
@@ -58,6 +59,7 @@ export const theme = {
     },
     titleStyle: {
       color: colors.text,
+      fontSize: 22,
     },
   },
   Slider: {
@@ -70,6 +72,17 @@ export const theme = {
       marginHorizontal: 20,
       width: 300,
       padding: 0,
+    },
+  },
+  SearchBar: {
+    inputStyle: {
+      color: colors.text
+    },
+    containerStyle: {
+      backgroundColor: colors.background,
+    },
+    inputContainerStyle: {
+      borderRadius: 0,
     },
   },
   colors,

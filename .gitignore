@@ -11,6 +11,8 @@ web-build/
 web-report/
 .env
 yarn-error.log
+.env-prod
+.env-dev
 
 # macOS
 .DS_Store

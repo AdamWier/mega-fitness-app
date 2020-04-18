@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Alert } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, ScrollView, Alert, StyleSheet, Keyboard } from 'react-native';
 import {
   Button,
   Text,
-  Divider,
-  Card,
-  ListItem,
   withTheme,
   Input,
 } from 'react-native-elements';
@@ -17,18 +14,24 @@ import { firestoreService } from '../Firebase';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import TotalCard from '../components/TotalCard';
 
+const getDateTimeString = (dateTime: Date): string => {
+  const fullString = dateTime.toLocaleString();
+  return fullString.substring(0, fullString.length -  8)
+}
+
 function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element {
+
+  const mealNameInput = useRef(null);
 
   const mealDocument = route.params.document;
 
   const [eatenAt, changeEatenAt] = useState(mealDocument.eatenAt);
   const [displayCalendar, toggleDisplayCalendar] = useState(false);
-  const [mealName, changeMealName] = useState(mealDocument.mealName || '')
+  const [mealName, changeMealName] = useState(mealDocument.name || "");
   const [documentId, setDocumentId] = useState(null);
+  const [expandedCard, changeExpandedCard] = useState(null);
 
-  const title = eatenAt.toLocaleString('en');
-
-  navigation.setOptions({ title });
+  navigation.setOptions({ title: mealName === "Untitled" ? "New meal" : mealName });
 
   const removeFoodFromMeal = (mealIndex: number): void => {
     const updatedArray = meal.filter((meal: {[key:string]: any}, index: number) => index !== mealIndex);
@@ -46,7 +49,7 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
       } else{
         await firestoreService.createMeal(meal, mealName, user.uid, datetime);
       }
-      navigation.navigate('Day', {date: eatenAt});
+      navigation.navigate('Calendar');
     } catch (e) {
       console.log(e);
     }
@@ -55,13 +58,12 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
   const setDate = (datetime: Date) => {
     toggleDisplayCalendar(false);
     changeEatenAt(datetime);
-    askToSave(datetime);
   }
 
-  const askToSave = (datetime: Date): void => {
+  const askToSave = (): void => {
     Alert.alert("Save", "Do you want to save the meal?", [
       {text: "No", onPress: () => null},
-      {text: "Yes", onPress: () => sendMealToFirestore(datetime)},
+      {text: "Yes", onPress: () => sendMealToFirestore(eatenAt)},
     ]);
   }
 
@@ -81,55 +83,80 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
     ]);
   }
 
+  const blurInput = () => {
+    mealName.current && mealNameInput.current.blur();
+  };
+
   useEffect(() => {
+    Keyboard.addListener('keyboardDidHide', blurInput)
+
     const document = route.params.document;
     updateMeal(document.meal);
     changeEatenAt(document.eatenAt);
     setDocumentId(document.id);
+
+    return () => {
+      Keyboard.removeAllListeners('keyboardDidHide');
+    }
   }, [])
 
   return (
-    <ScrollView>
-      <View>
-        {meal.length ? (
-          meal.map((food: {[key: string]: any }, index: number) => (
-            <FoodCard
-              name={food.name}
-              portion={food.portion}
-              calories={food.calories.toString()}
-              protein={food.protein.toString()}
-              carbs={food.carbs.toString()}
-              fats={food.fats.toString()}
-              key={index}
-            >
-            <Button
-                title="Delete food"
-                onPress={() => removeFoodFromMeal(index)}
-                buttonStyle={{
-                  backgroundColor: theme.colors.danger
-                }}
-              />
-            </FoodCard>
-          ))
-        ) : (
-          <Text>No foods added to this meal</Text>
-        )}
-        <Button
+    <ScrollView contentContainerStyle={styles.container}>
+      <Button
           title="Add a food"
           onPress={(): void => navigation.navigate('Search')}
           buttonStyle={{
             backgroundColor: theme.colors.warning
           }}
+          containerStyle={{
+            marginTop: 20,
+            width: '85%'
+          }}
         />
         {meal.length ? (
           <View>
-            <Divider />
-            <TotalCard foods={meal} />
             <Input 
               placeholder="Enter meal name"
               value={mealName}
               onChangeText={(value) => changeMealName(value)} 
+              ref={mealNameInput}
+              containerStyle={styles.input}
             />
+            {meal.map((food: {[key: string]: any }, index: number) => {
+              const isExpandedCard = index === expandedCard;
+              return <FoodCard
+                name={food.name}
+                amount={food.amount ? food.amount.toString() : ''}
+                amountDescription={food.portionDescription}
+                calories={food.calories.toString()}
+                protein={food.protein.toString()}
+                carbs={food.carbs.toString()}
+                fats={food.fats.toString()}
+                key={index}
+                expanded={isExpandedCard}
+              >
+                <View style={styles.sideBySide}>
+                  <Button
+                    title="Delete food"
+                    onPress={() => removeFoodFromMeal(index)}
+                    buttonStyle={{
+                      backgroundColor: theme.colors.danger
+                    }}
+                  />
+                  {isExpandedCard ?
+                    <Button
+                      title="Hide details"
+                      onPress={() => changeExpandedCard(null)}
+                    />
+                  : <Button
+                      title="See details"
+                      onPress={() => changeExpandedCard(index)}
+                    />
+                  }
+                </View>
+              </FoodCard>
+            })}
+            <TotalCard foods={meal} />
             <DateTimePickerModal
               isVisible={displayCalendar}
               date={eatenAt}
@@ -137,10 +164,13 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
               onConfirm={setDate}
               onCancel={() => toggleDisplayCalendar(false)}
             />
-            <Text>{eatenAt.toString()}</Text>
+            <Button
+              title={`Eaten at: ${getDateTimeString(eatenAt)}`}
+              onPress={getEatenAt} 
+            />
             <Button
               title="Save meal"
-              onPress={getEatenAt} 
+              onPress={askToSave} 
               buttonStyle={{
                 backgroundColor: theme.colors.success
               }}
@@ -155,11 +185,24 @@ function Meal({ navigation, route, theme, meal, updateMeal, user }): JSX.Element
               /> 
             : null}
           </View>
-        ) : null}
-        </View>
+        ) :  <Text>No foods added to this meal</Text>
+      }
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+  },
+  sideBySide: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  input: {
+   alignSelf: 'center'
+  }
+})
 
 Meal.propTypes = {
   navigation: PropTypes.shape({
