@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { View, ScrollView, Alert, StyleSheet, Keyboard } from 'react-native';
 import { Button, Text, withTheme, Input } from 'react-native-elements';
 import PropTypes from 'prop-types';
@@ -24,12 +24,12 @@ function Meal({
 }): JSX.Element {
   const mealNameInput = useRef(null);
 
-  const mealDocument = route.params.document;
+  const mealDocument: any = route.params.document;
 
   const [eatenAt, changeEatenAt] = useState(mealDocument.eatenAt);
   const [displayCalendar, toggleDisplayCalendar] = useState(false);
   const [mealName, changeMealName] = useState(mealDocument.name || '');
-  const [documentId, setDocumentId] = useState(null);
+  const [documentId, setDocumentId] = useState(mealDocument.id);
   const [expandedCard, changeExpandedCard] = useState(null);
 
   navigation.setOptions({
@@ -101,15 +101,11 @@ function Meal({
   useEffect(() => {
     Keyboard.addListener('keyboardDidHide', blurInput);
 
-    const document = route.params.document;
-    updateMeal(document.meal);
-    changeEatenAt(document.eatenAt);
-    setDocumentId(document.id);
-
+    updateMeal(mealDocument.meal);
     return () => {
       Keyboard.removeAllListeners('keyboardDidHide');
     };
-  }, [route.params.document, updateMeal, blurInput]);
+  }, [updateMeal, blurInput]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
