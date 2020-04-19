@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Slider, Button } from 'react-native-elements';
 import { ScrollView } from 'react-native';
 import PropTypes from 'prop-types';
@@ -10,10 +10,16 @@ import { FormattedPortion } from '../ApiHelpers/USDA/USDAApi';
 function Details({ navigation, route, meal, updateMeal }): JSX.Element {
   const { details } = route.params;
 
-  const calculateNutrient = (nutrient: string): number =>
-    Math.round(details[nutrient] * amount * currentPortion.weight);
+  const [amount, changeAmount] = useState(1);
+  const [currentPortion, changePortion] = useState(details.portions[0]);
 
-  const calculateValues = (): {
+  const calculateNutrient = useCallback(
+    (nutrient: string): number =>
+      Math.round(details[nutrient] * amount * currentPortion.weight),
+    [amount, currentPortion.weight, details]
+  );
+
+  const calculateValues = useCallback((): {
     calories: number;
     protein: number;
     carbs: number;
@@ -29,10 +35,8 @@ function Details({ navigation, route, meal, updateMeal }): JSX.Element {
       carbs,
       fats,
     };
-  };
+  }, [calculateNutrient]);
 
-  const [amount, changeAmount] = useState(1);
-  const [currentPortion, changePortion] = useState(details.portions[0]);
   const [currentCalculations, updateCurrentCalculations] = useState(
     calculateValues()
   );
@@ -56,7 +60,7 @@ function Details({ navigation, route, meal, updateMeal }): JSX.Element {
 
   useEffect(() => {
     updateCurrentCalculations(calculateValues());
-  }, [amount, currentPortion]);
+  }, [calculateValues]);
 
   return (
     <ScrollView>

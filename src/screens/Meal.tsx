@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { View, ScrollView, Alert, StyleSheet, Keyboard } from 'react-native';
 import { Button, Text, withTheme, Input } from 'react-native-elements';
 import PropTypes from 'prop-types';
@@ -94,9 +94,9 @@ function Meal({
     ]);
   };
 
-  const blurInput = () => {
+  const blurInput = useCallback(() => {
     mealName.current && mealNameInput.current.blur();
-  };
+  }, [mealName]);
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidHide', blurInput);
@@ -109,7 +109,7 @@ function Meal({
     return () => {
       Keyboard.removeAllListeners('keyboardDidHide');
     };
-  }, [route.params.document, updateMeal]);
+  }, [route.params.document, updateMeal, blurInput]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
