@@ -5,20 +5,17 @@ import firebase from 'firebase';
 export default class AuthServiceImpl implements AuthService {
   auth: firebase.auth.Auth;
 
-  firestore: FirestoreService
+  firestore: FirestoreService;
 
-  constructor(
-    auth: firebase.auth.Auth,
-    firestore: FirestoreService,
-  ) {
+  constructor(auth: firebase.auth.Auth, firestore: FirestoreService) {
     this.auth = auth;
     this.firestore = firestore;
     this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
   }
 
-  checkIfLoggedIn(): {uid: string, email: string} | null {
+  checkIfLoggedIn(): { uid: string; email: string } | null {
     const user = this.auth.currentUser;
-    return user ? { uid: user.uid, email: user.email } :  null;
+    return user ? { uid: user.uid, email: user.email } : null;
   }
 
   async login(
@@ -36,7 +33,7 @@ export default class AuthServiceImpl implements AuthService {
     email: string,
     password: string
   ): Promise<{ uid: string; email: string }> {
-    try{
+    try {
       const credentials = await this.auth.createUserWithEmailAndPassword(
         email,
         password
@@ -85,6 +82,7 @@ export default class AuthServiceImpl implements AuthService {
   }
 
   verifyEmail(email: string): string[] {
+    // eslint-disable-next-line no-control-regex
     const regex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
     const errors = [];
     if (!email.match(regex)) {

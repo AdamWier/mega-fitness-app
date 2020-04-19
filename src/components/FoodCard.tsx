@@ -17,23 +17,21 @@ export default function FoodCard({
   children,
 }): JSX.Element {
   return (
-    <Card
-      title={name}
-    >
+    <Card title={name}>
       <TotalListItem label="Calories:" total={calories} chevron={false} />
-      {expanded ? 
-        <View> 
+      {expanded ? (
+        <View>
           <TotalListItem label="Protein:" total={protein} chevron={false} />
           <TotalListItem label="Carbs:" total={carbs} chevron={false} />
           <TotalListItem label="Fat:" total={fats} chevron={false} />
-        </View> 
-      : null}
-      <TotalListItem 
-        label="Amount:" 
-        total={amount} 
-        description={amountDescription} 
-        chevron={false} 
-        onValueChange={onAmountChange} 
+        </View>
+      ) : null}
+      <TotalListItem
+        label="Amount:"
+        total={amount}
+        description={amountDescription}
+        chevron={false}
+        onValueChange={onAmountChange}
       />
       {children}
     </Card>
@@ -50,8 +48,8 @@ FoodCard.propTypes = {
   amountDescription: PropTypes.string,
   onAmountChange: PropTypes.func,
   expanded: PropTypes.bool,
-  children:  PropTypes.oneOfType([ 
-    PropTypes.node, 
+  children: PropTypes.oneOfType([
+    PropTypes.node,
     PropTypes.arrayOf(PropTypes.node),
   ]),
 };

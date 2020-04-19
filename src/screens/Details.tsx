@@ -43,7 +43,7 @@ function Details({ navigation, route, meal, updateMeal }): JSX.Element {
       ...meal,
       {
         name: details.name,
-        amount, 
+        amount,
         portionDescription: currentPortion.description,
         calories,
         protein,
@@ -68,7 +68,7 @@ function Details({ navigation, route, meal, updateMeal }): JSX.Element {
         fats={currentCalculations.fats.toString()}
         amount={amount ? amount.toString() : ''}
         amountDescription={currentPortion.description}
-        onAmountChange={value => changeAmount(Number(value))}
+        onAmountChange={(value) => changeAmount(Number(value))}
         expanded
       >
         <AmountPicker
@@ -84,7 +84,7 @@ function Details({ navigation, route, meal, updateMeal }): JSX.Element {
         <Slider
           step={1}
           minimumValue={1}
-          maximumValue={currentPortion.description === "gram" ? 5000 : 20}
+          maximumValue={currentPortion.description === 'gram' ? 5000 : 20}
           value={amount}
           onValueChange={(value): void => changeAmount(Number(value))}
         />

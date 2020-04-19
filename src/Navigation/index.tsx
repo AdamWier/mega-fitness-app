@@ -12,14 +12,14 @@ const Stack = createStackNavigator();
 
 function Navigation({ user, storeLogin }): JSX.Element {
   // Seems functional but probably still needs to be tested
-  const Screens = StackScreenCreator(Stack, screens, !!user.uid)
-  
+  const Screens = StackScreenCreator(Stack, screens, !!user.uid);
+
   React.useEffect(() => {
-      const userCheck = authService.checkIfLoggedIn();
-      if(!user && userCheck){
-        storeLogin(userCheck);
-      }
-  }, [user])
+    const userCheck = authService.checkIfLoggedIn();
+    if (!user && userCheck) {
+      storeLogin(userCheck);
+    }
+  }, [user, storeLogin]);
 
   return (
     <NavigationContainer theme={navTheme}>
@@ -34,7 +34,7 @@ function Navigation({ user, storeLogin }): JSX.Element {
           headerTintColor: navTheme.colors.text,
         }}
       >
-      {Screens}
+        {Screens}
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -45,6 +45,7 @@ Navigation.propTypes = {
     uid: PropTypes.string,
     email: PropTypes.string,
   }).isRequired,
+  storeLogin: PropTypes.func.isRequired,
 };
 
 export default container(Navigation);

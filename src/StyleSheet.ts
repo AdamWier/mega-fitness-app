@@ -76,7 +76,7 @@ export const theme = {
   },
   SearchBar: {
     inputStyle: {
-      color: colors.text
+      color: colors.text,
     },
     containerStyle: {
       backgroundColor: colors.background,
