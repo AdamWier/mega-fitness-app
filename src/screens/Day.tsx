@@ -3,8 +3,10 @@ import { View, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import { Button, Text, Card, ListItem, withTheme } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { container as UserContainer } from '../store/reducers/User';
+import { container as MealContainer } from '../store/reducers/MealDocument';
 import { firestoreService } from '../Firebase';
 import TotalCard from '../components/TotalCard';
+import MealDocument from '../Firebase/Documents/MealDocument';
 
 const getTimeString = (time: Date): string => {
   const fullString = time.toLocaleTimeString();
@@ -26,12 +28,13 @@ const months = [
   'December',
 ];
 
-function Day({ navigation, route, theme, user }): JSX.Element {
+function Day({ navigation, route, theme, user, updateMealDocument }): JSX.Element {
   const currentDate: Date = route.params.date || new Date();
 
   const title = `${
     months[currentDate.getMonth()]
   } ${currentDate.getDate()}, ${currentDate.getFullYear()}`;
+
   navigation.setOptions({ title });
 
   const [isLoading, toggleIsLoading] = useState(true);
@@ -61,6 +64,11 @@ function Day({ navigation, route, theme, user }): JSX.Element {
     currentValue: { [key: string]: any }
   ): number => accumulator + currentValue.calories;
 
+  const handleMealPress = (document: MealDocument) => {
+    updateMealDocument(document);
+    navigation.navigate('Meal');
+  }
+
   useEffect(() => {
     (async function (): Promise<void> {
       const data = await firestoreService.findMealsByDate(
@@ -86,21 +94,20 @@ function Day({ navigation, route, theme, user }): JSX.Element {
         <View>
           <Button
             title="Add a new meal"
-            onPress={() =>
-              navigation.navigate('Meal', {
-                document: {
-                  id: null,
-                  eatenAt: currentDate,
-                  meal: [],
-                  name: 'Untitled',
-                },
-              })
-            }
+            onPress={() =>handleMealPress({
+              id: null,
+              eatenAt: currentDate,
+              meal: [],
+              name: 'Untitled',
+              createdAt: new Date(),
+              deleted: false,
+              uid: user.uid
+            })}
           />
           {mealDocuments.length ? (
             <View>
               {mealDocuments.map(
-                (document: { [key: string]: any }, index: number) => (
+                (document: MealDocument, index: number) => (
                   <Card
                     title={document.name ? document.name : 'Untitled'}
                     key={document.id}
@@ -112,7 +119,7 @@ function Day({ navigation, route, theme, user }): JSX.Element {
                         'Total calories: ' +
                         document.meal.reduce(getTotalCalories, 0)
                       }
-                      onPress={() => navigation.navigate('Meal', { document })}
+                      onPress={() => handleMealPress(document)}
                     />
                     <Button
                       title="Delete meal"
@@ -146,6 +153,7 @@ Day.propTypes = {
   theme: PropTypes.shape({
     colors: PropTypes.object.isRequired,
   }).isRequired,
+  updateMealDocument: PropTypes.func.isRequired,
 };
 
-export default UserContainer(withTheme(Day));
+export default MealContainer(UserContainer(withTheme(Day)));

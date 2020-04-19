@@ -3,7 +3,7 @@ import { View, ScrollView, Alert, StyleSheet, Keyboard } from 'react-native';
 import { Button, Text, withTheme, Input } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import FoodCard from '../components/FoodCard';
-import { container as MealContainer } from '../store/reducers/Meal';
+import { container as MealContainer } from '../store/reducers/MealDocument';
 import { container as UserContainer } from '../store/reducers/User';
 import { firestoreService } from '../Firebase';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -16,49 +16,48 @@ const getDateTimeString = (dateTime: Date): string => {
 
 function Meal({
   navigation,
-  route,
   theme,
-  meal,
-  updateMeal,
+  mealDocument,
+  updateMealDocument,
   user,
 }): JSX.Element {
   const mealNameInput = useRef(null);
 
-  const mealDocument: any = route.params.document;
+  const {meal, eatenAt, name, id} = mealDocument;
 
-  const [eatenAt, changeEatenAt] = useState(mealDocument.eatenAt);
   const [displayCalendar, toggleDisplayCalendar] = useState(false);
-  const [mealName, changeMealName] = useState(mealDocument.name || '');
-  const [documentId, setDocumentId] = useState(mealDocument.id);
   const [expandedCard, changeExpandedCard] = useState(null);
 
   navigation.setOptions({
-    title: mealName === 'Untitled' ? 'New meal' : mealName,
+    title: name === 'Untitled' ? 'New meal' : name,
   });
 
   const removeFoodFromMeal = (mealIndex: number): void => {
-    const updatedArray = meal.filter(
+    const meals = meal.filter(
       (mealItem: { [key: string]: any }, index: number) => index !== mealIndex
     );
-    updateMeal(updatedArray);
+    updateMealDocument({
+      ...mealDocument,
+      meals,
+    });
   };
 
   const getEatenAt = (): void => {
     toggleDisplayCalendar(true);
   };
 
-  const sendMealToFirestore = async (datetime: Date): Promise<void> => {
+  const sendMealToFirestore = async (): Promise<void> => {
     try {
-      if (documentId) {
+      if (id) {
         await firestoreService.updateMeal(
           meal,
-          mealName,
+          name,
           user.uid,
-          datetime,
-          documentId
+          eatenAt,
+          id
         );
       } else {
-        await firestoreService.createMeal(meal, mealName, user.uid, datetime);
+        await firestoreService.createMeal(meal, name, user.uid, eatenAt);
       }
       navigation.navigate('Calendar');
     } catch (e) {
@@ -66,21 +65,24 @@ function Meal({
     }
   };
 
-  const setDate = (datetime: Date) => {
+  const setDate = (eatenAt: Date) => {
     toggleDisplayCalendar(false);
-    changeEatenAt(datetime);
+    updateMealDocument({
+      ...mealDocument,
+      eatenAt,
+    });
   };
 
   const askToSave = (): void => {
     Alert.alert('Save', 'Do you want to save the meal?', [
       { text: 'No', onPress: () => null },
-      { text: 'Yes', onPress: () => sendMealToFirestore(eatenAt) },
+      { text: 'Yes', onPress: () => sendMealToFirestore() },
     ]);
   };
 
   const deleteMeal = async () => {
     try {
-      await firestoreService.deleteMeal(documentId);
+      await firestoreService.deleteMeal(id);
       navigation.navigate('Day', { date: eatenAt });
     } catch (e) {
       console.log(e);
@@ -95,17 +97,16 @@ function Meal({
   };
 
   const blurInput = useCallback(() => {
-    mealName.current && mealNameInput.current.blur();
-  }, [mealName]);
+    mealNameInput.current && mealNameInput.current.blur();
+  }, [mealNameInput.current]);
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidHide', blurInput);
 
-    updateMeal(mealDocument.meal);
     return () => {
       Keyboard.removeAllListeners('keyboardDidHide');
     };
-  }, [updateMeal, blurInput]);
+  }, [blurInput]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -124,8 +125,11 @@ function Meal({
         <View>
           <Input
             placeholder="Enter meal name"
-            value={mealName}
-            onChangeText={(value) => changeMealName(value)}
+            value={name}
+            onChangeText={(name) => updateMealDocument({
+              ...mealDocument,
+              name,
+            })}
             ref={mealNameInput}
             containerStyle={styles.input}
           />
@@ -185,7 +189,7 @@ function Meal({
               backgroundColor: theme.colors.success,
             }}
           />
-          {documentId ? (
+          {id ? (
             <Button
               title="Delete meal"
               onPress={confirmDelete}
@@ -223,11 +227,8 @@ Meal.propTypes = {
   theme: PropTypes.shape({
     colors: PropTypes.object.isRequired,
   }).isRequired,
-  meal: PropTypes.arrayOf(PropTypes.object).isRequired,
-  route: PropTypes.shape({
-    params: PropTypes.object.isRequired,
-  }).isRequired,
-  updateMeal: PropTypes.func.isRequired,
+  mealDocument: PropTypes.object.isRequired,
+  updateMealDocument: PropTypes.func.isRequired,
   user: PropTypes.shape({
     uid: PropTypes.string,
     email: PropTypes.string,

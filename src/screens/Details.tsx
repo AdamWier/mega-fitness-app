@@ -4,10 +4,10 @@ import { ScrollView } from 'react-native';
 import PropTypes from 'prop-types';
 import AmountPicker from '../components/AmountPicker';
 import FoodCard from '../components/FoodCard';
-import { container } from '../store/reducers/Meal';
+import { container } from '../store/reducers/MealDocument';
 import { FormattedPortion } from '../ApiHelpers/USDA/USDAApi';
 
-function Details({ navigation, route, meal, updateMeal }): JSX.Element {
+function Details({ navigation, route, mealDocument, updateMealDocument }): JSX.Element {
   const { details } = route.params;
 
   const [amount, changeAmount] = useState(1);
@@ -43,18 +43,21 @@ function Details({ navigation, route, meal, updateMeal }): JSX.Element {
 
   const addFood = (): void => {
     const { calories, protein, fats, carbs } = currentCalculations;
-    updateMeal([
-      ...meal,
-      {
-        name: details.name,
-        amount,
-        portionDescription: currentPortion.description,
-        calories,
-        protein,
-        fats,
-        carbs,
-      },
-    ]);
+    updateMealDocument({
+      ...mealDocument,
+      meal: [
+        ...mealDocument.meal,
+        {
+          name: details.name,
+          amount,
+          portionDescription: currentPortion.description,
+          calories,
+          protein,
+          fats,
+          carbs,
+        },
+      ]
+    });
     navigation.navigate('Meal');
   };
 
@@ -110,8 +113,8 @@ Details.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.object.isRequired,
   }).isRequired,
-  meal: PropTypes.arrayOf(PropTypes.object).isRequired,
-  updateMeal: PropTypes.func.isRequired,
+  mealDocument: PropTypes.object.isRequired,
+  updateMealDocument: PropTypes.func.isRequired,
 };
 
 export default container(Details);
