@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { View, ScrollView, Alert, StyleSheet, Keyboard } from 'react-native';
 import { Button, Text, withTheme, Input } from 'react-native-elements';
 import PropTypes from 'prop-types';
@@ -23,7 +23,7 @@ function Meal({
 }): JSX.Element {
   const mealNameInput = useRef(null);
 
-  const {meal, eatenAt, name, id} = mealDocument;
+  const { meal, eatenAt, name, id } = mealDocument;
 
   const [displayCalendar, toggleDisplayCalendar] = useState(false);
   const [expandedCard, changeExpandedCard] = useState(null);
@@ -49,13 +49,7 @@ function Meal({
   const sendMealToFirestore = async (): Promise<void> => {
     try {
       if (id) {
-        await firestoreService.updateMeal(
-          meal,
-          name,
-          user.uid,
-          eatenAt,
-          id
-        );
+        await firestoreService.updateMeal(meal, name, user.uid, eatenAt, id);
       } else {
         await firestoreService.createMeal(meal, name, user.uid, eatenAt);
       }
@@ -65,11 +59,11 @@ function Meal({
     }
   };
 
-  const setDate = (eatenAt: Date) => {
+  const setDate = (input: Date) => {
     toggleDisplayCalendar(false);
     updateMealDocument({
       ...mealDocument,
-      eatenAt,
+      eatenAt: input,
     });
   };
 
@@ -98,7 +92,7 @@ function Meal({
 
   const blurInput = useCallback(() => {
     mealNameInput.current && mealNameInput.current.blur();
-  }, [mealNameInput.current]);
+  }, []);
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidHide', blurInput);
@@ -126,10 +120,12 @@ function Meal({
           <Input
             placeholder="Enter meal name"
             value={name}
-            onChangeText={(name) => updateMealDocument({
-              ...mealDocument,
-              name,
-            })}
+            onChangeText={(input) =>
+              updateMealDocument({
+                ...mealDocument,
+                name: input,
+              })
+            }
             ref={mealNameInput}
             containerStyle={styles.input}
           />

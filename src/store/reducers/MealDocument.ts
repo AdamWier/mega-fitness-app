@@ -31,7 +31,8 @@ const mapStateToProps = (state: {
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): { [key: string]: any } => ({
-  updateMealDocument: (payload: Array<any>): any => dispatch(updateMealDocument(payload)),
+  updateMealDocument: (payload: Array<any>): any =>
+    dispatch(updateMealDocument(payload)),
 });
 
 export const container = connect(mapStateToProps, mapDispatchToProps);

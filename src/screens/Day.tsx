@@ -28,7 +28,13 @@ const months = [
   'December',
 ];
 
-function Day({ navigation, route, theme, user, updateMealDocument }): JSX.Element {
+function Day({
+  navigation,
+  route,
+  theme,
+  user,
+  updateMealDocument,
+}): JSX.Element {
   const currentDate: Date = route.params.date || new Date();
 
   const title = `${
@@ -67,7 +73,7 @@ function Day({ navigation, route, theme, user, updateMealDocument }): JSX.Elemen
   const handleMealPress = (document: MealDocument) => {
     updateMealDocument(document);
     navigation.navigate('Meal');
-  }
+  };
 
   useEffect(() => {
     (async function (): Promise<void> {
@@ -94,43 +100,43 @@ function Day({ navigation, route, theme, user, updateMealDocument }): JSX.Elemen
         <View>
           <Button
             title="Add a new meal"
-            onPress={() =>handleMealPress({
-              id: null,
-              eatenAt: currentDate,
-              meal: [],
-              name: 'Untitled',
-              createdAt: new Date(),
-              deleted: false,
-              uid: user.uid
-            })}
+            onPress={() =>
+              handleMealPress({
+                id: null,
+                eatenAt: currentDate,
+                meal: [],
+                name: 'Untitled',
+                createdAt: new Date(),
+                deleted: false,
+                uid: user.uid,
+              })
+            }
           />
           {mealDocuments.length ? (
             <View>
-              {mealDocuments.map(
-                (document: MealDocument, index: number) => (
-                  <Card
-                    title={document.name ? document.name : 'Untitled'}
-                    key={document.id}
-                  >
-                    <ListItem
-                      key={index}
-                      title={getTimeString(document.eatenAt)}
-                      subtitle={
-                        'Total calories: ' +
-                        document.meal.reduce(getTotalCalories, 0)
-                      }
-                      onPress={() => handleMealPress(document)}
-                    />
-                    <Button
-                      title="Delete meal"
-                      onPress={() => confirmDelete(document.id)}
-                      buttonStyle={{
-                        backgroundColor: theme.colors.danger,
-                      }}
-                    />
-                  </Card>
-                )
-              )}
+              {mealDocuments.map((document: MealDocument, index: number) => (
+                <Card
+                  title={document.name ? document.name : 'Untitled'}
+                  key={document.id}
+                >
+                  <ListItem
+                    key={index}
+                    title={getTimeString(document.eatenAt)}
+                    subtitle={
+                      'Total calories: ' +
+                      document.meal.reduce(getTotalCalories, 0)
+                    }
+                    onPress={() => handleMealPress(document)}
+                  />
+                  <Button
+                    title="Delete meal"
+                    onPress={() => confirmDelete(document.id)}
+                    buttonStyle={{
+                      backgroundColor: theme.colors.danger,
+                    }}
+                  />
+                </Card>
+              ))}
               <TotalCard foods={allFoods} />
             </View>
           ) : (

@@ -7,7 +7,12 @@ import FoodCard from '../components/FoodCard';
 import { container } from '../store/reducers/MealDocument';
 import { FormattedPortion } from '../ApiHelpers/USDA/USDAApi';
 
-function Details({ navigation, route, mealDocument, updateMealDocument }): JSX.Element {
+function Details({
+  navigation,
+  route,
+  mealDocument,
+  updateMealDocument,
+}): JSX.Element {
   const { details } = route.params;
 
   const [amount, changeAmount] = useState(1);
@@ -56,7 +61,7 @@ function Details({ navigation, route, mealDocument, updateMealDocument }): JSX.E
           fats,
           carbs,
         },
-      ]
+      ],
     });
     navigation.navigate('Meal');
   };
