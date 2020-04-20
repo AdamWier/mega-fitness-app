@@ -6,7 +6,17 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "lint": "eslint --fix src/**/*.{ts,tsx}"
+    "lint": "eslint --fix src/**/*.{jsx,ts,tsx}"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{jsx,ts,tsx}": [
+      "eslint --fix"
+    ]
   },
   "dependencies": {
     "@react-native-community/datetimepicker": "2.1.0",
@@ -33,6 +43,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
+    "@react-native-community/eslint-config": "^1.1.0",
     "@types/firebase": "^3.2.1",
     "@types/react": "~16.9.0",
     "@types/react-native": "~0.60.23",
@@ -54,7 +65,8 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.0",
     "eslint-plugin-react-native": "^3.8.1",
-    "husky": "^4.2.3",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.1.6",
     "prettier": "^2.0.2",
     "typescript": "~3.6.3"
   },

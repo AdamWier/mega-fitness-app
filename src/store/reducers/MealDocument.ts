@@ -1,14 +1,14 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-const UPDATE_MEAL = 'UPDATE_MEAL';
+const UPDATE_MEAL_DOCUMENT = 'UPDATE_MEAL_DOCUMENT';
 
 const initalState = [];
 
-function updateMeal(newMeal: Array<any>): { type: string; payload: any } {
+function updateMealDocument(mealDocument: any): { type: string; payload: any } {
   return {
-    type: UPDATE_MEAL,
-    payload: newMeal,
+    type: UPDATE_MEAL_DOCUMENT,
+    payload: mealDocument,
   };
 }
 
@@ -17,8 +17,8 @@ export const mealReducer = (
   action: { type: string; payload: any }
 ): { [key: string]: any } => {
   switch (action.type) {
-    case UPDATE_MEAL:
-      return [...action.payload];
+    case UPDATE_MEAL_DOCUMENT:
+      return action.payload;
     default:
       return state;
   }
@@ -27,11 +27,12 @@ export const mealReducer = (
 const mapStateToProps = (state: {
   [key: string]: any;
 }): { [key: string]: any } => ({
-  meal: state.meal,
+  mealDocument: state.mealDocument,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): { [key: string]: any } => ({
-  updateMeal: (payload: Array<any>): any => dispatch(updateMeal(payload)),
+  updateMealDocument: (payload: Array<any>): any =>
+    dispatch(updateMealDocument(payload)),
 });
 
 export const container = connect(mapStateToProps, mapDispatchToProps);

@@ -65,10 +65,15 @@ export default class USDAApiImpl implements Helper {
   }
 
   sortFoods(a: USDAFoodSearchResult, b: USDAFoodSearchResult): number {
-    if (a.scientificName && !b.scientificName) return -1;
-    if (!a.scientificName && b.scientificName) return 1;
-    if (b.score - a.score === 0)
+    if (a.scientificName && !b.scientificName) {
+      return -1;
+    }
+    if (!a.scientificName && b.scientificName) {
+      return 1;
+    }
+    if (b.score - a.score === 0) {
       return parseInt(a.ndbNumber, 10) - parseInt(b.ndbNumber, 10);
+    }
     return b.score - a.score;
   }
 

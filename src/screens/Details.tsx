@@ -1,19 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Slider, Button } from 'react-native-elements';
 import { ScrollView } from 'react-native';
 import PropTypes from 'prop-types';
 import AmountPicker from '../components/AmountPicker';
 import FoodCard from '../components/FoodCard';
-import { container } from '../store/reducers/Meal';
+import { container } from '../store/reducers/MealDocument';
 import { FormattedPortion } from '../ApiHelpers/USDA/USDAApi';
 
-function Details({ navigation, route, meal, updateMeal }): JSX.Element {
+function Details({
+  navigation,
+  route,
+  mealDocument,
+  updateMealDocument,
+}): JSX.Element {
   const { details } = route.params;
 
-  const calculateNutrient = (nutrient: string): number =>
-    Math.round(details[nutrient] * amount * currentPortion.weight);
+  const [amount, changeAmount] = useState(1);
+  const [currentPortion, changePortion] = useState(details.portions[0]);
 
-  const calculateValues = (): {
+  const calculateNutrient = useCallback(
+    (nutrient: string): number =>
+      Math.round(details[nutrient] * amount * currentPortion.weight),
+    [amount, currentPortion.weight, details]
+  );
+
+  const calculateValues = useCallback((): {
     calories: number;
     protein: number;
     carbs: number;
@@ -29,34 +40,35 @@ function Details({ navigation, route, meal, updateMeal }): JSX.Element {
       carbs,
       fats,
     };
-  };
+  }, [calculateNutrient]);
 
-  const [amount, changeAmount] = useState(1);
-  const [currentPortion, changePortion] = useState(details.portions[0]);
   const [currentCalculations, updateCurrentCalculations] = useState(
     calculateValues()
   );
 
   const addFood = (): void => {
     const { calories, protein, fats, carbs } = currentCalculations;
-    updateMeal([
-      ...meal,
-      {
-        name: details.name,
-        amount, 
-        portionDescription: currentPortion.description,
-        calories,
-        protein,
-        fats,
-        carbs,
-      },
-    ]);
+    updateMealDocument({
+      ...mealDocument,
+      meal: [
+        ...mealDocument.meal,
+        {
+          name: details.name,
+          amount,
+          portionDescription: currentPortion.description,
+          calories,
+          protein,
+          fats,
+          carbs,
+        },
+      ],
+    });
     navigation.navigate('Meal');
   };
 
   useEffect(() => {
     updateCurrentCalculations(calculateValues());
-  }, [amount, currentPortion]);
+  }, [calculateValues]);
 
   return (
     <ScrollView>
@@ -68,7 +80,7 @@ function Details({ navigation, route, meal, updateMeal }): JSX.Element {
         fats={currentCalculations.fats.toString()}
         amount={amount ? amount.toString() : ''}
         amountDescription={currentPortion.description}
-        onAmountChange={value => changeAmount(Number(value))}
+        onAmountChange={(value) => changeAmount(Number(value))}
         expanded
       >
         <AmountPicker
@@ -84,7 +96,7 @@ function Details({ navigation, route, meal, updateMeal }): JSX.Element {
         <Slider
           step={1}
           minimumValue={1}
-          maximumValue={currentPortion.description === "gram" ? 5000 : 20}
+          maximumValue={currentPortion.description === 'gram' ? 5000 : 20}
           value={amount}
           onValueChange={(value): void => changeAmount(Number(value))}
         />
@@ -106,8 +118,8 @@ Details.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.object.isRequired,
   }).isRequired,
-  meal: PropTypes.arrayOf(PropTypes.object).isRequired,
-  updateMeal: PropTypes.func.isRequired,
+  mealDocument: PropTypes.object.isRequired,
+  updateMealDocument: PropTypes.func.isRequired,
 };
 
 export default container(Details);

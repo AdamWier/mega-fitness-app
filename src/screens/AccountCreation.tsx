@@ -65,7 +65,8 @@ function AccountCreation({ navigation, storeLogin }): JSX.Element {
         secureTextEntry
         onChangeText={(value): void =>
           /* prettier-ignore */
-          updateSignUpDetails(value, 'passwordConfirmation')}
+          updateSignUpDetails(value, 'passwordConfirmation')
+        }
       />
       <Button
         title="Create account"

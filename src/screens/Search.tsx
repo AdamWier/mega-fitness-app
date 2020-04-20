@@ -32,7 +32,7 @@ export default function Search({ navigation }): JSX.Element {
         value={searchText}
         onChangeText={(text): void => updateSearchText(text)}
         containerStyle={{
-          marginVertical: 10
+          marginVertical: 10,
         }}
       />
       <Button

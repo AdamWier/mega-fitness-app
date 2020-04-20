@@ -1,60 +1,14 @@
 {
-    "env": {
-        "browser": true,
-        "node": true,
-        "es6": true,
-        "react-native/react-native": true
-    },
     "extends": [
-        "plugin:react/recommended",
-        "airbnb",
-        "eslint:recommended",
-        "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:import/errors",
-        "plugin:import/warnings",
-        "prettier"
+        "@react-native-community",
+        "plugin:prettier/recommended"
     ],
-    "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
-    },
     "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
-        "ecmaVersion": 2018,
-        "sourceType": "module"
-    },
     "plugins": [
-        "react",
-        "@typescript-eslint",
-        "react-native",
-        "prettier"
+        "@typescript-eslint"
     ],
     "rules": {
-        "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
-        "import/extensions": 0,
-        "import/prefer-default-export": 0,
-        "class-methods-use-this": 0,
-        "import/no-unresolved": 0,
-        "@typescript-eslint/no-use-before-define": 0,
-        "react/no-array-index-key": 0,
         "prettier/prettier": ["error", {"singleQuote": true}],
-        "react/jsx-props-no-spreading": 0,
-        "no-control-regex": 0,
-        "@typescript-eslint/no-explicit-any": 0
-    },
-    "settings": {
-        "import/extensions": [".js",".jsx",".ts",".tsx"],
-        "import/parsers": {
-          "@typescript-eslint/parser": [".ts",".tsx"]
-         },
-         "import/resolver": {
-             "node": {
-                 "extensions": [".js",".jsx",".ts",".tsx"]
-             }
-         }
+        "react-native/no-inline-styles": 0
     }
 }
