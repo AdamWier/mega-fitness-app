@@ -33,12 +33,12 @@ function Meal({
   });
 
   const removeFoodFromMeal = (mealIndex: number): void => {
-    const meals = meal.filter(
+    const newMeal = meal.filter(
       (mealItem: { [key: string]: any }, index: number) => index !== mealIndex
     );
     updateMealDocument({
       ...mealDocument,
-      meals,
+      meal: newMeal,
     });
   };
 
