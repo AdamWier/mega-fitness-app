@@ -5,7 +5,15 @@ import { CalendarList } from 'react-native-calendars';
 
 export default function CalendarView({ navigation }): JSX.Element {
   const goToDayScreen = (timestamp: number): void => {
-    const date = new Date(timestamp);
+    const now = new Date();
+    const dateInput = new Date(timestamp);
+    let date: Date;
+    if (now.toDateString() === dateInput.toDateString()) {
+      date = now;
+    } else {
+      dateInput.setHours(0, 0, 0, 0);
+      date = dateInput;
+    }
     navigation.navigate('Day', { date });
   };
 
