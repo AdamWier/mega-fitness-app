@@ -13,6 +13,9 @@ export default interface FirestoreService {
     id: string
   ): Promise<void>;
   deleteMeal(id: string): Promise<void>;
-  findMealsByDate(dateStart: Date, uid: string): Promise<Array<any>>;
+  findMealsByDate(
+    dateStart: Date,
+    uid: string
+  ): Promise<{ [key: string]: any }[]>;
   saveUser(user: { uid: string; email: string }): Promise<void>;
 }

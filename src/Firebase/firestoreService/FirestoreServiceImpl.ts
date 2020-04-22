@@ -57,7 +57,12 @@ export default class FirestoreServiceImpl implements FirestoreService {
     });
   }
 
-  async findMealsByDate(dateStart: Date, uid: string): Promise<Array<any>> {
+  async findMealsByDate(
+    currentDate: Date,
+    uid: string
+  ): Promise<{ [key: string]: any }[]> {
+    const dateStart = new Date(currentDate.getTime());
+    dateStart.setHours(0, 0, 0, 0);
     const dateEnd = new Date(dateStart.getTime());
     dateEnd.setDate(dateStart.getDate() + 1);
     const response = await this.firestore
