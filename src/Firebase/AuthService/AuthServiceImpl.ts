@@ -23,7 +23,7 @@ export default class AuthServiceImpl implements AuthService {
     password: string
   ): Promise<{ uid: string; email: string }> {
     const { user } = await this.auth.signInWithEmailAndPassword(
-      email,
+      email.trim(),
       password
     );
     return { uid: user.uid, email: user.email };
@@ -35,7 +35,7 @@ export default class AuthServiceImpl implements AuthService {
   ): Promise<{ uid: string; email: string }> {
     try {
       const credentials = await this.auth.createUserWithEmailAndPassword(
-        email,
+        email.trim(),
         password
       );
       const { uid } = credentials.user;
@@ -57,7 +57,7 @@ export default class AuthServiceImpl implements AuthService {
   }): string[] {
     const { email, password, passwordConfirmation } = userInformation;
     const errors = [
-      ...this.verifyEmail(email),
+      ...this.verifyEmail(email.trim()),
       ...this.verifyPassword(password, passwordConfirmation),
     ];
     return errors;
