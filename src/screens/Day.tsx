@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Alert, ActivityIndicator } from 'react-native';
-import { Button, Text, Card, ListItem, withTheme } from 'react-native-elements';
+import { View, Alert } from 'react-native';
+import { withTheme } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { container as UserContainer } from '../store/reducers/User';
 import { container as MealContainer } from '../store/reducers/MealDocument';
 import { firestoreService } from '../Firebase';
-import TotalCard from '../components/TotalCard';
 import MealDocument from '../Firebase/Documents/MealDocument';
-
-const getTimeString = (time: Date): string => {
-  const fullString = time.toLocaleTimeString();
-  return fullString.substring(0, fullString.length - 3);
-};
+import { Agenda } from 'react-native-calendars';
+import AgendaItem from '../components/AgendaItem';
 
 const months = [
   'January',
@@ -43,11 +39,7 @@ function Day({
 
   navigation.setOptions({ title });
 
-  const [isLoading, toggleIsLoading] = useState(true);
-
-  const [mealDocuments, setMealDocuments] = useState([]);
-
-  const allFoods = mealDocuments.flatMap((document) => document.meal);
+  const [agendaItems, setAgendaItems] = useState({});
 
   const deleteMeal = async (documentId: string): Promise<void> => {
     try {
@@ -65,14 +57,24 @@ function Day({
     ]);
   };
 
-  const getTotalCalories = (
-    accumulator: number,
-    currentValue: { [key: string]: any }
-  ): number => accumulator + currentValue.calories;
-
   const handleMealPress = (document: MealDocument) => {
     updateMealDocument(document);
     navigation.navigate('Meal');
+  };
+
+  const reduceMealDocuments = (data: { [key: string]: any }[]) => {
+    const items = data.reduce((agenda, item) => {
+      const { eatenAt } = item;
+      const year = eatenAt.getFullYear();
+      const month = ('0' + (eatenAt.getMonth() + 1).toString()).slice(-2);
+      const day = eatenAt.getDate();
+      const key = `${year}-${month}-${day}`;
+      if (agenda.hasOwnProperty(key)) {
+        agenda[key].push(item);
+      } else agenda[key] = [item];
+      return agenda;
+    }, {});
+    setAgendaItems(items);
   };
 
   useEffect(() => {
@@ -82,69 +84,54 @@ function Day({
         user.uid
       );
       if (data) {
-        setMealDocuments(data);
+        reduceMealDocuments(data);
       }
-      toggleIsLoading(false);
     })();
-    return () => {
-      setMealDocuments([]);
-      toggleIsLoading(true);
-    };
   }, [currentDate, user.uid]);
 
+  const renderItem = (document) => {
+    return (
+      <AgendaItem
+        document={document}
+        onMealPress={handleMealPress}
+        onDeletePress={confirmDelete}
+      />
+    );
+  };
+
   return (
-    <ScrollView>
-      {isLoading ? (
-        <ActivityIndicator size="large" />
-      ) : (
-        <View>
-          <Button
-            title="Add a new meal"
-            onPress={() =>
-              handleMealPress({
-                id: null,
-                eatenAt: currentDate,
-                meal: [],
-                name: 'Untitled',
-                createdAt: new Date(),
-                deleted: false,
-                uid: user.uid,
-              })
-            }
-          />
-          {mealDocuments.length ? (
-            <View>
-              {mealDocuments.map((document: MealDocument, index: number) => (
-                <Card
-                  title={document.name ? document.name : 'Untitled'}
-                  key={document.id}
-                >
-                  <ListItem
-                    key={index}
-                    title={getTimeString(document.eatenAt)}
-                    subtitle={
-                      'Total calories: ' +
-                      document.meal.reduce(getTotalCalories, 0)
-                    }
-                    onPress={() => handleMealPress(document)}
-                  />
-                  <Button
-                    title="Delete meal"
-                    onPress={() => confirmDelete(document.id)}
-                    buttonStyle={{
-                      backgroundColor: theme.colors.danger,
-                    }}
-                  />
-                </Card>
-              ))}
-              <TotalCard foods={allFoods} />
-            </View>
-          ) : (
-            <Text>No meals for this date.</Text>
-          )}
-        </View>
-      )}
-    </ScrollView>
+    <Agenda
+      items={agendaItems}
+      onDayPress={() => {
+        console.log('day pressed');
+      }}
+      onDayChange={() => {
+        console.log('day changed');
+      }}
+      pastScrollRange={12}
+      futureScrollRange={12}
+      renderItem={renderItem}
+      renderEmptyDate={() => {
+        return <View />;
+      }}
+      rowHasChanged={(r1, r2) => {
+        console.log({ r1, r2 });
+        return r1.id !== r2.id;
+      }}
+      markedDates={{}}
+      theme={{
+        agendaDayTextColor: theme.colors.text,
+        agendaDayNumColor: theme.colors.text,
+        agendaTodayColor: theme.colors.text,
+        agendaKnobColor: theme.colors.grey0,
+        backgroundColor: theme.colors.background,
+        calendarBackground: theme.colors.background,
+        dayTextColor: theme.colors.text,
+        monthTextColor: theme.colors.text,
+        dotColor: theme.colors.info,
+        selectedDayBackgroundColor: theme.colors.info,
+      }}
+    />
   );
 }
 

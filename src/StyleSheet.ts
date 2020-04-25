@@ -85,5 +85,8 @@ export const theme = {
       borderRadius: 0,
     },
   },
+  Icon: {
+    color: colors.text,
+  },
   colors,
 } as MyTheme;
