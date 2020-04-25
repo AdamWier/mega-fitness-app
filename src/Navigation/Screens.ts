@@ -1,9 +1,8 @@
-import Day from '../screens/Day';
+import Agenda from '../screens/Agenda';
 import Search from '../screens/Search';
 import Details from '../screens/Details';
 import AccountCreation from '../screens/AccountCreation';
 import Login from '../screens/Login';
-import Calendar from '../screens/Calendar';
 import Meal from '../screens/Meal';
 
 export default [
@@ -21,13 +20,8 @@ export default [
     needsLogin: false,
   },
   {
-    name: 'Calendar',
-    component: Calendar,
-    needsLogin: true,
-  },
-  {
-    name: 'Day',
-    component: Day,
+    name: 'Agenda',
+    component: Agenda,
     needsLogin: true,
   },
   {

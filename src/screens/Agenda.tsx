@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View, Alert } from 'react-native';
-import { withTheme } from 'react-native-elements';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Alert, StyleSheet } from 'react-native';
+import { withTheme, Text } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { container as UserContainer } from '../store/reducers/User';
 import { container as MealContainer } from '../store/reducers/MealDocument';
@@ -9,37 +9,31 @@ import MealDocument from '../Firebase/Documents/MealDocument';
 import { Agenda } from 'react-native-calendars';
 import AgendaItem from '../components/AgendaItem';
 
-const months = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
+const createKey = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = ('0' + (date.getMonth() + 1).toString()).slice(-2);
+  const day = date.getDate();
+  return `${year}-${month}-${day}`;
+};
 
-function Day({
+const reduceMealDocuments = (data: { [key: string]: any }[]) => {
+  return data.reduce((agenda, item) => {
+    const { eatenAt } = item;
+    const key = createKey(eatenAt);
+    if (agenda.hasOwnProperty(key)) {
+      agenda[key].push(item);
+    } else agenda[key] = [item];
+    return agenda;
+  }, {});
+};
+
+function AgendaPage({
   navigation,
-  route,
   theme,
   user,
   updateMealDocument,
 }): JSX.Element {
-  const currentDate: Date = route.params.date || new Date();
-
-  const title = `${
-    months[currentDate.getMonth()]
-  } ${currentDate.getDate()}, ${currentDate.getFullYear()}`;
-
-  navigation.setOptions({ title });
-
-  const [agendaItems, setAgendaItems] = useState({});
+  const [agendaItems, setAgendaItems] = useState();
 
   const deleteMeal = async (documentId: string): Promise<void> => {
     try {
@@ -62,60 +56,47 @@ function Day({
     navigation.navigate('Meal');
   };
 
-  const reduceMealDocuments = (data: { [key: string]: any }[]) => {
-    const items = data.reduce((agenda, item) => {
-      const { eatenAt } = item;
-      const year = eatenAt.getFullYear();
-      const month = ('0' + (eatenAt.getMonth() + 1).toString()).slice(-2);
-      const day = eatenAt.getDate();
-      const key = `${year}-${month}-${day}`;
-      if (agenda.hasOwnProperty(key)) {
-        agenda[key].push(item);
-      } else agenda[key] = [item];
-      return agenda;
-    }, {});
-    setAgendaItems(items);
-  };
+  const onDayPress = useCallback(
+    async (date: Date) => {
+      const documents = await firestoreService.findMealsByDate(date, user.uid);
+      if (documents) {
+        setAgendaItems(reduceMealDocuments(documents));
+      } else {
+        setAgendaItems({
+          [createKey(date)]: [],
+        });
+      }
+    },
+    [user.uid]
+  );
 
   useEffect(() => {
-    (async function (): Promise<void> {
-      const data = await firestoreService.findMealsByDate(
-        currentDate,
-        user.uid
-      );
-      if (data) {
-        reduceMealDocuments(data);
-      }
-    })();
-  }, [currentDate, user.uid]);
+    onDayPress(new Date());
+  }, [onDayPress]);
 
-  const renderItem = (document) => {
-    return (
-      <AgendaItem
-        document={document}
-        onMealPress={handleMealPress}
-        onDeletePress={confirmDelete}
-      />
-    );
-  };
+  const emptyItem = () => (
+    <View style={styles.emptyItem}>
+      <Text>No meals for this date.</Text>
+    </View>
+  );
+
+  const renderItem = (document: { [key: string]: any }) => (
+    <AgendaItem
+      document={document}
+      onMealPress={handleMealPress}
+      onDeletePress={confirmDelete}
+    />
+  );
 
   return (
     <Agenda
       items={agendaItems}
-      onDayPress={() => {
-        console.log('day pressed');
-      }}
-      onDayChange={() => {
-        console.log('day changed');
-      }}
+      onDayPress={(date) => onDayPress(new Date(date.timestamp))}
       pastScrollRange={12}
       futureScrollRange={12}
       renderItem={renderItem}
-      renderEmptyDate={() => {
-        return <View />;
-      }}
+      renderEmptyDate={emptyItem}
       rowHasChanged={(r1, r2) => {
-        console.log({ r1, r2 });
         return r1.id !== r2.id;
       }}
       markedDates={{}}
@@ -135,13 +116,18 @@ function Day({
   );
 }
 
-Day.propTypes = {
+const styles = StyleSheet.create({
+  emptyItem: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
+
+AgendaPage.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
     setOptions: PropTypes.func.isRequired,
-  }).isRequired,
-  route: PropTypes.shape({
-    params: PropTypes.object.isRequired,
   }).isRequired,
   theme: PropTypes.shape({
     colors: PropTypes.object.isRequired,
@@ -149,4 +135,4 @@ Day.propTypes = {
   updateMealDocument: PropTypes.func.isRequired,
 };
 
-export default MealContainer(UserContainer(withTheme(Day)));
+export default MealContainer(UserContainer(withTheme(AgendaPage)));
