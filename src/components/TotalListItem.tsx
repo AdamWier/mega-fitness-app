@@ -1,18 +1,17 @@
 import React from 'react';
-import { Text, Divider, Input } from 'react-native-elements';
+import { Text, Input } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 
 const TotalListItem: React.FC<any> = ({
   label,
   total,
-  isBig,
   onValueChange,
   description,
 }) => (
   <View>
     <View style={styles.container}>
-      <Text h4={isBig} style={styles.text}>{`${label}`}</Text>
+      <Text style={styles.text}>{`${label}`}</Text>
       {onValueChange ? (
         <View style={styles.containerTight}>
           <Input
@@ -22,28 +21,25 @@ const TotalListItem: React.FC<any> = ({
             inputStyle={styles.input}
             keyboardType="number-pad"
           />
-          <Text h4={isBig} style={styles.text}>{`${description}`}</Text>
+          <Text style={styles.text}>{`${description}`}</Text>
         </View>
       ) : (
-        <Text h4={isBig} style={styles.text}>
+        <Text style={styles.text}>
           {description ? `${total} ${description}` : total}
         </Text>
       )}
     </View>
-    <Divider />
   </View>
 );
 
 TotalListItem.propTypes = {
   label: PropTypes.string.isRequired,
   total: PropTypes.string.isRequired,
-  isBig: PropTypes.bool,
   onValueChange: PropTypes.func,
   description: PropTypes.string,
 };
 
 TotalListItem.defaultProps = {
-  isBig: false,
   onValueChange: null,
   description: '',
 };
@@ -59,7 +55,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   text: {
-    margin: 10,
+    margin: 3,
   },
   inputContainer: {
     width: 50,

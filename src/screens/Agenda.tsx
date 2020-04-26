@@ -8,6 +8,7 @@ import { firestoreService } from '../Firebase';
 import MealDocument from '../Firebase/Documents/MealDocument';
 import { Agenda } from 'react-native-calendars';
 import AgendaItem from '../components/AgendaItem';
+import TotalCard from '../components/TotalCard';
 
 const createKey = (date: Date): string => {
   const year = date.getFullYear();
@@ -37,6 +38,8 @@ function AgendaPage({
 
   const [currentDate, setCurrentDate] = useState(new Date());
 
+  const [allFoods, setAllFoods] = useState([]);
+
   const deleteMeal = async (documentId: string): Promise<void> => {
     try {
       await firestoreService.deleteMeal(documentId);
@@ -63,6 +66,7 @@ function AgendaPage({
       setCurrentDate(date);
       const documents = await firestoreService.findMealsByDate(date, user.uid);
       if (documents) {
+        setAllFoods(documents.flatMap((document) => document.meal));
         setAgendaItems(reduceMealDocuments(documents));
       } else {
         setAgendaItems({
@@ -80,7 +84,7 @@ function AgendaPage({
   const emptyItem = () => (
     <View style={styles.emptyItem}>
       <NewMealButton />
-      <Text>No meals for this date.</Text>
+      <Text style={styles.noMeals}>No meals for this date.</Text>
     </View>
   );
 
@@ -105,6 +109,7 @@ function AgendaPage({
     isFirstItem ? (
       <View>
         <NewMealButton />
+        <TotalCard foods={allFoods} />
         <AgendaItem
           document={document}
           onMealPress={handleMealPress}
@@ -152,6 +157,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 25,
+  },
+  noMeals: {
+    marginTop: 50,
   },
 });
 
