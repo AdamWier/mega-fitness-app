@@ -53,7 +53,7 @@ function Meal({
       } else {
         await firestoreService.createMeal(meal, name, user.uid, eatenAt);
       }
-      navigation.navigate('Calendar');
+      navigation.navigate('Agenda');
     } catch (e) {
       console.log(e);
     }

@@ -17,39 +17,47 @@ const getTotalCalories = (
 
 const AgendaItem = ({ document, onMealPress, onDeletePress, theme }) => (
   <Card key={document.id}>
-    <TouchableOpacity
+    <View
       style={{
         flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
+        flexWrap: 'wrap',
       }}
-      onPress={() => onMealPress(document)}
-      activeOpacity={0.5}
     >
-      <View
+      <TouchableOpacity
         style={{
-          flexBasis: '60%',
+          flexBasis: '70%',
+          margin: 0,
+          padding: -10,
         }}
+        onPress={() => onMealPress(document)}
+        activeOpacity={0.5}
       >
-        <Text h4 style={styles.textStyle}>
-          {document.title || 'Untitled'}
-        </Text>
-        <Text style={styles.textStyle}>
-          {`${document.meal.reduce(getTotalCalories, 0)} Calories`}
-        </Text>
-        <Text style={styles.textStyle}>{getTimeString(document.eatenAt)}</Text>
-      </View>
+        <View>
+          <Text h4 style={styles.textStyle}>
+            {document.name || 'Untitled'}
+          </Text>
+          <Text style={styles.textStyle}>
+            {`${document.meal.reduce(getTotalCalories, 0)} Calories`}
+          </Text>
+          <Text style={styles.textStyle}>
+            {getTimeString(document.eatenAt)}
+          </Text>
+        </View>
+      </TouchableOpacity>
       <Button
         onPress={() => onDeletePress(document.id)}
         buttonStyle={{
           backgroundColor: theme.colors.danger,
         }}
         containerStyle={{
-          flexBasis: '40%',
+          flexBasis: '30%',
           margin: 0,
         }}
         icon={<Icon name="delete" />}
       />
-    </TouchableOpacity>
+    </View>
   </Card>
 );
 
