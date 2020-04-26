@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Alert, StyleSheet } from 'react-native';
-import { withTheme, Text } from 'react-native-elements';
+import { withTheme, Text, Button } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { container as UserContainer } from '../store/reducers/User';
 import { container as MealContainer } from '../store/reducers/MealDocument';
@@ -35,6 +35,8 @@ function AgendaPage({
 }): JSX.Element {
   const [agendaItems, setAgendaItems] = useState();
 
+  const [currentDate, setCurrentDate] = useState(new Date());
+
   const deleteMeal = async (documentId: string): Promise<void> => {
     try {
       await firestoreService.deleteMeal(documentId);
@@ -58,6 +60,7 @@ function AgendaPage({
 
   const onDayPress = useCallback(
     async (date: Date) => {
+      setCurrentDate(date);
       const documents = await firestoreService.findMealsByDate(date, user.uid);
       if (documents) {
         setAgendaItems(reduceMealDocuments(documents));
@@ -71,22 +74,50 @@ function AgendaPage({
   );
 
   useEffect(() => {
-    onDayPress(new Date());
-  }, [onDayPress]);
+    onDayPress(currentDate);
+  }, [onDayPress, currentDate]);
 
   const emptyItem = () => (
     <View style={styles.emptyItem}>
+      <NewMealButton />
       <Text>No meals for this date.</Text>
     </View>
   );
 
-  const renderItem = (document: { [key: string]: any }) => (
-    <AgendaItem
-      document={document}
-      onMealPress={handleMealPress}
-      onDeletePress={confirmDelete}
+  const NewMealButton = () => (
+    <Button
+      title="Add a new meal"
+      onPress={() =>
+        handleMealPress({
+          id: null,
+          eatenAt: currentDate,
+          meal: [],
+          name: 'Untitled',
+          createdAt: new Date(),
+          deleted: false,
+          uid: user.uid,
+        })
+      }
     />
   );
+
+  const renderItem = (document: { [key: string]: any }, isFirstItem: boolean) =>
+    isFirstItem ? (
+      <View>
+        <NewMealButton />
+        <AgendaItem
+          document={document}
+          onMealPress={handleMealPress}
+          onDeletePress={confirmDelete}
+        />
+      </View>
+    ) : (
+      <AgendaItem
+        document={document}
+        onMealPress={handleMealPress}
+        onDeletePress={confirmDelete}
+      />
+    );
 
   return (
     <Agenda
