@@ -171,7 +171,7 @@ function Meal({
             onCancel={() => toggleDisplayCalendar(false)}
           />
           <Button
-            title={`Eaten at: ${moment(eatenAt).format(
+            title={`Eaten: ${moment(eatenAt).format(
               'dddd MMMM D, YYYY HH:mm'
             )}`}
             onPress={getEatenAt}

@@ -30,7 +30,9 @@ function AgendaPage({
 }): JSX.Element {
   const [agendaItems, setAgendaItems] = useState();
 
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(
+    moment().startOf('day').toDate()
+  );
 
   const [allFoods, setAllFoods] = useState([]);
 
@@ -132,7 +134,9 @@ function AgendaPage({
   return (
     <Agenda
       items={agendaItems}
-      onDayPress={(date) => onDayPress(new Date(date.timestamp))}
+      onDayPress={(date) =>
+        onDayPress(moment(date.dateString).startOf('day').toDate())
+      }
       pastScrollRange={12}
       futureScrollRange={12}
       renderItem={renderItem}
