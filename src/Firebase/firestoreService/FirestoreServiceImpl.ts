@@ -1,5 +1,6 @@
 import firebase from 'firebase';
 import FirestoreService from './FirestoreService';
+import moment from 'moment';
 
 export default class FirestoreServiceImpl implements FirestoreService {
   firestore: firebase.firestore.Firestore;
@@ -61,14 +62,12 @@ export default class FirestoreServiceImpl implements FirestoreService {
     currentDate: Date,
     uid: string
   ): Promise<{ [key: string]: any }[]> {
-    const dateStart = new Date(currentDate.getTime());
-    dateStart.setHours(0, 0, 0, 0);
-    const dateEnd = new Date(dateStart.getTime());
-    dateEnd.setDate(dateStart.getDate() + 1);
+    const start = moment(currentDate).startOf('day');
+    const end = moment(start).endOf('day');
     const response = await this.firestore
       .collection('meals')
-      .where('eatenAt', '>=', dateStart)
-      .where('eatenAt', '<', dateEnd)
+      .where('eatenAt', '>=', start.toDate())
+      .where('eatenAt', '<', end.toDate())
       .where('uid', '==', uid)
       .where('deleted', '==', false)
       .get();

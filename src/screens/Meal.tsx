@@ -8,11 +8,7 @@ import { container as UserContainer } from '../store/reducers/User';
 import { firestoreService } from '../Firebase';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import TotalCard from '../components/TotalCard';
-
-const getDateTimeString = (dateTime: Date): string => {
-  const fullString = dateTime.toLocaleString();
-  return fullString.substring(0, fullString.length - 8);
-};
+import moment from 'moment';
 
 function Meal({
   navigation,
@@ -175,7 +171,9 @@ function Meal({
             onCancel={() => toggleDisplayCalendar(false)}
           />
           <Button
-            title={`Eaten at: ${getDateTimeString(eatenAt)}`}
+            title={`Eaten at: ${moment(eatenAt).format(
+              'dddd MMMM D, YYYY HH:mm'
+            )}`}
             onPress={getEatenAt}
           />
           <Button

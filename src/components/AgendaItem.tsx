@@ -4,11 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { View, StyleSheet } from 'react-native';
 import { withTheme } from 'react-native-elements';
 import PropTypes from 'prop-types';
-
-const getTimeString = (time: Date): string => {
-  const fullString = time.toLocaleTimeString();
-  return fullString.substring(0, fullString.length - 3);
-};
+import moment from 'moment';
 
 const getTotalCalories = (
   accumulator: number,
@@ -42,7 +38,7 @@ const AgendaItem = ({ document, onMealPress, onDeletePress, theme }) => (
             {`${document.meal.reduce(getTotalCalories, 0)} Calories`}
           </Text>
           <Text style={styles.textStyle}>
-            {getTimeString(document.eatenAt)}
+            {moment(document.eatenAt).format('H:mm')}
           </Text>
         </View>
       </TouchableOpacity>

@@ -9,18 +9,12 @@ import MealDocument from '../Firebase/Documents/MealDocument';
 import { Agenda } from 'react-native-calendars';
 import AgendaItem from '../components/AgendaItem';
 import TotalCard from '../components/TotalCard';
-
-const createKey = (date: Date): string => {
-  const year = date.getFullYear();
-  const month = ('0' + (date.getMonth() + 1).toString()).slice(-2);
-  const day = date.getDate();
-  return `${year}-${month}-${day}`;
-};
+import moment from 'moment';
 
 const reduceMealDocuments = (data: { [key: string]: any }[]) => {
   return data.reduce((agenda, item) => {
     const { eatenAt } = item;
-    const key = createKey(eatenAt);
+    const key = moment(eatenAt).format('YYYY-MM-DD');
     if (agenda.hasOwnProperty(key)) {
       agenda[key].push(item);
     } else agenda[key] = [item];
@@ -61,6 +55,17 @@ function AgendaPage({
     navigation.navigate('Meal');
   };
 
+  const getNewEatenAt = () => {
+    const startOfDay = moment(new Date()).startOf('day');
+    const endOfDay = moment(startOfDay).endOf('day');
+    const currentMoment = moment(currentDate);
+    if (currentMoment.isBetween(startOfDay, endOfDay)) {
+      return new Date();
+    } else {
+      return currentMoment.startOf('day').toDate();
+    }
+  };
+
   const onDayPress = useCallback(
     async (date: Date) => {
       setCurrentDate(date);
@@ -70,7 +75,7 @@ function AgendaPage({
         setAgendaItems(reduceMealDocuments(documents));
       } else {
         setAgendaItems({
-          [createKey(date)]: [],
+          [moment(date).format('YYYY-MM-DD')]: [],
         });
       }
     },
@@ -94,7 +99,7 @@ function AgendaPage({
       onPress={() =>
         handleMealPress({
           id: null,
-          eatenAt: currentDate,
+          eatenAt: getNewEatenAt(),
           meal: [],
           name: 'Untitled',
           createdAt: new Date(),
