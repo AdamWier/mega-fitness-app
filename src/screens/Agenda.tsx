@@ -11,8 +11,8 @@ import AgendaItem from '../components/AgendaItem';
 import TotalCard from '../components/TotalCard';
 import moment from 'moment';
 
-const reduceMealDocuments = (data: { [key: string]: any }[]) => {
-  return data.reduce((agenda, item) => {
+const reduceMealDocuments = (data: { [key: string]: any }[]) =>
+  data.reduce((agenda, item) => {
     const { eatenAt } = item;
     const key = moment(eatenAt).format('YYYY-MM-DD');
     if (agenda.hasOwnProperty(key)) {
@@ -20,7 +20,6 @@ const reduceMealDocuments = (data: { [key: string]: any }[]) => {
     } else agenda[key] = [item];
     return agenda;
   }, {});
-};
 
 function AgendaPage({
   navigation,

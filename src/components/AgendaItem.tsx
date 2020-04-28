@@ -22,22 +22,17 @@ const AgendaItem = ({ document, onMealPress, onDeletePress, theme }) => (
       }}
     >
       <TouchableOpacity
-        style={{
-          flexBasis: '70%',
-          margin: 0,
-          padding: -10,
-        }}
         onPress={() => onMealPress(document)}
         activeOpacity={0.5}
       >
         <View>
-          <Text h4 style={styles.textStyle}>
+          <Text h4 style={styles.text}>
             {document.name || 'Untitled'}
           </Text>
-          <Text style={styles.textStyle}>
+          <Text style={styles.text}>
             {`${document.meal.reduce(getTotalCalories, 0)} Calories`}
           </Text>
-          <Text style={styles.textStyle}>
+          <Text style={styles.text}>
             {moment(document.eatenAt).format('H:mm')}
           </Text>
         </View>
@@ -47,10 +42,7 @@ const AgendaItem = ({ document, onMealPress, onDeletePress, theme }) => (
         buttonStyle={{
           backgroundColor: theme.colors.danger,
         }}
-        containerStyle={{
-          flexBasis: '30%',
-          margin: 0,
-        }}
+        containerStyle={styles.buttonContainer}
         icon={<Icon name="delete" />}
       />
     </View>
@@ -65,7 +57,11 @@ AgendaItem.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  textStyle: { textAlign: 'left' },
+  text: { textAlign: 'left' },
+  buttonContainer: {
+    flexBasis: '30%',
+    margin: 0,
+  },
 });
 
 export default withTheme(AgendaItem);
