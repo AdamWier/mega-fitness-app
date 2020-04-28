@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, withTheme } from 'react-native-elements';
+import { Card } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import TotalListItem from '../components/TotalListItem';
 
@@ -8,7 +8,7 @@ const getTotal = (nutrient: string): CallableFunction => (
   currentValue: { [key: string]: any }
 ): number => accumulator + currentValue[nutrient];
 
-function TotalCard({ theme, foods }): JSX.Element {
+function TotalCard({ foods }): JSX.Element {
   const getTotals = (): {
     calories: number;
     protein: number;
@@ -30,7 +30,6 @@ function TotalCard({ theme, foods }): JSX.Element {
   return (
     <Card
       containerStyle={{
-        backgroundColor: theme.colors.info,
         marginBottom: 20,
       }}
       title="Totals"
@@ -38,19 +37,10 @@ function TotalCard({ theme, foods }): JSX.Element {
       <TotalListItem
         total={getTotals().calories.toString()}
         label="Calories:"
-        isBig
       />
-      <TotalListItem
-        label="Protein:"
-        total={getTotals().protein.toString()}
-        isBig
-      />
-      <TotalListItem
-        label="Carbs:"
-        total={getTotals().carbs.toString()}
-        isBig
-      />
-      <TotalListItem label="Fat:" total={getTotals().fats.toString()} isBig />
+      <TotalListItem label="Protein:" total={getTotals().protein.toString()} />
+      <TotalListItem label="Carbs:" total={getTotals().carbs.toString()} />
+      <TotalListItem label="Fat:" total={getTotals().fats.toString()} />
     </Card>
   );
 }
@@ -59,4 +49,4 @@ TotalCard.propTypes = {
   foods: PropTypes.array.isRequired,
 };
 
-export default withTheme(TotalCard);
+export default TotalCard;
