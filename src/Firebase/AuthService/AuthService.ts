@@ -4,6 +4,7 @@ export default interface AuthService {
     email: string,
     password: string
   ): Promise<{ uid: string; email: string }>;
+  logout(): Promise<void>;
   createUser(
     email: string,
     password: string
