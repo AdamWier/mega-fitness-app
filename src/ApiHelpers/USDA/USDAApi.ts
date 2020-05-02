@@ -1,8 +1,8 @@
-import { APITypes } from '../APITypes';
+import { FoodResult } from '../CommonAPITypes';
 
 export interface Helper {
-  search(searchText: string): Promise<USDAFood[]>;
-  getDetails(foodId: number): Promise<USDAFoodDetails>;
+  search(searchText: string): Promise<FoodResult[]>;
+  getDetails(foodId: string): Promise<USDAFoodDetails>;
   getNutrient(food: USDAFoodDetailsResult, nutrient: NutrientName): number;
   sortFoods(a: USDAFoodSearchResult, b: USDAFoodSearchResult): number;
 }
@@ -32,12 +32,6 @@ export interface USDAFoodSearchResult {
   score: number;
 }
 
-export interface USDAFood {
-  description: string;
-  fdcId: number;
-  api: APITypes.USDA;
-}
-
 export interface USDAFoodDetailsResult {
   changes: string;
   dataType: string;
@@ -45,8 +39,7 @@ export interface USDAFoodDetailsResult {
   endDate: string;
   fdcId: number;
   foodAttributes?: FoodAttribute[];
-  // So far, always an empty array
-  foodComponents?: Array<USDAFood>;
+  foodComponents?: Array<FoodResult>;
   foodNutrients?: Nutrient[];
   foodPortions?: FoodPortion[];
   inputFoods: InputFood[];
