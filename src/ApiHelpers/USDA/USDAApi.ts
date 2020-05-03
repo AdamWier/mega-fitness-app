@@ -1,8 +1,8 @@
-import { FoodResult } from '../CommonAPITypes';
+import { FoodResult, FoodDetails } from '../CommonAPITypes';
 
 export interface Helper {
   search(searchText: string): Promise<FoodResult[]>;
-  getDetails(foodId: string): Promise<USDAFoodDetails>;
+  getDetails(foodId: string): Promise<FoodDetails>;
   getNutrient(food: USDAFoodDetailsResult, nutrient: NutrientName): number;
   sortFoods(a: USDAFoodSearchResult, b: USDAFoodSearchResult): number;
 }
@@ -49,15 +49,6 @@ export interface USDAFoodDetailsResult {
     wweiaFoodCategoryCode: number;
     wweiaFoodCategoryDescription: string;
   };
-}
-
-export interface USDAFoodDetails {
-  name: string;
-  calories: number;
-  protein: number;
-  fats: number;
-  carbs: number;
-  portions: FormattedPortion[];
 }
 
 interface InputFood {
@@ -144,9 +135,4 @@ interface FoodPortion {
   modifier: string;
   portionDescription?: string;
   sequenceNumber: number;
-}
-
-export interface FormattedPortion {
-  description: string;
-  weight: number;
 }

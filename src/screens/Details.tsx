@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import AmountPicker from '../components/AmountPicker';
 import FoodCard from '../components/FoodCard';
 import { container } from '../store/reducers/MealDocument';
-import { FormattedPortion } from '../ApiHelpers/USDA/USDAApi';
+import { FormattedPortion } from '../ApiHelpers/CommonAPITypes';
 
 function Details({
   navigation,

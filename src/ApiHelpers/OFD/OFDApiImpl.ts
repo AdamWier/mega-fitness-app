@@ -1,5 +1,11 @@
-import { FoodResult } from '../CommonAPITypes';
-import { Helper, OFDSearchResult } from './OFDApi';
+import { FoodResult, FoodDetails } from '../CommonAPITypes';
+import {
+  Helper,
+  OFDSearchResult,
+  OFDDetailsResult,
+  OFDFood,
+  NutrientName,
+} from './OFDApi';
 
 export default class OFDAImpl implements Helper {
   getSearchURI(locale: string): string {
@@ -14,8 +20,26 @@ export default class OFDAImpl implements Helper {
     const addressComponents = {
       baseURI: `https://${locale}.openfoodfacts.org/cgi/search.pl?json=true&search_simple=1&action=process`,
       stateTagFilter:
-        '&tagtype_0=states&tag_contains_0=contains&tag_0=nutrition-facts-completed',
+        '&tagtype_0=states&tag_contains_0=contains&tag_0=characteristics-completed',
       returnedFiledsFilter: `&fields=${returnedFields.join(',')}`,
+    };
+    return Object.values(addressComponents).join('');
+  }
+
+  getDetailsURI(id: string): string {
+    const returnedFields = [
+      'brands',
+      'product_name',
+      'product_name_en',
+      'product_name_fr',
+      '_id',
+      'nutriments',
+      'serving_size',
+      'serving_quantity',
+    ];
+    const addressComponents = {
+      baseURI: `https://world.openfoodfacts.org/api/v0/product/${id}.json`,
+      returnFieldsFilter: `&fields=${returnedFields.join(',')}`,
     };
     return Object.values(addressComponents).join('');
   }
@@ -26,7 +50,7 @@ export default class OFDAImpl implements Helper {
     });
     const results: OFDSearchResult = await (
       await fetch(
-        this.getSearchURI('us').concat(`&search_terms=${searchText}`),
+        this.getSearchURI('fr').concat(`&search_terms=${searchText}`),
         {
           headers,
         }
@@ -47,5 +71,66 @@ export default class OFDAImpl implements Helper {
         api: 'Open Food Data',
       };
     });
+  }
+
+  async getDetails(foodId: string): Promise<FoodDetails> {
+    const result: OFDDetailsResult = await (
+      await fetch(this.getDetailsURI(foodId))
+    ).json();
+    const { product } = result;
+    const name =
+      product.product_name ||
+      product.product_name_en ||
+      product.product_name_fr;
+    const calories =
+      this.getNutrient(product, NutrientName.Energy) ||
+      this.convertKjToCalories(this.getNutrient(product, NutrientName.Kj));
+    const protein = this.getNutrient(product, NutrientName.Protein);
+    const fats = this.getNutrient(product, NutrientName.Fat);
+    const carbs = this.getNutrient(product, NutrientName.Carbs);
+    const portions = this.getPortions(product);
+    console.log({ name, calories, protein, fats, carbs, portions });
+    if (
+      name &&
+      !Number.isNaN(calories) &&
+      !Number.isNaN(protein) &&
+      !Number.isNaN(fats) &&
+      !Number.isNaN(carbs) &&
+      portions
+    ) {
+      return {
+        name,
+        calories,
+        protein,
+        fats,
+        carbs,
+        portions,
+      };
+    }
+    return null;
+  }
+
+  getNutrient(food: OFDFood, nutrient: NutrientName): number {
+    return food.nutriments[`${nutrient}`] / 100;
+  }
+
+  getPortions(product: OFDFood) {
+    const portions = [
+      {
+        weight: 1,
+        description: 'gram',
+      },
+    ];
+    if (product.serving_quantity) {
+      portions.push({
+        weight: Number(product.serving_quantity),
+        description: `Portion (${product.serving_size})`,
+      });
+    }
+    return portions;
+  }
+
+  convertKjToCalories(kj: number): number {
+    return kj / 4.184;
   }
 }

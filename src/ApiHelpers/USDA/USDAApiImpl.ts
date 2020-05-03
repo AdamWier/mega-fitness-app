@@ -2,13 +2,11 @@ import { USDA_KEY } from 'react-native-dotenv';
 import {
   USDASearchApiResult,
   Helper,
-  USDAFoodDetails,
   USDAFoodDetailsResult,
   NutrientName,
   USDAFoodSearchResult,
-  FormattedPortion,
 } from './USDAApi';
-import { FoodResult } from '../CommonAPITypes';
+import { FoodResult, FoodDetails, FormattedPortion } from '../CommonAPITypes';
 
 export default class USDAApiImpl implements Helper {
   private searchURI: string;
@@ -34,7 +32,7 @@ export default class USDAApiImpl implements Helper {
     });
   }
 
-  async getDetails(foodId: string): Promise<USDAFoodDetails> {
+  async getDetails(foodId: string): Promise<FoodDetails> {
     const food: USDAFoodDetailsResult = await (
       await fetch(this.detailsURI.replace('#FOOD_CODE#', foodId))
     ).json();
