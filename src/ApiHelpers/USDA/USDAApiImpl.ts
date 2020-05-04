@@ -1,15 +1,12 @@
 import { USDA_KEY } from 'react-native-dotenv';
 import {
   USDASearchApiResult,
-  USDAFood,
   Helper,
-  USDAFoodDetails,
   USDAFoodDetailsResult,
   NutrientName,
   USDAFoodSearchResult,
-  FormattedPortion,
 } from './USDAApi';
-import { APITypes } from '../APITypes';
+import { FoodResult, FoodDetails, FormattedPortion } from '../CommonAPITypes';
 
 export default class USDAApiImpl implements Helper {
   private searchURI: string;
@@ -21,24 +18,23 @@ export default class USDAApiImpl implements Helper {
     this.detailsURI = `https://api.nal.usda.gov/fdc/v1/#FOOD_CODE#?api_key=${USDA_KEY}`;
   }
 
-  async search(searchText: string): Promise<USDAFood[]> {
+  async search(searchText: string): Promise<FoodResult[]> {
     const result: USDASearchApiResult = await (
       await fetch(this.searchURI.concat(`&generalSearchInput=${searchText}`))
     ).json();
     const sortedFoods = result.foods.sort(this.sortFoods);
     return sortedFoods.map((food) => {
-      const { description, fdcId } = food;
       return {
-        description,
-        fdcId,
-        api: APITypes.USDA,
+        description: food.description,
+        id: food.fdcId.toString(),
+        api: 'USDA',
       };
     });
   }
 
-  async getDetails(foodId: number): Promise<USDAFoodDetails> {
+  async getDetails(foodId: string): Promise<FoodDetails> {
     const food: USDAFoodDetailsResult = await (
-      await fetch(this.detailsURI.replace('#FOOD_CODE#', foodId.toString()))
+      await fetch(this.detailsURI.replace('#FOOD_CODE#', foodId))
     ).json();
     const name = food.description;
     const calories = this.getNutrient(food, NutrientName.Energy);
