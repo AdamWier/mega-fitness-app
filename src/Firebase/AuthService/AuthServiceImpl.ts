@@ -29,6 +29,10 @@ export default class AuthServiceImpl implements AuthService {
     return { uid: user.uid, email: user.email };
   }
 
+  async logout(): Promise<void> {
+    return this.auth.signOut();
+  }
+
   async createUser(
     email: string,
     password: string

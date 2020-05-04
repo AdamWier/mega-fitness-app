@@ -7,11 +7,12 @@ import StackScreenCreator from './StackScreenCreator';
 import screens from './Screens';
 import { container } from '../store/reducers/User';
 import { authService } from '../Firebase';
+import { Button, Icon } from 'react-native-elements';
+import { Alert } from 'react-native';
 
 const Stack = createStackNavigator();
 
 function Navigation({ user, storeLogin }): JSX.Element {
-  // Seems functional but probably still needs to be tested
   const Screens = StackScreenCreator(Stack, screens, !!user.uid);
 
   React.useEffect(() => {
@@ -20,6 +21,19 @@ function Navigation({ user, storeLogin }): JSX.Element {
       storeLogin(userCheck);
     }
   }, [user, storeLogin]);
+
+  const logout = () => {
+    Alert.alert('Log out', 'Do you want to log out?', [
+      { text: 'No', onPress: () => null },
+      {
+        text: 'Yes',
+        onPress: () => {
+          authService.logout();
+          storeLogin({ uid: null, email: null });
+        },
+      },
+    ]);
+  };
 
   return (
     <NavigationContainer theme={navTheme}>
@@ -32,6 +46,13 @@ function Navigation({ user, storeLogin }): JSX.Element {
             color: navTheme.colors.text,
           },
           headerTintColor: navTheme.colors.text,
+          headerRight: () =>
+            !!user.uid && (
+              <Button
+                icon={<Icon name={'power-settings-new'} />}
+                onPress={logout}
+              />
+            ),
         }}
       >
         {Screens}
