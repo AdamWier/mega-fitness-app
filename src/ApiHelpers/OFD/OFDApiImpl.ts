@@ -8,7 +8,7 @@ import {
 } from './OFDApi';
 
 export default class OFDAImpl implements Helper {
-  getSearchURI(locale: string): string {
+  getSearchURI(locale: string, searchText: string, page: string): string {
     const returnedFields = [
       'brands',
       'product_name',
@@ -18,7 +18,7 @@ export default class OFDAImpl implements Helper {
       '_id',
     ];
     const addressComponents = {
-      baseURI: `https://${locale}.openfoodfacts.org/cgi/search.pl?json=true&search_simple=1&action=process`,
+      baseURI: `https://${locale}.openfoodfacts.org/cgi/search.pl?json=true&search_simple=1&action=process&page_size=50&search_terms=${searchText}&page=${page}`,
       stateTagFilter:
         '&tagtype_0=states&tag_contains_0=contains&tag_0=characteristics-completed',
       returnedFiledsFilter: `&fields=${returnedFields.join(',')}`,
@@ -44,13 +44,14 @@ export default class OFDAImpl implements Helper {
     return Object.values(addressComponents).join('');
   }
 
-  async search(searchText: string, isFranceLocale: boolean): Promise<FoodResult[]> {
+  async search(searchText: string, isFranceLocale: boolean, currentPage?: number): Promise<FoodResult[]> {
+    const page = currentPage ? (currentPage+1).toString() : '0';
     const headers = new Headers({
       'User-Agent': 'mega-fitness-app-dev - Android - Version 0.0',
     });
     const results: OFDSearchResult = await (
       await fetch(
-        this.getSearchURI(isFranceLocale ? 'fr' : 'us').concat(`&search_terms=${searchText}`),
+        this.getSearchURI(isFranceLocale ? 'fr' : 'us', searchText, page),
         {
           headers,
         }

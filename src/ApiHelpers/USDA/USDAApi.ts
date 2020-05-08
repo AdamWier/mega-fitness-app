@@ -1,7 +1,7 @@
 import { FoodResult, FoodDetails } from '../CommonAPITypes';
 
 export interface Helper {
-  search(searchText: string): Promise<FoodResult[]>;
+  search(searchText: string, currentPage?: number): Promise<FoodResult[]>;
   getDetails(foodId: string): Promise<FoodDetails>;
   getNutrient(food: USDAFoodDetailsResult, nutrient: NutrientName): number;
   sortFoods(a: USDAFoodSearchResult, b: USDAFoodSearchResult): number;
