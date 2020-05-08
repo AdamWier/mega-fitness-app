@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, FlatList, Switch, StyleSheet } from 'react-native';
-import { Text, SearchBar, Button, ListItem } from 'react-native-elements';
+import { Text, SearchBar, Button, ListItem, Tooltip, Icon } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import USDAApiImpl from '../ApiHelpers/USDA/USDAApiImpl';
 import OFDApiImpl from '../ApiHelpers/OFD/OFDApiImpl';
@@ -16,6 +16,14 @@ export default function Search({ navigation }): JSX.Element {
   const [loadingState, setLoadingState] = useState(false);
   const [isFranceLocale, setIsFranceLocale] = useState(true)
   const [shouldUseOFD, setShouldUseOFD] = useState(true)
+
+  const getApiToolTipText = () =>
+    shouldUseOFD ? 
+      'The Open Food Database is preferable for brand name foods.' 
+      : 'The USDA database is preferable for basic foods and ingredients.';
+
+  const getLocaleToolTipText = () =>
+    'The Open Food Database can search for American or French brands.' 
 
   const handleSubmit = async (): Promise<void> => {
     if (searchText) {
@@ -73,13 +81,21 @@ export default function Search({ navigation }): JSX.Element {
         }}
       />
       <View style={styles.switchGroupContainer}>
+        <View style={styles.emptyContainer}/>
         <Text style={styles.textContainer}>{shouldUseOFD ? 'Open Food Data' : 'USDA'}</Text>
         <Switch value={shouldUseOFD} onValueChange={setShouldUseOFD} />
+        <Tooltip height={100} popover={<Text>{getApiToolTipText()}</Text>}>
+          <Icon containerStyle={styles.icon} name='info' />
+        </Tooltip>
         <View style={styles.emptyContainer} />
       </View>
       <View style={styles.switchGroupContainer}>
+        <View style={styles.emptyContainer}/>
         <Text style={styles.textContainer}>{!shouldUseOFD ? 'USA' : isFranceLocale ? 'France' : 'USA'}</Text>
         <Switch value={!shouldUseOFD ? false : isFranceLocale} onValueChange={setIsFranceLocale} disabled={!shouldUseOFD}/>
+        <Tooltip height={100} popover={<Text>{getLocaleToolTipText()}</Text>}>
+          <Icon containerStyle={styles.icon} name='info' />
+        </Tooltip>
         <View style={styles.emptyContainer}/>
       </View>
       <Button
@@ -109,11 +125,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   textContainer: {
-    flex: 1,
+    flex: 2,
   },
   emptyContainer: {
     flex: 1,
-  }
+  },
+  icon: {
+    marginHorizontal: 15
+  },
 })
 
 Search.propTypes = {
