@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import TotalListItem from '../components/TotalListItem';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 const getTotal = (nutrient: string): CallableFunction => (
   accumulator: number,
@@ -30,12 +30,8 @@ function TotalCard({ foods }): JSX.Element {
 
   return (
     <Card
-      containerStyle={{
-        marginBottom: 20,
-      }}
-      titleStyle={{
-        fontSize: 15,
-      }}
+      containerStyle={styles.containerStyle}
+      titleStyle={styles.titleStyle}
       title="Totals"
     >
       <View
@@ -72,5 +68,14 @@ function TotalCard({ foods }): JSX.Element {
 TotalCard.propTypes = {
   foods: PropTypes.array.isRequired,
 };
+
+const styles = StyleSheet.create({
+  containerStyle: {
+    marginBottom: 20,
+  },
+  titleStyle: {
+    fontSize: 15,
+  },
+});
 
 export default TotalCard;
