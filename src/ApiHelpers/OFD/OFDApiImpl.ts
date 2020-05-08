@@ -44,8 +44,12 @@ export default class OFDAImpl implements Helper {
     return Object.values(addressComponents).join('');
   }
 
-  async search(searchText: string, isFranceLocale: boolean, currentPage?: number): Promise<FoodResult[]> {
-    const page = currentPage ? (currentPage+1).toString() : '0';
+  async search(
+    searchText: string,
+    isFranceLocale: boolean,
+    currentPage?: number
+  ): Promise<FoodResult[]> {
+    const page = currentPage ? (currentPage + 1).toString() : '0';
     const headers = new Headers({
       'User-Agent': 'mega-fitness-app-dev - Android - Version 0.0',
     });

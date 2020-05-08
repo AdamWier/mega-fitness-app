@@ -18,10 +18,17 @@ export default class USDAApiImpl implements Helper {
     this.detailsURI = `https://api.nal.usda.gov/fdc/v1/#FOOD_CODE#?api_key=${USDA_KEY}`;
   }
 
-  async search(searchText: string, currentPage?: number): Promise<FoodResult[]> {
-    const page = currentPage ? (currentPage+1).toString() : '0';
+  async search(
+    searchText: string,
+    currentPage?: number
+  ): Promise<FoodResult[]> {
+    const page = currentPage ? (currentPage + 1).toString() : '0';
     const result: USDASearchApiResult = await (
-      await fetch(this.searchURI.concat(`&generalSearchInput=${searchText}&pageNumber=${page}`))
+      await fetch(
+        this.searchURI.concat(
+          `&generalSearchInput=${searchText}&pageNumber=${page}`
+        )
+      )
     ).json();
     const sortedFoods = result.foods.sort(this.sortFoods);
     return sortedFoods.map((food) => {

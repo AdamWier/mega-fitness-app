@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { View, FlatList, Switch, StyleSheet } from 'react-native';
-import { Text, SearchBar, Button, ListItem, Tooltip, Icon } from 'react-native-elements';
+import {
+  Text,
+  SearchBar,
+  Button,
+  ListItem,
+  Tooltip,
+  Icon,
+} from 'react-native-elements';
 import PropTypes from 'prop-types';
 import USDAApiImpl from '../ApiHelpers/USDA/USDAApiImpl';
 import OFDApiImpl from '../ApiHelpers/OFD/OFDApiImpl';
@@ -15,16 +22,16 @@ export default function Search({ navigation }): JSX.Element {
   const [results, updateResults] = useState(null);
   const [page, updatePage] = useState(0);
   const [loadingState, setLoadingState] = useState(false);
-  const [isFranceLocale, setIsFranceLocale] = useState(true)
-  const [shouldUseOFD, setShouldUseOFD] = useState(true)
+  const [isFranceLocale, setIsFranceLocale] = useState(true);
+  const [shouldUseOFD, setShouldUseOFD] = useState(true);
 
   const getApiToolTipText = () =>
-    shouldUseOFD ? 
-      'The Open Food Database is preferable for brand name foods.' 
+    shouldUseOFD
+      ? 'The Open Food Database is preferable for brand name foods.'
       : 'The USDA database is preferable for basic foods and ingredients.';
 
   const getLocaleToolTipText = () =>
-    'The Open Food Database can search for American or French brands.' 
+    'The Open Food Database can search for American or French brands.';
 
   const handleSubmit = async (): Promise<void> => {
     updateResults(null);
@@ -36,23 +43,25 @@ export default function Search({ navigation }): JSX.Element {
 
   const getResults = async () => {
     setLoadingState(true);
-    if(shouldUseOFD){
+    if (shouldUseOFD) {
       updateResults(
-        results && results.length ? 
-        [...results, ...await OFDApi.search(searchText, isFranceLocale, page)]
-        : [...await OFDApi.search(searchText, isFranceLocale, page)]
-      );  
-    }
-    else {
+        results && results.length
+          ? [
+              ...results,
+              ...(await OFDApi.search(searchText, isFranceLocale, page)),
+            ]
+          : [...(await OFDApi.search(searchText, isFranceLocale, page))]
+      );
+    } else {
       updateResults(
-        results && results.length ? 
-        [...results, ...await USDAapi.search(searchText, page)]
-        : [...await USDAapi.search(searchText, page)]
-      ); 
+        results && results.length
+          ? [...results, ...(await USDAapi.search(searchText, page))]
+          : [...(await USDAapi.search(searchText, page))]
+      );
     }
     updatePage(page + 1);
     setLoadingState(false);
-  }
+  };
 
   const showErrorToast = () =>
     Toast.showWithGravity(
@@ -96,22 +105,30 @@ export default function Search({ navigation }): JSX.Element {
         }}
       />
       <View style={styles.switchGroupContainer}>
-        <View style={styles.emptyContainer}/>
-        <Text style={styles.textContainer}>{shouldUseOFD ? 'Open Food Data' : 'USDA'}</Text>
+        <View style={styles.emptyContainer} />
+        <Text style={styles.textContainer}>
+          {shouldUseOFD ? 'Open Food Data' : 'USDA'}
+        </Text>
         <Switch value={shouldUseOFD} onValueChange={setShouldUseOFD} />
         <Tooltip height={100} popover={<Text>{getApiToolTipText()}</Text>}>
-          <Icon containerStyle={styles.icon} name='info' />
+          <Icon containerStyle={styles.icon} name="info" />
         </Tooltip>
         <View style={styles.emptyContainer} />
       </View>
       <View style={styles.switchGroupContainer}>
-        <View style={styles.emptyContainer}/>
-        <Text style={styles.textContainer}>{!shouldUseOFD ? 'USA' : isFranceLocale ? 'France' : 'USA'}</Text>
-        <Switch value={!shouldUseOFD ? false : isFranceLocale} onValueChange={setIsFranceLocale} disabled={!shouldUseOFD}/>
+        <View style={styles.emptyContainer} />
+        <Text style={styles.textContainer}>
+          {!shouldUseOFD ? 'USA' : isFranceLocale ? 'France' : 'USA'}
+        </Text>
+        <Switch
+          value={!shouldUseOFD ? false : isFranceLocale}
+          onValueChange={setIsFranceLocale}
+          disabled={!shouldUseOFD}
+        />
         <Tooltip height={100} popover={<Text>{getLocaleToolTipText()}</Text>}>
-          <Icon containerStyle={styles.icon} name='info' />
+          <Icon containerStyle={styles.icon} name="info" />
         </Tooltip>
-        <View style={styles.emptyContainer}/>
+        <View style={styles.emptyContainer} />
       </View>
       <Button
         type={!searchText ? 'outline' : 'solid'}
@@ -121,23 +138,26 @@ export default function Search({ navigation }): JSX.Element {
         title="Search"
         onPress={(): Promise<void> => handleSubmit()}
       />
-      {results ? 
-        results.length ?
+      {results ? (
+        results.length ? (
           <FlatList
             data={results}
             keyExtractor={(item, index): string => index.toString()}
             renderItem={({ item }: { item: FoodResult }): JSX.Element => (
               <ListItem
-                onPress={(): Promise<void> => goToFoodDetails(item.api, item.id)}
+                onPress={(): Promise<void> =>
+                  goToFoodDetails(item.api, item.id)
+                }
                 title={item.description}
               />
-              )}
+            )}
             onEndReachedThreshold={0.5}
             onEndReached={getResults}
-          /> 
-          : <Text>No items found</Text>
-        : null
-      }
+          />
+        ) : (
+          <Text>No items found</Text>
+        )
+      ) : null}
     </View>
   );
 }
@@ -156,9 +176,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   icon: {
-    marginHorizontal: 15
+    marginHorizontal: 15,
   },
-})
+});
 
 Search.propTypes = {
   navigation: PropTypes.shape({
