@@ -44,13 +44,13 @@ export default class OFDAImpl implements Helper {
     return Object.values(addressComponents).join('');
   }
 
-  async search(searchText: string, isUSALocale: boolean): Promise<FoodResult[]> {
+  async search(searchText: string, isFranceLocale: boolean): Promise<FoodResult[]> {
     const headers = new Headers({
       'User-Agent': 'mega-fitness-app-dev - Android - Version 0.0',
     });
     const results: OFDSearchResult = await (
       await fetch(
-        this.getSearchURI(isUSALocale ? 'us' : 'fr').concat(`&search_terms=${searchText}`),
+        this.getSearchURI(isFranceLocale ? 'fr' : 'us').concat(`&search_terms=${searchText}`),
         {
           headers,
         }

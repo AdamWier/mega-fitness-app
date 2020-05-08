@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, Switch, StyleSheet } from 'react-native';
 import { Text, SearchBar, Button, ListItem } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import USDAApiImpl from '../ApiHelpers/USDA/USDAApiImpl';
@@ -14,15 +14,18 @@ export default function Search({ navigation }): JSX.Element {
   const [searchText, updateSearchText] = useState('');
   const [results, updateResults] = useState([]);
   const [loadingState, setLoadingState] = useState(false);
-  const [isUSALocale, setIsUSALocale] = useState(true)
+  const [isFranceLocale, setIsFranceLocale] = useState(true)
+  const [shouldUseOFD, setShouldUseOFD] = useState(true)
 
   const handleSubmit = async (): Promise<void> => {
     if (searchText) {
       setLoadingState(true);
-      updateResults([
-        ...(await OFDApi.search(searchText, isUSALocale)),
-        ...(await USDAapi.search(searchText)),
-      ]);
+      if(shouldUseOFD){
+        updateResults(await OFDApi.search(searchText, isFranceLocale));  
+      }
+      else {
+        updateResults(await USDAapi.search(searchText));
+      }
       setLoadingState(false);
       updateSearchText('');
     }
@@ -69,9 +72,15 @@ export default function Search({ navigation }): JSX.Element {
           marginVertical: 10,
         }}
       />
-      <View style={styles.sliderContainer}>
-      <Text style={styles.sliderText}>{isUSALocale ? 'USA' : 'FR'}</Text>
-      <Switch value={isUSALocale} onValueChange={setIsUSALocale} />
+      <View style={styles.switchGroupContainer}>
+        <Text style={styles.textContainer}>{shouldUseOFD ? 'Open Food Data' : 'USDA'}</Text>
+        <Switch value={shouldUseOFD} onValueChange={setShouldUseOFD} />
+        <View style={styles.emptyContainer} />
+      </View>
+      <View style={styles.switchGroupContainer}>
+        <Text style={styles.textContainer}>{!shouldUseOFD ? 'USA' : isFranceLocale ? 'France' : 'USA'}</Text>
+        <Switch value={!shouldUseOFD ? false : isFranceLocale} onValueChange={setIsFranceLocale} disabled={!shouldUseOFD}/>
+        <View style={styles.emptyContainer}/>
       </View>
       <Button
         type={!searchText ? 'outline' : 'solid'}
@@ -96,13 +105,15 @@ export default function Search({ navigation }): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-  sliderContainer: {
+  switchGroupContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
   },
-  sliderText: {
-    marginHorizontal: 15
+  textContainer: {
+    flex: 1,
   },
+  emptyContainer: {
+    flex: 1,
+  }
 })
 
 Search.propTypes = {
