@@ -8,27 +8,26 @@ const TotalListItem: React.FC<any> = ({
   total,
   onValueChange,
   description,
+  isColumn,
 }) => (
-  <View>
-    <View style={styles.container}>
-      <Text style={styles.text}>{`${label}`}</Text>
-      {onValueChange ? (
-        <View style={styles.containerTight}>
-          <Input
-            containerStyle={styles.inputContainer}
-            onChangeText={onValueChange}
-            value={total}
-            inputStyle={styles.input}
-            keyboardType="number-pad"
-          />
-          <Text style={styles.text}>{`${description}`}</Text>
-        </View>
-      ) : (
-        <Text style={styles.text}>
-          {description ? `${total} ${description}` : total}
-        </Text>
-      )}
-    </View>
+  <View style={isColumn ? styles.containerColumn : styles.containerRow}>
+    <Text style={styles.text}>{`${label}`}</Text>
+    {onValueChange ? (
+      <View style={styles.containerTight}>
+        <Input
+          containerStyle={styles.inputContainer}
+          onChangeText={onValueChange}
+          value={total}
+          inputStyle={styles.input}
+          keyboardType="number-pad"
+        />
+        <Text style={styles.text}>{`${description}`}</Text>
+      </View>
+    ) : (
+      <Text style={styles.text}>
+        {description ? `${total} ${description}` : `${total} g`}
+      </Text>
+    )}
   </View>
 );
 
@@ -45,9 +44,12 @@ TotalListItem.defaultProps = {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  containerRow: {
     margin: 5,
     flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  containerColumn: {
     justifyContent: 'space-between',
   },
   containerTight: {
