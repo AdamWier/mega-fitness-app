@@ -2,7 +2,7 @@ import { FoodResult, FoodDetails } from '../CommonAPITypes';
 
 export interface Helper {
   getSearchURI(locale: string): string;
-  search(searchText: string): Promise<FoodResult[]>;
+  search(searchText: string, isUSALocale: boolean): Promise<FoodResult[]>;
   getDetails(foodId: string): Promise<FoodDetails>;
 }
 

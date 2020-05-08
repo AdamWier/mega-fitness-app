@@ -14,12 +14,13 @@ export default function Search({ navigation }): JSX.Element {
   const [searchText, updateSearchText] = useState('');
   const [results, updateResults] = useState([]);
   const [loadingState, setLoadingState] = useState(false);
+  const [isUSALocale, setIsUSALocale] = useState(true)
 
   const handleSubmit = async (): Promise<void> => {
     if (searchText) {
       setLoadingState(true);
       updateResults([
-        ...(await OFDApi.search(searchText)),
+        ...(await OFDApi.search(searchText, isUSALocale)),
         ...(await USDAapi.search(searchText)),
       ]);
       setLoadingState(false);
@@ -68,6 +69,10 @@ export default function Search({ navigation }): JSX.Element {
           marginVertical: 10,
         }}
       />
+      <View style={styles.sliderContainer}>
+      <Text style={styles.sliderText}>{isUSALocale ? 'USA' : 'FR'}</Text>
+      <Switch value={isUSALocale} onValueChange={setIsUSALocale} />
+      </View>
       <Button
         type={!searchText ? 'outline' : 'solid'}
         disabled={!searchText}
@@ -89,6 +94,16 @@ export default function Search({ navigation }): JSX.Element {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  sliderContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  sliderText: {
+    marginHorizontal: 15
+  },
+})
 
 Search.propTypes = {
   navigation: PropTypes.shape({
