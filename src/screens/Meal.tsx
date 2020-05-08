@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { View, ScrollView, Alert, StyleSheet, Keyboard } from 'react-native';
-import { Button, Text, withTheme, Input } from 'react-native-elements';
+import { Button, Text, withTheme, Input, Divider } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import FoodCard from '../components/FoodCard';
 import { container as MealContainer } from '../store/reducers/MealDocument';
@@ -113,6 +113,12 @@ function Meal({
       />
       {meal.length ? (
         <View>
+          <Button
+            title={`Eaten: ${moment(eatenAt).format(
+              'dddd MMMM D, YYYY HH:mm'
+            )}`}
+            onPress={getEatenAt}
+          />
           <Input
             placeholder="Enter meal name"
             value={name}
@@ -125,6 +131,33 @@ function Meal({
             ref={mealNameInput}
             containerStyle={styles.input}
           />
+          <DateTimePickerModal
+            isVisible={displayCalendar}
+            date={eatenAt}
+            mode="datetime"
+            onConfirm={setDate}
+            onCancel={() => toggleDisplayCalendar(false)}
+          />
+          <TotalCard foods={meal} />
+          <Button
+            title="Save meal"
+            onPress={askToSave}
+            buttonStyle={{
+              backgroundColor: theme.colors.success,
+            }}
+          />
+          {id ? (
+            <Button
+              title="Delete meal"
+              onPress={confirmDelete}
+              buttonStyle={{
+                backgroundColor: theme.colors.danger,
+              }}
+            />
+          ) : null}
+
+          <Divider />
+
           {meal.map((food: { [key: string]: any }, index: number) => {
             const isExpandedCard = index === expandedCard;
             return (
@@ -162,36 +195,6 @@ function Meal({
               </FoodCard>
             );
           })}
-          <TotalCard foods={meal} />
-          <DateTimePickerModal
-            isVisible={displayCalendar}
-            date={eatenAt}
-            mode="datetime"
-            onConfirm={setDate}
-            onCancel={() => toggleDisplayCalendar(false)}
-          />
-          <Button
-            title={`Eaten: ${moment(eatenAt).format(
-              'dddd MMMM D, YYYY HH:mm'
-            )}`}
-            onPress={getEatenAt}
-          />
-          <Button
-            title="Save meal"
-            onPress={askToSave}
-            buttonStyle={{
-              backgroundColor: theme.colors.success,
-            }}
-          />
-          {id ? (
-            <Button
-              title="Delete meal"
-              onPress={confirmDelete}
-              buttonStyle={{
-                backgroundColor: theme.colors.danger,
-              }}
-            />
-          ) : null}
         </View>
       ) : (
         <Text>No foods added to this meal</Text>
