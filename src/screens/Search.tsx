@@ -1,30 +1,52 @@
 import React, { useState } from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, StyleSheet } from 'react-native';
 import { Text, SearchBar, Button, ListItem } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import USDAApiImpl from '../ApiHelpers/USDA/USDAApiImpl';
 import OFDApiImpl from '../ApiHelpers/OFD/OFDApiImpl';
 import { FoodResult, FoodDetails } from '../ApiHelpers/CommonAPITypes';
 import Toast from 'react-native-simple-toast';
+import SwitchGroup from '../components/SwitchGroup';
 
 export default function Search({ navigation }): JSX.Element {
   const USDAapi = new USDAApiImpl();
   const OFDApi = new OFDApiImpl();
 
   const [searchText, updateSearchText] = useState('');
-  const [results, updateResults] = useState([]);
+  const [results, updateResults] = useState(null);
+  const [page, updatePage] = useState(0);
   const [loadingState, setLoadingState] = useState(false);
+  const [isFranceLocale, setIsFranceLocale] = useState(true);
+  const [shouldUseOFD, setShouldUseOFD] = useState(true);
 
   const handleSubmit = async (): Promise<void> => {
+    updateResults(null);
+    updatePage(0);
     if (searchText) {
-      setLoadingState(true);
-      updateResults([
-        ...(await OFDApi.search(searchText)),
-        ...(await USDAapi.search(searchText)),
-      ]);
-      setLoadingState(false);
-      updateSearchText('');
+      getResults();
     }
+  };
+
+  const getResults = async () => {
+    setLoadingState(true);
+    if (shouldUseOFD) {
+      updateResults(
+        results && results.length
+          ? [
+              ...results,
+              ...(await OFDApi.search(searchText, isFranceLocale, page)),
+            ]
+          : [...(await OFDApi.search(searchText, isFranceLocale, page))]
+      );
+    } else {
+      updateResults(
+        results && results.length
+          ? [...results, ...(await USDAapi.search(searchText, page))]
+          : [...(await USDAapi.search(searchText, page))]
+      );
+    }
+    updatePage(page + 1);
+    setLoadingState(false);
   };
 
   const showErrorToast = () =>
@@ -59,7 +81,7 @@ export default function Search({ navigation }): JSX.Element {
   };
 
   return (
-    <View>
+    <View style={styles.screenContainer}>
       <Text h2>Search for a food</Text>
       <SearchBar
         value={searchText}
@@ -67,6 +89,28 @@ export default function Search({ navigation }): JSX.Element {
         containerStyle={{
           marginVertical: 10,
         }}
+      />
+      <SwitchGroup
+        value={shouldUseOFD}
+        onValueChange={setShouldUseOFD}
+        switchText={shouldUseOFD ? 'Open Food Data' : 'USDA'}
+        toolTipText={
+          shouldUseOFD
+            ? 'The Open Food Database is preferable for brand name foods.'
+            : 'The USDA database is preferable for basic foods and ingredients.'
+        }
+        toolTipHeight={100}
+        iconName="info"
+      />
+      <SwitchGroup
+        value={!shouldUseOFD ? false : isFranceLocale}
+        onValueChange={setIsFranceLocale}
+        switchText={!shouldUseOFD ? 'USA' : isFranceLocale ? 'France' : 'USA'}
+        toolTipText={
+          'The Open Food Database can search for American or French brands.'
+        }
+        toolTipHeight={100}
+        iconName="info"
       />
       <Button
         type={!searchText ? 'outline' : 'solid'}
@@ -76,19 +120,47 @@ export default function Search({ navigation }): JSX.Element {
         title="Search"
         onPress={(): Promise<void> => handleSubmit()}
       />
-      <FlatList
-        data={results}
-        keyExtractor={(item, index): string => index.toString()}
-        renderItem={({ item }: { item: FoodResult }): JSX.Element => (
-          <ListItem
-            onPress={(): Promise<void> => goToFoodDetails(item.api, item.id)}
-            title={item.description}
+      {results ? (
+        results.length ? (
+          <FlatList
+            data={results}
+            keyExtractor={(item, index): string => index.toString()}
+            renderItem={({ item }: { item: FoodResult }): JSX.Element => (
+              <ListItem
+                onPress={(): Promise<void> =>
+                  goToFoodDetails(item.api, item.id)
+                }
+                title={item.description}
+              />
+            )}
+            onEndReachedThreshold={0.5}
+            onEndReached={getResults}
           />
-        )}
-      />
+        ) : (
+          <Text>No items found</Text>
+        )
+      ) : null}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  screenContainer: {
+    flex: 1,
+  },
+  switchGroupContainer: {
+    flexDirection: 'row',
+  },
+  textContainer: {
+    flex: 2,
+  },
+  emptyContainer: {
+    flex: 1,
+  },
+  icon: {
+    marginHorizontal: 15,
+  },
+});
 
 Search.propTypes = {
   navigation: PropTypes.shape({

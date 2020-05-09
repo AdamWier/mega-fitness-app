@@ -87,5 +87,8 @@ export const theme = {
   Icon: {
     color: colors.text,
   },
+  Tooltip: {
+    withOverlay: false,
+  },
   colors,
 } as MyTheme;
