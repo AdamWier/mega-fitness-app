@@ -13,15 +13,38 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '12.13.1'
-    - name: Set up yarn
-      run: npm i -g yarn
-    - name: Install packages
-      run: yarn install --frozen-lockfile
+    - name: Install Java SDK
+      uses: actions/setup-java@v1
+      with:
+        java-version: '8'
+        java-package: jdk
     - name: Set up expo cli
       run: npm i -g expo-cli
     - name: Expo log in
       run: npx expo login -u ${{ secrets.ExpoUsername }} -p ${{ secrets.ExpoPassword }}
+    - name: Set up yarn
+      run: npm i -g yarn
+    - name: Install packages
+      run: yarn install --frozen-lockfile
     - name: Create env file
       run: echo "${{ secrets.EnvFile }}" > .env
-    - name: Send to expo
-      run: expo build:android --no-wait
+    - name: Generate jks
+      run: expo fetch:android:keystore
+    - name: Install turtle cli
+      run: npm i -g turtle-cli
+    - name: Set up turtle cli
+      run: turtle setup:android
+    - name: Turtle build
+      env: 
+        EXPO_USERNAME: ${{ secrets.ExpoUsername }}
+        EXPO_PASSWORD: ${{ secrets.ExpoPassword }}
+        EXPO_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.KeystorePassword }}
+        EXPO_ANDROID_KEY_PASSWORD: ${{ secrets.KeyPassword }}
+      run: turtle build:android -t apk -o ./mega-fitness-app-preprod.apk --keystore-path mega-fitness-app.jks --keystore-alias ${{ secrets.KeyAlias }}
+    - name: Setup gcloud
+      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      with:
+          service_account_key: ${{ secrets.FirebaseKey }}
+          project_id: ${{ secrets.GcloudProject }}
+    - name: Send to gcloud storage
+      run: gsutil cp ./mega-fitness-app-preprod.apk gs://${{ secrets.FirebaseProjectName }}.appspot.com/preProd/mega-fitness-app-preprod.apk
