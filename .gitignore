@@ -11,7 +11,7 @@ web-build/
 web-report/
 .env
 yarn-error.log
-.env-prod
+.env.production
 .env-dev
 
 # macOS
