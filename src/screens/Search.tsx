@@ -1,18 +1,12 @@
 import React, { useState } from 'react';
-import { View, FlatList, Switch, StyleSheet } from 'react-native';
-import {
-  Text,
-  SearchBar,
-  Button,
-  ListItem,
-  Tooltip,
-  Icon,
-} from 'react-native-elements';
+import { View, FlatList, StyleSheet } from 'react-native';
+import { Text, SearchBar, Button, ListItem } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import USDAApiImpl from '../ApiHelpers/USDA/USDAApiImpl';
 import OFDApiImpl from '../ApiHelpers/OFD/OFDApiImpl';
 import { FoodResult, FoodDetails } from '../ApiHelpers/CommonAPITypes';
 import Toast from 'react-native-simple-toast';
+import SwitchGroup from '../components/SwitchGroup';
 
 export default function Search({ navigation }): JSX.Element {
   const USDAapi = new USDAApiImpl();
@@ -24,14 +18,6 @@ export default function Search({ navigation }): JSX.Element {
   const [loadingState, setLoadingState] = useState(false);
   const [isFranceLocale, setIsFranceLocale] = useState(true);
   const [shouldUseOFD, setShouldUseOFD] = useState(true);
-
-  const getApiToolTipText = () =>
-    shouldUseOFD
-      ? 'The Open Food Database is preferable for brand name foods.'
-      : 'The USDA database is preferable for basic foods and ingredients.';
-
-  const getLocaleToolTipText = () =>
-    'The Open Food Database can search for American or French brands.';
 
   const handleSubmit = async (): Promise<void> => {
     updateResults(null);
@@ -104,32 +90,28 @@ export default function Search({ navigation }): JSX.Element {
           marginVertical: 10,
         }}
       />
-      <View style={styles.switchGroupContainer}>
-        <View style={styles.emptyContainer} />
-        <Text style={styles.textContainer}>
-          {shouldUseOFD ? 'Open Food Data' : 'USDA'}
-        </Text>
-        <Switch value={shouldUseOFD} onValueChange={setShouldUseOFD} />
-        <Tooltip height={100} popover={<Text>{getApiToolTipText()}</Text>}>
-          <Icon containerStyle={styles.icon} name="info" />
-        </Tooltip>
-        <View style={styles.emptyContainer} />
-      </View>
-      <View style={styles.switchGroupContainer}>
-        <View style={styles.emptyContainer} />
-        <Text style={styles.textContainer}>
-          {!shouldUseOFD ? 'USA' : isFranceLocale ? 'France' : 'USA'}
-        </Text>
-        <Switch
-          value={!shouldUseOFD ? false : isFranceLocale}
-          onValueChange={setIsFranceLocale}
-          disabled={!shouldUseOFD}
-        />
-        <Tooltip height={100} popover={<Text>{getLocaleToolTipText()}</Text>}>
-          <Icon containerStyle={styles.icon} name="info" />
-        </Tooltip>
-        <View style={styles.emptyContainer} />
-      </View>
+      <SwitchGroup
+        value={shouldUseOFD}
+        onValueChange={setShouldUseOFD}
+        switchText={shouldUseOFD ? 'Open Food Data' : 'USDA'}
+        toolTipText={
+          shouldUseOFD
+            ? 'The Open Food Database is preferable for brand name foods.'
+            : 'The USDA database is preferable for basic foods and ingredients.'
+        }
+        toolTipHeight={100}
+        iconName="info"
+      />
+      <SwitchGroup
+        value={!shouldUseOFD ? false : isFranceLocale}
+        onValueChange={setIsFranceLocale}
+        switchText={!shouldUseOFD ? 'USA' : isFranceLocale ? 'France' : 'USA'}
+        toolTipText={
+          'The Open Food Database can search for American or French brands.'
+        }
+        toolTipHeight={100}
+        iconName="info"
+      />
       <Button
         type={!searchText ? 'outline' : 'solid'}
         disabled={!searchText}
