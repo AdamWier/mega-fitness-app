@@ -2,6 +2,7 @@ import React from 'react';
 import { Card } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import TotalListItem from '../components/TotalListItem';
+import { View, StyleSheet } from 'react-native';
 
 const getTotal = (nutrient: string): CallableFunction => (
   accumulator: number,
@@ -29,18 +30,37 @@ function TotalCard({ foods }): JSX.Element {
 
   return (
     <Card
-      containerStyle={{
-        marginBottom: 20,
-      }}
+      containerStyle={styles.containerStyle}
+      titleStyle={styles.titleStyle}
       title="Totals"
     >
-      <TotalListItem
-        total={getTotals().calories.toString()}
-        label="Calories:"
-      />
-      <TotalListItem label="Protein:" total={getTotals().protein.toString()} />
-      <TotalListItem label="Carbs:" total={getTotals().carbs.toString()} />
-      <TotalListItem label="Fat:" total={getTotals().fats.toString()} />
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+        }}
+      >
+        <TotalListItem
+          total={getTotals().calories.toString()}
+          label="Calories"
+          isColumn
+        />
+        <TotalListItem
+          label="Protein"
+          total={getTotals().protein.toString()}
+          isColumn
+        />
+        <TotalListItem
+          label="Carbs"
+          total={getTotals().carbs.toString()}
+          isColumn
+        />
+        <TotalListItem
+          label="Fat"
+          total={getTotals().fats.toString()}
+          isColumn
+        />
+      </View>
     </Card>
   );
 }
@@ -48,5 +68,14 @@ function TotalCard({ foods }): JSX.Element {
 TotalCard.propTypes = {
   foods: PropTypes.array.isRequired,
 };
+
+const styles = StyleSheet.create({
+  containerStyle: {
+    marginBottom: 20,
+  },
+  titleStyle: {
+    fontSize: 15,
+  },
+});
 
 export default TotalCard;

@@ -59,7 +59,6 @@ export const theme = {
     },
     titleStyle: {
       color: colors.text,
-      fontSize: 22,
     },
   },
   Slider: {
