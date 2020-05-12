@@ -1,0 +1,48 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - master
+      - prod
+jobs:
+  build:
+    name: Compile and send to bucket
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up node
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.13.1'
+    - name: Install packages
+      run: yarn install --frozen-lockfile
+    - name: Create env file
+      run: echo "${{ secrets.EnvFile }}" > .env
+    - name: Set up expo cli
+      run: npm i -g expo-cli
+    - name: Expo log in
+      run: expo login -u ${{ secrets.ExpoUsername }} -p ${{ secrets.ExpoPassword }}
+    - name: Generate jks
+      run: expo fetch:android:keystore
+    - name: Install turtle cli
+      run: npm i -g turtle-cli
+    - name: Set up turtle cli
+      run: turtle setup:android --sdk-version 36.0.0
+    - name: Turtle build
+      env: 
+        EXPO_USERNAME: ${{ secrets.ExpoUsername }}
+        EXPO_PASSWORD: ${{ secrets.ExpoPassword }}
+        EXPO_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.KeystorePassword }}
+        EXPO_ANDROID_KEY_PASSWORD: ${{ secrets.KeyPassword }}
+      run: turtle build:android -t apk -o ./mega-fitness-app.apk --keystore-path mega-fitness-app.jks --keystore-alias ${{ secrets.KeyAlias }}
+    - name: Setup gcloud
+      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      with:
+        service_account_key: ${{ secrets.FirebaseKey }}
+        project_id: ${{ secrets.GcloudProject }}
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
+    - name: Send to gcloud storage
+      run: gsutil cp ./mega-fitness-app.apk gs://${{ secrets.FirebaseProjectName }}.appspot.com/releases/mega-fitness-app-${{ steps.extract_branch.outputs.branch }}.apk
