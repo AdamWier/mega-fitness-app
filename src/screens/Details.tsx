@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Slider, Button } from 'react-native-elements';
-import { ScrollView } from 'react-native';
+import { Button } from 'react-native-elements';
+import { ScrollView, Alert } from 'react-native';
 import PropTypes from 'prop-types';
 import AmountPicker from '../components/AmountPicker';
 import FoodCard from '../components/FoodCard';
@@ -15,12 +15,14 @@ function Details({
 }): JSX.Element {
   const { details } = route.params;
 
-  const [amount, changeAmount] = useState(1);
+  const [amount, changeAmount] = useState('1');
   const [currentPortion, changePortion] = useState(details.portions[0]);
 
   const calculateNutrient = useCallback(
     (nutrient: string): number =>
-      Math.round(details[nutrient] * amount * currentPortion.weight),
+      Number(amount)
+        ? Math.round(details[nutrient] * Number(amount) * currentPortion.weight)
+        : 0,
     [amount, currentPortion.weight, details]
   );
 
@@ -46,24 +48,32 @@ function Details({
     calculateValues()
   );
 
+  const amountIsCorrect = () => {
+    return amount !== '' && amount !== '0' && !!Number(amount);
+  };
+
   const addFood = (): void => {
     const { calories, protein, fats, carbs } = currentCalculations;
-    updateMealDocument({
-      ...mealDocument,
-      meal: [
-        ...mealDocument.meal,
-        {
-          name: details.name,
-          amount,
-          portionDescription: currentPortion.description,
-          calories,
-          protein,
-          fats,
-          carbs,
-        },
-      ],
-    });
-    navigation.navigate('Meal');
+    if (amountIsCorrect()) {
+      updateMealDocument({
+        ...mealDocument,
+        meal: [
+          ...mealDocument.meal,
+          {
+            name: details.name,
+            amount,
+            portionDescription: currentPortion.description,
+            calories,
+            protein,
+            fats,
+            carbs,
+          },
+        ],
+      });
+      navigation.navigate('Meal');
+    } else {
+      Alert.alert('Warning', 'You must enter a valid amount.');
+    }
   };
 
   useEffect(() => {
@@ -80,7 +90,7 @@ function Details({
         fats={currentCalculations.fats.toString()}
         amount={amount ? amount.toString() : ''}
         amountDescription={currentPortion.description}
-        onAmountChange={(value) => changeAmount(Number(value))}
+        onAmountChange={(value) => changeAmount(value)}
         expanded
       >
         <AmountPicker
@@ -92,13 +102,6 @@ function Details({
             );
             changePortion(newPortion);
           }}
-        />
-        <Slider
-          step={1}
-          minimumValue={1}
-          maximumValue={currentPortion.description === 'gram' ? 5000 : 20}
-          value={amount}
-          onValueChange={(value): void => changeAmount(Number(value))}
         />
       </FoodCard>
       <Button
