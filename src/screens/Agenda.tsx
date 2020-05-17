@@ -68,7 +68,7 @@ function AgendaPage({
   };
 
   const adaptDocuments = (documents: { [key: string]: any }[], date: Date) => {
-    if (documents.length) {
+    if (documents && documents.length) {
       setAllFoods(documents.flatMap((document) => document.meal));
       setAgendaItems(reduceMealDocuments(documents));
     } else {
