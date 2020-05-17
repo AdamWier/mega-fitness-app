@@ -22,6 +22,12 @@ jobs:
       run: npm i -g expo-cli
     - name: Expo log in
       run: expo login -u ${{ secrets.ExpoUsername }} -p ${{ secrets.ExpoPassword }}
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
+    - name: Publish to Expo
+      run: expo publish --release-channel ${{ steps.extract_branch.outputs.branch }}
     - name: Generate jks
       run: expo fetch:android:keystore
     - name: Install turtle cli
@@ -34,15 +40,11 @@ jobs:
         EXPO_PASSWORD: ${{ secrets.ExpoPassword }}
         EXPO_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.KeystorePassword }}
         EXPO_ANDROID_KEY_PASSWORD: ${{ secrets.KeyPassword }}
-      run: turtle build:android -t apk -o ./mega-fitness-app.apk --keystore-path mega-fitness-app.jks --keystore-alias ${{ secrets.KeyAlias }}
+      run: turtle build:android -t apk -o ./mega-fitness-app.apk --keystore-path mega-fitness-app.jks --keystore-alias ${{ secrets.KeyAlias }} --release-channel ${{ steps.extract_branch.outputs.branch }}
     - name: Setup gcloud
       uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
       with:
         service_account_key: ${{ secrets.FirebaseKey }}
         project_id: ${{ secrets.GcloudProject }}
-    - name: Extract branch name
-      shell: bash
-      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-      id: extract_branch
     - name: Send to gcloud storage
       run: gsutil cp ./mega-fitness-app.apk gs://${{ secrets.FirebaseProjectName }}.appspot.com/releases/mega-fitness-app-${{ steps.extract_branch.outputs.branch }}.apk
