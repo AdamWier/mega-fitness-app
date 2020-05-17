@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, MutableRefObject } from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import { Text, SearchBar, Button, ListItem } from 'react-native-elements';
 import PropTypes from 'prop-types';
@@ -18,34 +18,25 @@ export default function Search({ navigation }): JSX.Element {
   const [loadingState, setLoadingState] = useState(false);
   const [isFranceLocale, setIsFranceLocale] = useState(true);
   const [shouldUseOFD, setShouldUseOFD] = useState(true);
+  const [isAtEndOfResults, setEnd] = useState(false);
+  const foodList: MutableRefObject<FlatList<FoodResult>> = useRef();
 
-  const handleSubmit = async (): Promise<void> => {
-    updateResults(null);
-    updatePage(0);
-    if (searchText) {
-      getResults();
-    }
+  const handleSubmit = (): void => {
+    foodList &&
+      foodList.current &&
+      foodList.current.scrollToOffset({ animated: false, offset: 0 });
+    getResults(true);
   };
 
-  const getResults = async () => {
+  const getResults = async (isReset: boolean) => {
     setLoadingState(true);
-    if (shouldUseOFD) {
-      updateResults(
-        results && results.length
-          ? [
-              ...results,
-              ...(await OFDApi.search(searchText, isFranceLocale, page)),
-            ]
-          : [...(await OFDApi.search(searchText, isFranceLocale, page))]
-      );
-    } else {
-      updateResults(
-        results && results.length
-          ? [...results, ...(await USDAapi.search(searchText, page))]
-          : [...(await USDAapi.search(searchText, page))]
-      );
-    }
-    updatePage(page + 1);
+    const pageToGet = isReset ? 0 : page + 1;
+    const newResults = shouldUseOFD
+      ? await OFDApi.search(searchText, isFranceLocale, pageToGet)
+      : await USDAapi.search(searchText, pageToGet);
+    updateResults(isReset ? [...newResults] : [...results, ...newResults]);
+    updatePage(pageToGet);
+    setEnd(newResults.length ? false : true);
     setLoadingState(false);
   };
 
@@ -118,13 +109,14 @@ export default function Search({ navigation }): JSX.Element {
         loading={loadingState}
         raised
         title="Search"
-        onPress={(): Promise<void> => handleSubmit()}
+        onPress={handleSubmit}
       />
       {results ? (
         results.length ? (
           <FlatList
+            ref={foodList}
             data={results}
-            keyExtractor={(item, index): string => index.toString()}
+            keyExtractor={(item): string => item.id}
             renderItem={({ item }: { item: FoodResult }): JSX.Element => (
               <ListItem
                 onPress={(): Promise<void> =>
@@ -134,7 +126,7 @@ export default function Search({ navigation }): JSX.Element {
               />
             )}
             onEndReachedThreshold={0.5}
-            onEndReached={getResults}
+            onEndReached={() => !isAtEndOfResults && getResults(false)}
           />
         ) : (
           <Text>No items found</Text>
