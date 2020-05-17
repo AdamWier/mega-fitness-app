@@ -15,7 +15,8 @@ export default interface FirestoreService {
   deleteMeal(id: string): Promise<void>;
   findMealsByDate(
     dateStart: Date,
-    uid: string
+    uid: string,
+    updateCallback?: Function
   ): Promise<{ [key: string]: any }[]>;
   saveUser(user: { uid: string; email: string }): Promise<void>;
 }

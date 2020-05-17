@@ -67,18 +67,28 @@ function AgendaPage({
     }
   };
 
+  const adaptDocuments = (documents: { [key: string]: any }[], date: Date) => {
+    if (documents.length) {
+      setAllFoods(documents.flatMap((document) => document.meal));
+      setAgendaItems(reduceMealDocuments(documents));
+    } else {
+      setAgendaItems({
+        [moment(date).format('YYYY-MM-DD')]: [],
+      });
+    }
+  };
+
   const onDayPress = useCallback(
     async (date: Date) => {
       setCurrentDate(date);
-      const documents = await firestoreService.findMealsByDate(date, user.uid);
-      if (documents) {
-        setAllFoods(documents.flatMap((document) => document.meal));
-        setAgendaItems(reduceMealDocuments(documents));
-      } else {
-        setAgendaItems({
-          [moment(date).format('YYYY-MM-DD')]: [],
-        });
-      }
+      const documents = await firestoreService.findMealsByDate(
+        date,
+        user.uid,
+        (documents: { [key: string]: any }[]) => {
+          adaptDocuments(documents, date);
+        }
+      );
+      adaptDocuments(documents, date);
     },
     [user.uid]
   );

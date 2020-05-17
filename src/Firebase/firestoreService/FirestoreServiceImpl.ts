@@ -60,17 +60,35 @@ export default class FirestoreServiceImpl implements FirestoreService {
 
   async findMealsByDate(
     currentDate: Date,
-    uid: string
+    uid: string,
+    updateCallback?: Function
   ): Promise<{ [key: string]: any }[]> {
     const start = moment(currentDate).startOf('day');
     const end = moment(start).endOf('day');
-    const response = await this.firestore
+    const reference = this.firestore
       .collection('meals')
       .where('eatenAt', '>=', start.toDate())
       .where('eatenAt', '<', end.toDate())
       .where('uid', '==', uid)
-      .where('deleted', '==', false)
-      .get();
+      .where('deleted', '==', false);
+
+    if (updateCallback) {
+      reference.onSnapshot((snapshot) => {
+        const updatedDocs = snapshot.docs.map((doc) => {
+          const data = doc.data();
+          const { eatenAt, meal, name } = data;
+          return {
+            id: doc.id,
+            eatenAt: eatenAt.toDate(),
+            meal,
+            name,
+          };
+        });
+        updateCallback(updatedDocs);
+      });
+    }
+
+    const response = await reference.get();
     if (response.docs.length) {
       return response.docs.map((doc) => {
         const data = doc.data();
