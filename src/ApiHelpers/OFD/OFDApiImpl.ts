@@ -94,7 +94,6 @@ export default class OFDAImpl implements Helper {
     const fats = this.getNutrient(product, NutrientName.Fat);
     const carbs = this.getNutrient(product, NutrientName.Carbs);
     const portions = this.getPortions(product);
-    console.log({ name, calories, protein, fats, carbs, portions });
     if (
       name &&
       !Number.isNaN(calories) &&

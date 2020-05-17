@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, Input } from 'react-native-elements';
+import { Text, Input, Button, Icon } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 
@@ -14,6 +14,21 @@ const TotalListItem: React.FC<any> = ({
     <Text style={styles.text}>{`${label}`}</Text>
     {onValueChange ? (
       <View style={styles.containerTight}>
+        <Button
+          containerStyle={styles.amountChangerContainer}
+          buttonStyle={styles.amountChanger}
+          onPress={() => onValueChange((Number(total) + 1).toString())}
+          icon={<Icon name="arrow-drop-up" />}
+        />
+        <Button
+          containerStyle={styles.amountChangerContainer}
+          buttonStyle={styles.amountChanger}
+          onPress={() =>
+            onValueChange(Math.max(Number(total) - 1, 0).toString())
+          }
+          disabled={Number(total) <= 0}
+          icon={<Icon name="arrow-drop-down" />}
+        />
         <Input
           containerStyle={styles.inputContainer}
           onChangeText={onValueChange}
@@ -67,6 +82,14 @@ const styles = StyleSheet.create({
   },
   input: {
     textAlign: 'center',
+  },
+  amountChangerContainer: {
+    marginVertical: 5,
+    marginHorizontal: 10,
+  },
+  amountChanger: {
+    margin: 0,
+    padding: 0,
   },
 });
 
