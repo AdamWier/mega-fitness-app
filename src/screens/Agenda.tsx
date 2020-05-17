@@ -57,13 +57,11 @@ function AgendaPage({
   };
 
   const getNewEatenAt = () => {
-    const startOfDay = moment(new Date()).startOf('day');
-    const endOfDay = moment(startOfDay).endOf('day');
-    const currentMoment = moment(currentDate);
-    if (currentMoment.isBetween(startOfDay, endOfDay)) {
+    const selectedDateMoment = moment(currentDate);
+    if (selectedDateMoment.isSame(moment(), 'day')) {
       return new Date();
     } else {
-      return currentMoment.startOf('day').toDate();
+      return selectedDateMoment.startOf('day').toDate();
     }
   };
 
