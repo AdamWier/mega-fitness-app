@@ -126,7 +126,7 @@ export default class OFDAImpl implements Helper {
         description: 'gram',
       },
     ];
-    if (product.serving_quantity) {
+    if (Number(product.serving_quantity)) {
       portions.push({
         weight: Number(product.serving_quantity),
         description: `Portion (${product.serving_size})`,
