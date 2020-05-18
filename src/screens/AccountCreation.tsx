@@ -36,7 +36,7 @@ function AccountCreation({ navigation, storeLogin }): JSX.Element {
           signUpDetails.password
         );
         storeLogin(user);
-        navigation.navigate('Calendar');
+        navigation.navigate('Agenda');
       } catch (message) {
         toggleLoading(false);
         updateErrors([message]);
