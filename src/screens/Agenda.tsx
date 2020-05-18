@@ -21,24 +21,52 @@ const reduceMealDocuments = (data: { [key: string]: any }[]) =>
     return agenda;
   }, {});
 
+const constructAgendaItems = (
+  documents: { [key: string]: any }[],
+  date: Date
+) => {
+  if (documents && documents.length) {
+    return reduceMealDocuments(documents);
+  } else {
+    return {
+      [moment(date).format('YYYY-MM-DD')]: [],
+    };
+  }
+};
+
+const compareRows = (
+  r1: { [key: string]: any },
+  r2: { [key: string]: any }
+) => {
+  return (
+    r1.meal.reduce(
+      (prev: { [key: string]: any }, next: { [key: string]: any }) =>
+        prev.calories + next.calories,
+      0
+    ) !==
+    r2.meal.reduce(
+      (prev: { [key: string]: any }, next: { [key: string]: any }) =>
+        prev.calories + next.calories,
+      0
+    )
+  );
+};
+
 function AgendaPage({
   navigation,
   theme,
   user,
   updateMealDocument,
 }): JSX.Element {
-  const [agendaItems, setAgendaItems] = useState();
+  const [documents, setDocuments] = useState([]);
 
   const [currentDate, setCurrentDate] = useState(
     moment().startOf('day').toDate()
   );
 
-  const [allFoods, setAllFoods] = useState([]);
-
   const deleteMeal = async (documentId: string): Promise<void> => {
     try {
       await firestoreService.deleteMeal(documentId);
-      navigation.navigate('Calendar');
     } catch (e) {
       console.log(e);
     }
@@ -65,17 +93,6 @@ function AgendaPage({
     }
   };
 
-  const adaptDocuments = (documents: { [key: string]: any }[], date: Date) => {
-    if (documents && documents.length) {
-      setAllFoods(documents.flatMap((document) => document.meal));
-      setAgendaItems(reduceMealDocuments(documents));
-    } else {
-      setAgendaItems({
-        [moment(date).format('YYYY-MM-DD')]: [],
-      });
-    }
-  };
-
   const onDayPress = useCallback(
     async (date: Date) => {
       setCurrentDate(date);
@@ -83,10 +100,10 @@ function AgendaPage({
         date,
         user.uid,
         (documents: { [key: string]: any }[]) => {
-          adaptDocuments(documents, date);
+          setDocuments(documents);
         }
       );
-      adaptDocuments(documents, date);
+      setDocuments(documents);
     },
     [user.uid]
   );
@@ -123,7 +140,7 @@ function AgendaPage({
     isFirstItem ? (
       <View>
         <NewMealButton />
-        <TotalCard foods={allFoods} />
+        <TotalCard foods={documents.flatMap((document) => document.meal)} />
         <AgendaItem
           document={document}
           onMealPress={handleMealPress}
@@ -140,17 +157,16 @@ function AgendaPage({
 
   return (
     <Agenda
-      items={agendaItems}
+      items={constructAgendaItems(documents, currentDate)}
       onDayPress={(date) =>
         onDayPress(moment(date.dateString).startOf('day').toDate())
       }
+      firstDay={1}
       pastScrollRange={12}
       futureScrollRange={12}
       renderItem={renderItem}
       renderEmptyDate={emptyItem}
-      rowHasChanged={(r1, r2) => {
-        return r1.id !== r2.id;
-      }}
+      rowHasChanged={compareRows}
       markedDates={{}}
       theme={{
         agendaDayTextColor: theme.colors.text,
