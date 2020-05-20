@@ -21,7 +21,8 @@ function Meal({
 
   const { meal, eatenAt, name, id } = mealDocument;
 
-  const [displayCalendar, toggleDisplayCalendar] = useState(false);
+  const [displayMealCalendar, toggleDisplayMealCalendar] = useState(false);
+  const [displayCopyCalendar, toggleDisplayCopyCalendar] = useState(false);
   const [expandedCard, changeExpandedCard] = useState(null);
 
   navigation.setOptions({
@@ -38,11 +39,7 @@ function Meal({
     });
   };
 
-  const getEatenAt = (): void => {
-    toggleDisplayCalendar(true);
-  };
-
-  const sendMealToFirestore = async (): Promise<void> => {
+  const saveMeal = async (): Promise<void> => {
     try {
       if (id) {
         await firestoreService.updateMeal(meal, name, user.uid, eatenAt, id);
@@ -56,7 +53,7 @@ function Meal({
   };
 
   const setDate = (input: Date) => {
-    toggleDisplayCalendar(false);
+    toggleDisplayMealCalendar(false);
     updateMealDocument({
       ...mealDocument,
       eatenAt: input,
@@ -66,7 +63,7 @@ function Meal({
   const askToSave = (): void => {
     Alert.alert('Save', 'Do you want to save the meal?', [
       { text: 'No', onPress: () => null },
-      { text: 'Yes', onPress: () => sendMealToFirestore() },
+      { text: 'Yes', onPress: () => saveMeal() },
     ]);
   };
 
@@ -84,6 +81,11 @@ function Meal({
       { text: 'No', onPress: () => null },
       { text: 'Yes', onPress: () => deleteMeal() },
     ]);
+  };
+
+  const copyMeal = async (input: Date) => {
+    toggleDisplayCopyCalendar(false);
+    await firestoreService.createMeal(meal, name, user.uid, input);
   };
 
   const blurInput = useCallback(() => {
@@ -117,7 +119,14 @@ function Meal({
             title={`Eaten: ${moment(eatenAt).format(
               'dddd MMMM D, YYYY HH:mm'
             )}`}
-            onPress={getEatenAt}
+            onPress={() => toggleDisplayMealCalendar(true)}
+          />
+          <DateTimePickerModal
+            isVisible={displayMealCalendar}
+            date={eatenAt}
+            mode="datetime"
+            onConfirm={setDate}
+            onCancel={() => toggleDisplayMealCalendar(false)}
           />
           <Input
             placeholder="Enter meal name"
@@ -131,13 +140,6 @@ function Meal({
             ref={mealNameInput}
             containerStyle={styles.input}
           />
-          <DateTimePickerModal
-            isVisible={displayCalendar}
-            date={eatenAt}
-            mode="datetime"
-            onConfirm={setDate}
-            onCancel={() => toggleDisplayCalendar(false)}
-          />
           <TotalCard foods={meal} />
           <Button
             title="Save meal"
@@ -147,13 +149,29 @@ function Meal({
             }}
           />
           {id ? (
-            <Button
-              title="Delete meal"
-              onPress={confirmDelete}
-              buttonStyle={{
-                backgroundColor: theme.colors.danger,
-              }}
-            />
+            <View>
+              <Button
+                title="Delete meal"
+                onPress={confirmDelete}
+                buttonStyle={{
+                  backgroundColor: theme.colors.danger,
+                }}
+              />
+              <Button
+                title="Copy this meal to another day"
+                onPress={() => toggleDisplayCopyCalendar(true)}
+                buttonStyle={{
+                  backgroundColor: theme.colors.warning,
+                }}
+              />
+              <DateTimePickerModal
+                isVisible={displayCopyCalendar}
+                date={eatenAt}
+                mode="datetime"
+                onConfirm={copyMeal}
+                onCancel={() => toggleDisplayCopyCalendar(false)}
+              />
+            </View>
           ) : null}
 
           <Divider />

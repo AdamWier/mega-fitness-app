@@ -21,11 +21,11 @@ export default class FirestoreServiceImpl implements FirestoreService {
       .doc(uid + '-' + createdAt.getTime() + '-' + name)
       .set({
         meal,
+        name,
+        uid,
         eatenAt,
         createdAt,
         deleted: false,
-        uid,
-        name,
       });
   }
 
