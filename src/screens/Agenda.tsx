@@ -22,11 +22,11 @@ const reduceMealDocuments = (data: { [key: string]: any }[]) =>
   }, {});
 
 const constructAgendaItems = (
-  documents: { [key: string]: any }[],
+  documentsToFormat: { [key: string]: any }[],
   date: Date
 ) => {
-  if (documents && documents.length) {
-    return reduceMealDocuments(documents);
+  if (documentsToFormat && documentsToFormat.length) {
+    return reduceMealDocuments(documentsToFormat);
   } else {
     return {
       [moment(date).format('YYYY-MM-DD')]: [],
@@ -96,21 +96,29 @@ function AgendaPage({
   const onDayPress = useCallback(
     async (date: Date) => {
       setCurrentDate(date);
-      const documents = await firestoreService.findMealsByDate(
+      const documentsReceived = await firestoreService.findMealsByDate(
         date,
-        user.uid,
-        (documents: { [key: string]: any }[]) => {
-          setDocuments(documents);
-        }
+        user.uid
       );
-      setDocuments(documents);
+      setDocuments(documentsReceived);
     },
     [user.uid]
   );
 
   useEffect(() => {
     onDayPress(currentDate);
-  }, [onDayPress, currentDate]);
+    const unsubscribe = firestoreService.getFindMealsByDateListener(
+      currentDate,
+      user.uid,
+      (documentsReceived: { [key: string]: any }[]) => {
+        setDocuments(documentsReceived);
+      }
+    );
+    return () => {
+      setDocuments([]);
+      unsubscribe();
+    };
+  }, [onDayPress, currentDate, user.uid]);
 
   const emptyItem = () => (
     <View style={styles.emptyItem}>
