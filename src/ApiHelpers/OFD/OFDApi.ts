@@ -92,6 +92,11 @@ export interface OFDFood {
     ['saturated-fat']?: number;
     ['energy-kcal_value']?: number;
     sugars?: number;
+    alcohol?: number;
+    alcohol_100g?: number;
+    alcohol_serving?: number;
+    alcohol_unit?: string;
+    alcohol_value?: number;
   };
 }
 
