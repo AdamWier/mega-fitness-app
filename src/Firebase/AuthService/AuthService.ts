@@ -1,5 +1,5 @@
 export default interface AuthService {
-  checkIfLoggedIn(): { uid: string; email: string } | null;
+  getCurrentUser(callback: Function): firebase.Unsubscribe;
   login(
     email: string,
     password: string

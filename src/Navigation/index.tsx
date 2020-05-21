@@ -13,14 +13,24 @@ import { Alert } from 'react-native';
 const Stack = createStackNavigator();
 
 function Navigation({ user, storeLogin }): JSX.Element {
-  const Screens = StackScreenCreator(Stack, screens, !!user.uid);
+  const [Screens, setScreens] = React.useState(
+    StackScreenCreator(Stack, screens, !!user.uid)
+  );
 
   React.useEffect(() => {
-    const userCheck = authService.checkIfLoggedIn();
-    if (!user && userCheck) {
-      storeLogin(userCheck);
-    }
-  }, [user, storeLogin]);
+    const unsubscribe = authService.getCurrentUser(
+      (receivedUser: { uid: string; email: string }) => {
+        if (receivedUser) {
+          storeLogin(receivedUser);
+        }
+      }
+    );
+    return unsubscribe;
+  }, [storeLogin]);
+
+  React.useEffect(() => {
+    setScreens(StackScreenCreator(Stack, screens, !!user.uid));
+  }, [user]);
 
   const logout = () => {
     Alert.alert('Log out', 'Do you want to log out?', [
