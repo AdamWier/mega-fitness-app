@@ -1,5 +1,5 @@
 import React, { useState, useRef, MutableRefObject } from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import { View, FlatList, StyleSheet, Alert } from 'react-native';
 import { Text, SearchBar, Button, ListItem } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import USDAApiImpl from '../ApiHelpers/USDA/USDAApiImpl';
@@ -7,6 +7,7 @@ import OFDApiImpl from '../ApiHelpers/OFD/OFDApiImpl';
 import { FoodResult, FoodDetails } from '../ApiHelpers/CommonAPITypes';
 import Toast from 'react-native-simple-toast';
 import SwitchGroup from '../components/SwitchGroup';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
 export default function Search({ navigation }): JSX.Element {
   const USDAapi = new USDAApiImpl();
@@ -20,6 +21,15 @@ export default function Search({ navigation }): JSX.Element {
   const [shouldUseOFD, setShouldUseOFD] = useState(true);
   const [isAtEndOfResults, setEnd] = useState(false);
   const foodList: MutableRefObject<FlatList<FoodResult>> = useRef();
+
+  const scanBarcode = async () => {
+    const { status } = await BarCodeScanner.requestPermissionsAsync();
+    if (status === 'granted') {
+      navigation.navigate('BarCodeScanner');
+    } else {
+      Alert.prompt('You cannot search by barcode without camera access.');
+    }
+  };
 
   const handleSubmit = (): void => {
     try {
@@ -54,7 +64,7 @@ export default function Search({ navigation }): JSX.Element {
   const showNotEnoughDetailsToast = () =>
     Toast.showWithGravity(
       "There isn't sufficient information for this food",
-      Toast.LONG,
+      Toast.SHORT,
       Toast.CENTER
     );
 
@@ -119,8 +129,15 @@ export default function Search({ navigation }): JSX.Element {
         disabled={!searchText}
         loading={loadingState}
         raised
-        title="Search"
+        title="Text search"
         onPress={handleSubmit}
+      />
+      <Button
+        type="solid"
+        loading={loadingState}
+        raised
+        title="Barcode Search"
+        onPress={scanBarcode}
       />
       {results ? (
         results.length ? (

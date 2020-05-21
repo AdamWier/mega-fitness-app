@@ -1,4 +1,4 @@
-import { FoodResult, FoodDetails } from '../CommonAPITypes';
+import { FoodResult, FoodDetails, FormattedPortion } from '../CommonAPITypes';
 import {
   Helper,
   OFDSearchResult,
@@ -8,8 +8,11 @@ import {
 } from './OFDApi';
 
 export default class OFDAImpl implements Helper {
-  getSearchURI(locale: string, searchText: string, page: string): string {
-    const returnedFields = [
+  searchReturnedFields: string[];
+  detailsReturnedFields: string[];
+
+  constructor() {
+    this.searchReturnedFields = [
       'brands',
       'product_name',
       'product_name_en',
@@ -17,17 +20,7 @@ export default class OFDAImpl implements Helper {
       'completeness',
       '_id',
     ];
-    const addressComponents = {
-      baseURI: `https://${locale}.openfoodfacts.org/cgi/search.pl?json=true&search_simple=1&action=process&page_size=50&search_terms=${searchText}&page=${page}`,
-      stateTagFilter:
-        '&tagtype_0=states&tag_contains_0=contains&tag_0=characteristics-completed',
-      returnedFiledsFilter: `&fields=${returnedFields.join(',')}`,
-    };
-    return Object.values(addressComponents).join('');
-  }
-
-  getDetailsURI(id: string): string {
-    const returnedFields = [
+    this.detailsReturnedFields = [
       'brands',
       'product_name',
       'product_name_en',
@@ -37,9 +30,29 @@ export default class OFDAImpl implements Helper {
       'serving_size',
       'serving_quantity',
     ];
+  }
+  getSearchURI(locale: string, searchText: string, page: string): string {
+    const addressComponents = {
+      baseURI: `https://${locale}.openfoodfacts.org/cgi/search.pl?json=true&search_simple=1&action=process&page_size=50&search_terms=${searchText}&page=${page}`,
+      stateTagFilter:
+        '&tagtype_0=states&tag_contains_0=contains&tag_0=characteristics-completed',
+      returnedFiledsFilter: `&fields=${this.searchReturnedFields.join(',')}`,
+    };
+    return Object.values(addressComponents).join('');
+  }
+
+  getBarcodeSearchURI(barcode: string): string {
+    const addressComponents = {
+      baseURI: `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`,
+      returnFieldsFilter: `&fields=${this.detailsReturnedFields.join(',')}`,
+    };
+    return Object.values(addressComponents).join('');
+  }
+
+  getDetailsURI(id: string): string {
     const addressComponents = {
       baseURI: `https://world.openfoodfacts.org/api/v0/product/${id}.json`,
-      returnFieldsFilter: `&fields=${returnedFields.join(',')}`,
+      returnFieldsFilter: `&fields=${this.detailsReturnedFields.join(',')}`,
     };
     return Object.values(addressComponents).join('');
   }
@@ -78,11 +91,21 @@ export default class OFDAImpl implements Helper {
     });
   }
 
+  async barcodeSearch(barcode: string): Promise<FoodDetails> {
+    const result = await (
+      await fetch(this.getBarcodeSearchURI(barcode))
+    ).json();
+    return result.product ? this.adaptResult(result.product) : null;
+  }
+
   async getDetails(foodId: string): Promise<FoodDetails> {
     const result: OFDDetailsResult = await (
       await fetch(this.getDetailsURI(foodId))
     ).json();
-    const { product } = result;
+    return result.product ? this.adaptResult(result.product) : null;
+  }
+
+  adaptResult(product: OFDFood): FoodDetails {
     const name =
       product.product_name ||
       product.product_name_en ||
@@ -131,7 +154,7 @@ export default class OFDAImpl implements Helper {
     return food.nutriments[`${nutrient}`] / 100;
   }
 
-  getPortions(product: OFDFood) {
+  getPortions(product: OFDFood): FormattedPortion[] {
     const portions = [
       {
         weight: 1,
