@@ -70,7 +70,7 @@
     "husky": "^4.2.5",
     "lint-staged": "^10.1.6",
     "prettier": "^2.0.2",
-    "typescript": "~3.6.3"
+    "typescript": "^3.9.3"
   },
   "private": true
 }

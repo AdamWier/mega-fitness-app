@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, ScrollView, Alert, StyleSheet, Keyboard } from 'react-native';
+import {
+  View,
+  ScrollView,
+  Alert,
+  StyleSheet,
+  Keyboard,
+  BackHandler,
+} from 'react-native';
 import { Button, Text, withTheme, Input, Divider } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import FoodCard from '../components/FoodCard';
@@ -9,6 +16,7 @@ import { firestoreService } from '../Firebase';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import TotalCard from '../components/TotalCard';
 import moment from 'moment';
+import { useFocusEffect } from '@react-navigation/native';
 
 function Meal({
   navigation,
@@ -60,9 +68,9 @@ function Meal({
     });
   };
 
-  const askToSave = (): void => {
+  const askToSave = (cancelCallback?: Function): void => {
     Alert.alert('Save', 'Do you want to save the meal?', [
-      { text: 'No', onPress: () => null },
+      { text: 'No', onPress: () => (cancelCallback ? cancelCallback() : null) },
       { text: 'Yes', onPress: () => saveMeal() },
     ]);
   };
@@ -86,6 +94,14 @@ function Meal({
   const copyMeal = async (input: Date) => {
     toggleDisplayCopyCalendar(false);
     await firestoreService.createMeal(meal, name, user.uid, input);
+  }
+  
+  const onBackPress = () => {
+    if (meal.length) {
+      askToSave(() => navigation.navigate('Agenda'));
+      return true;
+    }
+    return false;
   };
 
   const blurInput = useCallback(() => {
@@ -99,6 +115,15 @@ function Meal({
       Keyboard.removeAllListeners('keyboardDidHide');
     };
   }, [blurInput]);
+
+  useFocusEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      onBackPress
+    );
+
+    return () => backHandler.remove();
+  });
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -143,7 +168,7 @@ function Meal({
           <TotalCard foods={meal} />
           <Button
             title="Save meal"
-            onPress={askToSave}
+            onPress={() => askToSave()}
             buttonStyle={{
               backgroundColor: theme.colors.success,
             }}
