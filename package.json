@@ -19,6 +19,7 @@
     ]
   },
   "dependencies": {
+    "@react-hook/debounce": "^2.0.4",
     "@react-native-community/datetimepicker": "2.1.0",
     "@react-native-community/masked-view": "0.1.5",
     "@react-navigation/native": "^5.0.9",

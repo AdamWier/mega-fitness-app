@@ -1549,6 +1549,11 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
+"@react-hook/debounce@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@react-hook/debounce/-/debounce-2.0.4.tgz#080c730ddecd3a479659ed8bfff30d9d9dd55cff"
+  integrity sha512-DZsB/0X+Q4WdB3M52j13v+BG40nxIKH8dl4W/spafvENIwMOl5BB2ShwEOCqtwYs2IflhiMi3m0PfPqk4ZANGg==
+
 "@react-native-community/cli-debugger-ui@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-3.0.0.tgz#d01d08d1e5ddc1633d82c7d84d48fff07bd39416"
