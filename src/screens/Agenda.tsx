@@ -10,6 +10,8 @@ import { Agenda } from 'react-native-calendars';
 import AgendaItem from '../components/AgendaItem';
 import TotalCard from '../components/TotalCard';
 import moment from 'moment';
+import Toast from 'react-native-simple-toast';
+import GoalOverlay from '../components/GoalOverlay';
 
 const reduceMealDocuments = (data: { [key: string]: any }[]) =>
   data.reduce((agenda, item) => {
@@ -59,10 +61,11 @@ function AgendaPage({
   updateMealDocument,
 }): JSX.Element {
   const [documents, setDocuments] = useState([]);
-
   const [currentDate, setCurrentDate] = useState(
     moment().startOf('day').toDate()
   );
+  const [isOverlayVisible, toggleIsOverlayVisible] = useState(false);
+  const [goalCalories, setGoalCalories] = useState(null);
 
   const deleteMeal = async (documentId: string): Promise<void> => {
     try {
@@ -77,6 +80,19 @@ function AgendaPage({
       { text: 'No', onPress: () => null },
       { text: 'Yes', onPress: () => deleteMeal(documentId) },
     ]);
+  };
+
+  const onGoalButtonPress = () => {
+    toggleIsOverlayVisible(true);
+  };
+
+  const checkIsNumber = () => {
+    const goalCaloriesNumber = Number(goalCalories);
+    if (!goalCaloriesNumber || Number.isNaN(goalCaloriesNumber)) {
+      Toast.showWithGravity('Please enter a number', Toast.SHORT, Toast.CENTER);
+    } else {
+      // firestoreService.createDayGoal(currentDate, goalCalories, user);
+    }
   };
 
   const handleMealPress = (document: MealDocument) => {
@@ -148,6 +164,14 @@ function AgendaPage({
     isFirstItem ? (
       <View>
         <NewMealButton />
+        <GoalOverlay
+          goalCalories={goalCalories}
+          isOverlayVisible={isOverlayVisible}
+          onGoalButtonPress={onGoalButtonPress}
+          setGoalCalories={setGoalCalories}
+          toggleIsOverlayVisible={toggleIsOverlayVisible}
+          onConfirmButtonPress={checkIsNumber}
+        />
         <TotalCard foods={documents.flatMap((document) => document.meal)} />
         <AgendaItem
           document={document}
