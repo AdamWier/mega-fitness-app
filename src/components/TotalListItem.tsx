@@ -42,9 +42,9 @@ const TotalListItem: React.FC<any> = ({
       <Text style={styles.text}>
         {description
           ? `${total} ${description}`
-          : label !== 'Calories'
-          ? `${total} g`
-          : total}
+          : label.includes('Calories')
+          ? total
+          : `${total} g`}
       </Text>
     )}
   </View>
