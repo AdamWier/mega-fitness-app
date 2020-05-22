@@ -22,10 +22,14 @@ export default function Search({ navigation }): JSX.Element {
   const foodList: MutableRefObject<FlatList<FoodResult>> = useRef();
 
   const handleSubmit = (): void => {
-    foodList &&
-      foodList.current &&
-      foodList.current.scrollToOffset({ animated: false, offset: 0 });
-    getResults(true);
+    try {
+      foodList &&
+        foodList.current &&
+        foodList.current.scrollToOffset({ animated: false, offset: 0 });
+      getResults(true);
+    } catch (e) {
+      showErrorToast();
+    }
   };
 
   const getResults = async (isReset: boolean) => {
@@ -42,7 +46,14 @@ export default function Search({ navigation }): JSX.Element {
 
   const showErrorToast = () =>
     Toast.showWithGravity(
-      'There was an error getting your food data',
+      'There was a network error',
+      Toast.LONG,
+      Toast.CENTER
+    );
+
+  const showNotEnoughDetailsToast = () =>
+    Toast.showWithGravity(
+      "There isn't sufficient information for this food",
       Toast.LONG,
       Toast.CENTER
     );
@@ -64,7 +75,7 @@ export default function Search({ navigation }): JSX.Element {
       if (details) {
         navigation.navigate('Details', { details });
       } else {
-        showErrorToast();
+        showNotEnoughDetailsToast();
       }
     } catch (e) {
       showErrorToast();
