@@ -26,7 +26,7 @@ export default [
     needsLogin: true,
   },
   {
-    name: 'BarCodeScanner',
+    name: 'Bar Code Scanner',
     component: BarCodeScanner,
     needsLogin: true,
   },
