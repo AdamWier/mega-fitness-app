@@ -111,6 +111,19 @@ export default class OFDAImpl implements Helper {
         portions,
       };
     }
+    if (
+      product.nutriments.hasOwnProperty('alcohol') &&
+      !Number.isNaN(calories)
+    ) {
+      return {
+        name,
+        calories,
+        protein: 0,
+        fats: 0,
+        carbs: calories / 4,
+        portions,
+      };
+    }
     return null;
   }
 
