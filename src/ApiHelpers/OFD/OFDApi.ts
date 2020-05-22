@@ -1,13 +1,20 @@
-import { FoodResult, FoodDetails } from '../CommonAPITypes';
+import { FoodResult, FoodDetails, FormattedPortion } from '../CommonAPITypes';
 
 export interface Helper {
   getSearchURI(locale: string, searchText: string, page: string): string;
+  getBarcodeSearchURI(barcode: string): string;
+  getDetailsURI(id: string): string;
   search(
     searchText: string,
     isFranceLocale: boolean,
     page?: number
   ): Promise<FoodResult[]>;
+  barcodeSearch(barcode: string): Promise<FoodDetails>;
   getDetails(foodId: string): Promise<FoodDetails>;
+  adaptResult(product: OFDFood): FoodDetails;
+  getNutrient(food: OFDFood, nutrient: NutrientName): number;
+  getPortions(product: OFDFood): FormattedPortion[];
+  convertKjToCalories(kj: number): number;
 }
 
 export interface OFDSearchResult {

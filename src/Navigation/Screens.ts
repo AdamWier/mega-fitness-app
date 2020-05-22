@@ -4,6 +4,7 @@ import Details from '../screens/Details';
 import AccountCreation from '../screens/AccountCreation';
 import Login from '../screens/Login';
 import Meal from '../screens/Meal';
+import BarCodeScanner from '../screens/BarCodeScanner';
 
 export default [
   {
@@ -22,6 +23,11 @@ export default [
   {
     name: 'Agenda',
     component: Agenda,
+    needsLogin: true,
+  },
+  {
+    name: 'Bar Code Scanner',
+    component: BarCodeScanner,
     needsLogin: true,
   },
   {
