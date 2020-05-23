@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Alert, StyleSheet } from 'react-native';
-import { withTheme, Text, Button } from 'react-native-elements';
+import { withTheme, Text } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { container as UserContainer } from '../store/reducers/User';
 import { container as MealContainer } from '../store/reducers/MealDocument';
@@ -11,7 +11,7 @@ import AgendaItem from '../components/AgendaItem';
 import TotalCard from '../components/TotalCard';
 import moment from 'moment';
 import Toast from 'react-native-simple-toast';
-import GoalOverlay from '../components/GoalOverlay';
+import DayHeader from '../components/DayHeader';
 
 const reduceMealDocuments = (data: { [key: string]: any }[]) =>
   data.reduce((agenda, item) => {
@@ -153,41 +153,37 @@ function AgendaPage({
   }, [onDayPress, currentDate, user.uid]);
 
   const emptyItem = () => (
-    <View style={styles.emptyItem}>
-      <NewMealButton />
+    <View>
+      <DayHeader
+        handleMealPress={handleMealPress}
+        getNewEatenAt={getNewEatenAt}
+        goalCaloriesInput={goalCaloriesInput}
+        isOverlayVisible={isOverlayVisible}
+        onGoalButtonPress={onGoalButtonPress}
+        setGoalCaloriesInput={setGoalCaloriesInput}
+        toggleIsOverlayVisible={toggleIsOverlayVisible}
+        checkIsNumber={checkIsNumber}
+        isOverlayLoading={isOverlayLoading}
+        user={user}
+      />
       <Text style={styles.noMeals}>No meals for this date.</Text>
     </View>
-  );
-
-  const NewMealButton = () => (
-    <Button
-      title="Add a new meal"
-      onPress={() =>
-        handleMealPress({
-          id: null,
-          eatenAt: getNewEatenAt(),
-          meal: [],
-          name: 'Untitled',
-          createdAt: new Date(),
-          deleted: false,
-          uid: user.uid,
-        })
-      }
-    />
   );
 
   const renderItem = (item: { [key: string]: any }, isFirstItem: boolean) =>
     isFirstItem ? (
       <View>
-        <NewMealButton />
-        <GoalOverlay
-          goalCalories={goalCaloriesInput}
+        <DayHeader
+          handleMealPress={handleMealPress}
+          getNewEatenAt={getNewEatenAt}
+          goalCaloriesInput={goalCaloriesInput}
           isOverlayVisible={isOverlayVisible}
           onGoalButtonPress={onGoalButtonPress}
-          setGoalCalories={setGoalCaloriesInput}
+          setGoalCaloriesInput={setGoalCaloriesInput}
           toggleIsOverlayVisible={toggleIsOverlayVisible}
-          onConfirmButtonPress={checkIsNumber}
-          loading={isOverlayLoading}
+          checkIsNumber={checkIsNumber}
+          isOverlayLoading={isOverlayLoading}
+          user={user}
         />
         <TotalCard foods={documents.flatMap((document) => document.meal)} />
         <AgendaItem
@@ -234,14 +230,8 @@ function AgendaPage({
 }
 
 const styles = StyleSheet.create({
-  emptyItem: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 25,
-  },
   noMeals: {
-    marginTop: 50,
+    marginTop: 25,
   },
 });
 
