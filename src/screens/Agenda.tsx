@@ -67,7 +67,7 @@ function AgendaPage({
   const [isOverlayVisible, toggleIsOverlayVisible] = useState(false);
   const [goalCaloriesInput, setGoalCaloriesInput] = useState('0');
   const [isOverlayLoading, setIsOverlayLoading] = useState(false);
-  const [dayDocument, setDayDocument] = useState({});
+  const [dayDocument, setDayDocument] = useState(null);
 
   const deleteMeal = async (documentId: string): Promise<void> => {
     try {
@@ -93,14 +93,22 @@ function AgendaPage({
     if (!goalCaloriesNumber || Number.isNaN(goalCaloriesNumber)) {
       Toast.showWithGravity('Please enter a number', Toast.SHORT, Toast.CENTER);
     } else {
-      try{
+      try {
         setIsOverlayLoading(true);
-        await firestoreService.createDayGoal(currentDate, goalCaloriesNumber, user.uid);
+        await firestoreService.createDayGoal(
+          currentDate,
+          goalCaloriesNumber,
+          user.uid
+        );
         setGoalCaloriesInput('0');
-        toggleIsOverlayVisible(false)
+        toggleIsOverlayVisible(false);
         setIsOverlayLoading(false);
-      } catch (e){
-        Toast.showWithGravity('Your goal couldn\'t be saved', Toast.SHORT, Toast.CENTER);
+      } catch (e) {
+        Toast.showWithGravity(
+          "Your goal couldn't be saved",
+          Toast.SHORT,
+          Toast.CENTER
+        );
       }
     }
   };
@@ -125,9 +133,12 @@ function AgendaPage({
       const mealDocumentsReceived = await firestoreService.findMealsByDate(
         date,
         user.uid
-        );
+      );
       setDocuments(mealDocumentsReceived);
-      const dayDocumentReceived = await firestoreService.findDayDocument(date, user.uid);
+      const dayDocumentReceived = await firestoreService.findDayDocument(
+        date,
+        user.uid
+      );
       setDayDocument(dayDocumentReceived);
     },
     [user.uid]
@@ -142,9 +153,13 @@ function AgendaPage({
         setDocuments(documentsReceived);
       }
     );
-    const unsubscribeDayListener = firestoreService.getDayDocumentListener(currentDate, user.uid, ((documentReceived: { [key: string]: any }) => {
-      setDayDocument(documentReceived);
-    }))
+    const unsubscribeDayListener = firestoreService.getDayDocumentListener(
+      currentDate,
+      user.uid,
+      (documentReceived: { [key: string]: any }) => {
+        setDayDocument(documentReceived);
+      }
+    );
     return () => {
       setDocuments([]);
       unsubscribeMealsByDateListener();
@@ -174,6 +189,7 @@ function AgendaPage({
     isFirstItem ? (
       <View>
         <DayHeader
+          goalCalories={dayDocument ? dayDocument.goalCalories : null}
           handleMealPress={handleMealPress}
           getNewEatenAt={getNewEatenAt}
           goalCaloriesInput={goalCaloriesInput}

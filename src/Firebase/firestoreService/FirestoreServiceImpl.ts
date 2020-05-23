@@ -94,7 +94,11 @@ export default class FirestoreServiceImpl implements FirestoreService {
       .where('deleted', '==', false);
   }
 
-  mapMealDocuments(document: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>): { [key: string]: any }{
+  mapMealDocuments(
+    document: firebase.firestore.QueryDocumentSnapshot<
+      firebase.firestore.DocumentData
+    >
+  ): { [key: string]: any } {
     const data = document.data();
     const { eatenAt, meal, name } = data;
     return {
@@ -109,20 +113,36 @@ export default class FirestoreServiceImpl implements FirestoreService {
     return this.firestore.collection('users').doc(user.uid).set(user);
   }
 
-  createDayGoal(date: Date, goalCalories: number, uid: string): Promise<void> {
+  createDayGoal(
+    currentDate: Date,
+    goalCalories: number,
+    uid: string
+  ): Promise<void> {
+    const dayStartMoment = moment(currentDate).startOf('day');
+    const date = dayStartMoment.toDate();
     const createdAt = new Date();
     return this.firestore
       .collection('days')
-      .doc(uid + '-' + moment(date).format('YYYY-MM-DD') + '-' + createdAt.getTime())
+      .doc(
+        uid +
+          '-' +
+          dayStartMoment.format('YYYY-MM-DD') +
+          '-' +
+          createdAt.getTime()
+      )
       .set({
         date,
         goalCalories,
         uid,
-        createdAt
+        createdAt,
+        deleted: false,
       });
   }
 
-  async findDayDocument(date: Date, uid: string): Promise<{ [key: string]: any }>{
+  async findDayDocument(
+    date: Date,
+    uid: string
+  ): Promise<{ [key: string]: any }> {
     const response = await this.getDayDocumentReference(date, uid).get();
     if (response.docs.length) {
       return response.docs.map(this.mapDayDocuments)[0];
@@ -136,28 +156,29 @@ export default class FirestoreServiceImpl implements FirestoreService {
     updateCallback: Function
   ): Function {
     return this.getDayDocumentReference(date, uid).onSnapshot((snapshot) => {
-      const updatedDocs = snapshot.docs.map((doc) => {
-        const data = doc.data();
-        const { id, goalCalories } = data;
-        return {
-          id,
-          goalCalories,
-        };
-      })[0];
+      const updatedDocs = snapshot.docs.map(this.mapDayDocuments)[0];
       updateCallback(updatedDocs);
     });
   }
 
-  getDayDocumentReference(date: Date, uid: string){
-    return this.firestore.collection('days').where('day', '==', date).where('uid', '==', uid).limit(1);
+  getDayDocumentReference(date: Date, uid: string) {
+    return this.firestore
+      .collection('days')
+      .where('date', '==', moment(date).startOf('day').toDate())
+      .where('uid', '==', uid)
+      .where('deleted', '==', false)
+      .limit(1);
   }
 
-  mapDayDocuments(document: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>): { [key: string]: any }{
+  mapDayDocuments(
+    document: firebase.firestore.QueryDocumentSnapshot<
+      firebase.firestore.DocumentData
+    >
+  ): { [key: string]: any } {
     const data = document.data();
-    const { id, goalCalories } = data;
     return {
-      id,
-      goalCalories,
+      id: document.id,
+      goalCalories: data.goalCalories,
     };
   }
 }
