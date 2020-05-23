@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, Button, Overlay, Input } from 'react-native-elements';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
 
 const GoalOverlay = ({
@@ -10,6 +10,7 @@ const GoalOverlay = ({
   goalCalories,
   setGoalCalories,
   onConfirmButtonPress,
+  loading,
 }) => (
   <View>
     <Button title="Set a day goal" onPress={onGoalButtonPress} />
@@ -26,13 +27,16 @@ const GoalOverlay = ({
           onChangeText={(value) => setGoalCalories(value)}
           keyboardType="number-pad"
         />
-        <View style={styles.buttonContainer}>
-          <Button title="Confirm" onPress={onConfirmButtonPress} />
-          <Button
-            title="Cancel"
-            onPress={() => toggleIsOverlayVisible(false)}
-          />
-        </View>
+        {loading ? 
+          <ActivityIndicator size='large' />
+          : <View style={styles.buttonContainer}>
+            <Button title="Confirm" onPress={onConfirmButtonPress} />
+            <Button
+              title="Cancel"
+              onPress={() => toggleIsOverlayVisible(false)}
+            />
+          </View>
+        }
       </View>
     </Overlay>
   </View>
@@ -42,9 +46,10 @@ GoalOverlay.propTypes = {
   onGoalButtonPress: PropTypes.func.isRequired,
   isOverlayVisible: PropTypes.bool.isRequired,
   toggleIsOverlayVisible: PropTypes.func.isRequired,
-  goalCalories: PropTypes.number.isRequired,
+  goalCalories: PropTypes.string.isRequired,
   setGoalCalories: PropTypes.func.isRequired,
   onConfirmButtonPress: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 const styles = StyleSheet.create({
