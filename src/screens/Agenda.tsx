@@ -84,10 +84,6 @@ function AgendaPage({
     ]);
   };
 
-  const onGoalButtonPress = () => {
-    toggleIsOverlayVisible(true);
-  };
-
   const checkIsNumber = async () => {
     const goalCaloriesNumber = Number(goalCaloriesInput);
     if (!goalCaloriesNumber || Number.isNaN(goalCaloriesNumber)) {
@@ -102,7 +98,6 @@ function AgendaPage({
         );
         setGoalCaloriesInput('0');
         toggleIsOverlayVisible(false);
-        setIsOverlayLoading(false);
       } catch (e) {
         Toast.showWithGravity(
           "Your goal couldn't be saved",
@@ -110,6 +105,7 @@ function AgendaPage({
           Toast.CENTER
         );
       }
+      setIsOverlayLoading(false);
     }
   };
 
@@ -170,11 +166,13 @@ function AgendaPage({
   const emptyItem = () => (
     <View>
       <DayHeader
+        foods={documents.flatMap((document) => document.meal)}
+        goalCalories={dayDocument ? dayDocument.goalCalories : null}
         handleMealPress={handleMealPress}
         getNewEatenAt={getNewEatenAt}
         goalCaloriesInput={goalCaloriesInput}
         isOverlayVisible={isOverlayVisible}
-        onGoalButtonPress={onGoalButtonPress}
+        onGoalButtonPress={() => toggleIsOverlayVisible(true)}
         setGoalCaloriesInput={setGoalCaloriesInput}
         toggleIsOverlayVisible={toggleIsOverlayVisible}
         checkIsNumber={checkIsNumber}
@@ -189,12 +187,13 @@ function AgendaPage({
     isFirstItem ? (
       <View>
         <DayHeader
+          foods={documents.flatMap((document) => document.meal)}
           goalCalories={dayDocument ? dayDocument.goalCalories : null}
           handleMealPress={handleMealPress}
           getNewEatenAt={getNewEatenAt}
           goalCaloriesInput={goalCaloriesInput}
           isOverlayVisible={isOverlayVisible}
-          onGoalButtonPress={onGoalButtonPress}
+          onGoalButtonPress={() => toggleIsOverlayVisible(true)}
           setGoalCaloriesInput={setGoalCaloriesInput}
           toggleIsOverlayVisible={toggleIsOverlayVisible}
           checkIsNumber={checkIsNumber}

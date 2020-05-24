@@ -37,6 +37,7 @@
     "react-native-elements": "^1.2.7",
     "react-native-gesture-handler": "~1.5.0",
     "react-native-modal-datetime-picker": "^8.5.4",
+    "react-native-progress": "^4.1.2",
     "react-native-reanimated": "~1.4.0",
     "react-native-safe-area-context": "0.6.0",
     "react-native-screens": "2.0.0-alpha.12",
