@@ -91,11 +91,20 @@ function AgendaPage({
     } else {
       try {
         setIsOverlayLoading(true);
-        await firestoreService.createDayGoal(
-          currentDate,
-          goalCaloriesNumber,
-          user.uid
-        );
+        if (dayDocument.id) {
+          await firestoreService.updateDayGoal(
+            currentDate,
+            goalCaloriesNumber,
+            user.uid,
+            dayDocument.id
+          );
+        } else {
+          await firestoreService.createDayGoal(
+            currentDate,
+            goalCaloriesNumber,
+            user.uid
+          );
+        }
         setGoalCaloriesInput('0');
         toggleIsOverlayVisible(false);
       } catch (e) {

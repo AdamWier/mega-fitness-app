@@ -11,9 +11,13 @@ const GoalOverlay = ({
   setGoalCalories,
   onConfirmButtonPress,
   loading,
+  hasGoal,
 }) => (
   <View>
-    <Button title="Set a day goal" onPress={onGoalButtonPress} />
+    <Button
+      title={hasGoal ? 'Change your day goal' : 'Set a day goal'}
+      onPress={onGoalButtonPress}
+    />
     <Overlay
       isVisible={isOverlayVisible}
       onBackdropPress={() => toggleIsOverlayVisible(false)}
@@ -27,16 +31,17 @@ const GoalOverlay = ({
           onChangeText={(value) => setGoalCalories(value)}
           keyboardType="number-pad"
         />
-        {loading ? 
-          <ActivityIndicator size='large' />
-          : <View style={styles.buttonContainer}>
+        {loading ? (
+          <ActivityIndicator size="large" />
+        ) : (
+          <View style={styles.buttonContainer}>
             <Button title="Confirm" onPress={onConfirmButtonPress} />
             <Button
               title="Cancel"
               onPress={() => toggleIsOverlayVisible(false)}
             />
           </View>
-        }
+        )}
       </View>
     </Overlay>
   </View>
@@ -50,6 +55,7 @@ GoalOverlay.propTypes = {
   setGoalCalories: PropTypes.func.isRequired,
   onConfirmButtonPress: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
+  hasGoal: PropTypes.bool.isRequired,
 };
 
 const styles = StyleSheet.create({

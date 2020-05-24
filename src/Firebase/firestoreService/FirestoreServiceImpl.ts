@@ -139,6 +139,23 @@ export default class FirestoreServiceImpl implements FirestoreService {
       });
   }
 
+  updateDayGoal(
+    currentDate: Date,
+    goalCalories: number,
+    uid: string,
+    id: string
+  ): Promise<void> {
+    const date = moment(currentDate).startOf('day').toDate();
+    const updatedAt = new Date();
+    return this.firestore.collection('days').doc(id).set({
+      date,
+      goalCalories,
+      uid,
+      updatedAt,
+      deleted: false,
+    });
+  }
+
   async findDayDocument(
     date: Date,
     uid: string
@@ -161,7 +178,10 @@ export default class FirestoreServiceImpl implements FirestoreService {
     });
   }
 
-  getDayDocumentReference(date: Date, uid: string) {
+  getDayDocumentReference(
+    date: Date,
+    uid: string
+  ): firebase.firestore.Query<firebase.firestore.DocumentData> {
     return this.firestore
       .collection('days')
       .where('date', '==', moment(date).startOf('day').toDate())
