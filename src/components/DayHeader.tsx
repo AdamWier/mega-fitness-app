@@ -67,7 +67,7 @@ const DayHeader = ({
         toggleIsOverlayVisible={toggleIsOverlayVisible}
         onConfirmButtonPress={checkIsNumber}
         loading={isOverlayLoading}
-        hasGoal={goalCalories}
+        hasGoal={!!goalCalories}
       />
     </View>
   );

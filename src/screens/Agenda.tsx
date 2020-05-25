@@ -175,7 +175,9 @@ function AgendaPage({
   const emptyItem = () => (
     <View>
       <DayHeader
-        foods={documents.flatMap((document) => document.meal)}
+        foods={
+          documents ? documents.flatMap((document) => document.meal) : null
+        }
         goalCalories={dayDocument ? dayDocument.goalCalories : null}
         handleMealPress={handleMealPress}
         getNewEatenAt={getNewEatenAt}
