@@ -1,4 +1,4 @@
-export default interface FirestoreService {
+export interface FirestoreService {
   createMeal(
     meal: Array<any>,
     name: string,
@@ -49,4 +49,9 @@ export default interface FirestoreService {
       firebase.firestore.DocumentData
     >
   ): { [key: string]: any };
+}
+
+export interface DayDocument {
+  id: string;
+  goalCalories: number;
 }

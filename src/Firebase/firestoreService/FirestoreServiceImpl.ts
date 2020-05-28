@@ -1,5 +1,5 @@
 import firebase from 'firebase';
-import FirestoreService from './FirestoreService';
+import { FirestoreService, DayDocument } from './FirestoreService';
 import moment from 'moment';
 
 export default class FirestoreServiceImpl implements FirestoreService {
@@ -66,7 +66,7 @@ export default class FirestoreServiceImpl implements FirestoreService {
     if (response.docs.length) {
       return response.docs.map(this.mapMealDocuments);
     }
-    return null;
+    return [];
   }
 
   getFindMealsByDateListener(
@@ -156,15 +156,15 @@ export default class FirestoreServiceImpl implements FirestoreService {
     });
   }
 
-  async findDayDocument(
-    date: Date,
-    uid: string
-  ): Promise<{ [key: string]: any }> {
+  async findDayDocument(date: Date, uid: string): Promise<DayDocument> {
     const response = await this.getDayDocumentReference(date, uid).get();
     if (response.docs.length) {
       return response.docs.map(this.mapDayDocuments)[0];
     }
-    return null;
+    return {
+      id: null,
+      goalCalories: null,
+    };
   }
 
   getDayDocumentListener(
@@ -194,7 +194,7 @@ export default class FirestoreServiceImpl implements FirestoreService {
     document: firebase.firestore.QueryDocumentSnapshot<
       firebase.firestore.DocumentData
     >
-  ): { [key: string]: any } {
+  ): DayDocument {
     const data = document.data();
     return {
       id: document.id,
