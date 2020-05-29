@@ -90,5 +90,9 @@ export const theme = {
   Tooltip: {
     withOverlay: false,
   },
+  Overlay: {
+    overlayStyle: { backgroundColor: colors.background },
+    borderRadius: 10,
+  },
   colors,
 } as MyTheme;

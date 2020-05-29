@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Alert, StyleSheet } from 'react-native';
-import { withTheme, Text, Button } from 'react-native-elements';
+import { View, Alert, StyleSheet, ActivityIndicator } from 'react-native';
+import { withTheme, Text } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { container as UserContainer } from '../store/reducers/User';
 import { container as MealContainer } from '../store/reducers/MealDocument';
@@ -10,6 +10,9 @@ import { Agenda } from 'react-native-calendars';
 import AgendaItem from '../components/AgendaItem';
 import TotalCard from '../components/TotalCard';
 import moment from 'moment';
+import Toast from 'react-native-simple-toast';
+import DayHeader from '../components/DayHeader';
+import { DayDocument } from '../Firebase/firestoreService/FirestoreService';
 
 const reduceMealDocuments = (data: { [key: string]: any }[]) =>
   data.reduce((agenda, item) => {
@@ -52,17 +55,22 @@ const compareRows = (
   );
 };
 
+const emptyDocuments = { meals: [], day: { id: null, goalCalories: null } };
+
 function AgendaPage({
   navigation,
   theme,
   user,
   updateMealDocument,
 }): JSX.Element {
-  const [documents, setDocuments] = useState([]);
-
+  const [isDayLoading, setIsDayLoading] = useState(true);
+  const [documents, setDocuments] = useState(emptyDocuments);
   const [currentDate, setCurrentDate] = useState(
     moment().startOf('day').toDate()
   );
+  const [isOverlayVisible, toggleIsOverlayVisible] = useState(false);
+  const [goalCaloriesInput, setGoalCaloriesInput] = useState('0');
+  const [isOverlayLoading, setIsOverlayLoading] = useState(false);
 
   const deleteMeal = async (documentId: string): Promise<void> => {
     try {
@@ -77,6 +85,40 @@ function AgendaPage({
       { text: 'No', onPress: () => null },
       { text: 'Yes', onPress: () => deleteMeal(documentId) },
     ]);
+  };
+
+  const checkIsNumber = async () => {
+    const goalCaloriesNumber = Number(goalCaloriesInput);
+    if (!goalCaloriesNumber || Number.isNaN(goalCaloriesNumber)) {
+      Toast.showWithGravity('Please enter a number', Toast.SHORT, Toast.CENTER);
+    } else {
+      try {
+        setIsOverlayLoading(true);
+        if (documents.day.id) {
+          await firestoreService.updateDayGoal(
+            currentDate,
+            goalCaloriesNumber,
+            user.uid,
+            documents.day.id
+          );
+        } else {
+          await firestoreService.createDayGoal(
+            currentDate,
+            goalCaloriesNumber,
+            user.uid
+          );
+        }
+        setGoalCaloriesInput('0');
+        toggleIsOverlayVisible(false);
+      } catch (e) {
+        Toast.showWithGravity(
+          "Your goal couldn't be saved",
+          Toast.SHORT,
+          Toast.CENTER
+        );
+      }
+      setIsOverlayLoading(false);
+    }
   };
 
   const handleMealPress = (document: MealDocument) => {
@@ -95,69 +137,104 @@ function AgendaPage({
 
   const onDayPress = useCallback(
     async (date: Date) => {
-      setCurrentDate(date);
-      const documentsReceived = await firestoreService.findMealsByDate(
-        date,
-        user.uid
-      );
-      setDocuments(documentsReceived);
+      try {
+        setIsDayLoading(true);
+        setDocuments(emptyDocuments);
+        const meals = await firestoreService.findMealsByDate(date, user.uid);
+        const day = await firestoreService.findDayDocument(date, user.uid);
+        setDocuments((documents) => ({ ...documents, meals, day }));
+        setCurrentDate(date);
+        setIsDayLoading(false);
+      } catch (e) {
+        console.log(e);
+        Toast.showWithGravity('An error occured', Toast.SHORT, Toast.CENTER);
+        setIsDayLoading(false);
+      }
     },
     [user.uid]
   );
 
   useEffect(() => {
     onDayPress(currentDate);
-    const unsubscribe = firestoreService.getFindMealsByDateListener(
+    const unsubscribeMealsByDateListener = firestoreService.getFindMealsByDateListener(
       currentDate,
       user.uid,
-      (documentsReceived: { [key: string]: any }[]) => {
-        setDocuments(documentsReceived);
+      (meals: { [key: string]: any }[]) => {
+        setDocuments((documents) => ({
+          ...documents,
+          meals,
+        }));
+      }
+    );
+    const unsubscribeDayListener = firestoreService.getDayDocumentListener(
+      currentDate,
+      user.uid,
+      (day: DayDocument) => {
+        setDocuments((documents) => ({
+          ...documents,
+          day,
+        }));
       }
     );
     return () => {
-      setDocuments([]);
-      unsubscribe();
+      setDocuments(emptyDocuments);
+      unsubscribeMealsByDateListener();
+      unsubscribeDayListener();
     };
   }, [onDayPress, currentDate, user.uid]);
 
-  const emptyItem = () => (
-    <View style={styles.emptyItem}>
-      <NewMealButton />
-      <Text style={styles.noMeals}>No meals for this date.</Text>
-    </View>
-  );
+  const emptyItem = () =>
+    isDayLoading ? (
+      <ActivityIndicator size="large" />
+    ) : (
+      <View>
+        <DayHeader
+          foods={documents.meals.flatMap((document) => document.meal)}
+          goalCalories={documents.day ? documents.day.goalCalories : 0}
+          handleMealPress={handleMealPress}
+          getNewEatenAt={getNewEatenAt}
+          goalCaloriesInput={goalCaloriesInput}
+          isOverlayVisible={isOverlayVisible}
+          onGoalButtonPress={() => toggleIsOverlayVisible(true)}
+          setGoalCaloriesInput={setGoalCaloriesInput}
+          toggleIsOverlayVisible={toggleIsOverlayVisible}
+          checkIsNumber={checkIsNumber}
+          isOverlayLoading={isOverlayLoading}
+          user={user}
+        />
+        <Text style={styles.noMeals}>No meals for this date.</Text>
+      </View>
+    );
 
-  const NewMealButton = () => (
-    <Button
-      title="Add a new meal"
-      onPress={() =>
-        handleMealPress({
-          id: null,
-          eatenAt: getNewEatenAt(),
-          meal: [],
-          name: 'Untitled',
-          createdAt: new Date(),
-          deleted: false,
-          uid: user.uid,
-        })
-      }
-    />
-  );
-
-  const renderItem = (document: { [key: string]: any }, isFirstItem: boolean) =>
+  const renderItem = (item: { [key: string]: any }, isFirstItem: boolean) =>
     isFirstItem ? (
       <View>
-        <NewMealButton />
-        <TotalCard foods={documents.flatMap((document) => document.meal)} />
+        <DayHeader
+          foods={documents.meals.flatMap((document) => document.meal)}
+          goalCalories={documents.day ? documents.day.goalCalories : 0}
+          handleMealPress={handleMealPress}
+          getNewEatenAt={getNewEatenAt}
+          goalCaloriesInput={goalCaloriesInput}
+          isOverlayVisible={isOverlayVisible}
+          onGoalButtonPress={() => toggleIsOverlayVisible(true)}
+          setGoalCaloriesInput={setGoalCaloriesInput}
+          toggleIsOverlayVisible={toggleIsOverlayVisible}
+          checkIsNumber={checkIsNumber}
+          isOverlayLoading={isOverlayLoading}
+          user={user}
+        />
+        <TotalCard
+          foods={documents.meals.flatMap((document) => document.meal)}
+        />
         <AgendaItem
-          document={document}
+          document={item}
           onMealPress={handleMealPress}
           onDeletePress={confirmDelete}
         />
       </View>
     ) : (
       <AgendaItem
-        document={document}
+        document={item}
         onMealPress={handleMealPress}
         onDeletePress={confirmDelete}
       />
@@ -165,7 +242,7 @@ function AgendaPage({
 
   return (
     <Agenda
-      items={constructAgendaItems(documents, currentDate)}
+      items={constructAgendaItems(documents.meals, currentDate)}
       onDayPress={(date) =>
         onDayPress(moment(date.dateString).startOf('day').toDate())
       }
@@ -173,6 +250,7 @@ function AgendaPage({
       pastScrollRange={12}
       futureScrollRange={12}
       renderItem={renderItem}
+      renderEmptyData={() => <ActivityIndicator size="large" />}
       renderEmptyDate={emptyItem}
       rowHasChanged={compareRows}
       markedDates={{}}
@@ -193,14 +271,8 @@ function AgendaPage({
 }
 
 const styles = StyleSheet.create({
-  emptyItem: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 25,
-  },
   noMeals: {
-    marginTop: 50,
+    marginTop: 25,
   },
 });
 

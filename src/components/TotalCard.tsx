@@ -3,11 +3,7 @@ import { Card } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import TotalListItem from '../components/TotalListItem';
 import { View, StyleSheet } from 'react-native';
-
-const getTotal = (nutrient: string): CallableFunction => (
-  accumulator: number,
-  currentValue: { [key: string]: any }
-): number => accumulator + currentValue[nutrient];
+import { getTotal } from '../utilities';
 
 function TotalCard({ foods }): JSX.Element {
   const getTotals = (): {
