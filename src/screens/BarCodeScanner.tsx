@@ -14,7 +14,7 @@ export default function BarCodeScannerScreen({ navigation }) {
         navigation.navigate('Details', { details });
       } else {
         Toast.showWithGravity(
-          'There was an error getting your food data',
+          'This food does not have enough information',
           Toast.SHORT,
           Toast.CENTER
         );
