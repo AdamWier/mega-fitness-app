@@ -1,22 +1,13 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import PropTypes from 'prop-types';
 import { navTheme } from '../StyleSheet';
-import StackScreenCreator from './StackScreenCreator';
-import screens from './Screens';
 import { container } from '../store/reducers/User';
 import { authService } from '../Firebase';
-import { Button, Icon } from 'react-native-elements';
-import { Alert } from 'react-native';
-
-const Stack = createStackNavigator();
+import LoggedInStack from './LoggedInStack';
+import LoggedOutStack from './LoggedOutStack';
 
 function Navigation({ user, storeLogin }): JSX.Element {
-  const [Screens, setScreens] = React.useState(
-    StackScreenCreator(Stack, screens, !!user.uid)
-  );
-
   React.useEffect(() => {
     const unsubscribe = authService.getCurrentUser(
       (receivedUser: { uid: string; email: string }) => {
@@ -28,45 +19,9 @@ function Navigation({ user, storeLogin }): JSX.Element {
     return unsubscribe;
   }, [storeLogin]);
 
-  React.useEffect(() => {
-    setScreens(StackScreenCreator(Stack, screens, !!user.uid));
-  }, [user]);
-
-  const logout = () => {
-    Alert.alert('Log out', 'Do you want to log out?', [
-      { text: 'No', onPress: () => null },
-      {
-        text: 'Yes',
-        onPress: () => {
-          authService.logout();
-          storeLogin({ uid: null, email: null });
-        },
-      },
-    ]);
-  };
-
   return (
     <NavigationContainer theme={navTheme}>
-      <Stack.Navigator
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: navTheme.colors.primary,
-          },
-          headerTitleStyle: {
-            color: navTheme.colors.text,
-          },
-          headerTintColor: navTheme.colors.text,
-          headerRight: () =>
-            !!user.uid && (
-              <Button
-                icon={<Icon name={'power-settings-new'} />}
-                onPress={logout}
-              />
-            ),
-        }}
-      >
-        {Screens}
-      </Stack.Navigator>
+      {user.uid ? <LoggedInStack /> : <LoggedOutStack />}
     </NavigationContainer>
   );
 }
