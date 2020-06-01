@@ -10,7 +10,7 @@ import { Alert } from 'react-native';
 
 const Stack = createStackNavigator();
 
-function Navigation({ storeLogin }): JSX.Element {
+function Navigation({ storeLogin, navigation }): JSX.Element {
   const logout = () => {
     Alert.alert('Log out', 'Do you want to log out?', [
       { text: 'No', onPress: () => null },
@@ -34,6 +34,12 @@ function Navigation({ storeLogin }): JSX.Element {
           color: navTheme.colors.text,
         },
         headerTintColor: navTheme.colors.text,
+        headerLeft: () => (
+          <Button
+            icon={<Icon name={'menu'} />}
+            onPress={() => navigation.toggleDrawer()}
+          />
+        ),
         headerRight: () => (
           <Button
             icon={<Icon name={'power-settings-new'} />}

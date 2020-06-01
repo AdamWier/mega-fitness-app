@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { navTheme } from '../StyleSheet';
 import { container } from '../store/reducers/User';
 import { authService } from '../Firebase';
-import LoggedInStack from './LoggedInStack';
 import LoggedOutStack from './LoggedOutStack';
+import LoggedInDrawer from './LoggedInDrawer';
 
 function Navigation({ user, storeLogin }): JSX.Element {
   React.useEffect(() => {
@@ -21,7 +21,7 @@ function Navigation({ user, storeLogin }): JSX.Element {
 
   return (
     <NavigationContainer theme={navTheme}>
-      {user.uid ? <LoggedInStack /> : <LoggedOutStack />}
+      {user.uid ? <LoggedInDrawer /> : <LoggedOutStack />}
     </NavigationContainer>
   );
 }
