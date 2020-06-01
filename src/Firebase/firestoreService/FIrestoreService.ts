@@ -49,6 +49,7 @@ export interface FirestoreService {
       firebase.firestore.DocumentData
     >
   ): { [key: string]: any };
+  updateUserCalorieGoal(uid: string, goalCalories: number): Promise<void>;
 }
 
 export interface DayDocument {

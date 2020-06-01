@@ -109,8 +109,13 @@ export default class FirestoreServiceImpl implements FirestoreService {
     };
   }
 
-  saveUser(user: { uid: string; email: string }): Promise<void> {
-    return this.firestore.collection('users').doc(user.uid).set(user);
+  saveUser({ uid, email }: { uid: string; email: string }): Promise<void> {
+    const createdAt = new Date();
+    return this.firestore.collection('users').doc(uid).set({
+      uid,
+      email,
+      createdAt,
+    });
   }
 
   createDayGoal(
@@ -200,5 +205,13 @@ export default class FirestoreServiceImpl implements FirestoreService {
       id: document.id,
       goalCalories: data.goalCalories,
     };
+  }
+
+  updateUserCalorieGoal(uid: string, goalCalories: number): Promise<void> {
+    const updatedAt = new Date();
+    return this.firestore.collection('users').doc(uid).update({
+      goalCalories,
+      updatedAt,
+    });
   }
 }

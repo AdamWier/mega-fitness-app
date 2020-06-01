@@ -4,11 +4,35 @@ import { View, StyleSheet, StatusBar } from 'react-native';
 import PropTypes from 'prop-types';
 import { container } from '../store/reducers/User';
 import GoalPrompt from '../components/GoalPrompt';
+import Toast from 'react-native-simple-toast';
+import { firestoreService } from '../Firebase';
 
-function Settings({ user, storeLogin }): JSX.Element {
-  const [goalCalories, setGoalCalories] = useState('0');
+function Settings({ user }): JSX.Element {
+  const [isLoading, toggleIsLoading] = useState(false);
+  const [goalCaloriesInput, setGoalCaloriesInput] = useState('0');
 
-  const saveCalories = () => console.log(null);
+  const checkIsNumber = async () => {
+    const goalCaloriesNumber = Number(goalCaloriesInput);
+    if (!goalCaloriesNumber || Number.isNaN(goalCaloriesNumber)) {
+      Toast.showWithGravity('Please enter a number', Toast.SHORT, Toast.CENTER);
+    } else {
+      try {
+        toggleIsLoading(true);
+        await firestoreService.updateUserCalorieGoal(
+          user.uid,
+          goalCaloriesNumber
+        );
+        setGoalCaloriesInput('0');
+        toggleIsLoading(false);
+      } catch (e) {
+        Toast.showWithGravity(
+          "Your goal couldn't be saved",
+          Toast.SHORT,
+          Toast.CENTER
+        );
+      }
+    }
+  };
 
   return (
     <View style={style.content}>
@@ -17,14 +41,14 @@ function Settings({ user, storeLogin }): JSX.Element {
         <Text h4>{user.email}</Text>
       </View>
       <View style={style.equalSpace}>
-        <GoalPrompt 
-          goalCalories={goalCalories} 
-          setGoalCalories={setGoalCalories} 
-          onConfirmButtonPress={saveCalories} 
-          loading={false} 
+        <GoalPrompt
+          goalCalories={goalCaloriesInput}
+          setGoalCalories={setGoalCaloriesInput}
+          onConfirmButtonPress={checkIsNumber}
+          loading={isLoading}
         />
       </View>
-      <View style={style.equalSpace}/>
+      <View style={style.equalSpace} />
     </View>
   );
 }
@@ -33,16 +57,16 @@ const style = StyleSheet.create({
   content: {
     paddingTop: StatusBar.currentHeight,
     justifyContent: 'space-evenly',
-    flex: 1
+    flex: 1,
   },
   equalSpace: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });
 
 Settings.propTypes = {
-  user: PropTypes.shape({ uid: PropTypes.string, email: PropTypes.string }).isRequired,
-  storeLogin: PropTypes.func.isRequired,
+  user: PropTypes.shape({ uid: PropTypes.string, email: PropTypes.string })
+    .isRequired,
 };
 
 export default container(Settings);

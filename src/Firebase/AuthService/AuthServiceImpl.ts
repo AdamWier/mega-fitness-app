@@ -1,5 +1,5 @@
 import AuthService from './AuthService';
-import FirestoreService from '../firestoreService/FirestoreService';
+import { FirestoreService } from '../firestoreService/FirestoreService';
 import firebase from 'firebase';
 
 export default class AuthServiceImpl implements AuthService {

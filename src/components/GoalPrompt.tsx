@@ -24,7 +24,12 @@ const GoalPrompt = ({
     ) : (
       <View style={styles.buttonContainer}>
         <Button title="Confirm" onPress={onConfirmButtonPress} />
-        <Button title="Cancel" onPress={() => toggleIsOverlayVisible(false)} />
+        {toggleIsOverlayVisible && (
+          <Button
+            title="Cancel"
+            onPress={() => toggleIsOverlayVisible(false)}
+          />
+        )}
       </View>
     )}
   </View>
