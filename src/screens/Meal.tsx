@@ -78,7 +78,7 @@ function Meal({
   const deleteMeal = async () => {
     try {
       await firestoreService.deleteMeal(id);
-      navigation.navigate('Day', { date: eatenAt });
+      navigation.navigate('Agenda');
     } catch (e) {
       console.log(e);
     }
