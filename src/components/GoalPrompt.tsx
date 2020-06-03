@@ -36,7 +36,7 @@ const GoalPrompt = ({
 );
 
 GoalPrompt.propTypes = {
-  toggleIsOverlayVisible: PropTypes.func.isRequired,
+  toggleIsOverlayVisible: PropTypes.func,
   goalCalories: PropTypes.string.isRequired,
   setGoalCalories: PropTypes.func.isRequired,
   onConfirmButtonPress: PropTypes.func.isRequired,

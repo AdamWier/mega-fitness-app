@@ -13,10 +13,14 @@ export default class AuthServiceImpl implements AuthService {
     this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
   }
 
-  getCurrentUser(callback: Function): firebase.Unsubscribe {
-    return this.auth.onAuthStateChanged((user) =>
-      user ? callback({ uid: user.uid, email: user.email }) : callback(null)
-    );
+  async getCurrentUser(callback: Function): Promise<firebase.Unsubscribe> {
+    return this.auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const document = await this.firestore.getUserDocument(user.uid);
+        return callback(document);
+      }
+      return callback(null);
+    });
   }
 
   async login(

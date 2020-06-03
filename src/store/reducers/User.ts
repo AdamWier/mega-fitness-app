@@ -26,8 +26,7 @@ export const userReducer = (
     case LOGIN:
       return {
         ...state,
-        uid: action.payload.uid,
-        email: action.payload.email,
+        ...action.payload,
       };
     default:
       return state;

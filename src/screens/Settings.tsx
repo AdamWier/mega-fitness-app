@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text } from 'react-native-elements';
 import { View, StyleSheet, StatusBar } from 'react-native';
 import PropTypes from 'prop-types';
@@ -22,7 +22,7 @@ function Settings({ user }): JSX.Element {
           user.uid,
           goalCaloriesNumber
         );
-        setGoalCaloriesInput('0');
+        setGoalCaloriesInput(goalCaloriesNumber.toString());
         toggleIsLoading(false);
       } catch (e) {
         Toast.showWithGravity(
@@ -33,6 +33,12 @@ function Settings({ user }): JSX.Element {
       }
     }
   };
+
+  useEffect(() => {
+    if (user.goalCalories) {
+      setGoalCaloriesInput(user.goalCalories.toString());
+    }
+  }, [user]);
 
   return (
     <View style={style.content}>

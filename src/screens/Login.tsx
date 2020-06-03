@@ -29,7 +29,6 @@ function Login({ navigation, storeLogin, theme }): JSX.Element {
       try {
         const user = await authService.login(email, password);
         storeLogin(user);
-        toggleLoading(false);
       } catch ({ message }) {
         toggleLoading(false);
         updateError(message);
@@ -61,7 +60,7 @@ function Login({ navigation, storeLogin, theme }): JSX.Element {
       <Button
         title="Create an account"
         onPress={(): void => {
-          navigation.navigate('AccountCreation');
+          navigation.navigate('Account Creation');
         }}
         buttonStyle={{
           backgroundColor: theme.colors.info,

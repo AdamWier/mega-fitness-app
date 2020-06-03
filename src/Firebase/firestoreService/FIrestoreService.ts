@@ -27,6 +27,7 @@ export interface FirestoreService {
     uid: string
   ): firebase.firestore.Query<firebase.firestore.DocumentData>;
   saveUser(user: { uid: string; email: string }): Promise<void>;
+  getUserDocument(uid: string): Promise<firebase.firestore.DocumentData>;
   createDayGoal(date: Date, goalCalories: number, uid: string): Promise<void>;
   updateDayGoal(
     currentDate: Date,

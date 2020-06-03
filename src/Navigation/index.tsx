@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import PropTypes from 'prop-types';
 import { navTheme } from '../StyleSheet';
@@ -8,16 +8,26 @@ import LoggedOutStack from './LoggedOutStack';
 import LoggedInDrawer from './LoggedInDrawer';
 
 function Navigation({ user, storeLogin }): JSX.Element {
-  React.useEffect(() => {
-    const unsubscribe = authService.getCurrentUser(
-      (receivedUser: { uid: string; email: string }) => {
-        if (receivedUser) {
-          storeLogin(receivedUser);
+  const getCurrentUserCallback = useCallback(
+    () =>
+      authService.getCurrentUser(
+        (receivedUser: { uid: string; email: string }) => {
+          if (receivedUser) {
+            storeLogin(receivedUser);
+          }
         }
-      }
-    );
-    return unsubscribe;
-  }, [storeLogin]);
+      ),
+    [storeLogin]
+  );
+
+  const unsubscribe = useMemo(async () => await getCurrentUserCallback(), [
+    getCurrentUserCallback,
+  ]);
+
+  useEffect(() => {
+    getCurrentUserCallback();
+    return async () => (await unsubscribe)();
+  }, [getCurrentUserCallback, unsubscribe]);
 
   return (
     <NavigationContainer theme={navTheme}>

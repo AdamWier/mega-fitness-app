@@ -118,6 +118,15 @@ export default class FirestoreServiceImpl implements FirestoreService {
     });
   }
 
+  async getUserDocument(uid: string): Promise<firebase.firestore.DocumentData> {
+    const response = await this.firestore
+      .collection('users')
+      .where('uid', '==', uid)
+      .limit(1)
+      .get();
+    return response.docs.length === 1 ? response.docs[0].data() : null;
+  }
+
   createDayGoal(
     currentDate: Date,
     goalCalories: number,
