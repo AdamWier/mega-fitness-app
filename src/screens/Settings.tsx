@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { container } from '../store/reducers/User';
 import GoalPrompt from '../components/GoalPrompt';
 import Toast from 'react-native-simple-toast';
-import { firestoreService } from '../Firebase';
+import { userDocumentService } from '../Firebase';
 
 function Settings({ user }): JSX.Element {
   const [isLoading, toggleIsLoading] = useState(false);
@@ -18,7 +18,7 @@ function Settings({ user }): JSX.Element {
     } else {
       try {
         toggleIsLoading(true);
-        await firestoreService.updateUserCalorieGoal(
+        await userDocumentService.updateCalorieGoal(
           user.uid,
           goalCaloriesNumber
         );

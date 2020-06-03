@@ -8,7 +8,9 @@ import {
   FIREBASE_STORAGE_BUCKET,
 } from 'react-native-dotenv';
 import AuthService from './AuthService/AuthServiceImpl';
-import FirestoreService from './firestoreService/FirestoreServiceImpl';
+import DayDocumentService from './DocumentServices/Day/DayImpl';
+import MealDocumentService from './DocumentServices/Meal/MealImpl';
+import UserDocumentService from './DocumentServices/User/UserImpl';
 
 const firebaseConfig = {
   apiKey: FIREBASE_API_KEY,
@@ -20,6 +22,15 @@ const firebaseConfig = {
 
 !firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
 
-export const firestoreService = new FirestoreService(firebase.firestore());
+export const dayDocumentService = new DayDocumentService(firebase.firestore());
+export const mealDocumentService = new MealDocumentService(
+  firebase.firestore()
+);
+export const userDocumentService = new UserDocumentService(
+  firebase.firestore()
+);
 
-export const authService = new AuthService(firebase.auth(), firestoreService);
+export const authService = new AuthService(
+  firebase.auth(),
+  userDocumentService
+);

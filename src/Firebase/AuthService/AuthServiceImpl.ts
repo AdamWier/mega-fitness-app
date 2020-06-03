@@ -1,22 +1,22 @@
 import AuthService from './AuthService';
-import { FirestoreService } from '../firestoreService/FirestoreService';
 import firebase from 'firebase';
+import User from '../DocumentServices/User/User';
 
 export default class AuthServiceImpl implements AuthService {
   auth: firebase.auth.Auth;
 
-  firestore: FirestoreService;
+  user: User;
 
-  constructor(auth: firebase.auth.Auth, firestore: FirestoreService) {
+  constructor(auth: firebase.auth.Auth, user: User) {
     this.auth = auth;
-    this.firestore = firestore;
+    this.user = user;
     this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
   }
 
   async getCurrentUser(callback: Function): Promise<firebase.Unsubscribe> {
     return this.auth.onAuthStateChanged(async (user) => {
       if (user) {
-        const document = await this.firestore.getUserDocument(user.uid);
+        const document = await this.user.getDocument(user.uid);
         return callback(document);
       }
       return callback(null);
@@ -50,7 +50,7 @@ export default class AuthServiceImpl implements AuthService {
       const { uid } = credentials.user;
       const user = { uid, email };
       if (credentials) {
-        await this.firestore.saveUser(user);
+        await this.user.create(user);
         return user;
       }
       throw 'There was an issue creating your account.';
