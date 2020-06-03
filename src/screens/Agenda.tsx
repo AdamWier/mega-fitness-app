@@ -154,6 +154,15 @@ function AgendaPage({
     [user.uid]
   );
 
+  const getGoalCalories = () => {
+    if (documents.day.goalCalories) {
+      return documents.day.goalCalories;
+    }
+    if (moment(currentDate).isSameOrAfter(new Date(), 'd')) {
+      return user.goalCalories;
+    }
+    return 0;
+  };
   useEffect(() => {
     onDayPress(currentDate);
     const unsubscribeMealsByDateListener = mealDocumentService.getFindByDateListener(
@@ -190,7 +199,7 @@ function AgendaPage({
       <View>
         <DayHeader
           foods={documents.meals.flatMap((document) => document.meal)}
-          goalCalories={documents.day ? documents.day.goalCalories : 0}
+          goalCalories={getGoalCalories()}
           handleMealPress={handleMealPress}
           getNewEatenAt={getNewEatenAt}
           goalCaloriesInput={goalCaloriesInput}

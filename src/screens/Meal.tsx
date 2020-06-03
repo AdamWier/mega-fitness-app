@@ -16,7 +16,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import TotalCard from '../components/TotalCard';
 import moment from 'moment';
 import { useFocusEffect } from '@react-navigation/native';
-import { mealDocumentService } from '../Firebase';
+import { mealDocumentService, dayDocumentService } from '../Firebase';
 
 function Meal({
   navigation,
@@ -53,6 +53,19 @@ function Meal({
         await mealDocumentService.update(meal, name, user.uid, eatenAt, id);
       } else {
         await mealDocumentService.create(meal, name, user.uid, eatenAt);
+        if (moment(eatenAt).isSame(new Date(), 'd')) {
+          const dayDocument = await dayDocumentService.findDocument(
+            eatenAt,
+            user.uid
+          );
+          if (user.goalCalories && !dayDocument.goalCalories) {
+            await dayDocumentService.createGoal(
+              eatenAt,
+              user.goalCalories,
+              user.uid
+            );
+          }
+        }
       }
       navigation.navigate('Agenda');
     } catch (e) {
