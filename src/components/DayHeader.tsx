@@ -1,11 +1,12 @@
 import React from 'react';
 import { Button, Text } from 'react-native-elements';
 import { View } from 'react-native';
-import PropTypes from 'prop-types';
+import PropTypes, { InferProps } from 'prop-types';
 import GoalOverlay from './GoalOverlay';
 import { Bar } from 'react-native-progress';
 import { getTotal } from '../utilities';
 import { withTheme } from 'react-native-elements';
+import { container } from '../store/reducers/User';
 
 const DayHeader = ({
   goalCalories,
@@ -21,7 +22,7 @@ const DayHeader = ({
   checkIsNumber,
   isOverlayLoading,
   theme,
-}) => {
+}: DayHeaderProps) => {
   const totalCalories = foods ? foods.reduce(getTotal('calories'), 0) : 0;
 
   return (
@@ -73,7 +74,7 @@ const DayHeader = ({
   );
 };
 
-DayHeader.propTypes = {
+const propTypes = {
   goalCalories: PropTypes.number,
   foods: PropTypes.array,
   handleMealPress: PropTypes.func.isRequired,
@@ -87,6 +88,17 @@ DayHeader.propTypes = {
   setGoalCaloriesInput: PropTypes.func.isRequired,
   checkIsNumber: PropTypes.func.isRequired,
   isOverlayLoading: PropTypes.bool.isRequired,
+  theme: PropTypes.shape({
+    colors: PropTypes.shape({
+      success: PropTypes.string,
+      danger: PropTypes.string,
+      text: PropTypes.string,
+    }),
+  }).isRequired,
 };
 
-export default withTheme(DayHeader);
+DayHeader.propTypes = propTypes;
+
+type DayHeaderProps = InferProps<typeof propTypes>;
+
+export default container(withTheme(DayHeader));

@@ -71,8 +71,11 @@ const style = StyleSheet.create({
 });
 
 Settings.propTypes = {
-  user: PropTypes.shape({ uid: PropTypes.string, email: PropTypes.string })
-    .isRequired,
+  user: PropTypes.shape({
+    uid: PropTypes.string,
+    email: PropTypes.string,
+    goalCalories: PropTypes.number,
+  }).isRequired,
 };
 
 export default container(Settings);

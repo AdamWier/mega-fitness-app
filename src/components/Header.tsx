@@ -2,11 +2,11 @@ import React from 'react';
 import { Header, Button, Icon, Text } from 'react-native-elements';
 import { Alert } from 'react-native';
 import { authService } from '../Firebase';
-import { container } from '../store/reducers/User';
+import { container, UserProps } from '../store/reducers/User';
 import { useNavigation } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 
-function CustomHeader({ storeLogin }) {
+function CustomHeader({ storeLogin }: UserProps) {
   const navigation = useNavigation<DrawerNavigationProp<{}>>();
 
   const logout = () => {

@@ -192,25 +192,28 @@ function AgendaPage({
     };
   }, [onDayPress, currentDate, user.uid]);
 
+  const DayHeaderWithProps = () => (
+    <DayHeader
+      foods={documents.meals.flatMap((document) => document.meal)}
+      goalCalories={getGoalCalories()}
+      handleMealPress={handleMealPress}
+      getNewEatenAt={getNewEatenAt}
+      goalCaloriesInput={goalCaloriesInput}
+      isOverlayVisible={isOverlayVisible}
+      onGoalButtonPress={() => toggleIsOverlayVisible(true)}
+      setGoalCaloriesInput={setGoalCaloriesInput}
+      toggleIsOverlayVisible={toggleIsOverlayVisible}
+      checkIsNumber={checkIsNumber}
+      isOverlayLoading={isOverlayLoading}
+    />
+  );
+
   const emptyItem = () =>
     isDayLoading ? (
       <ActivityIndicator size="large" />
     ) : (
       <View>
-        <DayHeader
-          foods={documents.meals.flatMap((document) => document.meal)}
-          goalCalories={getGoalCalories()}
-          handleMealPress={handleMealPress}
-          getNewEatenAt={getNewEatenAt}
-          goalCaloriesInput={goalCaloriesInput}
-          isOverlayVisible={isOverlayVisible}
-          onGoalButtonPress={() => toggleIsOverlayVisible(true)}
-          setGoalCaloriesInput={setGoalCaloriesInput}
-          toggleIsOverlayVisible={toggleIsOverlayVisible}
-          checkIsNumber={checkIsNumber}
-          isOverlayLoading={isOverlayLoading}
-          user={user}
-        />
+        <DayHeaderWithProps />
         <Text style={styles.noMeals}>No meals for this date.</Text>
       </View>
     );
@@ -218,20 +221,7 @@ function AgendaPage({
   const renderItem = (item: { [key: string]: any }, isFirstItem: boolean) =>
     isFirstItem ? (
       <View>
-        <DayHeader
-          foods={documents.meals.flatMap((document) => document.meal)}
-          goalCalories={documents.day ? documents.day.goalCalories : 0}
-          handleMealPress={handleMealPress}
-          getNewEatenAt={getNewEatenAt}
-          goalCaloriesInput={goalCaloriesInput}
-          isOverlayVisible={isOverlayVisible}
-          onGoalButtonPress={() => toggleIsOverlayVisible(true)}
-          setGoalCaloriesInput={setGoalCaloriesInput}
-          toggleIsOverlayVisible={toggleIsOverlayVisible}
-          checkIsNumber={checkIsNumber}
-          isOverlayLoading={isOverlayLoading}
-          user={user}
-        />
+        <DayHeaderWithProps />
         <TotalCard
           foods={documents.meals.flatMap((document) => document.meal)}
         />
