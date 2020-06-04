@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Text } from 'react-native-elements';
-import { View, StyleSheet, StatusBar } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import { container } from '../store/reducers/User';
 import GoalPrompt from '../components/GoalPrompt';
 import Toast from 'react-native-simple-toast';
 import { userDocumentService } from '../Firebase';
+import CustomHeader from '../components/Header';
 
 function Settings({ user }): JSX.Element {
   const [isLoading, toggleIsLoading] = useState(false);
@@ -42,6 +43,7 @@ function Settings({ user }): JSX.Element {
 
   return (
     <View style={style.content}>
+      <CustomHeader />
       <View style={style.equalSpace}>
         <Text h2>User Settings For</Text>
         <Text h4>{user.email}</Text>
@@ -61,8 +63,6 @@ function Settings({ user }): JSX.Element {
 
 const style = StyleSheet.create({
   content: {
-    paddingTop: StatusBar.currentHeight,
-    justifyContent: 'space-evenly',
     flex: 1,
   },
   equalSpace: {
