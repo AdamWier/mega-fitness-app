@@ -20,7 +20,7 @@ function Navigation({ user, storeLogin }): JSX.Element {
     [storeLogin]
   );
 
-  const unsubscribe = useMemo(async () => await getCurrentUserCallback(), [
+  const unsubscribe = useMemo(() => getCurrentUserCallback(), [
     getCurrentUserCallback,
   ]);
 
