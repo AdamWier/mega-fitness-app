@@ -192,28 +192,26 @@ function AgendaPage({
     };
   }, [onDayPress, currentDate, user.uid]);
 
-  const DayHeaderWithProps = () => (
-    <DayHeader
-      foods={documents.meals.flatMap((document) => document.meal)}
-      goalCalories={getGoalCalories()}
-      handleMealPress={handleMealPress}
-      getNewEatenAt={getNewEatenAt}
-      goalCaloriesInput={goalCaloriesInput}
-      isOverlayVisible={isOverlayVisible}
-      onGoalButtonPress={() => toggleIsOverlayVisible(true)}
-      setGoalCaloriesInput={setGoalCaloriesInput}
-      toggleIsOverlayVisible={toggleIsOverlayVisible}
-      checkIsNumber={checkIsNumber}
-      isOverlayLoading={isOverlayLoading}
-    />
-  );
+  const dayHeaderProps = {
+    foods: documents.meals.flatMap((document) => document.meal),
+    goalCalories: getGoalCalories(),
+    handleMealPress: handleMealPress,
+    getNewEatenAt: getNewEatenAt,
+    goalCaloriesInput: goalCaloriesInput,
+    isOverlayVisible: isOverlayVisible,
+    onGoalButtonPress: () => toggleIsOverlayVisible(true),
+    setGoalCaloriesInput: setGoalCaloriesInput,
+    toggleIsOverlayVisible: toggleIsOverlayVisible,
+    checkIsNumber: checkIsNumber,
+    isOverlayLoading: isOverlayLoading,
+  };
 
   const emptyItem = () =>
     isDayLoading ? (
       <ActivityIndicator size="large" />
     ) : (
       <View>
-        <DayHeaderWithProps />
+        <DayHeader {...dayHeaderProps} />
         <Text style={styles.noMeals}>No meals for this date.</Text>
       </View>
     );
@@ -221,7 +219,7 @@ function AgendaPage({
   const renderItem = (item: { [key: string]: any }, isFirstItem: boolean) =>
     isFirstItem ? (
       <View>
-        <DayHeaderWithProps />
+        <DayHeader {...dayHeaderProps} />
         <TotalCard
           foods={documents.meals.flatMap((document) => document.meal)}
         />
