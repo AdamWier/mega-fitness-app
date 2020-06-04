@@ -43,7 +43,7 @@ export default class DayImpl implements Day {
   ): Promise<void> {
     const date = moment(currentDate).startOf('day').toDate();
     const updatedAt = new Date();
-    return this.firestore.collection('days').doc(id).set({
+    return this.firestore.collection('days').doc(id).update({
       date,
       goalCalories,
       uid,
