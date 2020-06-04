@@ -155,7 +155,7 @@ function AgendaPage({
   );
 
   const getGoalCalories = () => {
-    if (documents.day.goalCalories) {
+    if (documents.day?.goalCalories) {
       return documents.day.goalCalories;
     }
     if (moment(currentDate).isSameOrAfter(new Date(), 'd')) {
