@@ -1,4 +1,4 @@
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { Dispatch } from 'redux';
 
 const LOGIN = 'LOGIN';
@@ -26,8 +26,7 @@ export const userReducer = (
     case LOGIN:
       return {
         ...state,
-        uid: action.payload.uid,
-        email: action.payload.email,
+        ...action.payload,
       };
     default:
       return state;
@@ -46,3 +45,5 @@ const mapDispatchToProps = (dispatch: Dispatch): { [key: string]: any } => ({
 });
 
 export const container = connect(mapStateToProps, mapDispatchToProps);
+
+export type UserProps = ConnectedProps<typeof container>;

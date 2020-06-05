@@ -12,11 +12,11 @@ import PropTypes from 'prop-types';
 import FoodCard from '../components/FoodCard';
 import { container as MealContainer } from '../store/reducers/MealDocument';
 import { container as UserContainer } from '../store/reducers/User';
-import { firestoreService } from '../Firebase';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import TotalCard from '../components/TotalCard';
 import moment from 'moment';
 import { useFocusEffect } from '@react-navigation/native';
+import { mealDocumentService, dayDocumentService } from '../Firebase';
 
 function Meal({
   navigation,
@@ -50,9 +50,22 @@ function Meal({
   const saveMeal = async (): Promise<void> => {
     try {
       if (id) {
-        await firestoreService.updateMeal(meal, name, user.uid, eatenAt, id);
+        await mealDocumentService.update(meal, name, user.uid, eatenAt, id);
       } else {
-        await firestoreService.createMeal(meal, name, user.uid, eatenAt);
+        await mealDocumentService.create(meal, name, user.uid, eatenAt);
+        if (moment(eatenAt).isSame(new Date(), 'd')) {
+          const dayDocument = await dayDocumentService.findDocument(
+            eatenAt,
+            user.uid
+          );
+          if (user.goalCalories && !dayDocument.goalCalories) {
+            await dayDocumentService.createGoal(
+              eatenAt,
+              user.goalCalories,
+              user.uid
+            );
+          }
+        }
       }
       navigation.navigate('Agenda');
     } catch (e) {
@@ -77,7 +90,7 @@ function Meal({
 
   const deleteMeal = async () => {
     try {
-      await firestoreService.deleteMeal(id);
+      await mealDocumentService.delete(id);
       navigation.navigate('Agenda');
     } catch (e) {
       console.log(e);
@@ -93,9 +106,9 @@ function Meal({
 
   const copyMeal = async (input: Date) => {
     toggleDisplayCopyCalendar(false);
-    await firestoreService.createMeal(meal, name, user.uid, input);
-  }
-  
+    await mealDocumentService.create(meal, name, user.uid, input);
+  };
+
   const onBackPress = () => {
     if (meal.length) {
       askToSave(() => navigation.navigate('Agenda'));

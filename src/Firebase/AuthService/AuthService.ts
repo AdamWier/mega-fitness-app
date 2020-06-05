@@ -1,5 +1,5 @@
 export default interface AuthService {
-  getCurrentUser(callback: Function): firebase.Unsubscribe;
+  getCurrentUser(callback: Function): Promise<firebase.Unsubscribe>;
   login(
     email: string,
     password: string

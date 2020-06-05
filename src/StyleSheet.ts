@@ -94,5 +94,13 @@ export const theme = {
     overlayStyle: { backgroundColor: colors.background },
     borderRadius: 10,
   },
+  Header: {
+    containerStyle: {
+      height: 56,
+      borderBottomColor: 'transparent',
+      paddingTop: 0,
+      paddingHorizontal: 0,
+    },
+  },
   colors,
 } as MyTheme;

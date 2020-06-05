@@ -4,7 +4,6 @@ import { withTheme, Text } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { container as UserContainer } from '../store/reducers/User';
 import { container as MealContainer } from '../store/reducers/MealDocument';
-import { firestoreService } from '../Firebase';
 import MealDocument from '../Firebase/Documents/MealDocument';
 import { Agenda } from 'react-native-calendars';
 import AgendaItem from '../components/AgendaItem';
@@ -12,7 +11,8 @@ import TotalCard from '../components/TotalCard';
 import moment from 'moment';
 import Toast from 'react-native-simple-toast';
 import DayHeader from '../components/DayHeader';
-import { DayDocument } from '../Firebase/firestoreService/FirestoreService';
+import { mealDocumentService, dayDocumentService } from '../Firebase/index';
+import DayDocument from '../Firebase/Documents/DayDocument';
 
 const reduceMealDocuments = (data: { [key: string]: any }[]) =>
   data.reduce((agenda, item) => {
@@ -74,7 +74,7 @@ function AgendaPage({
 
   const deleteMeal = async (documentId: string): Promise<void> => {
     try {
-      await firestoreService.deleteMeal(documentId);
+      await mealDocumentService.delete(documentId);
     } catch (e) {
       console.log(e);
     }
@@ -95,14 +95,14 @@ function AgendaPage({
       try {
         setIsOverlayLoading(true);
         if (documents.day.id) {
-          await firestoreService.updateDayGoal(
+          await dayDocumentService.updateGoal(
             currentDate,
             goalCaloriesNumber,
             user.uid,
             documents.day.id
           );
         } else {
-          await firestoreService.createDayGoal(
+          await dayDocumentService.createGoal(
             currentDate,
             goalCaloriesNumber,
             user.uid
@@ -140,8 +140,8 @@ function AgendaPage({
       try {
         setIsDayLoading(true);
         setDocuments(emptyDocuments);
-        const meals = await firestoreService.findMealsByDate(date, user.uid);
-        const day = await firestoreService.findDayDocument(date, user.uid);
+        const meals = await mealDocumentService.findByDate(date, user.uid);
+        const day = await dayDocumentService.findDocument(date, user.uid);
         setDocuments((documents) => ({ ...documents, meals, day }));
         setCurrentDate(date);
         setIsDayLoading(false);
@@ -154,9 +154,18 @@ function AgendaPage({
     [user.uid]
   );
 
+  const getGoalCalories = () => {
+    if (documents.day?.goalCalories) {
+      return documents.day.goalCalories;
+    }
+    if (moment(currentDate).isSameOrAfter(new Date(), 'd')) {
+      return user.goalCalories;
+    }
+    return 0;
+  };
   useEffect(() => {
     onDayPress(currentDate);
-    const unsubscribeMealsByDateListener = firestoreService.getFindMealsByDateListener(
+    const unsubscribeMealsByDateListener = mealDocumentService.getFindByDateListener(
       currentDate,
       user.uid,
       (meals: { [key: string]: any }[]) => {
@@ -166,7 +175,7 @@ function AgendaPage({
         }));
       }
     );
-    const unsubscribeDayListener = firestoreService.getDayDocumentListener(
+    const unsubscribeDayListener = dayDocumentService.getDocumentListener(
       currentDate,
       user.uid,
       (day: DayDocument) => {
@@ -183,25 +192,26 @@ function AgendaPage({
     };
   }, [onDayPress, currentDate, user.uid]);
 
+  const dayHeaderProps = {
+    foods: documents.meals.flatMap((document) => document.meal),
+    goalCalories: getGoalCalories(),
+    handleMealPress: handleMealPress,
+    getNewEatenAt: getNewEatenAt,
+    goalCaloriesInput: goalCaloriesInput,
+    isOverlayVisible: isOverlayVisible,
+    onGoalButtonPress: () => toggleIsOverlayVisible(true),
+    setGoalCaloriesInput: setGoalCaloriesInput,
+    toggleIsOverlayVisible: toggleIsOverlayVisible,
+    checkIsNumber: checkIsNumber,
+    isOverlayLoading: isOverlayLoading,
+  };
+
   const emptyItem = () =>
     isDayLoading ? (
       <ActivityIndicator size="large" />
     ) : (
       <View>
-        <DayHeader
-          foods={documents.meals.flatMap((document) => document.meal)}
-          goalCalories={documents.day ? documents.day.goalCalories : 0}
-          handleMealPress={handleMealPress}
-          getNewEatenAt={getNewEatenAt}
-          goalCaloriesInput={goalCaloriesInput}
-          isOverlayVisible={isOverlayVisible}
-          onGoalButtonPress={() => toggleIsOverlayVisible(true)}
-          setGoalCaloriesInput={setGoalCaloriesInput}
-          toggleIsOverlayVisible={toggleIsOverlayVisible}
-          checkIsNumber={checkIsNumber}
-          isOverlayLoading={isOverlayLoading}
-          user={user}
-        />
+        <DayHeader {...dayHeaderProps} />
         <Text style={styles.noMeals}>No meals for this date.</Text>
       </View>
     );
@@ -209,20 +219,7 @@ function AgendaPage({
   const renderItem = (item: { [key: string]: any }, isFirstItem: boolean) =>
     isFirstItem ? (
       <View>
-        <DayHeader
-          foods={documents.meals.flatMap((document) => document.meal)}
-          goalCalories={documents.day ? documents.day.goalCalories : 0}
-          handleMealPress={handleMealPress}
-          getNewEatenAt={getNewEatenAt}
-          goalCaloriesInput={goalCaloriesInput}
-          isOverlayVisible={isOverlayVisible}
-          onGoalButtonPress={() => toggleIsOverlayVisible(true)}
-          setGoalCaloriesInput={setGoalCaloriesInput}
-          toggleIsOverlayVisible={toggleIsOverlayVisible}
-          checkIsNumber={checkIsNumber}
-          isOverlayLoading={isOverlayLoading}
-          user={user}
-        />
+        <DayHeader {...dayHeaderProps} />
         <TotalCard
           foods={documents.meals.flatMap((document) => document.meal)}
         />
