@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Text } from 'react-native-elements';
-import { View } from 'react-native';
+import { View, StyleSheet, StatusBar } from 'react-native';
 import PropTypes, { InferProps } from 'prop-types';
 import GoalOverlay from './GoalOverlay';
 import { Bar } from 'react-native-progress';
@@ -26,7 +26,7 @@ const DayHeader = ({
   const totalCalories = foods ? foods.reduce(getTotal('calories'), 0) : 0;
 
   return (
-    <View>
+    <View style={styles.container}>
       <Button
         title="Add a new meal"
         onPress={() =>
@@ -73,6 +73,12 @@ const DayHeader = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    paddingTop: StatusBar.currentHeight,
+  },
+});
 
 const propTypes = {
   goalCalories: PropTypes.number,
