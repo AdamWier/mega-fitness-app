@@ -1,5 +1,6 @@
 import FoodJournalStack from '../FoodJournalStack';
 import Settings from '../../screens/Settings';
+import WeeklyReport from '../../screens/WeeklyReport';
 
 export default [
   {
@@ -9,5 +10,9 @@ export default [
   {
     name: 'Settings',
     component: Settings,
+  },
+  {
+    name: 'Weekly Reports',
+    component: WeeklyReport,
   },
 ];

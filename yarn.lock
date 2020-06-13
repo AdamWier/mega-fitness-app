@@ -4367,9 +4367,9 @@ grpc@1.24.2:
     node-pre-gyp "^0.14.0"
     protobufjs "^5.0.3"
 
-"hammerjs@git+https://github.com/naver/hammer.js.git":
+"hammerjs@https://github.com/naver/hammer.js.git":
   version "2.0.17-snapshot"
-  resolved "git+https://github.com/naver/hammer.js.git#54bc698b25edd6e1b76ca975ebaced5ce0467d51"
+  resolved "https://github.com/naver/hammer.js.git#54bc698b25edd6e1b76ca975ebaced5ce0467d51"
   dependencies:
     "@types/hammerjs" "^2.0.36"
 
@@ -6580,7 +6580,7 @@ react-is@^16.12.0, react-is@^16.13.0, react-is@^16.7.0, react-is@^16.8.1, react-
 
 "react-native-calendars@https://github.com/AdamWier/react-native-calendars":
   version "1.22.0"
-  resolved "https://github.com/AdamWier/react-native-calendars#58822b738d03a11171a0504770a0cb7c1e85bcdb"
+  resolved "https://github.com/AdamWier/react-native-calendars#4484145349c872cbf65cf4792376f4d1ce1f16a8"
   dependencies:
     hoist-non-react-statics "^3.3.1"
     lodash "^4.0.0"
