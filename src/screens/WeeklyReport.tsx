@@ -9,24 +9,13 @@ import { CalendarList } from 'react-native-calendars';
 import { withTheme } from 'react-native-elements';
 import { mealDocumentService, dayDocumentService } from '../Firebase/index';
 import FoodCard from '../components/FoodCard';
-import {
-  VictoryBar,
-  VictoryChart,
-  VictoryTheme,
-  VictoryGroup,
-  VictoryAxis,
-} from 'victory-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { createWeeklyReport } from '../utilities';
+import WeeklyGoalChart from '../components/WeeklyGoalsChart';
 
 function WeeklyReport({ user, theme }): JSX.Element {
   const [period, setPeriod] = useState({});
   const [report, setReport] = useState({});
-
-  const axisStyle = {
-    grid: { stroke: null },
-    ticks: { size: 0 },
-  };
 
   const onDayPress = async (date: { [key: string]: any }) => {
     const currentMoment = moment(date.dateString);
@@ -99,24 +88,7 @@ function WeeklyReport({ user, theme }): JSX.Element {
           />
         )}
         {!!report.graphData?.length && (
-          <VictoryChart animate theme={VictoryTheme.material}>
-            <VictoryAxis style={axisStyle} />
-            <VictoryAxis dependentAxis style={axisStyle} />
-            <VictoryGroup offset={20} colorScale={'qualitative'}>
-              <VictoryBar
-                data={report.graphData}
-                x="day"
-                y="eaten"
-                labels={({ datum }) => (datum.eaten ? 'eaten' : '')}
-              />
-              <VictoryBar
-                data={report.graphData}
-                x="day"
-                y="goal"
-                labels={({ datum }) => (datum.goal ? 'goal' : '')}
-              />
-            </VictoryGroup>
-          </VictoryChart>
+          <WeeklyGoalChart graphData={report.graphData} />
         )}
       </ScrollView>
     </View>
