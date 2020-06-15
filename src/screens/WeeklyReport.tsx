@@ -17,75 +17,7 @@ import {
   VictoryAxis,
 } from 'victory-native';
 import { ScrollView } from 'react-native-gesture-handler';
-
-const createMealReport = (
-  mealDocuments: { [key: string]: any },
-  dayDocuments: { [key: string]: any }
-) => {
-  const mealsGroupedByDay = mealDocuments.reduce((accum, next) => {
-    const dayString = moment(next.eatenAt).startOf('day').format('dddd');
-    if (accum.hasOwnProperty(dayString)) {
-      accum[dayString].push(...next.meal);
-    } else {
-      accum[dayString] = [...next.meal];
-    }
-    return accum;
-  }, {});
-
-  const mealTotalsByDay = {};
-  for (const day in mealsGroupedByDay) {
-    mealTotalsByDay[day] = mealsGroupedByDay[day].reduce(
-      (accum, next) => accum + next.calories,
-      0
-    );
-  }
-
-  const dayDocumentsRegrouped = dayDocuments.reduce((accum, next) => {
-    const dayString = moment(next.date).startOf('day').format('dddd');
-    accum[dayString] = next.goalCalories;
-    return accum;
-  }, {});
-
-  const days = [
-    ...new Set([
-      ...Object.keys(mealsGroupedByDay),
-      ...Object.keys(dayDocumentsRegrouped),
-    ]),
-  ];
-
-  const graphData = days.map((day) => ({
-    day,
-    eaten: mealTotalsByDay[day] || 0,
-    goal: dayDocumentsRegrouped[day] || 0,
-  }));
-
-  const meals = mealDocuments.flatMap(
-    (document: { [key: string]: any }) => document.meal
-  );
-
-  const totals = meals.reduce(
-    (
-      accum: { [key: string]: number },
-      next: { [key: string]: number },
-      index: number
-    ) => {
-      accum.calories += next.calories;
-      accum.protein += next.protein;
-      accum.carbs += next.carbs;
-      accum.fats += next.fats;
-      if (index === meals.length - 1) {
-        accum.calories /= meals.length;
-        accum.protein /= meals.length;
-        accum.carbs /= meals.length;
-        accum.fats /= meals.length;
-      }
-      return accum;
-    },
-    { calories: 0, protein: 0, carbs: 0, fats: 0 }
-  );
-
-  return { totals, graphData };
-};
+import { createWeeklyReport } from '../utilities';
 
 function WeeklyReport({ user, theme }): JSX.Element {
   const [period, setPeriod] = useState({});
@@ -133,14 +65,14 @@ function WeeklyReport({ user, theme }): JSX.Element {
       beginningOfWeek.toDate(),
       user.uid
     );
-    setReport(createMealReport(mealDocuments, dayDocuments));
+    setReport(createWeeklyReport(mealDocuments, dayDocuments));
   };
 
   return (
     <View style={style.content}>
       <CustomHeader />
       <View style={style.calendarContainer}>
-        <Text h2>Select a week</Text>
+        <Text h4>Select a week</Text>
         <CalendarList
           markedDates={period}
           markingType={'period'}
@@ -196,7 +128,7 @@ const style = StyleSheet.create({
     flex: 1,
   },
   reportSpace: {
-    flex: 3,
+    flex: 1,
   },
   calendarContainer: {
     flex: 0.5,
