@@ -1,6 +1,4 @@
 import moment from 'moment';
-import MealDocument from './Firebase/Documents/MealDocument';
-import DayDocument from './Firebase/Documents/DayDocument';
 
 export const getTotal = (nutrient: string) => (
   accumulator: number,
@@ -8,8 +6,8 @@ export const getTotal = (nutrient: string) => (
 ): number => accumulator + currentValue[nutrient];
 
 export function createWeeklyReport(
-  mealDocuments: MealDocument[],
-  dayDocuments: DayDocument[]
+  mealDocuments: { [key: string]: any }[],
+  dayDocuments: { [key: string]: any }[]
 ) {
   const mealCaloriesTotalReducer = (
     accum: number,
@@ -60,8 +58,8 @@ export function createWeeklyReport(
     return accum;
   };
 
-  const createTotalCardData = (mealDocuments: MealDocument[]) =>
-    mealDocuments
+  const createTotalCardData = (mealsDocs: { [key: string]: any }[]) =>
+    mealsDocs
       .flatMap((document: { [key: string]: any }) => document.meal)
       .reduce(averageNutrientsReducer, {
         calories: 0,
@@ -71,18 +69,15 @@ export function createWeeklyReport(
       });
 
   const createGraphData = (
-    mealDocuments: MealDocument[],
-    dayDocuments: DayDocument[]
+    mealsDocs: { [key: string]: any }[],
+    dayDocs: { [key: string]: any }[]
   ) => {
-    const mealTotalsGroupedByDay = mealDocuments.reduce(
+    const mealTotalsGroupedByDay = mealsDocs.reduce(
       dayCaloriesTotalReducer,
       {}
     );
 
-    const dayDocumentsRegrouped = dayDocuments.reduce(
-      dayCalorieGoalReducer,
-      {}
-    );
+    const dayDocumentsRegrouped = dayDocs.reduce(dayCalorieGoalReducer, {});
 
     const days = Array.from(
       new Set([
@@ -99,7 +94,7 @@ export function createWeeklyReport(
   };
 
   return {
-    totals: createTotalCardData(mealDocuments),
+    averages: createTotalCardData(mealDocuments),
     graphData: createGraphData(mealDocuments, dayDocuments),
   };
 }

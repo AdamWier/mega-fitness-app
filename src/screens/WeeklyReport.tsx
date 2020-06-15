@@ -15,7 +15,10 @@ import WeeklyGoalChart from '../components/WeeklyGoalsChart';
 
 function WeeklyReport({ user, theme }): JSX.Element {
   const [period, setPeriod] = useState({});
-  const [report, setReport] = useState({});
+  const [report, setReport] = useState({
+    graphData: [],
+    averages: { calories: 0, protein: 0, fats: 0, carbs: 0 },
+  });
 
   const onDayPress = async (date: { [key: string]: any }) => {
     const currentMoment = moment(date.dateString);
@@ -59,7 +62,7 @@ function WeeklyReport({ user, theme }): JSX.Element {
 
   return (
     <View style={style.content}>
-      <CustomHeader />
+      <CustomHeader title="Weekly reports" />
       <View style={style.calendarContainer}>
         <Text h4>Select a week</Text>
         <CalendarList
@@ -77,17 +80,17 @@ function WeeklyReport({ user, theme }): JSX.Element {
         />
       </View>
       <ScrollView style={style.reportSpace}>
-        {!!report.totals?.calories && (
+        {!!report.averages.calories && (
           <FoodCard
             name="Weekly Average"
-            calories={report.totals.calories.toString()}
-            protein={report.totals.protein.toString()}
-            fats={report.totals.fats.toString()}
-            carbs={report.totals.carbs.toString()}
+            calories={report.averages.calories.toString()}
+            protein={report.averages.protein.toString()}
+            fats={report.averages.fats.toString()}
+            carbs={report.averages.carbs.toString()}
             expanded
           />
         )}
-        {!!report.graphData?.length && (
+        {!!report.graphData.length && (
           <WeeklyGoalChart graphData={report.graphData} />
         )}
       </ScrollView>

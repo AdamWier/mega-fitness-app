@@ -1,4 +1,4 @@
-import { connect, ConnectedProps } from 'react-redux';
+import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 const LOGIN = 'LOGIN';
@@ -45,5 +45,3 @@ const mapDispatchToProps = (dispatch: Dispatch): { [key: string]: any } => ({
 });
 
 export const container = connect(mapStateToProps, mapDispatchToProps);
-
-export type UserProps = ConnectedProps<typeof container>;

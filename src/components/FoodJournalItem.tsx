@@ -11,7 +11,7 @@ const getTotalCalories = (
   currentValue: { [key: string]: any }
 ): number => accumulator + currentValue.calories;
 
-const AgendaItem = ({ document, onMealPress, onDeletePress, theme }) => (
+const FoodJournalItem = ({ document, onMealPress, onDeletePress, theme }) => (
   <Card key={document.id}>
     <View
       style={{
@@ -49,7 +49,7 @@ const AgendaItem = ({ document, onMealPress, onDeletePress, theme }) => (
   </Card>
 );
 
-AgendaItem.propTypes = {
+FoodJournalItem.propTypes = {
   document: PropTypes.object.isRequired,
   onMealPress: PropTypes.func.isRequired,
   onDeletePress: PropTypes.func.isRequired,
@@ -64,4 +64,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withTheme(AgendaItem);
+export default withTheme(FoodJournalItem);

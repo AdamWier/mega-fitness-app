@@ -6,7 +6,7 @@ import { container as UserContainer } from '../store/reducers/User';
 import { container as MealContainer } from '../store/reducers/MealDocument';
 import MealDocument from '../Firebase/Documents/MealDocument';
 import { Agenda } from 'react-native-calendars';
-import AgendaItem from '../components/AgendaItem';
+import FoodJournalItem from '../components/FoodJournalItem';
 import TotalCard from '../components/TotalCard';
 import moment from 'moment';
 import Toast from 'react-native-simple-toast';
@@ -15,16 +15,16 @@ import { mealDocumentService, dayDocumentService } from '../Firebase/index';
 import DayDocument from '../Firebase/Documents/DayDocument';
 
 const reduceMealDocuments = (data: { [key: string]: any }[]) =>
-  data.reduce((agenda, item) => {
+  data.reduce((foodJournal, item) => {
     const { eatenAt } = item;
     const key = moment(eatenAt).format('YYYY-MM-DD');
-    if (agenda.hasOwnProperty(key)) {
-      agenda[key].push(item);
-    } else agenda[key] = [item];
-    return agenda;
+    if (foodJournal.hasOwnProperty(key)) {
+      foodJournal[key].push(item);
+    } else foodJournal[key] = [item];
+    return foodJournal;
   }, {});
 
-const constructAgendaItems = (
+const constructFoodJournalItems = (
   documentsToFormat: { [key: string]: any }[],
   date: Date
 ) => {
@@ -57,7 +57,7 @@ const compareRows = (
 
 const emptyDocuments = { meals: [], day: { id: null, goalCalories: null } };
 
-function AgendaPage({
+function FoodJournalPage({
   navigation,
   theme,
   user,
@@ -223,14 +223,14 @@ function AgendaPage({
         <TotalCard
           foods={documents.meals.flatMap((document) => document.meal)}
         />
-        <AgendaItem
+        <FoodJournalItem
           document={item}
           onMealPress={handleMealPress}
           onDeletePress={confirmDelete}
         />
       </View>
     ) : (
-      <AgendaItem
+      <FoodJournalItem
         document={item}
         onMealPress={handleMealPress}
         onDeletePress={confirmDelete}
@@ -239,7 +239,7 @@ function AgendaPage({
 
   return (
     <Agenda
-      items={constructAgendaItems(documents.meals, currentDate)}
+      items={constructFoodJournalItems(documents.meals, currentDate)}
       onDayPress={(date) =>
         onDayPress(moment(date.dateString).startOf('day').toDate())
       }
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
   },
 });
 
-AgendaPage.propTypes = {
+FoodJournalPage.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
     setOptions: PropTypes.func.isRequired,
@@ -284,4 +284,4 @@ AgendaPage.propTypes = {
   updateMealDocument: PropTypes.func.isRequired,
 };
 
-export default MealContainer(UserContainer(withTheme(AgendaPage)));
+export default MealContainer(UserContainer(withTheme(FoodJournalPage)));
