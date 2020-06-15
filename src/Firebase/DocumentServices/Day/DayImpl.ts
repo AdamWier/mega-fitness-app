@@ -87,10 +87,10 @@ export default class DayImpl implements Day {
   }
 
   async findByWeek(
-    beginngingOfWeek: Date,
+    beginningOfWeek: Date,
     uid: string
   ): Promise<{ [key: string]: any }[]> {
-    const response = await this.getByWeekRef(beginngingOfWeek, uid).get();
+    const response = await this.getByWeekRef(beginningOfWeek, uid).get();
     if (response.docs.length) {
       return response.docs.map(this.mapDocuments);
     }
@@ -98,10 +98,10 @@ export default class DayImpl implements Day {
   }
 
   getByWeekRef(
-    beginngingOfWeek: Date,
+    beginningOfWeek: Date,
     uid: string
   ): firebase.firestore.Query<firebase.firestore.DocumentData> {
-    const start = moment(beginngingOfWeek).startOf('week');
+    const start = moment(beginningOfWeek).startOf('week');
     const end = start.clone().endOf('week');
     return this.firestore
       .collection('days')
