@@ -8,7 +8,7 @@ import Toast from 'react-native-simple-toast';
 import { userDocumentService } from '../Firebase';
 import CustomHeader from '../components/Header';
 
-function Settings({ user }): JSX.Element {
+function GoalSetPage({ user }): JSX.Element {
   const [isLoading, toggleIsLoading] = useState(false);
   const [goalCaloriesInput, setGoalCaloriesInput] = useState('0');
 
@@ -43,9 +43,9 @@ function Settings({ user }): JSX.Element {
 
   return (
     <View style={style.content}>
-      <CustomHeader />
+      <CustomHeader title="Calorie goal" />
       <View style={style.equalSpace}>
-        <Text h2>User Settings For</Text>
+        <Text h2>Set calorie goal for</Text>
         <Text h4>{user.email}</Text>
       </View>
       <View style={style.equalSpace}>
@@ -70,7 +70,7 @@ const style = StyleSheet.create({
   },
 });
 
-Settings.propTypes = {
+GoalSetPage.propTypes = {
   user: PropTypes.shape({
     uid: PropTypes.string,
     email: PropTypes.string,
@@ -78,4 +78,4 @@ Settings.propTypes = {
   }).isRequired,
 };
 
-export default container(Settings);
+export default container(GoalSetPage);

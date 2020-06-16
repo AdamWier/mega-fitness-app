@@ -26,13 +26,15 @@ export default function FoodCard({
           <TotalListItem label="Fat:" total={fats} chevron={false} />
         </View>
       ) : null}
-      <TotalListItem
-        label="Amount:"
-        total={amount}
-        description={amountDescription}
-        chevron={false}
-        onValueChange={onAmountChange}
-      />
+      {amount ? (
+        <TotalListItem
+          label="Amount:"
+          total={amount}
+          description={amountDescription}
+          chevron={false}
+          onValueChange={onAmountChange}
+        />
+      ) : null}
       {children}
     </Card>
   );
@@ -44,7 +46,7 @@ FoodCard.propTypes = {
   protein: PropTypes.string.isRequired,
   carbs: PropTypes.string.isRequired,
   fats: PropTypes.string.isRequired,
-  amount: PropTypes.string.isRequired,
+  amount: PropTypes.string,
   amountDescription: PropTypes.string,
   onAmountChange: PropTypes.func,
   expanded: PropTypes.bool,
@@ -59,4 +61,5 @@ FoodCard.defaultProps = {
   amountDescription: null,
   onAmountChange: null,
   expanded: false,
+  amount: null,
 };

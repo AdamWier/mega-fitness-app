@@ -93,6 +93,31 @@ export default class MealImpl implements Meal {
       .where('deleted', '==', false);
   }
 
+  async findByWeek(
+    beginningOfWeek: Date,
+    uid: string
+  ): Promise<{ [key: string]: any }[]> {
+    const response = await this.getByWeekRef(beginningOfWeek, uid).get();
+    if (response.docs.length) {
+      return response.docs.map(this.mapDocuments);
+    }
+    return [];
+  }
+
+  getByWeekRef(
+    beginningOfWeek: Date,
+    uid: string
+  ): firebase.firestore.Query<firebase.firestore.DocumentData> {
+    const start = moment(beginningOfWeek).startOf('week');
+    const end = start.clone().endOf('week');
+    return this.firestore
+      .collection('meals')
+      .where('eatenAt', '>=', start.toDate())
+      .where('eatenAt', '<', end.toDate())
+      .where('uid', '==', uid)
+      .where('deleted', '==', false);
+  }
+
   mapDocuments(
     document: firebase.firestore.QueryDocumentSnapshot<
       firebase.firestore.DocumentData

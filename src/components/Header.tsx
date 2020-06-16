@@ -2,11 +2,12 @@ import React from 'react';
 import { Header, Button, Icon, Text } from 'react-native-elements';
 import { Alert } from 'react-native';
 import { authService } from '../Firebase';
-import { container, UserProps } from '../store/reducers/User';
+import { container } from '../store/reducers/User';
 import { useNavigation } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
+import PropTypes, { InferProps } from 'prop-types';
 
-function CustomHeader({ storeLogin }: UserProps) {
+function CustomHeader({ title, storeLogin }: CustomHeader) {
   const navigation = useNavigation<DrawerNavigationProp<{}>>();
 
   const logout = () => {
@@ -37,7 +38,7 @@ function CustomHeader({ storeLogin }: UserProps) {
             fontFamily: 'sans-serif-medium',
           }}
         >
-          Settings
+          {title}
         </Text>
       }
       placement="left"
@@ -47,5 +48,14 @@ function CustomHeader({ storeLogin }: UserProps) {
     />
   );
 }
+
+const propTypes = {
+  title: PropTypes.string.isRequired,
+  storeLogin: PropTypes.func.isRequired,
+};
+
+CustomHeader.propTypes = propTypes;
+
+type CustomHeader = InferProps<typeof propTypes>;
 
 export default container(CustomHeader);

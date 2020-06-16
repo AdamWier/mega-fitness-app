@@ -21,6 +21,7 @@ export default function LoggedInDrawer(): JSX.Element {
         <Drawer.Screen
           name={screen.name}
           component={screen.component}
+          options={screen.options}
           key={index}
         />
       ))}

@@ -67,7 +67,7 @@ function Meal({
           }
         }
       }
-      navigation.navigate('Agenda');
+      navigation.navigate('Food Journal');
     } catch (e) {
       console.log(e);
     }
@@ -91,7 +91,7 @@ function Meal({
   const deleteMeal = async () => {
     try {
       await mealDocumentService.delete(id);
-      navigation.navigate('Agenda');
+      navigation.navigate('Food Journal');
     } catch (e) {
       console.log(e);
     }
@@ -111,7 +111,7 @@ function Meal({
 
   const onBackPress = () => {
     if (meal.length) {
-      askToSave(() => navigation.navigate('Agenda'));
+      askToSave(() => navigation.navigate('Food Journal'));
       return true;
     }
     return false;

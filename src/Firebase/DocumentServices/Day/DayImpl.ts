@@ -86,6 +86,31 @@ export default class DayImpl implements Day {
       .limit(1);
   }
 
+  async findByWeek(
+    beginningOfWeek: Date,
+    uid: string
+  ): Promise<{ [key: string]: any }[]> {
+    const response = await this.getByWeekRef(beginningOfWeek, uid).get();
+    if (response.docs.length) {
+      return response.docs.map(this.mapDocuments);
+    }
+    return [];
+  }
+
+  getByWeekRef(
+    beginningOfWeek: Date,
+    uid: string
+  ): firebase.firestore.Query<firebase.firestore.DocumentData> {
+    const start = moment(beginningOfWeek).startOf('week');
+    const end = start.clone().endOf('week');
+    return this.firestore
+      .collection('days')
+      .where('date', '>=', start.toDate())
+      .where('date', '<', end.toDate())
+      .where('uid', '==', uid)
+      .where('deleted', '==', false);
+  }
+
   mapDocuments(
     document: firebase.firestore.QueryDocumentSnapshot<
       firebase.firestore.DocumentData
@@ -95,6 +120,7 @@ export default class DayImpl implements Day {
     return {
       id: document.id,
       goalCalories: data.goalCalories,
+      date: data.date.toDate(),
     };
   }
 }

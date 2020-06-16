@@ -1,5 +1,6 @@
 import FoodJournalStack from '../FoodJournalStack';
-import Settings from '../../screens/Settings';
+import GoalSetPage from '../../screens/GoalSetPage';
+import WeeklyReport from '../../screens/WeeklyReport';
 
 export default [
   {
@@ -7,7 +8,14 @@ export default [
     component: FoodJournalStack,
   },
   {
-    name: 'Settings',
-    component: Settings,
+    name: 'GoalSetPage',
+    component: GoalSetPage,
+    options: {
+      title: 'Set a calorie goal',
+    },
+  },
+  {
+    name: 'Weekly Reports',
+    component: WeeklyReport,
   },
 ];
