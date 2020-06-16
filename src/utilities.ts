@@ -39,34 +39,40 @@ export function createWeeklyReport(
     return accum;
   };
 
-  const averageNutrientsReducer = (
+  const totalNutrientsReducer = (
     accum: { [key: string]: number },
-    next: { [key: string]: number },
-    index: number,
-    array: []
+    next: { [key: string]: number }
   ) => {
     accum.calories += next.calories;
     accum.protein += next.protein;
     accum.carbs += next.carbs;
     accum.fats += next.fats;
-    if (index === array.length - 1) {
-      accum.calories = Math.round(accum.calories / array.length);
-      accum.protein = Math.round(accum.protein / array.length);
-      accum.carbs = Math.round(accum.carbs / array.length);
-      accum.fats = Math.round(accum.fats / array.length);
-    }
     return accum;
   };
 
-  const createTotalCardData = (mealsDocs: { [key: string]: any }[]) =>
-    mealsDocs
+  const createTotalCardData = (mealsDocs: { [key: string]: any }[]) => {
+    const totals = mealsDocs
       .flatMap((document: { [key: string]: any }) => document.meal)
-      .reduce(averageNutrientsReducer, {
+      .reduce(totalNutrientsReducer, {
         calories: 0,
         protein: 0,
         carbs: 0,
         fats: 0,
       });
+
+    const mealTotalsGroupedByDay = mealsDocs.reduce(
+      dayCaloriesTotalReducer,
+      {}
+    );
+
+    for (const nutrient in totals) {
+      totals[nutrient] = Math.round(
+        totals[nutrient] / Object.keys(mealTotalsGroupedByDay).length
+      );
+    }
+
+    return totals;
+  };
 
   const createGraphData = (
     mealsDocs: { [key: string]: any }[],
