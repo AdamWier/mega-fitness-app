@@ -60,6 +60,7 @@ export default class DayImpl implements Day {
     return {
       id: null,
       goalCalories: null,
+      date: null,
     };
   }
 
@@ -101,8 +102,8 @@ export default class DayImpl implements Day {
     beginningOfWeek: Date,
     uid: string
   ): firebase.firestore.Query<firebase.firestore.DocumentData> {
-    const start = moment(beginningOfWeek).startOf('week');
-    const end = start.clone().endOf('week');
+    const start = moment(beginningOfWeek).startOf('isoWeek');
+    const end = start.clone().endOf('isoWeek');
     return this.firestore
       .collection('days')
       .where('date', '>=', start.toDate())

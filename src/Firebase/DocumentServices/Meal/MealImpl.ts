@@ -108,8 +108,8 @@ export default class MealImpl implements Meal {
     beginningOfWeek: Date,
     uid: string
   ): firebase.firestore.Query<firebase.firestore.DocumentData> {
-    const start = moment(beginningOfWeek).startOf('week');
-    const end = start.clone().endOf('week');
+    const start = moment(beginningOfWeek).startOf('isoWeek');
+    const end = start.clone().endOf('isoWeek');
     return this.firestore
       .collection('meals')
       .where('eatenAt', '>=', start.toDate())
