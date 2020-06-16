@@ -18,7 +18,7 @@ export function createWeeklyReport(
     accum: { [key: string]: any },
     next: { [key: string]: any }
   ) => {
-    const dayString = moment(next.eatenAt).startOf('day').format('dddd');
+    const dayString = moment(next.eatenAt).startOf('day').format('ddd');
     if (accum.hasOwnProperty(dayString)) {
       accum[dayString] = next.meal.reduce(
         mealCaloriesTotalReducer,
@@ -34,7 +34,7 @@ export function createWeeklyReport(
     accum: { [key: string]: any },
     next: { [key: string]: any }
   ) => {
-    const dayString = moment(next.date).startOf('day').format('dddd');
+    const dayString = moment(next.date).startOf('day').format('ddd');
     accum[dayString] = next.goalCalories;
     return accum;
   };
@@ -50,10 +50,10 @@ export function createWeeklyReport(
     accum.carbs += next.carbs;
     accum.fats += next.fats;
     if (index === array.length - 1) {
-      accum.calories /= array.length;
-      accum.protein /= array.length;
-      accum.carbs /= array.length;
-      accum.fats /= array.length;
+      accum.calories = Math.round(accum.calories / array.length);
+      accum.protein = Math.round(accum.protein / array.length);
+      accum.carbs = Math.round(accum.carbs / array.length);
+      accum.fats = Math.round(accum.fats / array.length);
     }
     return accum;
   };
