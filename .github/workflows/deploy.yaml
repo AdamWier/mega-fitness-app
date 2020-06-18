@@ -19,11 +19,10 @@ jobs:
     - name: Create env file
       run: echo "${{ secrets.EnvFile }}" > .env
     - name: Set up expo cli
-      run: npm i -g expo-cli
+      run: npm i -g expo-cli@3.21.5
     - name: Expo log in
       run: expo login -u ${{ secrets.ExpoUsername }} -p ${{ secrets.ExpoPassword }}
     - name: Extract branch name
-      shell: bash
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
       id: extract_branch
     - name: Publish to Expo
