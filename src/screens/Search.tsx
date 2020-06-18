@@ -1,12 +1,32 @@
-import React, { useState, useRef, MutableRefObject } from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
-import { Text, SearchBar, Button, ListItem } from 'react-native-elements';
+import React, {
+  useState,
+  useRef,
+  MutableRefObject,
+  useEffect,
+  useCallback,
+} from 'react';
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
+import {
+  Text,
+  SearchBar,
+  Button,
+  ListItem,
+  Divider,
+} from 'react-native-elements';
 import PropTypes from 'prop-types';
 import USDAApiImpl from '../ApiHelpers/USDA/USDAApiImpl';
 import OFDApiImpl from '../ApiHelpers/OFD/OFDApiImpl';
 import { FoodResult, FoodDetails } from '../ApiHelpers/CommonAPITypes';
 import Toast from 'react-native-simple-toast';
 import SwitchGroup from '../components/SwitchGroup';
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import { useDebounceCallback } from '@react-hook/debounce';
 
 export default function Search({ navigation }): JSX.Element {
   const USDAapi = new USDAApiImpl();
@@ -21,6 +41,15 @@ export default function Search({ navigation }): JSX.Element {
   const [isAtEndOfResults, setEnd] = useState(false);
   const foodList: MutableRefObject<FlatList<FoodResult>> = useRef();
 
+  const scanBarcode = async () => {
+    const { status } = await BarCodeScanner.requestPermissionsAsync();
+    if (status === 'granted') {
+      navigation.navigate('BarCodeScanner');
+    } else {
+      Alert.prompt('You cannot search by barcode without camera access.');
+    }
+  };
+
   const handleSubmit = (): void => {
     try {
       foodList &&
@@ -33,15 +62,20 @@ export default function Search({ navigation }): JSX.Element {
   };
 
   const getResults = async (isReset: boolean) => {
-    setLoadingState(true);
-    const pageToGet = isReset ? 0 : page + 1;
-    const newResults = shouldUseOFD
-      ? await OFDApi.search(searchText, isFranceLocale, pageToGet)
-      : await USDAapi.search(searchText, pageToGet);
-    updateResults(isReset ? [...newResults] : [...results, ...newResults]);
-    updatePage(pageToGet);
-    setEnd(newResults.length ? false : true);
-    setLoadingState(false);
+    try {
+      setLoadingState(true);
+      const pageToGet = isReset ? 0 : page + 1;
+      const newResults = shouldUseOFD
+        ? await OFDApi.search(searchText, isFranceLocale, pageToGet)
+        : await USDAapi.search(searchText, pageToGet);
+      updateResults(isReset ? [...newResults] : [...results, ...newResults]);
+      updatePage(pageToGet);
+      setEnd(newResults.length ? false : true);
+      setLoadingState(false);
+    } catch (e) {
+      setLoadingState(false);
+      showErrorToast();
+    }
   };
 
   const showErrorToast = () =>
@@ -54,7 +88,7 @@ export default function Search({ navigation }): JSX.Element {
   const showNotEnoughDetailsToast = () =>
     Toast.showWithGravity(
       "There isn't sufficient information for this food",
-      Toast.LONG,
+      Toast.SHORT,
       Toast.CENTER
     );
 
@@ -82,9 +116,29 @@ export default function Search({ navigation }): JSX.Element {
     }
   };
 
+  const debouncedHandleSubmit = useCallback(
+    useDebounceCallback(handleSubmit, 500),
+    [searchText, shouldUseOFD, isFranceLocale]
+  );
+
+  useEffect(() => {
+    if (searchText) {
+      debouncedHandleSubmit();
+    }
+  }, [searchText, debouncedHandleSubmit, shouldUseOFD, isFranceLocale]);
+
   return (
     <View style={styles.screenContainer}>
-      <Text h2>Search for a food</Text>
+      <View style={styles.titleContainer}>
+        <Text h2>Search for a food</Text>
+        <Button
+          containerStyle={styles.barcodeButtonContainer}
+          type="solid"
+          raised
+          title="Barcode Search"
+          onPress={scanBarcode}
+        />
+      </View>
       <SearchBar
         value={searchText}
         onChangeText={(text): void => updateSearchText(text)}
@@ -114,15 +168,9 @@ export default function Search({ navigation }): JSX.Element {
         toolTipHeight={100}
         iconName="info"
       />
-      <Button
-        type={!searchText ? 'outline' : 'solid'}
-        disabled={!searchText}
-        loading={loadingState}
-        raised
-        title="Search"
-        onPress={handleSubmit}
-      />
-      {results ? (
+      <Divider />
+      {loadingState && <ActivityIndicator size="large" />}
+      {!loadingState && results ? (
         results.length ? (
           <FlatList
             ref={foodList}
@@ -149,6 +197,13 @@ export default function Search({ navigation }): JSX.Element {
 
 const styles = StyleSheet.create({
   screenContainer: {
+    flex: 1,
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  barcodeButtonContainer: {
     flex: 1,
   },
   switchGroupContainer: {

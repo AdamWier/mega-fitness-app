@@ -1,14 +1,22 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, ScrollView, Alert, StyleSheet, Keyboard } from 'react-native';
+import {
+  View,
+  ScrollView,
+  Alert,
+  StyleSheet,
+  Keyboard,
+  BackHandler,
+} from 'react-native';
 import { Button, Text, withTheme, Input, Divider } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import FoodCard from '../components/FoodCard';
 import { container as MealContainer } from '../store/reducers/MealDocument';
 import { container as UserContainer } from '../store/reducers/User';
-import { firestoreService } from '../Firebase';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import TotalCard from '../components/TotalCard';
 import moment from 'moment';
+import { useFocusEffect } from '@react-navigation/native';
+import { mealDocumentService, dayDocumentService } from '../Firebase';
 
 function Meal({
   navigation,
@@ -21,7 +29,8 @@ function Meal({
 
   const { meal, eatenAt, name, id } = mealDocument;
 
-  const [displayCalendar, toggleDisplayCalendar] = useState(false);
+  const [displayMealCalendar, toggleDisplayMealCalendar] = useState(false);
+  const [displayCopyCalendar, toggleDisplayCopyCalendar] = useState(false);
   const [expandedCard, changeExpandedCard] = useState(null);
 
   navigation.setOptions({
@@ -38,42 +47,51 @@ function Meal({
     });
   };
 
-  const getEatenAt = (): void => {
-    toggleDisplayCalendar(true);
-  };
-
-  const sendMealToFirestore = async (): Promise<void> => {
+  const saveMeal = async (): Promise<void> => {
     try {
       if (id) {
-        await firestoreService.updateMeal(meal, name, user.uid, eatenAt, id);
+        await mealDocumentService.update(meal, name, user.uid, eatenAt, id);
       } else {
-        await firestoreService.createMeal(meal, name, user.uid, eatenAt);
+        await mealDocumentService.create(meal, name, user.uid, eatenAt);
+        if (moment(eatenAt).isSame(new Date(), 'd')) {
+          const dayDocument = await dayDocumentService.findDocument(
+            eatenAt,
+            user.uid
+          );
+          if (user.goalCalories && !dayDocument.goalCalories) {
+            await dayDocumentService.createGoal(
+              eatenAt,
+              user.goalCalories,
+              user.uid
+            );
+          }
+        }
       }
-      navigation.navigate('Agenda');
+      navigation.navigate('Food Journal');
     } catch (e) {
       console.log(e);
     }
   };
 
   const setDate = (input: Date) => {
-    toggleDisplayCalendar(false);
+    toggleDisplayMealCalendar(false);
     updateMealDocument({
       ...mealDocument,
       eatenAt: input,
     });
   };
 
-  const askToSave = (): void => {
+  const askToSave = (cancelCallback?: Function): void => {
     Alert.alert('Save', 'Do you want to save the meal?', [
-      { text: 'No', onPress: () => null },
-      { text: 'Yes', onPress: () => sendMealToFirestore() },
+      { text: 'No', onPress: () => (cancelCallback ? cancelCallback() : null) },
+      { text: 'Yes', onPress: () => saveMeal() },
     ]);
   };
 
   const deleteMeal = async () => {
     try {
-      await firestoreService.deleteMeal(id);
-      navigation.navigate('Agenda');
+      await mealDocumentService.delete(id);
+      navigation.navigate('Food Journal');
     } catch (e) {
       console.log(e);
     }
@@ -84,6 +102,19 @@ function Meal({
       { text: 'No', onPress: () => null },
       { text: 'Yes', onPress: () => deleteMeal() },
     ]);
+  };
+
+  const copyMeal = async (input: Date) => {
+    toggleDisplayCopyCalendar(false);
+    await mealDocumentService.create(meal, name, user.uid, input);
+  };
+
+  const onBackPress = () => {
+    if (meal.length) {
+      askToSave(() => navigation.navigate('Food Journal'));
+      return true;
+    }
+    return false;
   };
 
   const blurInput = useCallback(() => {
@@ -97,6 +128,15 @@ function Meal({
       Keyboard.removeAllListeners('keyboardDidHide');
     };
   }, [blurInput]);
+
+  useFocusEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      onBackPress
+    );
+
+    return () => backHandler.remove();
+  });
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -117,7 +157,14 @@ function Meal({
             title={`Eaten: ${moment(eatenAt).format(
               'dddd MMMM D, YYYY HH:mm'
             )}`}
-            onPress={getEatenAt}
+            onPress={() => toggleDisplayMealCalendar(true)}
+          />
+          <DateTimePickerModal
+            isVisible={displayMealCalendar}
+            date={eatenAt}
+            mode="datetime"
+            onConfirm={setDate}
+            onCancel={() => toggleDisplayMealCalendar(false)}
           />
           <Input
             placeholder="Enter meal name"
@@ -131,29 +178,38 @@ function Meal({
             ref={mealNameInput}
             containerStyle={styles.input}
           />
-          <DateTimePickerModal
-            isVisible={displayCalendar}
-            date={eatenAt}
-            mode="datetime"
-            onConfirm={setDate}
-            onCancel={() => toggleDisplayCalendar(false)}
-          />
           <TotalCard foods={meal} />
           <Button
             title="Save meal"
-            onPress={askToSave}
+            onPress={() => askToSave()}
             buttonStyle={{
               backgroundColor: theme.colors.success,
             }}
           />
           {id ? (
-            <Button
-              title="Delete meal"
-              onPress={confirmDelete}
-              buttonStyle={{
-                backgroundColor: theme.colors.danger,
-              }}
-            />
+            <View>
+              <Button
+                title="Delete meal"
+                onPress={confirmDelete}
+                buttonStyle={{
+                  backgroundColor: theme.colors.danger,
+                }}
+              />
+              <Button
+                title="Copy this meal to another day"
+                onPress={() => toggleDisplayCopyCalendar(true)}
+                buttonStyle={{
+                  backgroundColor: theme.colors.warning,
+                }}
+              />
+              <DateTimePickerModal
+                isVisible={displayCopyCalendar}
+                date={eatenAt}
+                mode="datetime"
+                onConfirm={copyMeal}
+                onCancel={() => toggleDisplayCopyCalendar(false)}
+              />
+            </View>
           ) : null}
 
           <Divider />
