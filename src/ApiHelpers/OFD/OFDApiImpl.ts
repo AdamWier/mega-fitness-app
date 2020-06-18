@@ -36,7 +36,7 @@ export default class OFDAImpl implements Helper {
       baseURI: `https://${locale}.openfoodfacts.org/cgi/search.pl?json=true&search_simple=1&action=process&page_size=50&search_terms=${searchText}&page=${page}`,
       stateTagFilter:
         '&tagtype_0=states&tag_contains_0=contains&tag_0=en:characteristics-completed',
-      returnedFiledsFilter: `&fields=${this.searchReturnedFields.join(',')}`,
+      returnedFieldsFilter: `&fields=${this.searchReturnedFields.join(',')}`,
     };
     return Object.values(addressComponents).join('');
   }

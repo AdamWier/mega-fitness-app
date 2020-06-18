@@ -147,7 +147,7 @@ function FoodJournalPage({
         setIsDayLoading(false);
       } catch (e) {
         console.log(e);
-        Toast.showWithGravity('An error occured', Toast.SHORT, Toast.CENTER);
+        Toast.showWithGravity('An error occurred', Toast.SHORT, Toast.CENTER);
         setIsDayLoading(false);
       }
     },
