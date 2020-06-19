@@ -26,7 +26,7 @@ export default function FoodCard({
           <TotalListItem label="Fat:" total={fats} chevron={false} />
         </View>
       ) : null}
-      {amount ? (
+      {amount !== null ? (
         <TotalListItem
           label="Amount:"
           total={amount}
