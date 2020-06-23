@@ -52,6 +52,45 @@ export default class DayImpl implements Day {
     });
   }
 
+  createWeight(currentDate: Date, weight: number, uid: string): Promise<void> {
+    const dayStartMoment = moment(currentDate).startOf('day');
+    const date = dayStartMoment.toDate();
+    const createdAt = new Date();
+    return this.firestore
+      .collection('days')
+      .doc(
+        uid +
+          '-' +
+          dayStartMoment.format('YYYY-MM-DD') +
+          '-' +
+          createdAt.getTime()
+      )
+      .set({
+        date,
+        weight,
+        uid,
+        createdAt,
+        deleted: false,
+      });
+  }
+
+  updateWeight(
+    currentDate: Date,
+    weight: number,
+    uid: string,
+    id: string
+  ): Promise<void> {
+    const date = moment(currentDate).startOf('day').toDate();
+    const updatedAt = new Date();
+    return this.firestore.collection('days').doc(id).update({
+      date,
+      weight,
+      uid,
+      updatedAt,
+      deleted: false,
+    });
+  }
+
   async findDocument(date: Date, uid: string): Promise<DayDocument> {
     const response = await this.getDocumentReference(date, uid).get();
     if (response.docs.length) {
@@ -61,6 +100,7 @@ export default class DayImpl implements Day {
       id: null,
       goalCalories: null,
       date: null,
+      weight: null,
     };
   }
 
@@ -122,6 +162,7 @@ export default class DayImpl implements Day {
       id: document.id,
       goalCalories: data.goalCalories,
       date: data.date.toDate(),
+      weight: data.weight,
     };
   }
 }

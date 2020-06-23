@@ -15,12 +15,20 @@ const DayHeader = ({
   getNewEatenAt,
   user,
   goalCaloriesInput,
-  isOverlayVisible,
+  isGoalOverlayVisible,
   onGoalButtonPress,
   setGoalCaloriesInput,
-  toggleIsOverlayVisible,
-  checkIsNumber,
-  isOverlayLoading,
+  toggleIsGoalOverlayVisible,
+  onGoalSubmit,
+  isGoalOverlayLoading,
+  onWeightButtonPress,
+  isWeightOverlayVisible,
+  toggleIsWeightOverlayVisible,
+  onWeightSubmit,
+  weightInput,
+  setWeightInput,
+  isWeightOverlayLoading,
+  weight,
   theme,
 }: DayHeaderProps) => {
   const totalCalories = foods ? foods.reduce(getTotal('calories'), 0) : 0;
@@ -62,15 +70,31 @@ const DayHeader = ({
       ) : null}
       <OverlayWithButton
         onButtonPress={onGoalButtonPress}
-        isOverlayVisible={isOverlayVisible}
-        toggleIsOverlayVisible={toggleIsOverlayVisible}
+        isOverlayVisible={isGoalOverlayVisible}
+        toggleIsOverlayVisible={toggleIsGoalOverlayVisible}
         inputValue={goalCaloriesInput}
         setInputValue={setGoalCaloriesInput}
-        onConfirmButtonPress={checkIsNumber}
-        loading={isOverlayLoading}
+        onConfirmButtonPress={onGoalSubmit}
+        loading={isGoalOverlayLoading}
         buttonLabel={goalCalories ? 'Change your day goal' : 'Set a day goal'}
         header="How many calories for today?"
       />
+      <OverlayWithButton
+        onButtonPress={onWeightButtonPress}
+        isOverlayVisible={isWeightOverlayVisible}
+        toggleIsOverlayVisible={toggleIsWeightOverlayVisible}
+        inputValue={weightInput}
+        setInputValue={setWeightInput}
+        onConfirmButtonPress={onWeightSubmit}
+        loading={isWeightOverlayLoading}
+        buttonLabel={
+          weight
+            ? 'Change your weight for today'
+            : 'Record your weight for today'
+        }
+        header="How many do you weight today?"
+      />
+      {weight && <Text>Weight recorded today: {weight}</Text>}
     </View>
   );
 };
@@ -89,12 +113,12 @@ const propTypes = {
   user: PropTypes.shape({ uid: PropTypes.string, email: PropTypes.string })
     .isRequired,
   onGoalButtonPress: PropTypes.func.isRequired,
-  isOverlayVisible: PropTypes.bool.isRequired,
-  toggleIsOverlayVisible: PropTypes.func.isRequired,
+  isGoalOverlayVisible: PropTypes.bool.isRequired,
+  toggleIsGoalOverlayVisible: PropTypes.func.isRequired,
   goalCaloriesInput: PropTypes.string.isRequired,
   setGoalCaloriesInput: PropTypes.func.isRequired,
-  checkIsNumber: PropTypes.func.isRequired,
-  isOverlayLoading: PropTypes.bool.isRequired,
+  onGoalSubmit: PropTypes.func.isRequired,
+  isGoalOverlayLoading: PropTypes.bool.isRequired,
   theme: PropTypes.shape({
     colors: PropTypes.shape({
       success: PropTypes.string,
@@ -102,6 +126,14 @@ const propTypes = {
       text: PropTypes.string,
     }),
   }).isRequired,
+  onWeightButtonPress: PropTypes.func.isRequired,
+  isWeightOverlayVisible: PropTypes.bool.isRequired,
+  toggleIsWeightOverlayVisible: PropTypes.func.isRequired,
+  onWeightSubmit: PropTypes.func.isRequired,
+  weightInput: PropTypes.string.isRequired,
+  setWeightInput: PropTypes.func.isRequired,
+  isWeightOverlayLoading: PropTypes.bool.isRequired,
+  weight: PropTypes.number,
 };
 
 DayHeader.propTypes = propTypes;
