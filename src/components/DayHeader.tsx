@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, Text } from 'react-native-elements';
-import { View, StyleSheet, StatusBar } from 'react-native';
+import { Button, Text, Icon } from 'react-native-elements';
+import { View, StyleSheet } from 'react-native';
 import PropTypes, { InferProps } from 'prop-types';
 import OverlayWithButton from './OverlayWithButton';
 import { Bar } from 'react-native-progress';
@@ -34,23 +34,53 @@ const DayHeader = ({
   const totalCalories = foods ? foods.reduce(getTotal('calories'), 0) : 0;
 
   return (
-    <View style={styles.container}>
-      <Button
-        title="Add a new meal"
-        onPress={() =>
-          handleMealPress({
-            id: null,
-            eatenAt: getNewEatenAt(),
-            meal: [],
-            name: 'Untitled',
-            createdAt: new Date(),
-            deleted: false,
-            uid: user.uid,
-          })
-        }
-      />
+    <View>
+      <View style={styles.buttonsContainer}>
+        <Button
+          containerStyle={styles.buttonContainer}
+          icon={<Icon name="add-circle" />}
+          onPress={() =>
+            handleMealPress({
+              id: null,
+              eatenAt: getNewEatenAt(),
+              meal: [],
+              name: 'Untitled',
+              createdAt: new Date(),
+              deleted: false,
+              uid: user.uid,
+            })
+          }
+        />
+        <View style={styles.buttonContainer}>
+          <OverlayWithButton
+            onButtonPress={onGoalButtonPress}
+            isOverlayVisible={isGoalOverlayVisible}
+            toggleIsOverlayVisible={toggleIsGoalOverlayVisible}
+            inputValue={goalCaloriesInput}
+            setInputValue={setGoalCaloriesInput}
+            onConfirmButtonPress={onGoalSubmit}
+            loading={isGoalOverlayLoading}
+            icon={<Icon type="font-awesome" name="clipboard" />}
+            header="Calorie goal for the day"
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <OverlayWithButton
+            onButtonPress={onWeightButtonPress}
+            isOverlayVisible={isWeightOverlayVisible}
+            toggleIsOverlayVisible={toggleIsWeightOverlayVisible}
+            inputValue={weightInput}
+            setInputValue={setWeightInput}
+            onConfirmButtonPress={onWeightSubmit}
+            loading={isWeightOverlayLoading}
+            icon={<Icon type="font-awesome" name="balance-scale" />}
+            header="Weight recorded today"
+          />
+        </View>
+      </View>
+      {weight && <Text>Weight recorded today: {weight}</Text>}
       {goalCalories ? (
-        <View>
+        <View style={styles.statusBarContainer}>
           <Bar
             style={{ alignSelf: 'center' }}
             progress={Math.min(totalCalories / goalCalories, 1)}
@@ -68,41 +98,14 @@ const DayHeader = ({
           </Text>
         </View>
       ) : null}
-      <OverlayWithButton
-        onButtonPress={onGoalButtonPress}
-        isOverlayVisible={isGoalOverlayVisible}
-        toggleIsOverlayVisible={toggleIsGoalOverlayVisible}
-        inputValue={goalCaloriesInput}
-        setInputValue={setGoalCaloriesInput}
-        onConfirmButtonPress={onGoalSubmit}
-        loading={isGoalOverlayLoading}
-        buttonLabel={goalCalories ? 'Change your day goal' : 'Set a day goal'}
-        header="How many calories for today?"
-      />
-      <OverlayWithButton
-        onButtonPress={onWeightButtonPress}
-        isOverlayVisible={isWeightOverlayVisible}
-        toggleIsOverlayVisible={toggleIsWeightOverlayVisible}
-        inputValue={weightInput}
-        setInputValue={setWeightInput}
-        onConfirmButtonPress={onWeightSubmit}
-        loading={isWeightOverlayLoading}
-        buttonLabel={
-          weight
-            ? 'Change your weight for today'
-            : 'Record your weight for today'
-        }
-        header="How many do you weight today?"
-      />
-      {weight && <Text>Weight recorded today: {weight}</Text>}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: StatusBar.currentHeight,
-  },
+  buttonsContainer: { flexDirection: 'row', justifyContent: 'space-around' },
+  buttonContainer: { flexGrow: 1 },
+  statusBarContainer: { padding: 10 },
 });
 
 const propTypes = {

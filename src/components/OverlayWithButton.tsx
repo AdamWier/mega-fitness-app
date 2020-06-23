@@ -11,11 +11,11 @@ const OverLayWithButton = ({
   setInputValue,
   onConfirmButtonPress,
   loading,
-  buttonLabel,
   header,
+  icon,
 }) => (
   <View>
-    <Button title={buttonLabel} onPress={onButtonPress} />
+    <Button icon={icon} onPress={onButtonPress} />
     <Overlay
       isVisible={isOverlayVisible}
       onBackdropPress={() => toggleIsOverlayVisible(false)}
@@ -53,8 +53,8 @@ OverLayWithButton.propTypes = {
   onConfirmButtonPress: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   hasGoal: PropTypes.bool.isRequired,
-  buttonLabel: PropTypes.string.isRequired,
   header: PropTypes.string.isRequired,
+  icon: PropTypes.element.isRequired,
 };
 
 const styles = StyleSheet.create({
