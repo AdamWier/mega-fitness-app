@@ -3,32 +3,29 @@ import { Text, Button, Overlay, Input } from 'react-native-elements';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
 
-const GoalOverlay = ({
-  onGoalButtonPress,
+const OverLayWithButton = ({
+  onButtonPress,
   isOverlayVisible,
   toggleIsOverlayVisible,
-  goalCalories,
-  setGoalCalories,
+  inputValue,
+  setInputValue,
   onConfirmButtonPress,
   loading,
-  hasGoal,
+  buttonLabel,
+  header,
 }) => (
   <View>
-    <Button
-      title={hasGoal ? 'Change your day goal' : 'Set a day goal'}
-      onPress={onGoalButtonPress}
-    />
+    <Button title={buttonLabel} onPress={onButtonPress} />
     <Overlay
       isVisible={isOverlayVisible}
       onBackdropPress={() => toggleIsOverlayVisible(false)}
     >
       <View style={styles.overlayContentContainer}>
-        <Text h3>Let's set a goal!</Text>
-        <Text h4>How many calories for today?</Text>
+        <Text h4>{header}</Text>
         <Input
           containerStyle={styles.inputContainer}
-          value={goalCalories}
-          onChangeText={(value) => setGoalCalories(value)}
+          value={inputValue}
+          onChangeText={(value) => setInputValue(value)}
           keyboardType="number-pad"
         />
         {loading ? (
@@ -47,15 +44,17 @@ const GoalOverlay = ({
   </View>
 );
 
-GoalOverlay.propTypes = {
-  onGoalButtonPress: PropTypes.func.isRequired,
+OverLayWithButton.propTypes = {
+  onButtonPress: PropTypes.func.isRequired,
   isOverlayVisible: PropTypes.bool.isRequired,
   toggleIsOverlayVisible: PropTypes.func.isRequired,
-  goalCalories: PropTypes.string.isRequired,
-  setGoalCalories: PropTypes.func.isRequired,
+  inputValue: PropTypes.string.isRequired,
+  setInputValue: PropTypes.func.isRequired,
   onConfirmButtonPress: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   hasGoal: PropTypes.bool.isRequired,
+  buttonLabel: PropTypes.string.isRequired,
+  header: PropTypes.string.isRequired,
 };
 
 const styles = StyleSheet.create({
@@ -75,4 +74,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GoalOverlay;
+export default OverLayWithButton;

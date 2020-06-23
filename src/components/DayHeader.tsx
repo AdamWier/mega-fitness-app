@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Text } from 'react-native-elements';
 import { View, StyleSheet, StatusBar } from 'react-native';
 import PropTypes, { InferProps } from 'prop-types';
-import GoalOverlay from './GoalOverlay';
+import OverlayWithButton from './OverlayWithButton';
 import { Bar } from 'react-native-progress';
 import { getTotal } from '../utilities';
 import { withTheme } from 'react-native-elements';
@@ -60,15 +60,16 @@ const DayHeader = ({
           </Text>
         </View>
       ) : null}
-      <GoalOverlay
-        goalCalories={goalCaloriesInput}
+      <OverlayWithButton
+        onButtonPress={onGoalButtonPress}
         isOverlayVisible={isOverlayVisible}
-        onGoalButtonPress={onGoalButtonPress}
-        setGoalCalories={setGoalCaloriesInput}
         toggleIsOverlayVisible={toggleIsOverlayVisible}
+        inputValue={goalCaloriesInput}
+        setInputValue={setGoalCaloriesInput}
         onConfirmButtonPress={checkIsNumber}
         loading={isOverlayLoading}
-        hasGoal={!!goalCalories}
+        buttonLabel={goalCalories ? 'Change your day goal' : 'Set a day goal'}
+        header="How many calories for today?"
       />
     </View>
   );
