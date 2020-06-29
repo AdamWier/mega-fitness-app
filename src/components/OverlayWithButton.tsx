@@ -52,7 +52,6 @@ OverLayWithButton.propTypes = {
   setInputValue: PropTypes.func.isRequired,
   onConfirmButtonPress: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
-  hasGoal: PropTypes.bool.isRequired,
   header: PropTypes.string.isRequired,
   icon: PropTypes.element.isRequired,
 };

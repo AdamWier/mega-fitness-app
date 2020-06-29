@@ -256,7 +256,7 @@ function FoodJournalPage({
     setWeightInput: setWeightInput,
     isWeightOverlayLoading: isWeightOverlayLoading,
     onWeightSubmit: onWeightSubmit,
-    weight: documents.day.weight,
+    weight: documents.day?.weight,
   };
 
   const emptyItem = () =>
