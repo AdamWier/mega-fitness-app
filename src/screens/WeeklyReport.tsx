@@ -14,6 +14,7 @@ import { createWeeklyReport } from '../utilities';
 import WeeklyGoalChart from '../components/WeeklyGoalsChart';
 
 function WeeklyReport({ user, theme }): JSX.Element {
+  const [startOfPeriod, setStartOfPeriod] = useState(null);
   const [period, setPeriod] = useState({});
   const [report, setReport] = useState({
     graphData: [],
@@ -22,42 +23,43 @@ function WeeklyReport({ user, theme }): JSX.Element {
 
   const onDayPress = async (date: { [key: string]: any }) => {
     const currentMoment = moment(date.dateString);
-    const beginningOfWeek = moment(currentMoment.startOf('isoWeek'));
-    const week = {
-      [beginningOfWeek.format('YYYY-MM-DD')]: {
-        startingDay: true,
-        color: theme.colors.success,
-      },
-      [beginningOfWeek.clone().add('1', 'day').format('YYYY-MM-DD')]: {
-        color: theme.colors.success,
-      },
-      [beginningOfWeek.clone().add('2', 'day').format('YYYY-MM-DD')]: {
-        color: theme.colors.success,
-      },
-      [beginningOfWeek.clone().add('3', 'day').format('YYYY-MM-DD')]: {
-        color: theme.colors.success,
-      },
-      [beginningOfWeek.clone().add('4', 'day').format('YYYY-MM-DD')]: {
-        color: theme.colors.success,
-      },
-      [beginningOfWeek.clone().add('5', 'day').format('YYYY-MM-DD')]: {
-        color: theme.colors.success,
-      },
-      [beginningOfWeek.clone().add('6', 'day').format('YYYY-MM-DD')]: {
-        endingDay: true,
-        color: theme.colors.success,
-      },
-    };
-    setPeriod(week);
-    const mealDocuments = await mealDocumentService.findByWeek(
-      beginningOfWeek.toDate(),
-      user.uid
-    );
-    const dayDocuments = await dayDocumentService.findByWeek(
-      beginningOfWeek.toDate(),
-      user.uid
-    );
-    setReport(createWeeklyReport(mealDocuments, dayDocuments));
+    if (
+      !startOfPeriod ||
+      currentMoment.isBefore(startOfPeriod) ||
+      currentMoment.clone().diff(startOfPeriod, 'months') >= 1
+    ) {
+      setStartOfPeriod(currentMoment);
+      setPeriod({
+        [currentMoment.clone().format('YYYY-MM-DD')]: {
+          startingDay: true,
+          color: theme.colors.success,
+        },
+      });
+    } else if (currentMoment.isAfter(startOfPeriod)) {
+      const period = {};
+      const length = currentMoment.clone().diff(startOfPeriod, 'days');
+      for (let i = length; i >= 0; i--) {
+        period[
+          currentMoment.clone().subtract(i, 'day').format('YYYY-MM-DD')
+        ] = {
+          startingDay: i === length,
+          endingDay: i === 0,
+          color: theme.colors.success,
+        };
+      }
+      setPeriod(period);
+      const mealDocuments = await mealDocumentService.findByPeriod(
+        startOfPeriod.startOf('day').toDate(),
+        currentMoment.endOf('day').toDate(),
+        user.uid
+      );
+      const dayDocuments = await dayDocumentService.findByPeriod(
+        startOfPeriod.startOf('day').toDate(),
+        currentMoment.endOf('day').toDate(),
+        user.uid
+      );
+      setReport(createWeeklyReport(mealDocuments, dayDocuments));
+    }
   };
 
   return (

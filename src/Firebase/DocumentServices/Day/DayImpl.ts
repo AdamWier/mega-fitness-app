@@ -127,27 +127,27 @@ export default class DayImpl implements Day {
       .limit(1);
   }
 
-  async findByWeek(
-    beginningOfWeek: Date,
+  async findByPeriod(
+    beginning: Date,
+    end: Date,
     uid: string
   ): Promise<{ [key: string]: any }[]> {
-    const response = await this.getByWeekRef(beginningOfWeek, uid).get();
+    const response = await this.getByPeriodRef(beginning, end, uid).get();
     if (response.docs.length) {
       return response.docs.map(this.mapDocuments);
     }
     return [];
   }
 
-  getByWeekRef(
-    beginningOfWeek: Date,
+  getByPeriodRef(
+    beginning: Date,
+    end: Date,
     uid: string
   ): firebase.firestore.Query<firebase.firestore.DocumentData> {
-    const start = moment(beginningOfWeek).startOf('isoWeek');
-    const end = start.clone().endOf('isoWeek');
     return this.firestore
       .collection('days')
-      .where('date', '>=', start.toDate())
-      .where('date', '<', end.toDate())
+      .where('date', '>=', beginning)
+      .where('date', '<', end)
       .where('uid', '==', uid)
       .where('deleted', '==', false);
   }
