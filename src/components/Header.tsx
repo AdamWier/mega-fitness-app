@@ -1,6 +1,6 @@
 import React from 'react';
 import { Header, Button, Icon, Text } from 'react-native-elements';
-import { Alert } from 'react-native';
+import { Alert, StyleSheet, StatusBar } from 'react-native';
 import { authService } from '../Firebase';
 import { container } from '../store/reducers/User';
 import { useNavigation } from '@react-navigation/native';
@@ -25,6 +25,7 @@ function CustomHeader({ title, storeLogin }: CustomHeader) {
 
   return (
     <Header
+      style={style.headerPadding}
       leftComponent={
         <Button
           icon={<Icon name={'menu'} />}
@@ -48,6 +49,12 @@ function CustomHeader({ title, storeLogin }: CustomHeader) {
     />
   );
 }
+
+const style = StyleSheet.create({
+  headerPadding: {
+    paddingTop: StatusBar.currentHeight,
+  },
+});
 
 const propTypes = {
   title: PropTypes.string.isRequired,
