@@ -152,6 +152,31 @@ export default class DayImpl implements Day {
       .where('deleted', '==', false);
   }
 
+  async findByMonth(
+    beginningOfMonth: Date,
+    uid: string
+  ): Promise<{ [key: string]: any }[]> {
+    const response = await this.getByMonthRef(beginningOfMonth, uid).get();
+    if (response.docs.length) {
+      return response.docs.map(this.mapDocuments);
+    }
+    return [];
+  }
+
+  getByMonthRef(
+    beginningOfWeek: Date,
+    uid: string
+  ): firebase.firestore.Query<firebase.firestore.DocumentData> {
+    const start = moment(beginningOfWeek).startOf('month');
+    const end = start.clone().endOf('month');
+    return this.firestore
+      .collection('days')
+      .where('date', '>=', start.toDate())
+      .where('date', '<', end.toDate())
+      .where('uid', '==', uid)
+      .where('deleted', '==', false);
+  }
+
   mapDocuments(
     document: firebase.firestore.QueryDocumentSnapshot<
       firebase.firestore.DocumentData
