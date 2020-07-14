@@ -7,20 +7,25 @@ import {
   VictoryLine,
 } from 'victory-native';
 
-function WeightGraph({ records }): JSX.Element {
+function WeightGraph({ weightReport }): JSX.Element {
   const axisStyle = {
     grid: { stroke: null },
     ticks: { size: 0 },
   } as any;
 
   return (
-    records.length > 2 && (
+    weightReport.records.length > 2 && (
       <VictoryChart animate theme={VictoryTheme.material}>
         <VictoryAxis style={axisStyle} />
         <VictoryAxis dependentAxis style={axisStyle} />
         <VictoryLine
-          data={records.length > 2 ? records : null}
-          domain={{ y: [0, 120] }}
+          data={weightReport.records}
+          domain={{
+            y: [
+              Math.floor(weightReport.minWeight * 0.9),
+              Math.floor(weightReport.maxWeight * 1.1),
+            ],
+          }}
         />
       </VictoryChart>
     )
@@ -28,9 +33,13 @@ function WeightGraph({ records }): JSX.Element {
 }
 
 WeightGraph.propTypes = {
-  records: PropTypes.arrayOf(
-    PropTypes.shape({ date: PropTypes.string, weight: PropTypes.number })
-  ).isRequired,
+  weightReport: PropTypes.shape({
+    records: PropTypes.arrayOf(
+      PropTypes.shape({ date: PropTypes.string, weight: PropTypes.number })
+    ).isRequired,
+    minWeight: PropTypes.number,
+    maxWeight: PropTypes.number,
+  }),
 };
 
 export default WeightGraph;
