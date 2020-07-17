@@ -72,15 +72,15 @@ function FoodJournalPage({
     moment().startOf('day').toDate()
   );
 
-  const [isGoalOverlayVisible, toggleisGoalOverlayVisible] = useState(false);
+  const [isGoalOverlayVisible, toggleIsGoalOverlayVisible] = useState(false);
   const [goalCaloriesInput, setGoalCaloriesInput] = useState('0');
-  const [isGoalOverlayLoading, setisGoalOverlayLoading] = useState(false);
+  const [isGoalOverlayLoading, setIsGoalOverlayLoading] = useState(false);
 
-  const [isWeightOverlayVisible, toggleisWeightOverlayVisible] = useState(
+  const [isWeightOverlayVisible, toggleIsWeightOverlayVisible] = useState(
     false
   );
   const [weightInput, setWeightInput] = useState('0');
-  const [isWeightOverlayLoading, setisWeightOverlayLoading] = useState(false);
+  const [isWeightOverlayLoading, setIsWeightOverlayLoading] = useState(false);
 
   const deleteMeal = async (documentId: string): Promise<void> => {
     try {
@@ -103,7 +103,7 @@ function FoodJournalPage({
       Toast.showWithGravity('Please enter a number', Toast.SHORT, Toast.CENTER);
     } else {
       try {
-        setisWeightOverlayLoading(true);
+        setIsWeightOverlayLoading(true);
         if (documents.day.id) {
           await dayDocumentService.updateWeight(
             currentDate,
@@ -119,7 +119,7 @@ function FoodJournalPage({
           );
         }
         setGoalCaloriesInput('0');
-        toggleisWeightOverlayVisible(false);
+        toggleIsWeightOverlayVisible(false);
       } catch (e) {
         Toast.showWithGravity(
           "Your goal couldn't be saved",
@@ -127,7 +127,7 @@ function FoodJournalPage({
           Toast.CENTER
         );
       }
-      setisWeightOverlayLoading(false);
+      setIsWeightOverlayLoading(false);
     }
   };
 
@@ -137,7 +137,7 @@ function FoodJournalPage({
       Toast.showWithGravity('Please enter a number', Toast.SHORT, Toast.CENTER);
     } else {
       try {
-        setisGoalOverlayLoading(true);
+        setIsGoalOverlayLoading(true);
         if (documents.day.id) {
           await dayDocumentService.updateGoal(
             currentDate,
@@ -153,7 +153,7 @@ function FoodJournalPage({
           );
         }
         setGoalCaloriesInput('0');
-        toggleisGoalOverlayVisible(false);
+        toggleIsGoalOverlayVisible(false);
       } catch (e) {
         Toast.showWithGravity(
           "Your goal couldn't be saved",
@@ -161,7 +161,7 @@ function FoodJournalPage({
           Toast.CENTER
         );
       }
-      setisGoalOverlayLoading(false);
+      setIsGoalOverlayLoading(false);
     }
   };
 
@@ -244,14 +244,14 @@ function FoodJournalPage({
     getNewEatenAt: getNewEatenAt,
     goalCaloriesInput: goalCaloriesInput,
     isGoalOverlayVisible: isGoalOverlayVisible,
-    onGoalButtonPress: () => toggleisGoalOverlayVisible(true),
+    onGoalButtonPress: () => toggleIsGoalOverlayVisible(true),
     setGoalCaloriesInput: setGoalCaloriesInput,
-    toggleIsGoalOverlayVisible: toggleisGoalOverlayVisible,
+    toggleIsGoalOverlayVisible: toggleIsGoalOverlayVisible,
     onGoalSubmit: onGoalSubmit,
     isGoalOverlayLoading: isGoalOverlayLoading,
-    onWeightButtonPress: () => toggleisWeightOverlayVisible(true),
+    onWeightButtonPress: () => toggleIsWeightOverlayVisible(true),
     isWeightOverlayVisible: isWeightOverlayVisible,
-    toggleIsWeightOverlayVisible: toggleisWeightOverlayVisible,
+    toggleIsWeightOverlayVisible: toggleIsWeightOverlayVisible,
     weightInput: weightInput,
     setWeightInput: setWeightInput,
     isWeightOverlayLoading: isWeightOverlayLoading,
