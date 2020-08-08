@@ -2,6 +2,7 @@ import FoodJournalStack from '../FoodJournalStack';
 import GoalSetPage from '../../screens/GoalSetPage';
 import WeeklyReport from '../../screens/WeeklyReport';
 import WeightTracking from '../../screens/WeightTracking';
+import ShoppingList from '../../screens/ShoppingList';
 
 export default [
   {
@@ -22,5 +23,9 @@ export default [
   {
     name: 'Weight tracking',
     component: WeightTracking,
+  },
+  {
+    name: 'Shopping Lists',
+    component: ShoppingList,
   },
 ];
