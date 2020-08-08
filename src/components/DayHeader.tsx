@@ -78,7 +78,7 @@ const DayHeader = ({
           />
         </View>
       </View>
-      {weight && <Text>Weight recorded today: {weight}</Text>}
+      {!!weight && <Text>Weight recorded today: {weight}</Text>}
       {goalCalories ? (
         <View style={styles.statusBarContainer}>
           <Bar
