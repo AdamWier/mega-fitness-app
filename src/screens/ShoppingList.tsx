@@ -20,6 +20,10 @@ function ShoppingList({ user }): JSX.Element {
     setList((previousList) => ({ ...previousList, [food]: newFood }));
   };
 
+  const toggleCheckBox = (food: string, portion: string, isChecked: string) => {
+    console.log({ food, portion, isChecked });
+  };
+
   useEffect(() => {
     (async function generateList() {
       const mealDocuments = await mealDocumentService.findByWeek(
@@ -52,7 +56,11 @@ function ShoppingList({ user }): JSX.Element {
       </View>
       <ScrollView style={style.listSpace}>
         {!!Object.keys(list).length && (
-          <ShoppingListCard list={list} updateList={updateList} />
+          <ShoppingListCard
+            list={list}
+            updateList={updateList}
+            toggleCheckBox={toggleCheckBox}
+          />
         )}
       </ScrollView>
     </View>
