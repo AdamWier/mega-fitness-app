@@ -14,14 +14,24 @@ function ShoppingList({ user }): JSX.Element {
   const [period, setPeriod] = useState({});
   const [list, setList] = useState([]);
 
-  const updateList = (food: string, portion: string, updatedNumber: string) => {
+  const updateAmount = (
+    food: string,
+    portion: string,
+    updatedNumber: string
+  ) => {
     const newFood = list[food];
-    newFood[portion] = updatedNumber;
+    newFood[portion].amount = updatedNumber;
     setList((previousList) => ({ ...previousList, [food]: newFood }));
   };
 
-  const toggleCheckBox = (food: string, portion: string, isChecked: string) => {
-    console.log({ food, portion, isChecked });
+  const toggleCheckBox = (
+    food: string,
+    portion: string,
+    isChecked: boolean
+  ) => {
+    const newFood = list[food];
+    newFood[portion].checked = !isChecked;
+    setList((previousList) => ({ ...previousList, [food]: newFood }));
   };
 
   useEffect(() => {
@@ -35,10 +45,13 @@ function ShoppingList({ user }): JSX.Element {
         if (accumulator.hasOwnProperty(currentValue.name)) {
           accumulator[currentValue.name][
             currentValue.portionDescription
-          ] += Number(currentValue.amount);
+          ].amount += Number(currentValue.amount);
         } else {
           accumulator[currentValue.name] = {
-            [currentValue.portionDescription]: Number(currentValue.amount),
+            [currentValue.portionDescription]: {
+              amount: Number(currentValue.amount),
+              checked: false,
+            },
           };
         }
         return accumulator;
@@ -58,7 +71,7 @@ function ShoppingList({ user }): JSX.Element {
         {!!Object.keys(list).length && (
           <ShoppingListCard
             list={list}
-            updateList={updateList}
+            updateAmount={updateAmount}
             toggleCheckBox={toggleCheckBox}
           />
         )}

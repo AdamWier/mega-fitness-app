@@ -6,7 +6,7 @@ import UpDownButtons from './UpDownButtons';
 
 export default function ShoppingListCard({
   list,
-  updateList,
+  updateAmount,
   toggleCheckBox,
 }): JSX.Element {
   return (
@@ -28,13 +28,14 @@ export default function ShoppingListCard({
             </View>
             <View style={style.subItem}>
               <UpDownButtons
-                total={list[food][portion]}
+                total={list[food][portion].amount}
                 onValueChange={(updatedNumber: string) =>
-                  updateList(food, portion, updatedNumber)
+                  !list[food][portion].checked &&
+                  updateAmount(food, portion, updatedNumber)
                 }
               />
               <Text>
-                {list[food][portion]} {portion}
+                {list[food][portion].amount} {portion}
               </Text>
             </View>
           </View>
@@ -50,7 +51,7 @@ ShoppingListCard.propTypes = {
       PropTypes.objectOf(PropTypes.oneOf([PropTypes.string, PropTypes.bool]))
     )
   ).isRequired,
-  updateList: PropTypes.func.isRequired,
+  updateAmount: PropTypes.func.isRequired,
   toggleCheckBox: PropTypes.func.isRequired,
 };
 
