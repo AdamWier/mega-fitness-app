@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Text } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
 import { container, UserPropTypes } from '../store/reducers/User';
 import CustomHeader from '../components/Header';
@@ -62,10 +61,7 @@ function ShoppingList({ user }): JSX.Element {
   return (
     <View style={style.content}>
       <CustomHeader title="Shopping Lists" />
-      <View style={style.calendarContainer}>
-        <Text h4>Select a week</Text>
-        <WeekSelector period={period} setPeriod={setPeriod} />
-      </View>
+      <WeekSelector period={period} setPeriod={setPeriod} />
       <ScrollView style={style.listSpace}>
         {!!Object.keys(list).length && (
           <ShoppingListCard
@@ -85,9 +81,6 @@ const style = StyleSheet.create({
   },
   listSpace: {
     flex: 1,
-  },
-  calendarContainer: {
-    flex: 0.5,
   },
 });
 

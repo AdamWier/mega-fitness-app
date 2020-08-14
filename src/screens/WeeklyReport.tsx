@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Text } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import { container } from '../store/reducers/User';
@@ -36,10 +35,7 @@ function WeeklyReport({ user }): JSX.Element {
   return (
     <View style={style.content}>
       <CustomHeader title="Weekly reports" />
-      <View style={style.calendarContainer}>
-        <Text h4>Select a week</Text>
-        <WeekSelector period={period} setPeriod={setPeriod} />
-      </View>
+      <WeekSelector period={period} setPeriod={setPeriod} />
       <ScrollView style={style.reportSpace}>
         {!!report.averages.calories && (
           <FoodCard
@@ -65,9 +61,6 @@ const style = StyleSheet.create({
   },
   reportSpace: {
     flex: 1,
-  },
-  calendarContainer: {
-    flex: 0.5,
   },
 });
 

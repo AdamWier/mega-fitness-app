@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { CalendarList } from 'react-native-calendars';
-import { withTheme } from 'react-native-elements';
+import { withTheme, Text } from 'react-native-elements';
+import { View, StyleSheet } from 'react-native';
 
 function WeekSelector({ theme, period, setPeriod }): JSX.Element {
   const onDayPress = async (date: { [key: string]: any }) => {
@@ -37,21 +38,30 @@ function WeekSelector({ theme, period, setPeriod }): JSX.Element {
   };
 
   return (
-    <CalendarList
-      markedDates={period}
-      markingType={'period'}
-      onDayPress={onDayPress}
-      firstDay={1}
-      hideDayNames
-      theme={{
-        backgroundColor: theme.colors.background,
-        calendarBackground: theme.colors.background,
-        dayTextColor: theme.colors.text,
-        monthTextColor: theme.colors.text,
-      }}
-    />
+    <View style={style.calendarContainer}>
+      <Text h4>Select a week</Text>
+      <CalendarList
+        markedDates={period}
+        markingType={'period'}
+        onDayPress={onDayPress}
+        firstDay={1}
+        hideDayNames
+        theme={{
+          backgroundColor: theme.colors.background,
+          calendarBackground: theme.colors.background,
+          dayTextColor: theme.colors.text,
+          monthTextColor: theme.colors.text,
+        }}
+      />
+    </View>
   );
 }
+
+const style = StyleSheet.create({
+  calendarContainer: {
+    flex: 0.5,
+  },
+});
 
 WeekSelector.propTypes = {
   period: PropTypes.objectOf(
