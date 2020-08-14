@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Text } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
-import { container } from '../store/reducers/User';
+import { container, UserPropTypes } from '../store/reducers/User';
 import CustomHeader from '../components/Header';
 import { ScrollView } from 'react-native-gesture-handler';
 import WeekSelector from '../components/WeekSelector';
@@ -93,11 +92,7 @@ const style = StyleSheet.create({
 });
 
 ShoppingList.propTypes = {
-  user: PropTypes.shape({
-    uid: PropTypes.string,
-    email: PropTypes.string,
-    goalCalories: PropTypes.number,
-  }).isRequired,
+  ...UserPropTypes,
 };
 
 export default container(ShoppingList);

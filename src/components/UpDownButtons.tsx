@@ -22,7 +22,7 @@ const UpDownButtons: React.FC<any> = ({ total, onValueChange }) => (
 );
 
 UpDownButtons.propTypes = {
-  total: PropTypes.string.isRequired,
+  total: PropTypes.number.isRequired,
   onValueChange: PropTypes.func,
 };
 
