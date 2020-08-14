@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import PropTypes from 'prop-types';
 
 const LOGIN = 'LOGIN';
 
@@ -45,3 +46,11 @@ const mapDispatchToProps = (dispatch: Dispatch): { [key: string]: any } => ({
 });
 
 export const container = connect(mapStateToProps, mapDispatchToProps);
+
+export const UserPropTypes = {
+  user: PropTypes.shape({
+    uid: PropTypes.string,
+    email: PropTypes.string,
+    goalCalories: PropTypes.number,
+  }).isRequired,
+};
