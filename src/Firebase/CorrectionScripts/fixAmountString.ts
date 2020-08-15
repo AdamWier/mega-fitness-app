@@ -15,14 +15,15 @@ collectionRef.get().then((snapshot) => {
   firestore.runTransaction(async (t) => {
     const documents = await t.getAll(...docRefs);
     await Promise.all(
-      documents.map((document) =>
-        t.update(document.ref, {
-          ...document.data(),
-          meal: document
-            .data()
-            .meal.map((food) => ({ ...food, amount: Number(food.amount) })),
-        })
-      )
+      documents.map((document) => {
+        const data = document.data();
+        return t.update(document.ref, {
+          ...data,
+          meal: data.meal.map((food) =>
+            food.amount ? { ...food, amount: Number(food.amount) } : food
+          ),
+        });
+      })
     );
   });
 });
