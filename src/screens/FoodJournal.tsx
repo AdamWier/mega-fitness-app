@@ -154,15 +154,6 @@ function FoodJournalPage({
     [user.uid]
   );
 
-  const getGoalCalories = () => {
-    if (documents.day?.goalCalories) {
-      return documents.day.goalCalories;
-    }
-    if (moment(currentDate).isSameOrAfter(new Date(), 'd')) {
-      return user.goalCalories;
-    }
-    return 0;
-  };
   useEffect(() => {
     onDayPress(currentDate);
     const unsubscribeMealsByDateListener = mealDocumentService.getFindByDateListener(
@@ -194,7 +185,7 @@ function FoodJournalPage({
 
   const dayHeaderProps = {
     foods: documents.meals.flatMap((document) => document.meal),
-    goalCalories: getGoalCalories(),
+    goalCalories: documents.day?.goalCalories || user.goalCalories,
     handleMealPress: handleMealPress,
     getNewEatenAt: getNewEatenAt,
     goalCaloriesInput: goalCaloriesInput,
