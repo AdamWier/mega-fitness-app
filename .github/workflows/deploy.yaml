@@ -4,7 +4,6 @@ on:
     branches:
       - master
       - prod
-      - 130-broken-actions
 jobs:
   build:
     name: Compile and send to bucket
