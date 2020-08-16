@@ -13,6 +13,7 @@ web-report/
 yarn-error.log
 .env.production
 .env-dev
+src/Firebase/CorrectionScripts/*.json
 
 # macOS
 .DS_Store

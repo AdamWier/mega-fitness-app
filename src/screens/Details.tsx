@@ -61,7 +61,7 @@ function Details({
           ...mealDocument.meal,
           {
             name: details.name,
-            amount,
+            amount: Number(amount),
             portionDescription: currentPortion.description,
             calories,
             protein,
