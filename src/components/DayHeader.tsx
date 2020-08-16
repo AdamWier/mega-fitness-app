@@ -44,7 +44,7 @@ const DayHeader = ({
               id: null,
               eatenAt: getNewEatenAt(),
               meal: [],
-              name: 'Untitled',
+              name: '',
               createdAt: new Date(),
               deleted: false,
               uid: user.uid,

@@ -20,7 +20,7 @@ export default class MealImpl implements Meal {
       .doc(uid + '-' + createdAt.getTime() + '-' + name)
       .set({
         meal,
-        name,
+        name: name === '' ? 'Untitled' : name,
         uid,
         eatenAt,
         createdAt,

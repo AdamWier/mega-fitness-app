@@ -34,7 +34,7 @@ function Meal({
   const [expandedCard, changeExpandedCard] = useState(null);
 
   navigation.setOptions({
-    title: name === 'Untitled' ? 'New meal' : name,
+    title: name || 'New meal',
   });
 
   const removeFoodFromMeal = (mealIndex: number): void => {
@@ -140,16 +140,25 @@ function Meal({
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <Input
+        placeholder="Enter meal name"
+        value={name}
+        onChangeText={(input) =>
+          updateMealDocument({
+            ...mealDocument,
+            name: input,
+          })
+        }
+        ref={mealNameInput}
+        containerStyle={styles.input}
+      />
       <Button
         title="Add a food"
         onPress={(): void => navigation.navigate('Search')}
         buttonStyle={{
           backgroundColor: theme.colors.warning,
         }}
-        containerStyle={{
-          marginTop: 20,
-          width: '85%',
-        }}
+        containerStyle={styles.addButtonContainer}
       />
       {meal.length ? (
         <View>
@@ -165,18 +174,6 @@ function Meal({
             mode="datetime"
             onConfirm={setDate}
             onCancel={() => toggleDisplayMealCalendar(false)}
-          />
-          <Input
-            placeholder="Enter meal name"
-            value={name}
-            onChangeText={(input) =>
-              updateMealDocument({
-                ...mealDocument,
-                name: input,
-              })
-            }
-            ref={mealNameInput}
-            containerStyle={styles.input}
           />
           <TotalCard foods={meal} />
           <Button
@@ -269,6 +266,10 @@ const styles = StyleSheet.create({
   },
   input: {
     alignSelf: 'center',
+  },
+  addButtonContainer: {
+    marginTop: 20,
+    width: '70%',
   },
 });
 
