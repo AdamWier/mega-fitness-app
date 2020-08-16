@@ -29,24 +29,29 @@ function WeightTracking({ user }): JSX.Element {
         user.uid
       );
       if (records.length) {
-        const maxWeight = records
-          .map((record) => record.weight)
-          .reduce((accumulator, currentValue) =>
-            Math.max(accumulator, currentValue)
-          );
-        const minWeight = records
-          .map((record) => record.weight)
-          .reduce((accumulator, currentValue) =>
-            Math.min(accumulator, currentValue)
-          );
-        const averageWeight = records
-          .map((record) => record.weight)
-          .reduce((accumulator, currentValue, index, array) =>
-            index === array.length - 1
-              ? Math.round(((currentValue + accumulator) / array.length) * 10) /
-                10
-              : accumulator + currentValue
-          );
+        const weights = records
+          .filter((record) => !!record.weight)
+          .map((record) => record.weight);
+        const maxWeight =
+          weights.reduce(
+            (accumulator, currentValue) => Math.max(accumulator, currentValue),
+            0
+          ) || null;
+        const minWeight = maxWeight
+          ? weights.reduce((accumulator, currentValue) =>
+              Math.min(accumulator, currentValue)
+            )
+          : null;
+        const averageWeight =
+          weights.reduce(
+            (accumulator, currentValue, index, array) =>
+              index === array.length - 1
+                ? Math.round(
+                    ((currentValue + accumulator) / array.length) * 10
+                  ) / 10
+                : accumulator + currentValue,
+            0
+          ) || null;
         setWeightReport({
           records: adaptRecordsForGraph(records),
           minWeight,
