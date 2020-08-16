@@ -19,9 +19,10 @@ const DayHeader = ({
   onGoalButtonPress,
   setGoalCaloriesInput,
   toggleIsOverlayVisible,
-  checkIsNumber,
+  onGoalConfirm,
   isOverlayLoading,
   theme,
+  clearGoal,
 }: DayHeaderProps) => {
   const totalCalories = foods ? foods.reduce(getTotal('calories'), 0) : 0;
 
@@ -66,9 +67,10 @@ const DayHeader = ({
         onGoalButtonPress={onGoalButtonPress}
         setGoalCalories={setGoalCaloriesInput}
         toggleIsOverlayVisible={toggleIsOverlayVisible}
-        onConfirmButtonPress={checkIsNumber}
+        onConfirmButtonPress={onGoalConfirm}
         loading={isOverlayLoading}
         hasGoal={!!goalCalories}
+        clearGoal={clearGoal}
       />
     </View>
   );
@@ -92,7 +94,8 @@ const propTypes = {
   toggleIsOverlayVisible: PropTypes.func.isRequired,
   goalCaloriesInput: PropTypes.string.isRequired,
   setGoalCaloriesInput: PropTypes.func.isRequired,
-  checkIsNumber: PropTypes.func.isRequired,
+  onGoalConfirm: PropTypes.func.isRequired,
+  clearGoal: PropTypes.func.isRequired,
   isOverlayLoading: PropTypes.bool.isRequired,
   theme: PropTypes.shape({
     colors: PropTypes.shape({

@@ -92,33 +92,32 @@ function FoodJournalPage({
     if (!goalCaloriesNumber || Number.isNaN(goalCaloriesNumber)) {
       Toast.showWithGravity('Please enter a number', Toast.SHORT, Toast.CENTER);
     } else {
-      try {
-        setIsOverlayLoading(true);
-        if (documents.day.id) {
-          await dayDocumentService.updateGoal(
-            currentDate,
-            goalCaloriesNumber,
-            user.uid,
-            documents.day.id
-          );
-        } else {
-          await dayDocumentService.createGoal(
-            currentDate,
-            goalCaloriesNumber,
-            user.uid
-          );
-        }
-        setGoalCaloriesInput('0');
-        toggleIsOverlayVisible(false);
-      } catch (e) {
-        Toast.showWithGravity(
-          "Your goal couldn't be saved",
-          Toast.SHORT,
-          Toast.CENTER
-        );
-      }
-      setIsOverlayLoading(false);
+      setGoalCalories(goalCaloriesNumber);
     }
+  };
+
+  const setGoalCalories = async (goal: number) => {
+    try {
+      setIsOverlayLoading(true);
+      if (documents.day.id) {
+        await dayDocumentService.updateGoal(
+          currentDate,
+          goal,
+          user.uid,
+          documents.day.id
+        );
+      } else {
+        await dayDocumentService.createGoal(currentDate, goal, user.uid);
+      }
+      toggleIsOverlayVisible(false);
+    } catch (e) {
+      Toast.showWithGravity(
+        "Your goal couldn't be saved",
+        Toast.SHORT,
+        Toast.CENTER
+      );
+    }
+    setIsOverlayLoading(false);
   };
 
   const handleMealPress = (document: MealDocument) => {
@@ -185,7 +184,7 @@ function FoodJournalPage({
 
   const dayHeaderProps = {
     foods: documents.meals.flatMap((document) => document.meal),
-    goalCalories: documents.day?.goalCalories || user.goalCalories,
+    goalCalories: documents.day?.goalCalories ?? user.goalCalories,
     handleMealPress: handleMealPress,
     getNewEatenAt: getNewEatenAt,
     goalCaloriesInput: goalCaloriesInput,
@@ -193,8 +192,9 @@ function FoodJournalPage({
     onGoalButtonPress: () => toggleIsOverlayVisible(true),
     setGoalCaloriesInput: setGoalCaloriesInput,
     toggleIsOverlayVisible: toggleIsOverlayVisible,
-    checkIsNumber: checkIsNumber,
+    onGoalConfirm: checkIsNumber,
     isOverlayLoading: isOverlayLoading,
+    clearGoal: () => setGoalCalories(0),
   };
 
   const emptyItem = () =>
