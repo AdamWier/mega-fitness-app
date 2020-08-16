@@ -132,10 +132,9 @@ export default function Search({ navigation }): JSX.Element {
       <View style={styles.titleContainer}>
         <Text h2>Search for a food</Text>
         <Button
-          containerStyle={styles.barcodeButtonContainer}
           type="solid"
           raised
-          title="Barcode Search"
+          title="Scan barcode"
           onPress={scanBarcode}
         />
       </View>
@@ -200,11 +199,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   titleContainer: {
-    flexDirection: 'row',
     alignItems: 'center',
-  },
-  barcodeButtonContainer: {
-    flex: 1,
   },
   switchGroupContainer: {
     flexDirection: 'row',
