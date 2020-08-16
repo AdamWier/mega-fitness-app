@@ -20,7 +20,7 @@ export default class MealImpl implements Meal {
       .doc(uid + '-' + createdAt.getTime() + '-' + name)
       .set({
         meal,
-        name: name === '' ? 'Untitled' : name,
+        name: name || 'Untitled',
         uid,
         eatenAt,
         createdAt,
@@ -44,7 +44,7 @@ export default class MealImpl implements Meal {
         eatenAt,
         deleted: false,
         uid,
-        name: name === '' ? 'Untitled' : name,
+        name: name || 'Untitled',
         updatedAt,
       });
   }
