@@ -1,7 +1,8 @@
 import React from 'react';
-import { Text, Button, Overlay, Input } from 'react-native-elements';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { Button, Overlay } from 'react-native-elements';
+import { View } from 'react-native';
 import PropTypes from 'prop-types';
+import GoalPrompt from './GoalPrompt';
 
 const GoalOverlay = ({
   onGoalButtonPress,
@@ -12,6 +13,7 @@ const GoalOverlay = ({
   onConfirmButtonPress,
   loading,
   hasGoal,
+  clearGoal,
 }) => (
   <View>
     <Button
@@ -22,27 +24,14 @@ const GoalOverlay = ({
       isVisible={isOverlayVisible}
       onBackdropPress={() => toggleIsOverlayVisible(false)}
     >
-      <View style={styles.overlayContentContainer}>
-        <Text h3>Let's set a goal!</Text>
-        <Text h4>How many calories for today?</Text>
-        <Input
-          containerStyle={styles.inputContainer}
-          value={goalCalories}
-          onChangeText={(value) => setGoalCalories(value)}
-          keyboardType="number-pad"
-        />
-        {loading ? (
-          <ActivityIndicator size="large" />
-        ) : (
-          <View style={styles.buttonContainer}>
-            <Button title="Confirm" onPress={onConfirmButtonPress} />
-            <Button
-              title="Cancel"
-              onPress={() => toggleIsOverlayVisible(false)}
-            />
-          </View>
-        )}
-      </View>
+      <GoalPrompt
+        goalCalories={goalCalories}
+        loading={loading}
+        onConfirmButtonPress={onConfirmButtonPress}
+        setGoalCalories={setGoalCalories}
+        toggleIsOverlayVisible={toggleIsOverlayVisible}
+        clearGoal={clearGoal}
+      />
     </Overlay>
   </View>
 );
@@ -56,23 +45,7 @@ GoalOverlay.propTypes = {
   onConfirmButtonPress: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   hasGoal: PropTypes.bool.isRequired,
+  clearGoal: PropTypes.func.isRequired,
 };
-
-const styles = StyleSheet.create({
-  overlayContentContainer: {
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    flex: 1,
-  },
-  inputContainer: {
-    marginVertical: 0,
-    marginHorizontal: 0,
-    width: 200,
-    padding: 0,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-  },
-});
 
 export default GoalOverlay;
