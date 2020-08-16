@@ -30,6 +30,7 @@ const DayHeader = ({
   isWeightOverlayLoading,
   weight,
   theme,
+  clearGoal,
 }: DayHeaderProps) => {
   const totalCalories = foods ? foods.reduce(getTotal('calories'), 0) : 0;
 
@@ -62,6 +63,7 @@ const DayHeader = ({
             loading={isGoalOverlayLoading}
             icon={<Icon type="font-awesome" name="clipboard" />}
             header="Calorie goal for the day"
+            onClear={clearGoal}
           />
         </View>
         <View style={styles.buttonContainer}>
@@ -122,6 +124,7 @@ const propTypes = {
   setGoalCaloriesInput: PropTypes.func.isRequired,
   onGoalSubmit: PropTypes.func.isRequired,
   isGoalOverlayLoading: PropTypes.bool.isRequired,
+  clearGoal: PropTypes.func.isRequired,
   theme: PropTypes.shape({
     colors: PropTypes.shape({
       success: PropTypes.string,

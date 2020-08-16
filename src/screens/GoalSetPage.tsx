@@ -11,26 +11,27 @@ function GoalSetPage({ user }): JSX.Element {
   const [isLoading, toggleIsLoading] = useState(false);
   const [goalCaloriesInput, setGoalCaloriesInput] = useState('0');
 
-  const checkIsNumber = async () => {
+  const checkIsNumber = () => {
     const goalCaloriesNumber = Number(goalCaloriesInput);
     if (!goalCaloriesNumber || Number.isNaN(goalCaloriesNumber)) {
       Toast.showWithGravity('Please enter a number', Toast.SHORT, Toast.CENTER);
     } else {
-      try {
-        toggleIsLoading(true);
-        await userDocumentService.updateCalorieGoal(
-          user.uid,
-          goalCaloriesNumber
-        );
-        setGoalCaloriesInput(goalCaloriesNumber.toString());
-        toggleIsLoading(false);
-      } catch (e) {
-        Toast.showWithGravity(
-          "Your goal couldn't be saved",
-          Toast.SHORT,
-          Toast.CENTER
-        );
-      }
+      setGoal(goalCaloriesNumber);
+    }
+  };
+
+  const setGoal = async (goal: number): Promise<void> => {
+    try {
+      toggleIsLoading(true);
+      await userDocumentService.updateCalorieGoal(user.uid, goal);
+      setGoalCaloriesInput(goal.toString());
+      toggleIsLoading(false);
+    } catch (e) {
+      Toast.showWithGravity(
+        "Your goal couldn't be saved",
+        Toast.SHORT,
+        Toast.CENTER
+      );
     }
   };
 
@@ -53,6 +54,7 @@ function GoalSetPage({ user }): JSX.Element {
           setGoalCalories={setGoalCaloriesInput}
           onConfirmButtonPress={checkIsNumber}
           loading={isLoading}
+          clearGoal={() => setGoal(0)}
         />
       </View>
       <View style={style.equalSpace} />

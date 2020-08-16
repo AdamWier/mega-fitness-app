@@ -131,38 +131,37 @@ function FoodJournalPage({
     }
   };
 
-  const onGoalSubmit = async () => {
+  const checkIsNumber = async () => {
     const goalCaloriesNumber = Number(goalCaloriesInput);
     if (!goalCaloriesNumber || Number.isNaN(goalCaloriesNumber)) {
       Toast.showWithGravity('Please enter a number', Toast.SHORT, Toast.CENTER);
     } else {
-      try {
-        setIsGoalOverlayLoading(true);
-        if (documents.day.id) {
-          await dayDocumentService.updateGoal(
-            currentDate,
-            goalCaloriesNumber,
-            user.uid,
-            documents.day.id
-          );
-        } else {
-          await dayDocumentService.createGoal(
-            currentDate,
-            goalCaloriesNumber,
-            user.uid
-          );
-        }
-        setGoalCaloriesInput('0');
-        toggleIsGoalOverlayVisible(false);
-      } catch (e) {
-        Toast.showWithGravity(
-          "Your goal couldn't be saved",
-          Toast.SHORT,
-          Toast.CENTER
-        );
-      }
-      setIsGoalOverlayLoading(false);
+      setGoalCalories(goalCaloriesNumber);
     }
+  };
+
+  const setGoalCalories = async (goal: number) => {
+    try {
+      setIsGoalOverlayLoading(true);
+      if (documents.day.id) {
+        await dayDocumentService.updateGoal(
+          currentDate,
+          goal,
+          user.uid,
+          documents.day.id
+        );
+      } else {
+        await dayDocumentService.createGoal(currentDate, goal, user.uid);
+      }
+      toggleIsGoalOverlayVisible(false);
+    } catch (e) {
+      Toast.showWithGravity(
+        "Your goal couldn't be saved",
+        Toast.SHORT,
+        Toast.CENTER
+      );
+    }
+    setIsGoalOverlayLoading(false);
   };
 
   const handleMealPress = (document: MealDocument) => {
@@ -198,16 +197,6 @@ function FoodJournalPage({
     [user.uid]
   );
 
-  const getGoalCalories = () => {
-    if (documents.day?.goalCalories) {
-      return documents.day.goalCalories;
-    }
-    if (moment(currentDate).isSameOrAfter(new Date(), 'd')) {
-      return user.goalCalories;
-    }
-    return 0;
-  };
-
   useEffect(() => {
     onDayPress(currentDate);
     const unsubscribeMealsByDateListener = mealDocumentService.getFindByDateListener(
@@ -239,7 +228,7 @@ function FoodJournalPage({
 
   const dayHeaderProps = {
     foods: documents.meals.flatMap((document) => document.meal),
-    goalCalories: getGoalCalories(),
+    goalCalories: documents.day?.goalCalories ?? user.goalCalories,
     handleMealPress: handleMealPress,
     getNewEatenAt: getNewEatenAt,
     goalCaloriesInput: goalCaloriesInput,
@@ -247,8 +236,9 @@ function FoodJournalPage({
     onGoalButtonPress: () => toggleIsGoalOverlayVisible(true),
     setGoalCaloriesInput: setGoalCaloriesInput,
     toggleIsGoalOverlayVisible: toggleIsGoalOverlayVisible,
-    onGoalSubmit: onGoalSubmit,
+    onGoalSubmit: checkIsNumber,
     isGoalOverlayLoading: isGoalOverlayLoading,
+    clearGoal: () => setGoalCalories(0),
     onWeightButtonPress: () => toggleIsWeightOverlayVisible(true),
     isWeightOverlayVisible: isWeightOverlayVisible,
     toggleIsWeightOverlayVisible: toggleIsWeightOverlayVisible,

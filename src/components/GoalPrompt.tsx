@@ -9,6 +9,7 @@ const GoalPrompt = ({
   setGoalCalories,
   onConfirmButtonPress,
   loading,
+  clearGoal,
 }) => (
   <View style={styles.overlayContentContainer}>
     <Text h3>Let's set a goal!</Text>
@@ -24,6 +25,7 @@ const GoalPrompt = ({
     ) : (
       <View style={styles.buttonContainer}>
         <Button title="Confirm" onPress={onConfirmButtonPress} />
+        <Button title="Clear goal" onPress={clearGoal} />
         {toggleIsOverlayVisible && (
           <Button
             title="Cancel"
@@ -41,12 +43,14 @@ GoalPrompt.propTypes = {
   setGoalCalories: PropTypes.func.isRequired,
   onConfirmButtonPress: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
+  clearGoal: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({
   overlayContentContainer: {
     justifyContent: 'space-around',
     alignItems: 'center',
+    flex: 1,
   },
   inputContainer: {
     marginVertical: 0,

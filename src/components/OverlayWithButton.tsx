@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, Button, Overlay, Input } from 'react-native-elements';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { Button, Overlay, Text, Input } from 'react-native-elements';
+import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
 const OverLayWithButton = ({
@@ -13,6 +13,7 @@ const OverLayWithButton = ({
   loading,
   header,
   icon,
+  onClear,
 }) => (
   <View>
     <Button icon={icon} onPress={onButtonPress} />
@@ -33,6 +34,7 @@ const OverLayWithButton = ({
         ) : (
           <View style={styles.buttonContainer}>
             <Button title="Confirm" onPress={onConfirmButtonPress} />
+            {!!onClear && <Button title="Clear goal" onPress={onClear} />}
             <Button
               title="Cancel"
               onPress={() => toggleIsOverlayVisible(false)}
@@ -54,6 +56,7 @@ OverLayWithButton.propTypes = {
   loading: PropTypes.bool.isRequired,
   header: PropTypes.string.isRequired,
   icon: PropTypes.element.isRequired,
+  onClear: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
