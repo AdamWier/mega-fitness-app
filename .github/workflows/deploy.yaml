@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v2
+    - name: Increase watchers for publish step
+      run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
     - name: Set up node
       uses: actions/setup-node@v1
       with:
@@ -19,7 +21,7 @@ jobs:
     - name: Create env file
       run: echo "${{ secrets.EnvFile }}" > .env
     - name: Set up expo cli
-      run: npm i -g expo-cli@3.21.5
+      run: npm i -g expo-cli
     - name: Expo log in
       run: expo login -u ${{ secrets.ExpoUsername }} -p ${{ secrets.ExpoPassword }}
     - name: Extract branch name
