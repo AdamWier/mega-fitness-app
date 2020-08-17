@@ -8,6 +8,7 @@ export default function ShoppingListCard({
   list,
   updateAmount,
   toggleCheckBox,
+  refreshList,
 }): JSX.Element {
   return (
     <Card
@@ -17,7 +18,7 @@ export default function ShoppingListCard({
           <Text h4>Shopping List</Text>
           <View style={style.buttonContainer}>
             <Button icon={<Icon name="save" />} />
-            <Button icon={<Icon name="autorenew" />} />
+            <Button icon={<Icon name="autorenew" />} onPress={refreshList} />
           </View>
         </View>
       }
@@ -62,6 +63,7 @@ ShoppingListCard.propTypes = {
   ).isRequired,
   updateAmount: PropTypes.func.isRequired,
   toggleCheckBox: PropTypes.func.isRequired,
+  refreshList: PropTypes.func.isRequired,
 };
 
 const style = StyleSheet.create({

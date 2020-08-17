@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { container, UserPropTypes } from '../store/reducers/User';
 import CustomHeader from '../components/Header';
@@ -32,31 +32,33 @@ function ShoppingList({ user }): JSX.Element {
     setList((previousList) => ({ ...previousList, [food]: newFood }));
   };
 
-  useEffect(() => {
-    (async function generateList() {
-      const mealDocuments = await mealDocumentService.findByWeek(
-        moment(Object.keys(period)[0]).toDate(),
-        user.uid
-      );
-      const foods = mealDocuments.flatMap((document) => document.meal);
-      const reorderedFoods = foods.reduce((accumulator, currentValue) => {
-        if (accumulator.hasOwnProperty(currentValue.name)) {
-          accumulator[currentValue.name][
-            currentValue.portionDescription
-          ].amount += Number(currentValue.amount);
-        } else {
-          accumulator[currentValue.name] = {
-            [currentValue.portionDescription]: {
-              amount: Number(currentValue.amount),
-              checked: false,
-            },
-          };
-        }
-        return accumulator;
-      }, {});
-      setList(reorderedFoods);
-    })();
+  const generateList = useCallback(async () => {
+    const mealDocuments = await mealDocumentService.findByWeek(
+      moment(Object.keys(period)[0]).toDate(),
+      user.uid
+    );
+    const foods = mealDocuments.flatMap((document) => document.meal);
+    const reorderedFoods = foods.reduce((accumulator, currentValue) => {
+      if (accumulator.hasOwnProperty(currentValue.name)) {
+        accumulator[currentValue.name][
+          currentValue.portionDescription
+        ].amount += Number(currentValue.amount);
+      } else {
+        accumulator[currentValue.name] = {
+          [currentValue.portionDescription]: {
+            amount: Number(currentValue.amount),
+            checked: false,
+          },
+        };
+      }
+      return accumulator;
+    }, {});
+    setList(reorderedFoods);
   }, [period, user.uid]);
+
+  useEffect(() => {
+    generateList();
+  }, [generateList]);
 
   return (
     <View style={style.content}>
@@ -68,6 +70,7 @@ function ShoppingList({ user }): JSX.Element {
             list={list}
             updateAmount={updateAmount}
             toggleCheckBox={toggleCheckBox}
+            refreshList={generateList}
           />
         )}
       </ScrollView>
