@@ -46,10 +46,8 @@ export default function ShoppingListCard({
 }
 
 ShoppingListCard.propTypes = {
-  list: PropTypes.arrayOf(
-    PropTypes.objectOf(
-      PropTypes.objectOf(PropTypes.oneOf([PropTypes.string, PropTypes.bool]))
-    )
+  list: PropTypes.objectOf(
+    PropTypes.objectOf(PropTypes.oneOfType([PropTypes.number, PropTypes.bool]))
   ).isRequired,
   updateAmount: PropTypes.func.isRequired,
   toggleCheckBox: PropTypes.func.isRequired,

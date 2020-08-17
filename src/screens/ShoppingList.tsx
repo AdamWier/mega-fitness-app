@@ -10,7 +10,7 @@ import ShoppingListCard from '../components/ShoppingListCard';
 
 function ShoppingList({ user }): JSX.Element {
   const [period, setPeriod] = useState({});
-  const [list, setList] = useState([]);
+  const [list, setList] = useState({});
 
   const updateAmount = (
     food: string,
