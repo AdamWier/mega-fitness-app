@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Text, CheckBox } from 'react-native-elements';
+import { Card, Text, CheckBox, Button, Icon } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 import UpDownButtons from './UpDownButtons';
@@ -10,7 +10,18 @@ export default function ShoppingListCard({
   toggleCheckBox,
 }): JSX.Element {
   return (
-    <Card title="Shopping list">
+    <Card
+      title={
+        <View style={style.headerContainer}>
+          <View />
+          <Text h4>Shopping List</Text>
+          <View style={style.buttonContainer}>
+            <Button icon={<Icon name="save" />} />
+            <Button icon={<Icon name="autorenew" />} />
+          </View>
+        </View>
+      }
+    >
       {Object.keys(list).map((food) =>
         Object.keys(list[food]).map((portion) => (
           <View
@@ -70,5 +81,14 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
   },
 });
