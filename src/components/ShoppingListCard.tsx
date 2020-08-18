@@ -9,6 +9,7 @@ export default function ShoppingListCard({
   updateAmount,
   toggleCheckBox,
   refreshList,
+  saveList,
 }): JSX.Element {
   return (
     <Card
@@ -17,53 +18,60 @@ export default function ShoppingListCard({
           <View />
           <Text h4>Shopping List</Text>
           <View style={style.buttonContainer}>
-            <Button icon={<Icon name="save" />} />
+            <Button icon={<Icon name="save" onPress={saveList} />} />
             <Button icon={<Icon name="autorenew" />} onPress={refreshList} />
           </View>
         </View>
       }
     >
-      {Object.keys(list).map((food) =>
-        Object.keys(list[food]).map((portion) => (
-          <View
-            key={food + portion}
-            style={list[food][portion].checked && style.checkedItem}
-          >
-            <View style={style.heading}>
-              <CheckBox
-                checked={list[food][portion].checked}
-                onPress={() =>
-                  toggleCheckBox(food, portion, list[food][portion].checked)
-                }
-              />
-              <Text style={style.listItem}>{food}</Text>
+      <View>
+        {Object.keys(list).map((food) =>
+          Object.keys(list[food]).map((portion) => (
+            <View
+              key={food + portion}
+              style={list[food][portion].checked && style.checkedItem}
+            >
+              <View style={style.heading}>
+                <CheckBox
+                  checked={list[food][portion].checked}
+                  onPress={() =>
+                    toggleCheckBox(food, portion, list[food][portion].checked)
+                  }
+                />
+                <Text style={style.listItem}>{food}</Text>
+              </View>
+              <View style={style.subItem}>
+                <UpDownButtons
+                  total={list[food][portion].amount}
+                  onValueChange={(updatedNumber: string) =>
+                    !list[food][portion].checked &&
+                    updateAmount(food, portion, updatedNumber)
+                  }
+                />
+                <Text>
+                  {list[food][portion].amount} {portion}
+                </Text>
+              </View>
             </View>
-            <View style={style.subItem}>
-              <UpDownButtons
-                total={list[food][portion].amount}
-                onValueChange={(updatedNumber: string) =>
-                  !list[food][portion].checked &&
-                  updateAmount(food, portion, updatedNumber)
-                }
-              />
-              <Text>
-                {list[food][portion].amount} {portion}
-              </Text>
-            </View>
-          </View>
-        ))
-      )}
+          ))
+        )}
+      </View>
     </Card>
   );
 }
 
 ShoppingListCard.propTypes = {
   list: PropTypes.objectOf(
-    PropTypes.objectOf(PropTypes.oneOfType([PropTypes.number, PropTypes.bool]))
+    PropTypes.objectOf(
+      PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.number, PropTypes.bool])
+      )
+    )
   ).isRequired,
   updateAmount: PropTypes.func.isRequired,
   toggleCheckBox: PropTypes.func.isRequired,
   refreshList: PropTypes.func.isRequired,
+  saveList: PropTypes.func.isRequired,
 };
 
 const style = StyleSheet.create({

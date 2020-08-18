@@ -4,13 +4,13 @@ import { container, UserPropTypes } from '../store/reducers/User';
 import CustomHeader from '../components/Header';
 import { ScrollView } from 'react-native-gesture-handler';
 import WeekSelector from '../components/WeekSelector';
-import { mealDocumentService } from '../Firebase';
+import { mealDocumentService, shoppingListDocumentService } from '../Firebase';
 import moment from 'moment';
 import ShoppingListCard from '../components/ShoppingListCard';
 
 function ShoppingList({ user }): JSX.Element {
   const [period, setPeriod] = useState({});
-  const [list, setList] = useState({});
+  const [list, setList] = useState({ id: null, items: {} });
 
   const updateAmount = (
     food: string,
@@ -30,6 +30,27 @@ function ShoppingList({ user }): JSX.Element {
     const newFood = list[food];
     newFood[portion].checked = !isChecked;
     setList((previousList) => ({ ...previousList, [food]: newFood }));
+  };
+
+  const saveList = async () => {
+    if (list.id) {
+      shoppingListDocumentService.updateShoppingList(
+        new Date(Object.keys(period)[0]),
+        list,
+        user.uid,
+        list.id
+      );
+    } else {
+      const id = await shoppingListDocumentService.createShoppingList(
+        new Date(Object.keys(period)[0]),
+        list,
+        user.uid
+      );
+      setList((list) => ({
+        ...list,
+        id,
+      }));
+    }
   };
 
   const generateList = useCallback(async () => {
@@ -53,7 +74,7 @@ function ShoppingList({ user }): JSX.Element {
       }
       return accumulator;
     }, {});
-    setList(reorderedFoods);
+    setList({ items: reorderedFoods, id: null });
   }, [period, user.uid]);
 
   useEffect(() => {
@@ -65,12 +86,13 @@ function ShoppingList({ user }): JSX.Element {
       <CustomHeader title="Shopping Lists" />
       <WeekSelector period={period} setPeriod={setPeriod} />
       <ScrollView style={style.listSpace}>
-        {!!Object.keys(list).length && (
+        {!!Object.keys(list.items).length && (
           <ShoppingListCard
-            list={list}
+            list={list.items}
             updateAmount={updateAmount}
             toggleCheckBox={toggleCheckBox}
             refreshList={generateList}
+            saveList={saveList}
           />
         )}
       </ScrollView>
