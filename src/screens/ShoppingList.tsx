@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { container, UserPropTypes } from '../store/reducers/User';
 import CustomHeader from '../components/Header';
 import { ScrollView } from 'react-native-gesture-handler';
 import WeekSelector from '../components/WeekSelector';
-import { mealDocumentService } from '../Firebase';
+import { mealDocumentService, shoppingListDocumentService } from '../Firebase';
 import moment from 'moment';
 import ShoppingListCard from '../components/ShoppingListCard';
 
 function ShoppingList({ user }): JSX.Element {
   const [period, setPeriod] = useState({});
-  const [list, setList] = useState([]);
+  const [list, setList] = useState({ id: null, items: {} });
 
   const updateAmount = (
     food: string,
     portion: string,
     updatedNumber: string
   ) => {
-    const newFood = list[food];
+    const newFood = list.items[food];
     newFood[portion].amount = updatedNumber;
     setList((previousList) => ({ ...previousList, [food]: newFood }));
   };
@@ -27,47 +27,84 @@ function ShoppingList({ user }): JSX.Element {
     portion: string,
     isChecked: boolean
   ) => {
-    const newFood = list[food];
+    const newFood = list.items[food];
     newFood[portion].checked = !isChecked;
     setList((previousList) => ({ ...previousList, [food]: newFood }));
   };
 
-  useEffect(() => {
-    (async function generateList() {
-      const mealDocuments = await mealDocumentService.findByWeek(
-        moment(Object.keys(period)[0]).toDate(),
+  const saveList = async () => {
+    if (list.id) {
+      shoppingListDocumentService.updateShoppingList(
+        new Date(Object.keys(period)[0]),
+        list,
         user.uid
       );
-      const foods = mealDocuments.flatMap((document) => document.meal);
-      const reorderedFoods = foods.reduce((accumulator, currentValue) => {
-        if (accumulator.hasOwnProperty(currentValue.name)) {
-          accumulator[currentValue.name][
-            currentValue.portionDescription
-          ].amount += Number(currentValue.amount);
-        } else {
-          accumulator[currentValue.name] = {
-            [currentValue.portionDescription]: {
-              amount: Number(currentValue.amount),
-              checked: false,
-            },
-          };
-        }
-        return accumulator;
-      }, {});
-      setList(reorderedFoods);
-    })();
+    } else {
+      const id = await shoppingListDocumentService.createShoppingList(
+        new Date(Object.keys(period)[0]),
+        list,
+        user.uid
+      );
+      setList((list) => ({
+        ...list,
+        id,
+      }));
+    }
+  };
+
+  const generateList = useCallback(async () => {
+    const mealDocuments = await mealDocumentService.findByWeek(
+      moment(Object.keys(period)[0]).toDate(),
+      user.uid
+    );
+    const foods = mealDocuments.flatMap((document) => document.meal);
+    const reorderedFoods = foods.reduce((accumulator, currentValue) => {
+      if (accumulator.hasOwnProperty(currentValue.name)) {
+        accumulator[currentValue.name][
+          currentValue.portionDescription
+        ].amount += Number(currentValue.amount);
+      } else {
+        accumulator[currentValue.name] = {
+          [currentValue.portionDescription]: {
+            amount: Number(currentValue.amount),
+            checked: false,
+          },
+        };
+      }
+      return accumulator;
+    }, {});
+    setList({ items: reorderedFoods, id: null });
   }, [period, user.uid]);
+
+  useEffect(() => {
+    (async function findOrGenerateList() {
+      const weekDays = Object.keys(period);
+      const savedList =
+        weekDays.length &&
+        (await shoppingListDocumentService.findDocument(
+          new Date(weekDays[0]),
+          user.uid
+        ));
+      savedList ? setList(savedList) : generateList();
+    })();
+  }, [generateList, period, user.uid]);
 
   return (
     <View style={style.content}>
       <CustomHeader title="Shopping Lists" />
-      <WeekSelector period={period} setPeriod={setPeriod} />
+      <WeekSelector
+        period={period}
+        setPeriod={setPeriod}
+        shouldConfirm={!!Object.keys(list.items).length}
+      />
       <ScrollView style={style.listSpace}>
-        {!!Object.keys(list).length && (
+        {!!Object.keys(list.items).length && (
           <ShoppingListCard
-            list={list}
+            list={list.items}
             updateAmount={updateAmount}
             toggleCheckBox={toggleCheckBox}
+            refreshList={generateList}
+            saveList={saveList}
           />
         )}
       </ScrollView>

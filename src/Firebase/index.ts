@@ -11,6 +11,7 @@ import AuthService from './AuthService/AuthServiceImpl';
 import DayDocumentService from './DocumentServices/Day/DayImpl';
 import MealDocumentService from './DocumentServices/Meal/MealImpl';
 import UserDocumentService from './DocumentServices/User/UserImpl';
+import ShoppingListDocumentService from './DocumentServices/ShoppingList/ShoppingListImpl';
 
 const firebaseConfig = {
   apiKey: FIREBASE_API_KEY,
@@ -27,6 +28,9 @@ export const mealDocumentService = new MealDocumentService(
   firebase.firestore()
 );
 export const userDocumentService = new UserDocumentService(
+  firebase.firestore()
+);
+export const shoppingListDocumentService = new ShoppingListDocumentService(
   firebase.firestore()
 );
 
