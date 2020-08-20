@@ -1,6 +1,7 @@
 import moment from 'moment';
+import ShoppingList from './ShoppingList';
 
-export default class ShoppingListDocumentServiceImpl {
+export default class ShoppingListDocumentServiceImpl implements ShoppingList {
   firestore: firebase.firestore.Firestore;
 
   constructor(firestore: firebase.firestore.Firestore) {
@@ -53,7 +54,10 @@ export default class ShoppingListDocumentServiceImpl {
     });
   }
 
-  async findDocument(beginningOfWeek: Date, uid: string): Promise<any> {
+  async findDocument(
+    beginningOfWeek: Date,
+    uid: string
+  ): Promise<{ id: string; items: { [key: string]: any } }> {
     const beginningOfWeekMoment = moment(beginningOfWeek).startOf('isoWeek');
     const beginningOfWeekDate = beginningOfWeekMoment.toDate();
     const response = await this.getDocumentReference(

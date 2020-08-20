@@ -35,7 +35,11 @@ function WeeklyReport({ user }): JSX.Element {
   return (
     <View style={style.content}>
       <CustomHeader title="Weekly reports" />
-      <WeekSelector period={period} setPeriod={setPeriod} />
+      <WeekSelector
+        period={period}
+        setPeriod={setPeriod}
+        shouldConfirm={false}
+      />
       <ScrollView style={style.reportSpace}>
         {!!report.averages.calories && (
           <FoodCard
