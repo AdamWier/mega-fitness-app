@@ -93,7 +93,12 @@ function ShoppingList({ user }): JSX.Element {
   return (
     <View style={style.content}>
       <CustomHeader title="Shopping Lists" />
-      <WeekSelector period={period} setPeriod={setPeriod} />
+      <WeekSelector
+        period={period}
+        setPeriod={setPeriod}
+        shouldConfirm={!!Object.keys(list.items).length}
+        confirmAction={saveList}
+      />
       <ScrollView style={style.listSpace}>
         {!!Object.keys(list.items).length && (
           <ShoppingListCard

@@ -3,10 +3,29 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { CalendarList } from 'react-native-calendars';
 import { withTheme, Text } from 'react-native-elements';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 
-function WeekSelector({ theme, period, setPeriod }): JSX.Element {
+function WeekSelector({
+  theme,
+  period,
+  setPeriod,
+  shouldConfirm,
+}): JSX.Element {
   const onDayPress = async (date: { [key: string]: any }) => {
+    if (shouldConfirm) {
+      return Alert.alert(
+        'Confirm',
+        'Do you want to change weeks without saving?',
+        [
+          { text: 'Cancel', onPress: () => null },
+          { text: 'OK', onPress: () => createNewWeek(date) },
+        ]
+      );
+    }
+    return createNewWeek(date);
+  };
+
+  const createNewWeek = (date: { [key: string]: any }) => {
     const currentMoment = moment(date.dateString);
     const beginningOfWeek = moment(currentMoment.startOf('isoWeek'));
     const week = {
@@ -68,6 +87,11 @@ WeekSelector.propTypes = {
     PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool]))
   ),
   setPeriod: PropTypes.func.isRequired,
+  shouldConfirm: PropTypes.bool,
+};
+
+WeekSelector.defaultProps = {
+  shouldConfirm: false,
 };
 
 export default withTheme(WeekSelector);
