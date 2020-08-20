@@ -78,8 +78,17 @@ function ShoppingList({ user }): JSX.Element {
   }, [period, user.uid]);
 
   useEffect(() => {
-    generateList();
-  }, [generateList]);
+    (async function findOrGenerateList() {
+      const weekDays = Object.keys(period);
+      const savedList =
+        weekDays.length &&
+        (await shoppingListDocumentService.findDocument(
+          new Date(weekDays[0]),
+          user.uid
+        ));
+      savedList ? setList(savedList) : generateList();
+    })();
+  }, [generateList, period, user.uid]);
 
   return (
     <View style={style.content}>

@@ -20,8 +20,8 @@ export default class ShoppingListDocumentServiceImpl {
     )} - ${createdAt.getTime()}`;
     try {
       await this.firestore.collection('shoppingList').doc(id).set({
-        beginningOfWeekDate,
-        list,
+        beginningOfWeek: beginningOfWeekDate,
+        list: list.items,
         uid,
         createdAt,
         deleted: false,
@@ -48,5 +48,42 @@ export default class ShoppingListDocumentServiceImpl {
       modifiedAt,
       deleted: false,
     });
+  }
+
+  async findDocument(beginningOfWeek: Date, uid: string): Promise<any> {
+    const beginngingOfWeekMoment = moment(beginningOfWeek).startOf('isoWeek');
+    const beginningOfWeekDate = beginngingOfWeekMoment.toDate();
+    const response = await this.getDocumentReference(
+      beginningOfWeekDate,
+      uid
+    ).get();
+    if (response.docs.length) {
+      return response.docs.map(this.mapDocuments)[0];
+    }
+    return null;
+  }
+
+  getDocumentReference(
+    date: Date,
+    uid: string
+  ): firebase.firestore.Query<firebase.firestore.DocumentData> {
+    return this.firestore
+      .collection('shoppingList')
+      .where('beginningOfWeek', '==', moment(date).startOf('day').toDate())
+      .where('uid', '==', uid)
+      .where('deleted', '==', false)
+      .limit(1);
+  }
+
+  mapDocuments(
+    document: firebase.firestore.QueryDocumentSnapshot<
+      firebase.firestore.DocumentData
+    >
+  ): any {
+    const data = document.data();
+    return {
+      id: document.id,
+      items: data.list,
+    };
   }
 }
