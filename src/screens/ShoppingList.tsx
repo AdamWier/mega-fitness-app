@@ -17,7 +17,7 @@ function ShoppingList({ user }): JSX.Element {
     portion: string,
     updatedNumber: string
   ) => {
-    const newFood = list[food];
+    const newFood = list.items[food];
     newFood[portion].amount = updatedNumber;
     setList((previousList) => ({ ...previousList, [food]: newFood }));
   };
@@ -27,7 +27,7 @@ function ShoppingList({ user }): JSX.Element {
     portion: string,
     isChecked: boolean
   ) => {
-    const newFood = list[food];
+    const newFood = list.items[food];
     newFood[portion].checked = !isChecked;
     setList((previousList) => ({ ...previousList, [food]: newFood }));
   };
