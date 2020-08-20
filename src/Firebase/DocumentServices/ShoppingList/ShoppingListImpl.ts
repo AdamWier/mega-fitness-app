@@ -12,10 +12,10 @@ export default class ShoppingListDocumentServiceImpl {
     list: { [key: string]: any },
     uid: string
   ): Promise<string | null> {
-    const beginngingOfWeekMoment = moment(beginningOfWeek).startOf('isoWeek');
-    const beginningOfWeekDate = beginngingOfWeekMoment.toDate();
+    const beginningOfWeekMoment = moment(beginningOfWeek).startOf('isoWeek');
+    const beginningOfWeekDate = beginningOfWeekMoment.toDate();
     const createdAt = new Date();
-    const id = `${uid} - ${beginngingOfWeekMoment.format(
+    const id = `${uid} - ${beginningOfWeekMoment.format(
       'YYYY-MM-DD'
     )} - ${createdAt.getTime()}`;
     const { items } = list;
@@ -39,8 +39,8 @@ export default class ShoppingListDocumentServiceImpl {
     list: { [key: string]: any },
     uid: string
   ): Promise<void> {
-    const beginngingOfWeekMoment = moment(beginningOfWeek).startOf('isoWeek');
-    const beginningOfWeekDate = beginngingOfWeekMoment.toDate();
+    const beginningOfWeekMoment = moment(beginningOfWeek).startOf('isoWeek');
+    const beginningOfWeekDate = beginningOfWeekMoment.toDate();
     const modifiedAt = new Date();
     const { id, items } = list;
 
@@ -54,8 +54,8 @@ export default class ShoppingListDocumentServiceImpl {
   }
 
   async findDocument(beginningOfWeek: Date, uid: string): Promise<any> {
-    const beginngingOfWeekMoment = moment(beginningOfWeek).startOf('isoWeek');
-    const beginningOfWeekDate = beginngingOfWeekMoment.toDate();
+    const beginningOfWeekMoment = moment(beginningOfWeek).startOf('isoWeek');
+    const beginningOfWeekDate = beginningOfWeekMoment.toDate();
     const response = await this.getDocumentReference(
       beginningOfWeekDate,
       uid
