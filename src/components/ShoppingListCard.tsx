@@ -18,7 +18,7 @@ export default function ShoppingListCard({
           <View />
           <Text h4>Shopping List</Text>
           <View style={style.buttonContainer}>
-            <Button icon={<Icon name="save" onPress={saveList} />} />
+            <Button icon={<Icon name="save" />} onPress={saveList} />
             <Button icon={<Icon name="autorenew" />} onPress={refreshList} />
           </View>
         </View>
@@ -48,9 +48,7 @@ export default function ShoppingListCard({
                     updateAmount(food, portion, updatedNumber)
                   }
                 />
-                <Text>
-                  {list[food][portion].amount} {portion}
-                </Text>
+                <Text>{portion}</Text>
               </View>
             </View>
           ))

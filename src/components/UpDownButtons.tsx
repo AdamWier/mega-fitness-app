@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Icon } from 'react-native-elements';
+import { Button, Icon, Input } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 
@@ -8,15 +8,22 @@ const UpDownButtons: React.FC<any> = ({ total, onValueChange }) => (
     <Button
       containerStyle={styles.buttonContainer}
       buttonStyle={styles.button}
-      onPress={() => onValueChange((Number(total) + 1).toString())}
+      onPress={() => onValueChange(total + 1)}
       icon={<Icon name="arrow-drop-up" />}
     />
     <Button
       containerStyle={styles.buttonContainer}
       buttonStyle={styles.button}
-      onPress={() => onValueChange(Math.max(Number(total) - 1, 0).toString())}
+      onPress={() => onValueChange(Math.max(total - 1, 0))}
       disabled={Number(total) <= 0}
       icon={<Icon name="arrow-drop-down" />}
+    />
+    <Input
+      containerStyle={styles.inputContainer}
+      onChangeText={(value) => onValueChange(Number(value))}
+      value={total ? total.toString() : '0'}
+      inputStyle={styles.input}
+      keyboardType="number-pad"
     />
   </View>
 );
@@ -41,6 +48,15 @@ const styles = StyleSheet.create({
   button: {
     margin: 0,
     padding: 0,
+  },
+  inputContainer: {
+    width: 50,
+    marginVertical: 0,
+    marginHorizontal: 5,
+    paddingHorizontal: 0,
+  },
+  input: {
+    textAlign: 'center',
   },
 });
 

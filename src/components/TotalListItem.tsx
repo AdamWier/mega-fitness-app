@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, Input } from 'react-native-elements';
+import { Text } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 import UpDownButtons from './UpDownButtons';
@@ -15,14 +15,7 @@ const TotalListItem: React.FC<any> = ({
     <Text style={styles.text}>{`${label}`}</Text>
     {onValueChange ? (
       <View style={styles.containerTight}>
-        <UpDownButtons total={total} onValueChange={onValueChange} />
-        <Input
-          containerStyle={styles.inputContainer}
-          onChangeText={onValueChange}
-          value={total}
-          inputStyle={styles.input}
-          keyboardType="number-pad"
-        />
+        <UpDownButtons total={Number(total)} onValueChange={onValueChange} />
         <Text style={styles.text}>{`${description}`}</Text>
       </View>
     ) : (
@@ -64,15 +57,6 @@ const styles = StyleSheet.create({
   },
   text: {
     margin: 3,
-  },
-  inputContainer: {
-    width: 50,
-    marginVertical: 0,
-    marginHorizontal: 5,
-    paddingHorizontal: 0,
-  },
-  input: {
-    textAlign: 'center',
   },
   amountChangerContainer: {
     marginVertical: 5,

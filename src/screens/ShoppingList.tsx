@@ -37,8 +37,7 @@ function ShoppingList({ user }): JSX.Element {
       shoppingListDocumentService.updateShoppingList(
         new Date(Object.keys(period)[0]),
         list,
-        user.uid,
-        list.id
+        user.uid
       );
     } else {
       const id = await shoppingListDocumentService.createShoppingList(
@@ -97,7 +96,6 @@ function ShoppingList({ user }): JSX.Element {
         period={period}
         setPeriod={setPeriod}
         shouldConfirm={!!Object.keys(list.items).length}
-        confirmAction={saveList}
       />
       <ScrollView style={style.listSpace}>
         {!!Object.keys(list.items).length && (
