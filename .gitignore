@@ -9,10 +9,8 @@ npm-debug.*
 *.orig.*
 web-build/
 web-report/
-.env
+.env*
 yarn-error.log
-.env.production
-.env-dev
 src/Firebase/CorrectionScripts/*.json
 
 # macOS
