@@ -60,9 +60,20 @@ function ShoppingList({ user }): JSX.Element {
     const foods = mealDocuments.flatMap((document) => document.meal);
     const reorderedFoods = foods.reduce((accumulator, currentValue) => {
       if (accumulator.hasOwnProperty(currentValue.name)) {
-        accumulator[currentValue.name][
-          currentValue.portionDescription
-        ].amount += Number(currentValue.amount);
+        if (
+          accumulator[currentValue.name].hasOwnProperty[
+            currentValue.portionDescription
+          ]
+        ) {
+          accumulator[currentValue.name][
+            currentValue.portionDescription
+          ].amount += Number(currentValue.amount);
+        } else {
+          accumulator[currentValue.name][currentValue.portionDescription] = {
+            amount: Number(currentValue.amount),
+            checked: false,
+          };
+        }
       } else {
         accumulator[currentValue.name] = {
           [currentValue.portionDescription]: {
