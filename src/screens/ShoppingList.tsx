@@ -15,7 +15,7 @@ function ShoppingList({ user }): JSX.Element {
   const updateAmount = (
     food: string,
     portion: string,
-    updatedNumber: string
+    updatedNumber: string | null
   ) => {
     const newFood = list.items[food];
     newFood[portion].amount = updatedNumber;
