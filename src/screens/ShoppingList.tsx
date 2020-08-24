@@ -52,40 +52,43 @@ function ShoppingList({ user }): JSX.Element {
     }
   };
 
-  const generateList = useCallback(async () => {
-    const mealDocuments = await mealDocumentService.findByWeek(
-      moment(Object.keys(period)[0]).toDate(),
-      user.uid
-    );
-    const foods = mealDocuments.flatMap((document) => document.meal);
-    const reorderedFoods = foods.reduce((accumulator, currentValue) => {
-      if (accumulator.hasOwnProperty(currentValue.name)) {
-        if (
-          accumulator[currentValue.name].hasOwnProperty[
-            currentValue.portionDescription
-          ]
-        ) {
-          accumulator[currentValue.name][
-            currentValue.portionDescription
-          ].amount += Number(currentValue.amount);
+  const generateList = useCallback(
+    async (id: string | null) => {
+      const mealDocuments = await mealDocumentService.findByWeek(
+        moment(Object.keys(period)[0]).toDate(),
+        user.uid
+      );
+      const foods = mealDocuments.flatMap((document) => document.meal);
+      const reorderedFoods = foods.reduce((accumulator, currentValue) => {
+        if (accumulator.hasOwnProperty(currentValue.name)) {
+          if (
+            accumulator[currentValue.name].hasOwnProperty[
+              currentValue.portionDescription
+            ]
+          ) {
+            accumulator[currentValue.name][
+              currentValue.portionDescription
+            ].amount += Number(currentValue.amount);
+          } else {
+            accumulator[currentValue.name][currentValue.portionDescription] = {
+              amount: Number(currentValue.amount),
+              checked: false,
+            };
+          }
         } else {
-          accumulator[currentValue.name][currentValue.portionDescription] = {
-            amount: Number(currentValue.amount),
-            checked: false,
+          accumulator[currentValue.name] = {
+            [currentValue.portionDescription]: {
+              amount: Number(currentValue.amount),
+              checked: false,
+            },
           };
         }
-      } else {
-        accumulator[currentValue.name] = {
-          [currentValue.portionDescription]: {
-            amount: Number(currentValue.amount),
-            checked: false,
-          },
-        };
-      }
-      return accumulator;
-    }, {});
-    setList({ items: reorderedFoods, id: null });
-  }, [period, user.uid]);
+        return accumulator;
+      }, {});
+      setList({ items: reorderedFoods, id });
+    },
+    [period, user.uid]
+  );
 
   useEffect(() => {
     (async function findOrGenerateList() {
@@ -96,7 +99,7 @@ function ShoppingList({ user }): JSX.Element {
           new Date(weekDays[0]),
           user.uid
         ));
-      savedList ? setList(savedList) : generateList();
+      savedList ? setList(savedList) : generateList(null);
     })();
   }, [generateList, period, user.uid]);
 
@@ -114,7 +117,7 @@ function ShoppingList({ user }): JSX.Element {
             list={list.items}
             updateAmount={updateAmount}
             toggleCheckBox={toggleCheckBox}
-            refreshList={generateList}
+            refreshList={() => generateList(list.id)}
             saveList={saveList}
           />
         )}
