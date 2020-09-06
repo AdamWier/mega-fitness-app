@@ -15,25 +15,23 @@ function ShoppingList({ user }): JSX.Element {
     end: null as Date,
   });
   const [list, setList] = useState({ id: null, items: {} });
-  const [isStartVisible, setIsStartVisible] = useState(false);
-  const [isEndVisible, setIsEndVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [currentInput, setCurrentInput] = useState(null);
 
-  const getEnd = (start: Date) => {
-    setPeriod((period) => ({
-      ...period,
-      start: moment(start).startOf('day').toDate(),
-      end: null,
-    }));
-    setIsStartVisible(false);
-    setIsEndVisible(true);
-  };
-
-  const getPeriod = (end: Date) => {
-    setPeriod((period) => ({
-      ...period,
-      end: moment(end).startOf('day').toDate(),
-    }));
-    setIsEndVisible(false);
+  const getPeriod = (input: Date) => {
+    setIsVisible(false);
+    if (!period.start) {
+      setPeriod((oldPeriod) => ({
+        ...oldPeriod,
+        start: moment(input).startOf('day').toDate(),
+        end: null,
+      }));
+    } else if (!period.end) {
+      setPeriod((oldPeriod) => ({
+        ...oldPeriod,
+        end: moment(input).startOf('day').toDate(),
+      }));
+    }
   };
 
   const updateAmount = (
@@ -66,8 +64,8 @@ function ShoppingList({ user }): JSX.Element {
         list,
         user.uid
       );
-      setList((list) => ({
-        ...list,
+      setList((oldList) => ({
+        ...oldList,
         id,
       }));
     }
@@ -113,10 +111,6 @@ function ShoppingList({ user }): JSX.Element {
   );
 
   useEffect(() => {
-    setIsStartVisible(true);
-  }, [setIsStartVisible]);
-
-  useEffect(() => {
     (async function findOrGenerateList() {
       if (period.start && period.end) {
         const savedList = await shoppingListDocumentService.findDocument(
@@ -127,33 +121,43 @@ function ShoppingList({ user }): JSX.Element {
         savedList ? setList(savedList) : generateList(null);
       }
     })();
-  }, [generateList, period, user.uid]);
+  }, [generateList, period.start, period.end, user.uid]);
 
   return (
     <View style={style.content}>
       <CustomHeader title="Shopping Lists" />
       <DateTimePickerModal
-        isVisible={isStartVisible}
-        date={period.start || new Date()}
+        isVisible={isVisible}
+        date={currentInput || new Date()}
         mode="date"
-        onConfirm={getEnd}
-        onCancel={() => null}
-      />
-      <DateTimePickerModal
-        isVisible={isEndVisible}
-        date={period.end || new Date()}
-        mode="date"
+        onChange={setCurrentInput}
         onConfirm={getPeriod}
-        onCancel={() => null}
+        onCancel={() => setIsVisible(false)}
       />
       <View style={style.horizontal}>
+        <Button
+          icon={<Icon name="restore" />}
+          onPress={() => {
+            setPeriod((oldPeriod) => ({
+              ...oldPeriod,
+              start: null,
+            }));
+            setIsVisible(true);
+          }}
+        />
         <Text h4>
-          {!!period.start && `${period.start?.toLocaleDateString()} - `}
-          {period.end?.toLocaleDateString()}
+          {period.start ? period.start?.toLocaleDateString() : 'Enter start'}-
+          {period.end ? period.end?.toLocaleDateString() : 'Enter end'}
         </Text>
         <Button
           icon={<Icon name="restore" />}
-          onPress={() => setIsStartVisible(true)}
+          onPress={() => {
+            setPeriod((oldPeriod) => ({
+              ...oldPeriod,
+              end: null,
+            }));
+            setIsVisible(true);
+          }}
         />
       </View>
       <ScrollView style={style.listSpace}>
