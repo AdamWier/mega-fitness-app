@@ -9,21 +9,21 @@ export default class ShoppingListDocumentServiceImpl implements ShoppingList {
   }
 
   async createShoppingList(
-    beginningOfWeek: Date,
+    start: Date,
+    end: Date,
     list: { [key: string]: any },
     uid: string
   ): Promise<string | null> {
-    const beginningOfWeekMoment = moment(beginningOfWeek).startOf('isoWeek');
-    const beginningOfWeekDate = beginningOfWeekMoment.toDate();
     const createdAt = new Date();
-    const id = `${uid} - ${beginningOfWeekMoment.format(
+    const id = `${uid} - ${moment(start).format(
       'YYYY-MM-DD'
     )} - ${createdAt.getTime()}`;
     const { items } = list;
 
     try {
       await this.firestore.collection('shoppingList').doc(id).set({
-        beginningOfWeek: beginningOfWeekDate,
+        start,
+        end,
         items,
         uid,
         createdAt,
@@ -35,18 +35,11 @@ export default class ShoppingListDocumentServiceImpl implements ShoppingList {
     }
   }
 
-  updateShoppingList(
-    beginningOfWeek: Date,
-    list: { [key: string]: any },
-    uid: string
-  ): Promise<void> {
-    const beginningOfWeekMoment = moment(beginningOfWeek).startOf('isoWeek');
-    const beginningOfWeekDate = beginningOfWeekMoment.toDate();
+  updateShoppingList(list: { [key: string]: any }, uid: string): Promise<void> {
     const modifiedAt = new Date();
     const { id, items } = list;
 
     return this.firestore.collection('shoppingList').doc(id).update({
-      beginningOfWeek: beginningOfWeekDate,
       items,
       uid,
       modifiedAt,

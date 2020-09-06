@@ -56,14 +56,11 @@ function ShoppingList({ user }): JSX.Element {
 
   const saveList = async () => {
     if (list.id) {
-      shoppingListDocumentService.updateShoppingList(
-        new Date(Object.keys(period)[0]),
-        list,
-        user.uid
-      );
+      shoppingListDocumentService.updateShoppingList(list, user.uid);
     } else {
       const id = await shoppingListDocumentService.createShoppingList(
-        new Date(Object.keys(period)[0]),
+        period.start,
+        period.end,
         list,
         user.uid
       );
