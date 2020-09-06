@@ -118,6 +118,31 @@ export default class MealImpl implements Meal {
       .where('deleted', '==', false);
   }
 
+  async findByDateRange(
+    start: Date,
+    end: Date,
+    uid: string
+  ): Promise<{ [key: string]: any }[]> {
+    const response = await this.getByDateRangeRef(start, end, uid).get();
+    if (response.docs.length) {
+      return response.docs.map(this.mapDocuments);
+    }
+    return [];
+  }
+
+  getByDateRangeRef(
+    start: Date,
+    end: Date,
+    uid: string
+  ): firebase.firestore.Query<firebase.firestore.DocumentData> {
+    return this.firestore
+      .collection('meals')
+      .where('eatenAt', '>=', start)
+      .where('eatenAt', '<=', end)
+      .where('uid', '==', uid)
+      .where('deleted', '==', false);
+  }
+
   mapDocuments(
     document: firebase.firestore.QueryDocumentSnapshot<
       firebase.firestore.DocumentData

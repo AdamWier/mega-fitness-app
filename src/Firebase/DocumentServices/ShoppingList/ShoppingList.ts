@@ -12,7 +12,8 @@ export default interface Day {
   ): Promise<void>;
 
   findDocument(
-    beginningOfWeek: Date,
+    start: Date,
+    end: Date,
     uid: string
   ): Promise<{ id: string; items: { [key: string]: any } }>;
 }
