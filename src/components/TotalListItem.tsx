@@ -1,7 +1,8 @@
 import React from 'react';
-import { Text, Input, Button, Icon } from 'react-native-elements';
+import { Text } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
+import UpDownButtons from './UpDownButtons';
 
 const TotalListItem: React.FC<any> = ({
   label,
@@ -14,28 +15,7 @@ const TotalListItem: React.FC<any> = ({
     <Text style={styles.text}>{`${label}`}</Text>
     {onValueChange ? (
       <View style={styles.containerTight}>
-        <Button
-          containerStyle={styles.amountChangerContainer}
-          buttonStyle={styles.amountChanger}
-          onPress={() => onValueChange((Number(total) + 1).toString())}
-          icon={<Icon name="arrow-drop-up" />}
-        />
-        <Button
-          containerStyle={styles.amountChangerContainer}
-          buttonStyle={styles.amountChanger}
-          onPress={() =>
-            onValueChange(Math.max(Number(total) - 1, 0).toString())
-          }
-          disabled={Number(total) <= 0}
-          icon={<Icon name="arrow-drop-down" />}
-        />
-        <Input
-          containerStyle={styles.inputContainer}
-          onChangeText={onValueChange}
-          value={total}
-          inputStyle={styles.input}
-          keyboardType="number-pad"
-        />
+        <UpDownButtons total={Number(total)} onValueChange={onValueChange} />
         <Text style={styles.text}>{`${description}`}</Text>
       </View>
     ) : (
@@ -77,15 +57,6 @@ const styles = StyleSheet.create({
   },
   text: {
     margin: 3,
-  },
-  inputContainer: {
-    width: 50,
-    marginVertical: 0,
-    marginHorizontal: 5,
-    paddingHorizontal: 0,
-  },
-  input: {
-    textAlign: 'center',
   },
   amountChangerContainer: {
     marginVertical: 5,

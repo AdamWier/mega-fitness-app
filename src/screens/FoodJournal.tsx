@@ -55,7 +55,10 @@ const compareRows = (
   );
 };
 
-const emptyDocuments = { meals: [], day: { id: null, goalCalories: null } };
+const emptyDocuments = {
+  meals: [],
+  day: { id: null, goalCalories: null, weight: 0 },
+};
 
 function FoodJournalPage({
   navigation,
@@ -68,9 +71,16 @@ function FoodJournalPage({
   const [currentDate, setCurrentDate] = useState(
     moment().startOf('day').toDate()
   );
-  const [isOverlayVisible, toggleIsOverlayVisible] = useState(false);
+
+  const [isGoalOverlayVisible, toggleIsGoalOverlayVisible] = useState(false);
   const [goalCaloriesInput, setGoalCaloriesInput] = useState('0');
-  const [isOverlayLoading, setIsOverlayLoading] = useState(false);
+  const [isGoalOverlayLoading, setIsGoalOverlayLoading] = useState(false);
+
+  const [isWeightOverlayVisible, toggleIsWeightOverlayVisible] = useState(
+    false
+  );
+  const [weightInput, setWeightInput] = useState('0');
+  const [isWeightOverlayLoading, setIsWeightOverlayLoading] = useState(false);
 
   const deleteMeal = async (documentId: string): Promise<void> => {
     try {
@@ -87,6 +97,40 @@ function FoodJournalPage({
     ]);
   };
 
+  const onWeightSubmit = async () => {
+    const weightNumber = Number(weightInput);
+    if (!weightNumber || Number.isNaN(weightNumber)) {
+      Toast.showWithGravity('Please enter a number', Toast.SHORT, Toast.CENTER);
+    } else {
+      try {
+        setIsWeightOverlayLoading(true);
+        if (documents.day.id) {
+          await dayDocumentService.updateWeight(
+            currentDate,
+            weightNumber,
+            user.uid,
+            documents.day.id
+          );
+        } else {
+          await dayDocumentService.createWeight(
+            currentDate,
+            weightNumber,
+            user.uid
+          );
+        }
+        setGoalCaloriesInput('0');
+        toggleIsWeightOverlayVisible(false);
+      } catch (e) {
+        Toast.showWithGravity(
+          "Your goal couldn't be saved",
+          Toast.SHORT,
+          Toast.CENTER
+        );
+      }
+      setIsWeightOverlayLoading(false);
+    }
+  };
+
   const checkIsNumber = async () => {
     const goalCaloriesNumber = Number(goalCaloriesInput);
     if (!goalCaloriesNumber || Number.isNaN(goalCaloriesNumber)) {
@@ -98,7 +142,7 @@ function FoodJournalPage({
 
   const setGoalCalories = async (goal: number) => {
     try {
-      setIsOverlayLoading(true);
+      setIsGoalOverlayLoading(true);
       if (documents.day.id) {
         await dayDocumentService.updateGoal(
           currentDate,
@@ -109,7 +153,7 @@ function FoodJournalPage({
       } else {
         await dayDocumentService.createGoal(currentDate, goal, user.uid);
       }
-      toggleIsOverlayVisible(false);
+      toggleIsGoalOverlayVisible(false);
     } catch (e) {
       Toast.showWithGravity(
         "Your goal couldn't be saved",
@@ -117,7 +161,7 @@ function FoodJournalPage({
         Toast.CENTER
       );
     }
-    setIsOverlayLoading(false);
+    setIsGoalOverlayLoading(false);
   };
 
   const handleMealPress = (document: MealDocument) => {
@@ -188,13 +232,21 @@ function FoodJournalPage({
     handleMealPress: handleMealPress,
     getNewEatenAt: getNewEatenAt,
     goalCaloriesInput: goalCaloriesInput,
-    isOverlayVisible: isOverlayVisible,
-    onGoalButtonPress: () => toggleIsOverlayVisible(true),
+    isGoalOverlayVisible: isGoalOverlayVisible,
+    onGoalButtonPress: () => toggleIsGoalOverlayVisible(true),
     setGoalCaloriesInput: setGoalCaloriesInput,
-    toggleIsOverlayVisible: toggleIsOverlayVisible,
-    onGoalConfirm: checkIsNumber,
-    isOverlayLoading: isOverlayLoading,
+    toggleIsGoalOverlayVisible: toggleIsGoalOverlayVisible,
+    onGoalSubmit: checkIsNumber,
+    isGoalOverlayLoading: isGoalOverlayLoading,
     clearGoal: () => setGoalCalories(0),
+    onWeightButtonPress: () => toggleIsWeightOverlayVisible(true),
+    isWeightOverlayVisible: isWeightOverlayVisible,
+    toggleIsWeightOverlayVisible: toggleIsWeightOverlayVisible,
+    weightInput: weightInput,
+    setWeightInput: setWeightInput,
+    isWeightOverlayLoading: isWeightOverlayLoading,
+    onWeightSubmit: onWeightSubmit,
+    weight: documents.day?.weight,
   };
 
   const emptyItem = () =>

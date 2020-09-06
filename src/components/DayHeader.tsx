@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, Text } from 'react-native-elements';
-import { View, StyleSheet, StatusBar } from 'react-native';
+import { Button, Text, Icon } from 'react-native-elements';
+import { View, StyleSheet } from 'react-native';
 import PropTypes, { InferProps } from 'prop-types';
-import GoalOverlay from './GoalOverlay';
+import OverlayWithButton from './OverlayWithButton';
 import { Bar } from 'react-native-progress';
 import { getTotal } from '../utilities';
 import { withTheme } from 'react-native-elements';
@@ -15,35 +15,74 @@ const DayHeader = ({
   getNewEatenAt,
   user,
   goalCaloriesInput,
-  isOverlayVisible,
+  isGoalOverlayVisible,
   onGoalButtonPress,
   setGoalCaloriesInput,
-  toggleIsOverlayVisible,
-  onGoalConfirm,
-  isOverlayLoading,
+  toggleIsGoalOverlayVisible,
+  onGoalSubmit,
+  isGoalOverlayLoading,
+  onWeightButtonPress,
+  isWeightOverlayVisible,
+  toggleIsWeightOverlayVisible,
+  onWeightSubmit,
+  weightInput,
+  setWeightInput,
+  isWeightOverlayLoading,
+  weight,
   theme,
   clearGoal,
 }: DayHeaderProps) => {
   const totalCalories = foods ? foods.reduce(getTotal('calories'), 0) : 0;
 
   return (
-    <View style={styles.container}>
-      <Button
-        title="Add a new meal"
-        onPress={() =>
-          handleMealPress({
-            id: null,
-            eatenAt: getNewEatenAt(),
-            meal: [],
-            name: 'Untitled',
-            createdAt: new Date(),
-            deleted: false,
-            uid: user.uid,
-          })
-        }
-      />
+    <View>
+      <View style={styles.buttonsContainer}>
+        <Button
+          containerStyle={styles.buttonContainer}
+          icon={<Icon name="add-circle" />}
+          onPress={() =>
+            handleMealPress({
+              id: null,
+              eatenAt: getNewEatenAt(),
+              meal: [],
+              name: '',
+              createdAt: new Date(),
+              deleted: false,
+              uid: user.uid,
+            })
+          }
+        />
+        <View style={styles.buttonContainer}>
+          <OverlayWithButton
+            onButtonPress={onGoalButtonPress}
+            isOverlayVisible={isGoalOverlayVisible}
+            toggleIsOverlayVisible={toggleIsGoalOverlayVisible}
+            inputValue={goalCaloriesInput}
+            setInputValue={setGoalCaloriesInput}
+            onConfirmButtonPress={onGoalSubmit}
+            loading={isGoalOverlayLoading}
+            icon={<Icon type="font-awesome" name="clipboard" />}
+            header="Calorie goal for the day"
+            onClear={clearGoal}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <OverlayWithButton
+            onButtonPress={onWeightButtonPress}
+            isOverlayVisible={isWeightOverlayVisible}
+            toggleIsOverlayVisible={toggleIsWeightOverlayVisible}
+            inputValue={weightInput}
+            setInputValue={setWeightInput}
+            onConfirmButtonPress={onWeightSubmit}
+            loading={isWeightOverlayLoading}
+            icon={<Icon type="font-awesome" name="balance-scale" />}
+            header="Weight recorded today"
+          />
+        </View>
+      </View>
+      {!!weight && <Text>Weight recorded today: {weight}</Text>}
       {goalCalories ? (
-        <View>
+        <View style={styles.statusBarContainer}>
           <Bar
             style={{ alignSelf: 'center' }}
             progress={Math.min(totalCalories / goalCalories, 1)}
@@ -61,25 +100,14 @@ const DayHeader = ({
           </Text>
         </View>
       ) : null}
-      <GoalOverlay
-        goalCalories={goalCaloriesInput}
-        isOverlayVisible={isOverlayVisible}
-        onGoalButtonPress={onGoalButtonPress}
-        setGoalCalories={setGoalCaloriesInput}
-        toggleIsOverlayVisible={toggleIsOverlayVisible}
-        onConfirmButtonPress={onGoalConfirm}
-        loading={isOverlayLoading}
-        hasGoal={!!goalCalories}
-        clearGoal={clearGoal}
-      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: StatusBar.currentHeight,
-  },
+  buttonsContainer: { flexDirection: 'row', justifyContent: 'space-around' },
+  buttonContainer: { flexGrow: 1 },
+  statusBarContainer: { padding: 10 },
 });
 
 const propTypes = {
@@ -90,13 +118,13 @@ const propTypes = {
   user: PropTypes.shape({ uid: PropTypes.string, email: PropTypes.string })
     .isRequired,
   onGoalButtonPress: PropTypes.func.isRequired,
-  isOverlayVisible: PropTypes.bool.isRequired,
-  toggleIsOverlayVisible: PropTypes.func.isRequired,
+  isGoalOverlayVisible: PropTypes.bool.isRequired,
+  toggleIsGoalOverlayVisible: PropTypes.func.isRequired,
   goalCaloriesInput: PropTypes.string.isRequired,
   setGoalCaloriesInput: PropTypes.func.isRequired,
-  onGoalConfirm: PropTypes.func.isRequired,
+  onGoalSubmit: PropTypes.func.isRequired,
+  isGoalOverlayLoading: PropTypes.bool.isRequired,
   clearGoal: PropTypes.func.isRequired,
-  isOverlayLoading: PropTypes.bool.isRequired,
   theme: PropTypes.shape({
     colors: PropTypes.shape({
       success: PropTypes.string,
@@ -104,6 +132,14 @@ const propTypes = {
       text: PropTypes.string,
     }),
   }).isRequired,
+  onWeightButtonPress: PropTypes.func.isRequired,
+  isWeightOverlayVisible: PropTypes.bool.isRequired,
+  toggleIsWeightOverlayVisible: PropTypes.func.isRequired,
+  onWeightSubmit: PropTypes.func.isRequired,
+  weightInput: PropTypes.string.isRequired,
+  setWeightInput: PropTypes.func.isRequired,
+  isWeightOverlayLoading: PropTypes.bool.isRequired,
+  weight: PropTypes.number,
 };
 
 DayHeader.propTypes = propTypes;

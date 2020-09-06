@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Text } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
-import { container } from '../store/reducers/User';
+import { container, UserPropTypes } from '../store/reducers/User';
 import GoalPrompt from '../components/GoalPrompt';
 import Toast from 'react-native-simple-toast';
 import { userDocumentService } from '../Firebase';
@@ -73,11 +72,7 @@ const style = StyleSheet.create({
 });
 
 GoalSetPage.propTypes = {
-  user: PropTypes.shape({
-    uid: PropTypes.string,
-    email: PropTypes.string,
-    goalCalories: PropTypes.number,
-  }).isRequired,
+  ...UserPropTypes,
 };
 
 export default container(GoalSetPage);

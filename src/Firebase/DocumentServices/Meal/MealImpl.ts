@@ -20,7 +20,7 @@ export default class MealImpl implements Meal {
       .doc(uid + '-' + createdAt.getTime() + '-' + name)
       .set({
         meal,
-        name,
+        name: name || 'Untitled',
         uid,
         eatenAt,
         createdAt,
@@ -44,7 +44,7 @@ export default class MealImpl implements Meal {
         eatenAt,
         deleted: false,
         uid,
-        name: name === '' ? 'Untitled' : name,
+        name: name || 'Untitled',
         updatedAt,
       });
   }
@@ -114,6 +114,31 @@ export default class MealImpl implements Meal {
       .collection('meals')
       .where('eatenAt', '>=', start.toDate())
       .where('eatenAt', '<', end.toDate())
+      .where('uid', '==', uid)
+      .where('deleted', '==', false);
+  }
+
+  async findByDateRange(
+    start: Date,
+    end: Date,
+    uid: string
+  ): Promise<{ [key: string]: any }[]> {
+    const response = await this.getByDateRangeRef(start, end, uid).get();
+    if (response.docs.length) {
+      return response.docs.map(this.mapDocuments);
+    }
+    return [];
+  }
+
+  getByDateRangeRef(
+    start: Date,
+    end: Date,
+    uid: string
+  ): firebase.firestore.Query<firebase.firestore.DocumentData> {
+    return this.firestore
+      .collection('meals')
+      .where('eatenAt', '>=', start)
+      .where('eatenAt', '<=', end)
       .where('uid', '==', uid)
       .where('deleted', '==', false);
   }

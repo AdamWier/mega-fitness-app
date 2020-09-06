@@ -1,84 +1,45 @@
-import React, { useState } from 'react';
-import { Text } from 'react-native-elements';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import { container } from '../store/reducers/User';
 import CustomHeader from '../components/Header';
 import moment from 'moment';
-import { CalendarList } from 'react-native-calendars';
-import { withTheme } from 'react-native-elements';
 import { mealDocumentService, dayDocumentService } from '../Firebase/index';
 import FoodCard from '../components/FoodCard';
 import { ScrollView } from 'react-native-gesture-handler';
 import { createWeeklyReport } from '../utilities';
 import WeeklyGoalChart from '../components/WeeklyGoalsChart';
+import WeekSelector from '../components/WeekSelector';
 
-function WeeklyReport({ user, theme }): JSX.Element {
+function WeeklyReport({ user }): JSX.Element {
   const [period, setPeriod] = useState({});
   const [report, setReport] = useState({
     graphData: [],
     averages: { calories: 0, protein: 0, fats: 0, carbs: 0 },
   });
 
-  const onDayPress = async (date: { [key: string]: any }) => {
-    const currentMoment = moment(date.dateString);
-    const beginningOfWeek = moment(currentMoment.startOf('isoWeek'));
-    const week = {
-      [beginningOfWeek.format('YYYY-MM-DD')]: {
-        startingDay: true,
-        color: theme.colors.success,
-      },
-      [beginningOfWeek.clone().add('1', 'day').format('YYYY-MM-DD')]: {
-        color: theme.colors.success,
-      },
-      [beginningOfWeek.clone().add('2', 'day').format('YYYY-MM-DD')]: {
-        color: theme.colors.success,
-      },
-      [beginningOfWeek.clone().add('3', 'day').format('YYYY-MM-DD')]: {
-        color: theme.colors.success,
-      },
-      [beginningOfWeek.clone().add('4', 'day').format('YYYY-MM-DD')]: {
-        color: theme.colors.success,
-      },
-      [beginningOfWeek.clone().add('5', 'day').format('YYYY-MM-DD')]: {
-        color: theme.colors.success,
-      },
-      [beginningOfWeek.clone().add('6', 'day').format('YYYY-MM-DD')]: {
-        endingDay: true,
-        color: theme.colors.success,
-      },
-    };
-    setPeriod(week);
-    const mealDocuments = await mealDocumentService.findByWeek(
-      beginningOfWeek.toDate(),
-      user.uid
-    );
-    const dayDocuments = await dayDocumentService.findByWeek(
-      beginningOfWeek.toDate(),
-      user.uid
-    );
-    setReport(createWeeklyReport(mealDocuments, dayDocuments));
-  };
+  useEffect(() => {
+    (async function getReport() {
+      const mealDocuments = await mealDocumentService.findByWeek(
+        moment(Object.keys(period)[0]).toDate(),
+        user.uid
+      );
+      const dayDocuments = await dayDocumentService.findByWeek(
+        moment(Object.keys(period)[0]).toDate(),
+        user.uid
+      );
+      setReport(createWeeklyReport(mealDocuments, dayDocuments));
+    })();
+  }, [period, user.uid]);
 
   return (
     <View style={style.content}>
       <CustomHeader title="Weekly reports" />
-      <View style={style.calendarContainer}>
-        <Text h4>Select a week</Text>
-        <CalendarList
-          markedDates={period}
-          markingType={'period'}
-          onDayPress={onDayPress}
-          firstDay={1}
-          hideDayNames
-          theme={{
-            backgroundColor: theme.colors.background,
-            calendarBackground: theme.colors.background,
-            dayTextColor: theme.colors.text,
-            monthTextColor: theme.colors.text,
-          }}
-        />
-      </View>
+      <WeekSelector
+        period={period}
+        setPeriod={setPeriod}
+        shouldConfirm={false}
+      />
       <ScrollView style={style.reportSpace}>
         {!!report.averages.calories && (
           <FoodCard
@@ -105,9 +66,6 @@ const style = StyleSheet.create({
   reportSpace: {
     flex: 1,
   },
-  calendarContainer: {
-    flex: 0.5,
-  },
 });
 
 WeeklyReport.propTypes = {
@@ -118,4 +76,4 @@ WeeklyReport.propTypes = {
   }).isRequired,
 };
 
-export default withTheme(container(WeeklyReport));
+export default container(WeeklyReport);
