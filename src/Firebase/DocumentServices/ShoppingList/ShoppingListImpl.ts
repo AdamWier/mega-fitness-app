@@ -9,21 +9,21 @@ export default class ShoppingListDocumentServiceImpl implements ShoppingList {
   }
 
   async createShoppingList(
-    beginningOfWeek: Date,
+    start: Date,
+    end: Date,
     list: { [key: string]: any },
     uid: string
   ): Promise<string | null> {
-    const beginningOfWeekMoment = moment(beginningOfWeek).startOf('isoWeek');
-    const beginningOfWeekDate = beginningOfWeekMoment.toDate();
     const createdAt = new Date();
-    const id = `${uid} - ${beginningOfWeekMoment.format(
+    const id = `${uid} - ${moment(start).format(
       'YYYY-MM-DD'
     )} - ${createdAt.getTime()}`;
     const { items } = list;
 
     try {
       await this.firestore.collection('shoppingList').doc(id).set({
-        beginningOfWeek: beginningOfWeekDate,
+        start,
+        end,
         items,
         uid,
         createdAt,
@@ -35,18 +35,11 @@ export default class ShoppingListDocumentServiceImpl implements ShoppingList {
     }
   }
 
-  updateShoppingList(
-    beginningOfWeek: Date,
-    list: { [key: string]: any },
-    uid: string
-  ): Promise<void> {
-    const beginningOfWeekMoment = moment(beginningOfWeek).startOf('isoWeek');
-    const beginningOfWeekDate = beginningOfWeekMoment.toDate();
+  updateShoppingList(list: { [key: string]: any }, uid: string): Promise<void> {
     const modifiedAt = new Date();
     const { id, items } = list;
 
     return this.firestore.collection('shoppingList').doc(id).update({
-      beginningOfWeekDate,
       items,
       uid,
       modifiedAt,
@@ -55,15 +48,11 @@ export default class ShoppingListDocumentServiceImpl implements ShoppingList {
   }
 
   async findDocument(
-    beginningOfWeek: Date,
+    start: Date,
+    end: Date,
     uid: string
   ): Promise<{ id: string; items: { [key: string]: any } }> {
-    const beginningOfWeekMoment = moment(beginningOfWeek).startOf('isoWeek');
-    const beginningOfWeekDate = beginningOfWeekMoment.toDate();
-    const response = await this.getDocumentReference(
-      beginningOfWeekDate,
-      uid
-    ).get();
+    const response = await this.getDocumentReference(start, end, uid).get();
     if (response.docs.length) {
       return response.docs.map(this.mapDocuments)[0];
     }
@@ -71,12 +60,14 @@ export default class ShoppingListDocumentServiceImpl implements ShoppingList {
   }
 
   getDocumentReference(
-    date: Date,
+    start: Date,
+    end: Date,
     uid: string
   ): firebase.firestore.Query<firebase.firestore.DocumentData> {
     return this.firestore
       .collection('shoppingList')
-      .where('beginningOfWeek', '==', moment(date).startOf('day').toDate())
+      .where('start', '==', start)
+      .where('end', '==', end)
       .where('uid', '==', uid)
       .where('deleted', '==', false)
       .limit(1);

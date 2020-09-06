@@ -1,18 +1,16 @@
 export default interface Day {
   createShoppingList(
-    beginningOfWeek: Date,
+    start: Date,
+    end: Date,
     list: { [key: string]: any },
     uid: string
   ): Promise<string | null>;
 
-  updateShoppingList(
-    beginningOfWeek: Date,
-    list: { [key: string]: any },
-    uid: string
-  ): Promise<void>;
+  updateShoppingList(list: { [key: string]: any }, uid: string): Promise<void>;
 
   findDocument(
-    beginningOfWeek: Date,
+    start: Date,
+    end: Date,
     uid: string
   ): Promise<{ id: string; items: { [key: string]: any } }>;
 }

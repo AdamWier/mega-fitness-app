@@ -3,14 +3,38 @@ import { View, StyleSheet } from 'react-native';
 import { container, UserPropTypes } from '../store/reducers/User';
 import CustomHeader from '../components/Header';
 import { ScrollView } from 'react-native-gesture-handler';
-import WeekSelector from '../components/WeekSelector';
 import { mealDocumentService, shoppingListDocumentService } from '../Firebase';
-import moment from 'moment';
 import ShoppingListCard from '../components/ShoppingListCard';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import moment from 'moment';
+import { Text, Icon, Button } from 'react-native-elements';
 
 function ShoppingList({ user }): JSX.Element {
-  const [period, setPeriod] = useState({});
+  const [period, setPeriod] = useState({
+    start: null as Date,
+    end: null as Date,
+  });
   const [list, setList] = useState({ id: null, items: {} });
+  const [isStartVisible, setIsStartVisible] = useState(false);
+  const [isEndVisible, setIsEndVisible] = useState(false);
+
+  const getEnd = (start: Date) => {
+    setPeriod((period) => ({
+      ...period,
+      start: moment(start).startOf('day').toDate(),
+      end: null,
+    }));
+    setIsStartVisible(false);
+    setIsEndVisible(true);
+  };
+
+  const getPeriod = (end: Date) => {
+    setPeriod((period) => ({
+      ...period,
+      end: moment(end).startOf('day').toDate(),
+    }));
+    setIsEndVisible(false);
+  };
 
   const updateAmount = (
     food: string,
@@ -34,14 +58,11 @@ function ShoppingList({ user }): JSX.Element {
 
   const saveList = async () => {
     if (list.id) {
-      shoppingListDocumentService.updateShoppingList(
-        new Date(Object.keys(period)[0]),
-        list,
-        user.uid
-      );
+      shoppingListDocumentService.updateShoppingList(list, user.uid);
     } else {
       const id = await shoppingListDocumentService.createShoppingList(
-        new Date(Object.keys(period)[0]),
+        period.start,
+        period.end,
         list,
         user.uid
       );
@@ -54,8 +75,9 @@ function ShoppingList({ user }): JSX.Element {
 
   const generateList = useCallback(
     async (id: string | null) => {
-      const mealDocuments = await mealDocumentService.findByWeek(
-        moment(Object.keys(period)[0]).toDate(),
+      const mealDocuments = await mealDocumentService.findByDateRange(
+        period.start,
+        period.end,
         user.uid
       );
       const foods = mealDocuments.flatMap((document) => document.meal);
@@ -87,40 +109,67 @@ function ShoppingList({ user }): JSX.Element {
       }, {});
       setList({ items: reorderedFoods, id });
     },
-    [period, user.uid]
+    [period.start, period.end, user.uid]
   );
 
   useEffect(() => {
+    setIsStartVisible(true);
+  }, [setIsStartVisible]);
+
+  useEffect(() => {
     (async function findOrGenerateList() {
-      const weekDays = Object.keys(period);
-      const savedList =
-        weekDays.length &&
-        (await shoppingListDocumentService.findDocument(
-          new Date(weekDays[0]),
+      if (period.start && period.end) {
+        const savedList = await shoppingListDocumentService.findDocument(
+          period.start,
+          period.end,
           user.uid
-        ));
-      savedList ? setList(savedList) : generateList(null);
+        );
+        savedList ? setList(savedList) : generateList(null);
+      }
     })();
   }, [generateList, period, user.uid]);
 
   return (
     <View style={style.content}>
       <CustomHeader title="Shopping Lists" />
-      <WeekSelector
-        period={period}
-        setPeriod={setPeriod}
-        shouldConfirm={!!Object.keys(list.items).length}
+      <DateTimePickerModal
+        isVisible={isStartVisible}
+        date={period.start || new Date()}
+        mode="date"
+        onConfirm={getEnd}
+        onCancel={() => null}
       />
+      <DateTimePickerModal
+        isVisible={isEndVisible}
+        date={period.end || new Date()}
+        mode="date"
+        onConfirm={getPeriod}
+        onCancel={() => null}
+      />
+      <View style={style.horizontal}>
+        <Text h4>
+          {!!period.start && `${period.start?.toLocaleDateString()} - `}
+          {period.end?.toLocaleDateString()}
+        </Text>
+        <Button
+          icon={<Icon name="restore" />}
+          onPress={() => setIsStartVisible(true)}
+        />
+      </View>
       <ScrollView style={style.listSpace}>
-        {!!Object.keys(list.items).length && (
-          <ShoppingListCard
-            list={list.items}
-            updateAmount={updateAmount}
-            toggleCheckBox={toggleCheckBox}
-            refreshList={() => generateList(list.id)}
-            saveList={saveList}
-          />
-        )}
+        {!!period.start &&
+          !!period.end &&
+          (Object.keys(list.items).length ? (
+            <ShoppingListCard
+              list={list.items}
+              updateAmount={updateAmount}
+              toggleCheckBox={toggleCheckBox}
+              refreshList={() => generateList(list.id)}
+              saveList={saveList}
+            />
+          ) : (
+            <Text>No meals or list found</Text>
+          ))}
       </ScrollView>
     </View>
   );
@@ -132,6 +181,11 @@ const style = StyleSheet.create({
   },
   listSpace: {
     flex: 1,
+  },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
   },
 });
 
