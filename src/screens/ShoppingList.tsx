@@ -7,6 +7,7 @@ import { mealDocumentService, shoppingListDocumentService } from '../Firebase';
 import ShoppingListCard from '../components/ShoppingListCard';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
+import { Text, Icon, Button } from 'react-native-elements';
 
 function ShoppingList({ user }): JSX.Element {
   const [period, setPeriod] = useState({
@@ -21,6 +22,7 @@ function ShoppingList({ user }): JSX.Element {
     setPeriod((period) => ({
       ...period,
       start: moment(start).startOf('day').toDate(),
+      end: null,
     }));
     setIsStartVisible(false);
     setIsEndVisible(true);
@@ -144,16 +146,30 @@ function ShoppingList({ user }): JSX.Element {
         onConfirm={getPeriod}
         onCancel={() => null}
       />
+      <View style={style.horizontal}>
+        <Text h4>
+          {!!period.start && `${period.start?.toLocaleDateString()} - `}
+          {period.end?.toLocaleDateString()}
+        </Text>
+        <Button
+          icon={<Icon name="restore" />}
+          onPress={() => setIsStartVisible(true)}
+        />
+      </View>
       <ScrollView style={style.listSpace}>
-        {!!Object.keys(list.items).length && (
-          <ShoppingListCard
-            list={list.items}
-            updateAmount={updateAmount}
-            toggleCheckBox={toggleCheckBox}
-            refreshList={() => generateList(list.id)}
-            saveList={saveList}
-          />
-        )}
+        {!!period.start &&
+          !!period.end &&
+          (Object.keys(list.items).length ? (
+            <ShoppingListCard
+              list={list.items}
+              updateAmount={updateAmount}
+              toggleCheckBox={toggleCheckBox}
+              refreshList={() => generateList(list.id)}
+              saveList={saveList}
+            />
+          ) : (
+            <Text>No meals or list found</Text>
+          ))}
       </ScrollView>
     </View>
   );
@@ -165,6 +181,11 @@ const style = StyleSheet.create({
   },
   listSpace: {
     flex: 1,
+  },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
   },
 });
 
