@@ -1,5 +1,6 @@
 # Mega-fitness-app
 ## The fitness app that's super mega
+http://www.mycabinetofcuriosities.com/
 
 ### About the project
 The idea for this app came from the dissatisfaction I had with other meal and exercise tracking apps in the past that didn't provide enough flexibility. Notably being able to only input food for the current day and the past but not the future or the inability to copy meals from one day to another. These were some of the first features I worked towards, essentially bringing the idea of it also being not just a meal tracking app but also a meal planning app. It has continued to evolve from there.
