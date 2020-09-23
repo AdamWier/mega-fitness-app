@@ -15,7 +15,7 @@ The idea for this app came from the dissatisfaction I had with other meal and ex
 
 ### Bootstrap the project
 1. Fork the repo
-2. (Install yarn if necessary)[https://classic.yarnpkg.com/en/docs/install/]
+2. [Install yarn if necessary](https://classic.yarnpkg.com/en/docs/install/)
 3. Run ``yarn`` in the root directory
 4. Create a file named ``.env`` in the root directory
 5. Copy and past the following into the file: 
@@ -28,10 +28,10 @@ FIREBASE_DATABASE_URL=https://<<FIREBASE_PROJECT_ID>>.firebaseio.com
 FIREBASE_STORAGE_BUCKET=<<FIREBASE_PROJECT_ID>>.appspot.com
 ```
 #### USDA Api Key
-6. A key for the USDA's Food Central API can be acquired here: [https://fdc.nal.usda.gov/api-key-signup.html]
+6. A key for the USDA's Food Central API can be acquired here: (https://fdc.nal.usda.gov/api-key-signup.html)
 7. Once you receive the key, replace the DUMMY value in the .env project with this key
 #### Firebase API keys
-8. Go to [https://firebase.google.com/] and sign up for a google account or sign in if you already have one
+8. Go to (https://firebase.google.com/) and sign up for a google account or sign in if you already have one
 9. Click "Go to console" in the top right corner
 10. Click the "Create a project" button
 11. Enter any name you like
@@ -40,7 +40,7 @@ FIREBASE_STORAGE_BUCKET=<<FIREBASE_PROJECT_ID>>.appspot.com
 14. Here you will see "project id" (FIREBASE_PROJECT_ID) and "web api key" (FIREBASE_API_KEY); copy these values into the corresponding variables
 15. Make sure to also replace <<FIREBASE_PROJECT_ID>> in the other variables
 16. When this is done, you should be able to launch the project by using the commnad ``yarn start`` (You can add ``-c`` if you ever need to clear the cache)
-17. To run the app on your physical device or an emulator please see Expo's instructions [https://reactnative.dev/docs/0.60/getting-started]
+17. To run the app on your physical device or an emulator please see Expo's instructions (https://reactnative.dev/docs/0.60/getting-started)
 (The app no longer runs in their web view due to certain component incompatibilities. It has also not been tested or adapted for iOS because I don't own an iPhone, but if you're interested in doing that, feel free to submit any pull requests to make it happen! I have only tested this app on Android physical devices.)
 
 ### Contributing to the project
