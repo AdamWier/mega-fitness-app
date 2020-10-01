@@ -2,6 +2,9 @@
 ## The fitness app that's super mega
 http://www.mycabinetofcuriosities.com/
 
+## Hacktoberfest tag
+Some issues are tagged Hacktoberfest because I thought they would be particularly clear or easy to understand without much explanation. If you feel like taking on an issue but need clarification, don't hesitate to ask. Whether with my project or another, happy hacking this Hacktoberfest! 🎃
+
 ### About the project
 The idea for this app came from the dissatisfaction I had with other meal and exercise tracking apps in the past that didn't provide enough flexibility. Notably being able to only input food for the current day and the past but not the future or the inability to copy meals from one day to another. These were some of the first features I worked towards, essentially bringing the idea of it also being not just a meal tracking app but also a meal planning app. It has continued to evolve from there.
 
@@ -46,6 +49,3 @@ FIREBASE_STORAGE_BUCKET=<<FIREBASE_PROJECT_ID>>.appspot.com
 
 ### Contributing to the project
 Feel free to contibute an idea you have by forking the repository and making a pull request. If you want to see features I have in mind, take a look at the current version in development (v1.3 for example) under the Projects tab and feel free to assign yourself to an issue. If possible, please include "Close #<<Number of issue in this repository or if no issue, the number of the pull request with the angle brackets>>" in the commit for a minimum of tracability. Thanks and welcome to the project!
-
-## Hacktoberfest tag
-Some issues are tagged Hacktoberfest because I thought they would be particularly clear or easy to understand without much explanation. If you feel like taking on an issue but need clarification, don't hesitate to ask. Whether with my project or another, happy hacking this Hacktoberfest! 🎃
