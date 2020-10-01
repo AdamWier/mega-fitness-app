@@ -46,3 +46,6 @@ FIREBASE_STORAGE_BUCKET=<<FIREBASE_PROJECT_ID>>.appspot.com
 
 ### Contributing to the project
 Feel free to contibute an idea you have by forking the repository and making a pull request. If you want to see features I have in mind, take a look at the current version in development (v1.3 for example) under the Projects tab and feel free to assign yourself to an issue. If possible, please include "Close #<<Number of issue in this repository or if no issue, the number of the pull request with the angle brackets>>" in the commit for a minimum of tracability. Thanks and welcome to the project!
+
+## Hacktoberfest tag
+Some issues are tagged Hacktoberfest because I thought they would be particularly clear or easy to understand without much explanation. If you feel like taking on an issue but need clarification, don't hesitate to ask. Whether with my project or another, happy hacking this Hacktoberfest! 🎃
