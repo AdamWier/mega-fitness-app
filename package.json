@@ -9,9 +9,13 @@
   },
   "jest": {
     "preset": "jest-expo",
-    "testMatch": ["<rootDir>/tests/**/*.tsx"],
-    "setupFiles": ["./jest.ts"],
-    "transformIgnorePatterns": ["node_modules/(?!victory-native)/", "node_modules/(?!(jest-)?react-native|unimodules-permissions-interface|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|sentry-expo|native-base|victory-*)"],
+    "testMatch": [
+      "<rootDir>/tests/**/*.{js,jsx,ts,tsx}"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!victory-native)/",
+      "node_modules/(?!(jest-)?react-native|unimodules-permissions-interface|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|sentry-expo|native-base|victory-*)"
+    ],
     "collectCoverage": true,
     "collectCoverageFrom": [
       "**/*.{js,jsx,ts,tsx}",
@@ -84,6 +88,7 @@
     "eslint-config-prettier": "^6.10.1",
     "eslint-import-resolver-typescript": "^2.0.0",
     "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jest": "^24.1.0",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.19.0",
