@@ -22,7 +22,9 @@
       "!**/coverage/**",
       "!**/node_modules/**",
       "!**/babel.config.js",
-      "!**/jest.ts"
+      "!**/jest.ts",
+      "!**/web-build/**",
+      "!**/src/Firebase/CorrectionScripts/**"
     ]
   },
   "husky": {
@@ -97,6 +99,7 @@
     "firebase-admin": "^9.1.0",
     "husky": "^4.2.5",
     "jest-expo": "^36.0.0",
+    "jest-fetch-mock": "^3.0.3",
     "lint-staged": "^10.1.6",
     "prettier": "^2.0.2",
     "typescript": "^3.9.3"
