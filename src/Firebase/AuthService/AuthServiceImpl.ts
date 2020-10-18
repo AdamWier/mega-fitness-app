@@ -1,6 +1,6 @@
 import AuthService from './AuthService';
 import firebase from 'firebase';
-import User from '../DocumentServices/User/User';
+import User from '../DocumentServices/User';
 
 export default class AuthServiceImpl implements AuthService {
   auth: firebase.auth.Auth;
@@ -10,7 +10,6 @@ export default class AuthServiceImpl implements AuthService {
   constructor(auth: firebase.auth.Auth, user: User) {
     this.auth = auth;
     this.user = user;
-    this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
   }
 
   async getCurrentUser(callback: Function): Promise<firebase.Unsubscribe> {

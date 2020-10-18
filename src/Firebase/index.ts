@@ -8,10 +8,10 @@ import {
   FIREBASE_STORAGE_BUCKET,
 } from 'react-native-dotenv';
 import AuthService from './AuthService/AuthServiceImpl';
-import DayDocumentService from './DocumentServices/Day/DayImpl';
-import MealDocumentService from './DocumentServices/Meal/MealImpl';
-import UserDocumentService from './DocumentServices/User/UserImpl';
-import ShoppingListDocumentService from './DocumentServices/ShoppingList/ShoppingListImpl';
+import DayDocumentService from './DocumentServices/Day';
+import MealDocumentService from './DocumentServices/Meal';
+import UserDocumentService from './DocumentServices/User';
+import ShoppingListDocumentService from './DocumentServices/ShoppingList';
 
 const firebaseConfig = {
   apiKey: FIREBASE_API_KEY,
