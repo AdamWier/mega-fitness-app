@@ -1,116 +1,180 @@
 import { FoodResult, FoodDetails, FormattedPortion } from '../CommonAPITypes';
+import {
+  OFDSearchResult,
+  OFDDetailsResult,
+  OFDFood,
+  NutrientName,
+} from './OFDApiTypes';
 
-export interface Helper {
-  getSearchURI(locale: string, searchText: string, page: string): string;
-  getBarcodeSearchURI(barcode: string): string;
-  getDetailsURI(id: string): string;
-  search(
+export default class OFDApi {
+  searchReturnedFields: string[];
+  detailsReturnedFields: string[];
+
+  constructor() {
+    this.searchReturnedFields = [
+      'brands',
+      'product_name',
+      'product_name_en',
+      'product_name_fr',
+      'completeness',
+      '_id',
+    ];
+    this.detailsReturnedFields = [
+      'brands',
+      'product_name',
+      'product_name_en',
+      'product_name_fr',
+      '_id',
+      'nutriments',
+      'serving_size',
+      'serving_quantity',
+    ];
+  }
+
+  private getSearchURI(
+    locale: string,
+    searchText: string,
+    page: string
+  ): string {
+    const addressComponents = {
+      baseURI: `https://${locale}.openfoodfacts.org/cgi/search.pl?json=true&search_simple=1&action=process&page_size=50&search_terms=${searchText}&page=${page}`,
+      stateTagFilter:
+        '&tagtype_0=states&tag_contains_0=contains&tag_0=en:characteristics-completed',
+      returnedFieldsFilter: `&fields=${this.searchReturnedFields.join(',')}`,
+    };
+    return Object.values(addressComponents).join('');
+  }
+
+  private getBarcodeSearchURI(barcode: string): string {
+    const addressComponents = {
+      baseURI: `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`,
+      returnFieldsFilter: `&fields=${this.detailsReturnedFields.join(',')}`,
+    };
+    return Object.values(addressComponents).join('');
+  }
+
+  private getDetailsURI(id: string): string {
+    const addressComponents = {
+      baseURI: `https://world.openfoodfacts.org/api/v0/product/${id}.json`,
+      returnFieldsFilter: `&fields=${this.detailsReturnedFields.join(',')}`,
+    };
+    return Object.values(addressComponents).join('');
+  }
+
+  public async search(
     searchText: string,
     isFranceLocale: boolean,
-    page?: number
-  ): Promise<FoodResult[]>;
-  barcodeSearch(barcode: string): Promise<FoodDetails>;
-  getDetails(foodId: string): Promise<FoodDetails>;
-  adaptResult(product: OFDFood): FoodDetails;
-  getNutrient(food: OFDFood, nutrient: NutrientName): number;
-  getPortions(product: OFDFood): FormattedPortion[];
-  convertKjToCalories(kj: number): number;
-}
+    currentPage?: number
+  ): Promise<FoodResult[]> {
+    const page = currentPage ? (currentPage + 1).toString() : '0';
+    const headers = new Headers({
+      'User-Agent': 'mega-fitness-app-dev - Android - Version 0.0',
+    });
+    const results: OFDSearchResult = await (
+      await fetch(
+        this.getSearchURI(isFranceLocale ? 'fr' : 'us', searchText, page),
+        {
+          headers,
+        }
+      )
+    ).json();
+    const filteredResults = results.products.filter(
+      (product) => Number(product.completeness) > 0.5
+    );
+    return filteredResults.map((food) => {
+      const productName =
+        food.product_name || food.product_name_en || food.product_name_fr;
+      const description = food.brands
+        ? `${productName} (${food.brands})`
+        : productName;
+      return {
+        description,
+        id: food._id,
+        api: 'Open Food Data',
+      };
+    });
+  }
 
-export interface OFDSearchResult {
-  page: number;
-  page_size: number;
-  products: {
-    _id: string;
-    product_name: string;
-    product_name_en: string;
-    product_name_fr: string;
-    brands: string;
-    completeness: string;
-  }[];
-  count: number;
-  skip: number;
-}
+  public async barcodeSearch(barcode: string): Promise<FoodDetails> {
+    const result = await (
+      await fetch(this.getBarcodeSearchURI(barcode))
+    ).json();
+    return result.product ? this.adaptResult(result.product) : null;
+  }
 
-export interface OFDDetailsResult {
-  product: OFDFood;
-  status_verbose: string;
-  code: string;
-  status: number;
-}
+  public async getDetails(foodId: string): Promise<FoodDetails> {
+    const result: OFDDetailsResult = await (
+      await fetch(this.getDetailsURI(foodId))
+    ).json();
+    return result.product ? this.adaptResult(result.product) : null;
+  }
 
-export interface OFDFood {
-  _id: string;
-  product_name: string;
-  product_name_en: string;
-  product_name_fr: string;
-  brands: string;
-  serving_quantity: string;
-  serving_size: string;
-  nutriments: {
-    fat_unit?: string;
-    sugars_unit?: string;
-    carbohydrates_unit?: string;
-    fat?: number;
-    ['energy-kcal_serving']?: number;
-    sodium_value?: number;
-    energy_value?: number;
-    sodium_unit?: string;
-    ['energy-kcal_unit']?: string;
-    fat_100g?: number;
-    carbohydrates_100g?: number;
-    ['nova-group']?: number;
-    sugars_serving?: number;
-    salt_serving?: number;
-    carbohydrates_serving?: number;
-    sodium_serving?: number;
-    proteins_unit?: string;
-    salt_value?: number;
-    sugars_100g?: number;
-    salt?: number;
-    carbohydrates?: number;
-    energy_unit?: string;
-    ['nutrition-score-fr_100g']?: number;
-    energy?: number;
-    ['nova-group_100g']?: number;
-    ['saturated-fat_100g']?: number;
-    ['saturated-fat_value']?: number;
-    sodium?: number;
-    ['fruits-vegetables-nuts-estimate-from-ingredients_100g']?: number;
-    energy_serving?: number;
-    ['energy-kcal']?: number;
-    fat_value?: number;
-    sodium_100g?: number;
-    salt_unit?: string;
-    proteins_serving?: number;
-    energy_100g?: number;
-    ['nova-group_serving']?: number;
-    salt_100g?: number;
-    proteins_value?: number;
-    ['energy-kcal_100g']?: number;
-    carbohydrates_value?: number;
-    ['nutrition-score-fr']?: number;
-    ['saturated-fat_unit']?: string;
-    proteins?: number;
-    proteins_100g?: number;
-    ['saturated-fat_serving']?: number;
-    fat_serving?: number;
-    sugars_value?: number;
-    ['saturated-fat']?: number;
-    ['energy-kcal_value']?: number;
-    sugars?: number;
-    alcohol?: number;
-    alcohol_100g?: number;
-    alcohol_serving?: number;
-    alcohol_unit?: string;
-    alcohol_value?: number;
-  };
-}
+  private adaptResult(product: OFDFood): FoodDetails {
+    const name =
+      product.product_name ||
+      product.product_name_en ||
+      product.product_name_fr;
+    const calories =
+      this.getNutrient(product, NutrientName.Energy) ||
+      this.convertKjToCalories(this.getNutrient(product, NutrientName.Kj));
+    const protein = this.getNutrient(product, NutrientName.Protein);
+    const fats = this.getNutrient(product, NutrientName.Fat);
+    const carbs = this.getNutrient(product, NutrientName.Carbs);
+    const portions = this.getPortions(product);
+    if (
+      name &&
+      !Number.isNaN(calories) &&
+      !Number.isNaN(protein) &&
+      !Number.isNaN(fats) &&
+      !Number.isNaN(carbs) &&
+      portions
+    ) {
+      return {
+        name,
+        calories,
+        protein,
+        fats,
+        carbs,
+        portions,
+      };
+    }
+    if (
+      product.nutriments.hasOwnProperty('alcohol') &&
+      !Number.isNaN(calories)
+    ) {
+      return {
+        name,
+        calories,
+        protein: 0,
+        fats: 0,
+        carbs: calories / 4,
+        portions,
+      };
+    }
+    return null;
+  }
 
-export enum NutrientName {
-  Protein = 'proteins_100g',
-  Fat = 'fat_100g',
-  Carbs = 'carbohydrates_100g',
-  Energy = 'energy-kcal_value',
-  Kj = 'energy-kj_value',
+  private getNutrient(food: OFDFood, nutrient: NutrientName): number {
+    return food.nutriments[`${nutrient}`] / 100;
+  }
+
+  private getPortions(product: OFDFood): FormattedPortion[] {
+    const portions = [
+      {
+        weight: 1,
+        description: 'gram',
+      },
+    ];
+    if (Number(product.serving_quantity)) {
+      portions.push({
+        weight: Number(product.serving_quantity),
+        description: `Portion (${product.serving_size})`,
+      });
+    }
+    return portions;
+  }
+
+  private convertKjToCalories(kj: number): number {
+    return kj / 4.184;
+  }
 }
