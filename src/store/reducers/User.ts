@@ -2,17 +2,17 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import PropTypes from 'prop-types';
 
-const LOGIN = 'LOGIN';
+export const LOGIN = 'LOGIN';
 
-const initalState = {
+export const initalState = {
   uid: null,
   email: null,
 };
 
-function login(userInfo: {
+export function login(userInfo: {
   uid: string;
   email: string;
-}): { type: string; payload: any } {
+}): { type: string; payload: typeof initalState } {
   return {
     type: LOGIN,
     payload: userInfo,
@@ -21,7 +21,7 @@ function login(userInfo: {
 
 export const userReducer = (
   state = initalState,
-  action: { type: string; payload: any }
+  action: { type: string; payload: typeof initalState }
 ): { [key: string]: any } => {
   switch (action.type) {
     case LOGIN:
