@@ -1,14 +1,13 @@
 import moment from 'moment';
-import ShoppingList from './ShoppingList';
 
-export default class ShoppingListDocumentServiceImpl implements ShoppingList {
+export default class ShoppingListService {
   firestore: firebase.firestore.Firestore;
 
   constructor(firestore: firebase.firestore.Firestore) {
     this.firestore = firestore;
   }
 
-  async createShoppingList(
+  public async createShoppingList(
     start: Date,
     end: Date,
     list: { [key: string]: any },
@@ -35,7 +34,10 @@ export default class ShoppingListDocumentServiceImpl implements ShoppingList {
     }
   }
 
-  updateShoppingList(list: { [key: string]: any }, uid: string): Promise<void> {
+  public updateShoppingList(
+    list: { [key: string]: any },
+    uid: string
+  ): Promise<void> {
     const modifiedAt = new Date();
     const { id, items } = list;
 
@@ -47,7 +49,7 @@ export default class ShoppingListDocumentServiceImpl implements ShoppingList {
     });
   }
 
-  async findDocument(
+  public async findDocument(
     start: Date,
     end: Date,
     uid: string

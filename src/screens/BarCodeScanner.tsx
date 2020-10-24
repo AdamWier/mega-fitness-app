@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Toast from 'react-native-simple-toast';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import OFDApiImpl from '../ApiHelpers/OFD/OFDApiImpl';
+import OFDApiImpl from '../ApiHelpers/OFD/OFDApi';
 import PropTypes from 'prop-types';
 import { useFocusEffect } from '@react-navigation/native';
 

@@ -4,13 +4,35 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web",
-    "eject": "expo eject",
+    "test": "jest",
     "lint": "eslint --fix src/**/*.{jsx,ts,tsx}"
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "testMatch": [
+      "<rootDir>/tests/**/*.{js,jsx,ts,tsx}"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!victory-native)/",
+      "node_modules/(?!(jest-)?react-native|unimodules-permissions-interface|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|sentry-expo|native-base|victory-*)"
+    ],
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.{js,jsx,ts,tsx}",
+      "!**/coverage/**",
+      "!**/node_modules/**",
+      "!**/babel.config.js",
+      "!**/jest.ts",
+      "!**/web-build/**",
+      "!**/src/Firebase/CorrectionScripts/**",
+      "!**/src/StyleSheet.ts",
+      "!**/src/Firebase/index.ts"
+    ]
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run test"
     }
   },
   "lint-staged": {
@@ -53,11 +75,13 @@
     "@babel/core": "^7.0.0",
     "@react-native-community/eslint-config": "^1.1.0",
     "@types/firebase": "^3.2.1",
+    "@types/jest": "^26.0.14",
     "@types/react": "~16.9.0",
     "@types/react-native": "~0.60.23",
     "@types/react-native-calendars": "^1.20.7",
     "@types/react-native-elements": "^0.18.0",
     "@types/react-redux": "^7.1.7",
+    "@types/react-test-renderer": "^16.9.3",
     "@types/redux": "^3.6.0",
     "@types/victory": "^33.1.4",
     "@typescript-eslint/eslint-plugin": "^2.23.0",
@@ -69,6 +93,7 @@
     "eslint-config-prettier": "^6.10.1",
     "eslint-import-resolver-typescript": "^2.0.0",
     "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jest": "^24.1.0",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.19.0",
@@ -76,6 +101,8 @@
     "eslint-plugin-react-native": "^3.8.1",
     "firebase-admin": "^9.1.0",
     "husky": "^4.2.5",
+    "jest-expo": "^36.0.0",
+    "jest-fetch-mock": "^3.0.3",
     "lint-staged": "^10.1.6",
     "prettier": "^2.0.2",
     "typescript": "^3.9.3"

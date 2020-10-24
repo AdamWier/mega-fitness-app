@@ -1,14 +1,25 @@
 {
     "extends": [
         "@react-native-community",
-        "plugin:prettier/recommended"
+        "plugin:prettier/recommended",
+        "plugin:jest/all"
     ],
     "parser": "@typescript-eslint/parser",
     "plugins": [
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "jest"
     ],
     "rules": {
         "prettier/prettier": ["error", {"singleQuote": true}],
-        "react-native/no-inline-styles": 0
+        "react-native/no-inline-styles": 0,
+        "jest/no-disabled-tests": "warn",
+        "jest/no-focused-tests": "error",
+        "jest/no-identical-title": "error",
+        "jest/prefer-to-have-length": "warn",
+        "jest/valid-expect": "error",
+        "jest/no-hooks": "off"
+    },
+    "env": {
+        "jest/globals": true
     }
 }

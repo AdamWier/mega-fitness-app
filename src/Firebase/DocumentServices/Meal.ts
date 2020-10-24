@@ -1,14 +1,13 @@
-import Meal from './Meal';
 import moment from 'moment';
 
-export default class MealImpl implements Meal {
+export default class MealService {
   firestore: firebase.firestore.Firestore;
 
   constructor(firestore: firebase.firestore.Firestore) {
     this.firestore = firestore;
   }
 
-  create(
+  public create(
     meal: Array<any>,
     name: string,
     uid: string,
@@ -28,7 +27,7 @@ export default class MealImpl implements Meal {
       });
   }
 
-  update(
+  public update(
     meal: Array<any>,
     name: string,
     uid: string,
@@ -49,7 +48,7 @@ export default class MealImpl implements Meal {
       });
   }
 
-  delete(id: string): Promise<void> {
+  public delete(id: string): Promise<void> {
     const updatedAt = new Date();
     return this.firestore.collection('meals').doc(id).update({
       deleted: true,
@@ -57,7 +56,7 @@ export default class MealImpl implements Meal {
     });
   }
 
-  async findByDate(
+  public async findByDate(
     currentDate: Date,
     uid: string
   ): Promise<{ [key: string]: any }[]> {
@@ -68,7 +67,7 @@ export default class MealImpl implements Meal {
     return [];
   }
 
-  getFindByDateListener(
+  public getFindByDateListener(
     currentDate: Date,
     uid: string,
     updateCallback: Function
@@ -79,7 +78,7 @@ export default class MealImpl implements Meal {
     });
   }
 
-  getByDateRef(
+  private getByDateRef(
     currentDate: Date,
     uid: string
   ): firebase.firestore.Query<firebase.firestore.DocumentData> {
@@ -93,7 +92,7 @@ export default class MealImpl implements Meal {
       .where('deleted', '==', false);
   }
 
-  async findByWeek(
+  public async findByWeek(
     beginningOfWeek: Date,
     uid: string
   ): Promise<{ [key: string]: any }[]> {
@@ -104,7 +103,7 @@ export default class MealImpl implements Meal {
     return [];
   }
 
-  getByWeekRef(
+  private getByWeekRef(
     beginningOfWeek: Date,
     uid: string
   ): firebase.firestore.Query<firebase.firestore.DocumentData> {
@@ -118,7 +117,7 @@ export default class MealImpl implements Meal {
       .where('deleted', '==', false);
   }
 
-  async findByDateRange(
+  public async findByDateRange(
     start: Date,
     end: Date,
     uid: string
@@ -130,7 +129,7 @@ export default class MealImpl implements Meal {
     return [];
   }
 
-  getByDateRangeRef(
+  private getByDateRangeRef(
     start: Date,
     end: Date,
     uid: string
@@ -143,7 +142,7 @@ export default class MealImpl implements Meal {
       .where('deleted', '==', false);
   }
 
-  mapDocuments(
+  private mapDocuments(
     document: firebase.firestore.QueryDocumentSnapshot<
       firebase.firestore.DocumentData
     >

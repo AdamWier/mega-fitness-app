@@ -1,15 +1,14 @@
 import moment from 'moment';
-import Day from './Day';
-import DayDocument from '../../Documents/DayDocument';
+import DayDocument from '../Documents/DayDocument';
 
-export default class DayImpl implements Day {
+export default class DayService {
   firestore: firebase.firestore.Firestore;
 
   constructor(firestore: firebase.firestore.Firestore) {
     this.firestore = firestore;
   }
 
-  createGoal(
+  public createGoal(
     currentDate: Date,
     goalCalories: number,
     uid: string
@@ -35,7 +34,7 @@ export default class DayImpl implements Day {
       });
   }
 
-  updateGoal(
+  public updateGoal(
     currentDate: Date,
     goalCalories: number,
     uid: string,
@@ -52,7 +51,11 @@ export default class DayImpl implements Day {
     });
   }
 
-  createWeight(currentDate: Date, weight: number, uid: string): Promise<void> {
+  public createWeight(
+    currentDate: Date,
+    weight: number,
+    uid: string
+  ): Promise<void> {
     const dayStartMoment = moment(currentDate).startOf('day');
     const date = dayStartMoment.toDate();
     const createdAt = new Date();
@@ -74,7 +77,7 @@ export default class DayImpl implements Day {
       });
   }
 
-  updateWeight(
+  public updateWeight(
     currentDate: Date,
     weight: number,
     uid: string,
@@ -91,7 +94,7 @@ export default class DayImpl implements Day {
     });
   }
 
-  async findDocument(date: Date, uid: string): Promise<DayDocument> {
+  public async findDocument(date: Date, uid: string): Promise<DayDocument> {
     const response = await this.getDocumentReference(date, uid).get();
     if (response.docs.length) {
       return response.docs.map(this.mapDocuments)[0];
@@ -104,7 +107,7 @@ export default class DayImpl implements Day {
     };
   }
 
-  getDocumentListener(
+  public getDocumentListener(
     date: Date,
     uid: string,
     updateCallback: Function
@@ -115,7 +118,7 @@ export default class DayImpl implements Day {
     });
   }
 
-  getDocumentReference(
+  private getDocumentReference(
     date: Date,
     uid: string
   ): firebase.firestore.Query<firebase.firestore.DocumentData> {
@@ -127,7 +130,7 @@ export default class DayImpl implements Day {
       .limit(1);
   }
 
-  async findByWeek(
+  public async findByWeek(
     beginningOfWeek: Date,
     uid: string
   ): Promise<{ [key: string]: any }[]> {
@@ -138,7 +141,7 @@ export default class DayImpl implements Day {
     return [];
   }
 
-  getByWeekRef(
+  private getByWeekRef(
     beginningOfWeek: Date,
     uid: string
   ): firebase.firestore.Query<firebase.firestore.DocumentData> {
@@ -152,7 +155,7 @@ export default class DayImpl implements Day {
       .where('deleted', '==', false);
   }
 
-  async findByMonth(
+  public async findByMonth(
     beginningOfMonth: Date,
     uid: string
   ): Promise<{ [key: string]: any }[]> {
@@ -163,7 +166,7 @@ export default class DayImpl implements Day {
     return [];
   }
 
-  getByMonthRef(
+  private getByMonthRef(
     beginningOfWeek: Date,
     uid: string
   ): firebase.firestore.Query<firebase.firestore.DocumentData> {
@@ -177,7 +180,7 @@ export default class DayImpl implements Day {
       .where('deleted', '==', false);
   }
 
-  mapDocuments(
+  private mapDocuments(
     document: firebase.firestore.QueryDocumentSnapshot<
       firebase.firestore.DocumentData
     >
