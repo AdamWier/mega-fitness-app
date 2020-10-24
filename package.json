@@ -24,7 +24,9 @@
       "!**/babel.config.js",
       "!**/jest.ts",
       "!**/web-build/**",
-      "!**/src/Firebase/CorrectionScripts/**"
+      "!**/src/Firebase/CorrectionScripts/**",
+      "!**/src/StyleSheet.ts",
+      "!**/src/Firebase/index.ts"
     ]
   },
   "husky": {
