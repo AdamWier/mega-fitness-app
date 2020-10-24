@@ -6,6 +6,7 @@ import OFDDetailsByIdResult from '../../Fixtures/OFDDetailsById.json';
 import OFDAlcoholResult from '../../Fixtures/OFDAlcoholResult.json';
 import OFDNoResult from '../../Fixtures/OFDNoResult.json';
 import OFDResultOnlyGrams from '../../Fixtures/OFDResultOnlyGrams.json';
+import OFDNoCalNoKJ from '../../Fixtures/OFDNoCalNoKJ.json';
 
 describe('open Food Data Api', () => {
   fetchMock.enableMocks();
@@ -180,5 +181,17 @@ describe('open Food Data Api', () => {
         ]),
       })
     );
+  });
+
+  it('returns undefined is no calories or kj', async () => {
+    expect.assertions(1);
+
+    const api = new OFDApi();
+
+    fetchMock.mockResponseOnce(JSON.stringify(OFDNoCalNoKJ));
+
+    const results = await api.getDetails('8002270116544');
+
+    expect(results).toBeUndefined();
   });
 });
