@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 export const LOGIN = 'LOGIN';
 
-export const initalState = {
+export const initialState = {
   uid: null,
   email: null,
 };
@@ -12,7 +12,7 @@ export const initalState = {
 export function login(userInfo: {
   uid: string;
   email: string;
-}): { type: string; payload: typeof initalState } {
+}): { type: string; payload: typeof initialState } {
   return {
     type: LOGIN,
     payload: userInfo,
@@ -20,8 +20,8 @@ export function login(userInfo: {
 }
 
 export const userReducer = (
-  state = initalState,
-  action: { type: string; payload: typeof initalState }
+  state = initialState,
+  action: { type: string; payload: typeof initialState }
 ): { [key: string]: any } => {
   switch (action.type) {
     case LOGIN:

@@ -2,7 +2,7 @@ import {
   UPDATE_MEAL_DOCUMENT,
   updateMealDocument,
   mealReducer,
-  initalState,
+  initialState,
 } from '../../src/store/reducers/MealDocument';
 
 const payload = [
@@ -29,13 +29,13 @@ describe('user reducer', () => {
 
   it('should return the initial state', () => {
     expect.assertions(1);
-    expect(mealReducer(undefined, [] as any)).toStrictEqual(initalState);
+    expect(mealReducer(undefined, [] as any)).toStrictEqual(initialState);
   });
 
   it('should store new user information', () => {
     expect.assertions(1);
     expect(
-      mealReducer(initalState, {
+      mealReducer(initialState, {
         type: UPDATE_MEAL_DOCUMENT,
         payload,
       })

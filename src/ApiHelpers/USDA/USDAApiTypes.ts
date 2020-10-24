@@ -74,9 +74,9 @@ interface FoodAttribute {
 }
 
 enum FoodAttributeName {
-  AdditionalDescripion = 'Additional Description',
+  AdditionalDescription = 'Additional Description',
   CommonName = 'Common Name',
-  Adjustments = 'Adjustements',
+  Adjustments = 'Adjustments',
 }
 
 interface Nutrient {
@@ -100,7 +100,7 @@ enum Unit {
   g = 'g',
   kcal = 'kcal',
   mg = 'mg',
-  micorgram = 'µg',
+  microgram = 'µg',
   kJ = 'kj',
   IU = 'IU',
   go = 'go',
