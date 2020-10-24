@@ -1,15 +1,16 @@
 import OFDApi from '../../../src/ApiHelpers/OFD/OFDApi';
 import fetchMock from 'jest-fetch-mock';
 import OFDSearchResult from '../../Fixtures/OFDSearchResponse.json';
+import OFDBarcodeSearchResult from '../../Fixtures/OFDBarcodeSearchResult.json';
 
-describe('open Food Data Api', () => {
+describe('Open Food Data Api', () => {
   fetchMock.enableMocks();
 
   beforeEach(() => {
     fetchMock.resetMocks();
   });
 
-  it('text search', async () => {
+  it('correctly formats results from an OFD text search', async () => {
     expect.assertions(1);
 
     const api = new OFDApi();
