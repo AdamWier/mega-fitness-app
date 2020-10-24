@@ -7,7 +7,7 @@ import {
   FIREBASE_DATABASE_URL,
   FIREBASE_STORAGE_BUCKET,
 } from 'react-native-dotenv';
-import AuthService from './AuthService/AuthServiceImpl';
+import AuthService from './AuthService';
 import DayDocumentService from './DocumentServices/Day';
 import MealDocumentService from './DocumentServices/Meal';
 import UserDocumentService from './DocumentServices/User';
