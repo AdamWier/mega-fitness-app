@@ -20,7 +20,7 @@ import {
   Divider,
 } from 'react-native-elements';
 import PropTypes from 'prop-types';
-import USDAApiImpl from '../ApiHelpers/USDA/USDAApiImpl';
+import USDAApiImpl from '../ApiHelpers/USDA/USDAApi';
 import OFDApiImpl from '../ApiHelpers/OFD/OFDApi';
 import { FoodResult, FoodDetails } from '../ApiHelpers/CommonAPITypes';
 import Toast from 'react-native-simple-toast';

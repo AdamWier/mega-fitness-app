@@ -1,18 +1,19 @@
-import AuthService from './AuthService';
 import firebase from 'firebase';
-import User from '../DocumentServices/User';
+import User from './DocumentServices/User';
 
-export default class AuthServiceImpl implements AuthService {
-  auth: firebase.auth.Auth;
+export default class AuthService {
+  private auth: firebase.auth.Auth;
 
-  user: User;
+  private user: User;
 
   constructor(auth: firebase.auth.Auth, user: User) {
     this.auth = auth;
     this.user = user;
   }
 
-  async getCurrentUser(callback: Function): Promise<firebase.Unsubscribe> {
+  public async getCurrentUser(
+    callback: Function
+  ): Promise<firebase.Unsubscribe> {
     return this.auth.onAuthStateChanged(async (user) => {
       if (user) {
         const document = await this.user.getDocument(user.uid);
@@ -22,7 +23,7 @@ export default class AuthServiceImpl implements AuthService {
     });
   }
 
-  async login(
+  public async login(
     email: string,
     password: string
   ): Promise<{ uid: string; email: string }> {
@@ -33,11 +34,11 @@ export default class AuthServiceImpl implements AuthService {
     return { uid: user.uid, email: user.email };
   }
 
-  async logout(): Promise<void> {
+  public async logout(): Promise<void> {
     return this.auth.signOut();
   }
 
-  async createUser(
+  public async createUser(
     email: string,
     password: string
   ): Promise<{ uid: string; email: string }> {
@@ -58,7 +59,7 @@ export default class AuthServiceImpl implements AuthService {
     }
   }
 
-  checkUserDetails(userInformation: {
+  public checkUserDetails(userInformation: {
     email: string;
     password: string;
     passwordConfirmation: string;
@@ -71,7 +72,10 @@ export default class AuthServiceImpl implements AuthService {
     return errors;
   }
 
-  verifyPassword(password: string, passwordConfirmation: string): string[] {
+  private verifyPassword(
+    password: string,
+    passwordConfirmation: string
+  ): string[] {
     const errors = [];
     if (!password) {
       errors.push('You must enter a password');
@@ -89,7 +93,7 @@ export default class AuthServiceImpl implements AuthService {
     return errors;
   }
 
-  verifyEmail(email: string): string[] {
+  private verifyEmail(email: string): string[] {
     // eslint-disable-next-line no-control-regex
     const regex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
     const errors = [];
