@@ -5,6 +5,7 @@ import OFDBarcodeSearchResult from '../../Fixtures/OFDBarcodeSearchResult.json';
 import OFDDetailsByIdResult from '../../Fixtures/OFDDetailsById.json';
 import OFDAlcoholResult from '../../Fixtures/OFDAlcoholResult.json';
 import OFDNoResult from '../../Fixtures/OFDNoResult.json';
+import OFDResultOnlyGrams from '../../Fixtures/OFDResultOnlyGrams.json';
 
 describe('open Food Data Api', () => {
   fetchMock.enableMocks();
@@ -153,5 +154,31 @@ describe('open Food Data Api', () => {
     const results = await api.getDetails('yabba dabba do');
 
     expect(results).toBeNull();
+  });
+
+  it('has only grams when other portion types are not available', async () => {
+    expect.assertions(1);
+
+    const api = new OFDApi();
+
+    fetchMock.mockResponseOnce(JSON.stringify(OFDResultOnlyGrams));
+
+    const results = await api.getDetails('5449000131805');
+
+    expect(results).toStrictEqual(
+      expect.objectContaining({
+        name: expect.any(String),
+        calories: expect.any(Number),
+        protein: expect.any(Number),
+        fats: expect.any(Number),
+        carbs: expect.any(Number),
+        portions: expect.arrayContaining([
+          expect.objectContaining({
+            description: 'gram',
+            weight: 1,
+          }),
+        ]),
+      })
+    );
   });
 });
