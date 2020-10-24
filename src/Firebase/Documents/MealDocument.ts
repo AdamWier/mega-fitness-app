@@ -9,7 +9,7 @@ export default interface MealDocument {
   id?: string;
 }
 
-interface AddedFood {
+export interface AddedFood {
   calories: number;
   protein: number;
   fats: number;
