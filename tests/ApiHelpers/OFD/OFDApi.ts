@@ -4,6 +4,7 @@ import OFDSearchResult from '../../Fixtures/OFDSearchResponse.json';
 import OFDBarcodeSearchResult from '../../Fixtures/OFDBarcodeSearchResult.json';
 import OFDDetailsByIdResult from '../../Fixtures/OFDDetailsById.json';
 import OFDAlcoholResult from '../../Fixtures/OFDAlcoholResult.json';
+import OFDNoResult from '../../Fixtures/OFDNoResult.json';
 
 describe('open Food Data Api', () => {
   fetchMock.enableMocks();
@@ -12,7 +13,27 @@ describe('open Food Data Api', () => {
     fetchMock.resetMocks();
   });
 
-  it('correctly formats results from an OFD text search', async () => {
+  it('correctly formats results from an OFD text search in France locale', async () => {
+    expect.assertions(1);
+
+    const api = new OFDApi();
+
+    fetchMock.mockResponseOnce(JSON.stringify(OFDSearchResult));
+
+    const results = await api.search('cookies', true);
+
+    expect(results).toStrictEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          description: expect.any(String),
+          id: expect.any(String),
+          api: 'Open Food Data',
+        }),
+      ])
+    );
+  });
+
+  it('correctly formats results from a second page of OFD text search', async () => {
     expect.assertions(1);
 
     const api = new OFDApi();
@@ -108,5 +129,29 @@ describe('open Food Data Api', () => {
         ]),
       })
     );
+  });
+
+  it('correctly handles no product found for barcode search', async () => {
+    expect.assertions(1);
+
+    const api = new OFDApi();
+
+    fetchMock.mockResponseOnce(JSON.stringify(OFDNoResult));
+
+    const results = await api.barcodeSearch('0');
+
+    expect(results).toBeNull();
+  });
+
+  it('correctly handles no product found for text search', async () => {
+    expect.assertions(1);
+
+    const api = new OFDApi();
+
+    fetchMock.mockResponseOnce(JSON.stringify(OFDNoResult));
+
+    const results = await api.getDetails('yabba dabba do');
+
+    expect(results).toBeNull();
   });
 });
