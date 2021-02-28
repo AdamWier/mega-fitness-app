@@ -8,7 +8,11 @@ import {
 describe('user reducer', () => {
   it('should create an action to store user info', () => {
     expect.assertions(1);
-    const payload = { uid: '1', email: 'nightcrawler@xmen.com' };
+    const payload = {
+      uid: '1',
+      email: 'nightcrawler@xmen.com',
+      goalCalories: 0,
+    };
     const expectedAction = {
       type: LOGIN,
       payload,
@@ -23,7 +27,7 @@ describe('user reducer', () => {
 
   it('should store new user information', () => {
     expect.assertions(1);
-    const payload = { uid: '2', email: 'gambit@xmen.com' };
+    const payload = { uid: '2', email: 'gambit@xmen.com', goalCalories: 0 };
     expect(
       userReducer(initialState, {
         type: LOGIN,

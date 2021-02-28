@@ -32,4 +32,13 @@ export default class UserService {
       updatedAt,
     });
   }
+
+  public getDocumentListener(uid: string, updateCallback: Function): Function {
+    return this.firestore
+      .collection('users')
+      .doc(uid)
+      .onSnapshot((snapshot) => {
+        updateCallback(snapshot.data());
+      });
+  }
 }
