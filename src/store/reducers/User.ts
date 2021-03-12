@@ -1,21 +1,30 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import PropTypes from 'prop-types';
+import { UserDocument } from '../../Firebase/Documents/UserDocument';
 
 export const LOGIN = 'LOGIN';
+const UPDATE_CALORIES = 'UPDATE_CALORIES';
 
 export const initialState = {
   uid: null,
   email: null,
+  goalCalories: 0,
 };
 
-export function login(userInfo: {
-  uid: string;
-  email: string;
-}): { type: string; payload: typeof initialState } {
+export function login(
+  userInfo: UserDocument
+): { type: string; payload: typeof initialState } {
   return {
     type: LOGIN,
     payload: userInfo,
+  };
+}
+
+export function updateCalories(goalCalories: number) {
+  return {
+    type: UPDATE_CALORIES,
+    payload: goalCalories,
   };
 }
 
@@ -29,6 +38,11 @@ export const userReducer = (
         ...state,
         ...action.payload,
       };
+    case UPDATE_CALORIES:
+      return {
+        ...state,
+        goalCalories: action.payload,
+      };
     default:
       return state;
   }
@@ -41,8 +55,8 @@ const mapStateToProps = (state: {
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): { [key: string]: any } => ({
-  storeLogin: (payload: { uid: string; email: string }): any =>
-    dispatch(login(payload)),
+  storeLogin: (payload: UserDocument): any => dispatch(login(payload)),
+  storeCalories: (payload: number) => dispatch(updateCalories(payload)),
 });
 
 export const container = connect(mapStateToProps, mapDispatchToProps);

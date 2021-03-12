@@ -6,17 +6,16 @@ import { container } from '../store/reducers/User';
 import { authService } from '../Firebase';
 import LoggedOutStack from './LoggedOutStack';
 import LoggedInDrawer from './LoggedInDrawer';
+import { UserDocument } from '../Firebase/Documents/UserDocument';
 
 function Navigation({ user, storeLogin }): JSX.Element {
   const getCurrentUserCallback = useCallback(
     () =>
-      authService.getCurrentUser(
-        (receivedUser: { uid: string; email: string }) => {
-          if (receivedUser) {
-            storeLogin(receivedUser);
-          }
+      authService.getCurrentUser((receivedUser: UserDocument) => {
+        if (receivedUser) {
+          storeLogin(receivedUser);
         }
-      ),
+      }),
     [storeLogin]
   );
 

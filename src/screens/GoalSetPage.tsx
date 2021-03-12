@@ -6,8 +6,9 @@ import GoalPrompt from '../components/GoalPrompt';
 import Toast from 'react-native-simple-toast';
 import { userDocumentService } from '../Firebase';
 import CustomHeader from '../components/Header';
+import { UserDocument } from '../Firebase/Documents/UserDocument';
 
-function GoalSetPage({ user }): JSX.Element {
+function GoalSetPage({ user, storeCalories }): JSX.Element {
   const [isLoading, toggleIsLoading] = useState(false);
   const [goalCaloriesInput, setGoalCaloriesInput] = useState('0');
 
@@ -39,7 +40,17 @@ function GoalSetPage({ user }): JSX.Element {
     if (user.goalCalories) {
       setGoalCaloriesInput(user.goalCalories.toString());
     }
-  }, [user]);
+
+    const unsubscribeUserListener = userDocumentService.getDocumentListener(
+      user.uid,
+      (user: UserDocument) => {
+        storeCalories(user.goalCalories);
+      }
+    );
+    return () => {
+      unsubscribeUserListener();
+    };
+  }, [user.uid, user.goalCalories, storeCalories]);
 
   return (
     <View style={style.content}>
