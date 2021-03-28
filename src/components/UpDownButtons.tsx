@@ -3,7 +3,7 @@ import { Button, Icon, Input } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 
-const UpDownButtons: React.FC<any> = ({ total, onValueChange }) => {
+const UpDownButtons: React.FC<any> = ({ total, onValueChange, hideInput }) => {
   const [input, setInput] = useState(null);
 
   const handleInputBox = (value: string) => {
@@ -32,13 +32,15 @@ const UpDownButtons: React.FC<any> = ({ total, onValueChange }) => {
         disabled={Number(total) <= 0}
         icon={<Icon name="arrow-drop-down" />}
       />
-      <Input
-        containerStyle={styles.inputContainer}
-        onChangeText={handleInputBox}
-        value={input || total?.toString() || '0'}
-        inputStyle={styles.input}
-        keyboardType="number-pad"
-      />
+      {!hideInput && (
+        <Input
+          containerStyle={styles.inputContainer}
+          onChangeText={handleInputBox}
+          value={input || total?.toString() || '0'}
+          inputStyle={styles.input}
+          keyboardType="number-pad"
+        />
+      )}
     </View>
   );
 };

@@ -7,6 +7,7 @@ import { Bar } from 'react-native-progress';
 import { getTotal } from '../utilities';
 import { withTheme } from 'react-native-elements';
 import { container } from '../store/reducers/User';
+import UpDownButtons from './UpDownButtons';
 
 const DayHeader = ({
   goalCalories,
@@ -33,6 +34,7 @@ const DayHeader = ({
   clearGoal,
   waterGoal,
   todaysWater,
+  updateWaterGoal,
 }: DayHeaderProps) => {
   const totalCalories = foods ? foods.reduce(getTotal('calories'), 0) : 0;
 
@@ -104,6 +106,11 @@ const DayHeader = ({
       )}
       {waterGoal && (
         <View style={styles.statusBarContainer}>
+          <UpDownButtons
+            total={todaysWater}
+            onValueChange={updateWaterGoal}
+            hideInput={true}
+          />
           <Bar
             style={{ alignSelf: 'center' }}
             progress={Math.min(todaysWater / waterGoal, 1)}
@@ -163,6 +170,7 @@ const propTypes = {
   weight: PropTypes.number,
   waterGoal: PropTypes.number,
   todaysWater: PropTypes.number,
+  updateWaterGoal: PropTypes.func,
 };
 
 DayHeader.propTypes = propTypes;
