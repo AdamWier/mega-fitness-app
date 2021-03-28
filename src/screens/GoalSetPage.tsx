@@ -8,19 +8,22 @@ import { userDocumentService } from '../Firebase';
 import CustomHeader from '../components/Header';
 import { UserDocument } from '../Firebase/Documents/UserDocument';
 
-function GoalSetPage({ user, storeCalories }): JSX.Element {
+function GoalSetPage({ user, storeCalories, storeWaterGoal }): JSX.Element {
   const [isLoading, toggleIsLoading] = useState(false);
   const [goalCaloriesInput, setGoalCaloriesInput] = useState('0');
   const [goalWaterInput, setGoalWaterInput] = useState('0');
 
-  const checkIsNumber = (setGoal: (number: number) => void) => {
-    const goalCaloriesNumber = Number(goalCaloriesInput);
-    if (!goalCaloriesNumber || Number.isNaN(goalCaloriesNumber)) {
+  const processGoal = (
+    goalInput: string,
+    setGoal: (number: number) => void
+  ) => {
+    const goalInputNumber = Number(goalInput);
+    if (!goalInputNumber || Number.isNaN(goalInputNumber)) {
       Toast.showWithGravity('Please enter a number', Toast.SHORT, Toast.CENTER);
     } else {
       try {
         toggleIsLoading(true);
-        setGoal(goalCaloriesNumber);
+        setGoal(goalInputNumber);
         toggleIsLoading(false);
       } catch (e) {
         Toast.showWithGravity(
@@ -43,20 +46,26 @@ function GoalSetPage({ user, storeCalories }): JSX.Element {
   };
 
   useEffect(() => {
-    if (user.goalCalories) {
-      setGoalCaloriesInput(user.goalCalories.toString());
-    }
+    user.goalCalories && setGoalCaloriesInput(user.goalCalories.toString());
+    user.waterGoal && setGoalWaterInput(user.waterGoal.toString());
 
     const unsubscribeUserListener = userDocumentService.getDocumentListener(
       user.uid,
       (userDocument: UserDocument) => {
+        storeWaterGoal(userDocument.waterGoal);
         storeCalories(userDocument.goalCalories);
       }
     );
     return () => {
       unsubscribeUserListener();
     };
-  }, [user.uid, user.goalCalories, storeCalories]);
+  }, [
+    user.uid,
+    user.goalCalories,
+    user.waterGoal,
+    storeCalories,
+    storeWaterGoal,
+  ]);
 
   return (
     <View style={style.content}>
@@ -66,7 +75,9 @@ function GoalSetPage({ user, storeCalories }): JSX.Element {
       <GoalPrompt
         goal={goalCaloriesInput}
         setGoal={setGoalCaloriesInput}
-        onConfirmButtonPress={checkIsNumber}
+        onConfirmButtonPress={() =>
+          processGoal(goalCaloriesInput, setCalorieGoal)
+        }
         loading={isLoading}
         clearGoal={() => setCalorieGoal(0)}
         title="Daily calorie goal"
@@ -74,7 +85,7 @@ function GoalSetPage({ user, storeCalories }): JSX.Element {
       <GoalPrompt
         goal={goalWaterInput}
         setGoal={setGoalWaterInput}
-        onConfirmButtonPress={() => checkIsNumber(setWaterGoal)}
+        onConfirmButtonPress={() => processGoal(goalWaterInput, setWaterGoal)}
         loading={isLoading}
         clearGoal={() => setWaterGoal(0)}
         title="Daily water goal"
