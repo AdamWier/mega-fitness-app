@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginVertical: 5,
-    marginHorizontal: 10,
+    marginHorizontal: 5,
   },
   button: {
     margin: 0,

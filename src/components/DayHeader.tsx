@@ -85,6 +85,28 @@ const DayHeader = ({
         </View>
       </View>
       {!!weight && <Text>Weight recorded today: {weight}</Text>}
+      {waterGoal && (
+        <View style={styles.statusBarContainer}>
+          <View style={styles.waterGoalContainer}>
+            <UpDownButtons
+              total={todaysWater}
+              onValueChange={updateWaterGoal}
+              hideInput={true}
+            />
+            <Bar
+              style={{ flexShrink: 1, alignSelf: 'center' }}
+              progress={Math.min(todaysWater / waterGoal, 1)}
+              color={theme.colors.info}
+              borderColor={theme.colors.text}
+              height={15}
+              width={250}
+            />
+          </View>
+          <Text>
+            {todaysWater} glasses out of {waterGoal} drunk
+          </Text>
+        </View>
+      )}
       {goalCalories && (
         <View style={styles.statusBarContainer}>
           <Bar
@@ -104,30 +126,6 @@ const DayHeader = ({
           </Text>
         </View>
       )}
-      {waterGoal && (
-        <View style={styles.statusBarContainer}>
-          <UpDownButtons
-            total={todaysWater}
-            onValueChange={updateWaterGoal}
-            hideInput={true}
-          />
-          <Bar
-            style={{ alignSelf: 'center' }}
-            progress={Math.min(todaysWater / waterGoal, 1)}
-            color={
-              todaysWater / waterGoal <= 1
-                ? theme.colors.success
-                : theme.colors.danger
-            }
-            borderColor={theme.colors.text}
-            height={15}
-            width={250}
-          />
-          <Text>
-            {todaysWater} glasses out of {waterGoal} drunk
-          </Text>
-        </View>
-      )}
     </View>
   );
 };
@@ -136,6 +134,7 @@ const styles = StyleSheet.create({
   buttonsContainer: { flexDirection: 'row', justifyContent: 'space-around' },
   buttonContainer: { flexGrow: 1 },
   statusBarContainer: { padding: 10 },
+  waterGoalContainer: { flexDirection: 'row' },
 });
 
 const propTypes = {
@@ -158,6 +157,7 @@ const propTypes = {
       success: PropTypes.string,
       danger: PropTypes.string,
       text: PropTypes.string,
+      info: PropTypes.string,
     }),
   }).isRequired,
   onWeightButtonPress: PropTypes.func.isRequired,
