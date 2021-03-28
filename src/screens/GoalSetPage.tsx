@@ -61,40 +61,30 @@ function GoalSetPage({ user, storeCalories }): JSX.Element {
   return (
     <View style={style.content}>
       <CustomHeader title="Calorie goal" />
-      <View style={style.equalSpace}>
-        <Text h2>Set calorie goal for</Text>
-        <Text h4>{user.email}</Text>
-      </View>
-      <View style={style.equalSpace}>
-        <GoalPrompt
-          goal={goalCaloriesInput}
-          setGoal={setGoalCaloriesInput}
-          onConfirmButtonPress={checkIsNumber}
-          loading={isLoading}
-          clearGoal={() => setCalorieGoal(0)}
-          title="Let's set a goal!"
-          question="How many calories for today?"
-        />
-        <GoalPrompt
-          goal={goalWaterInput}
-          setGoal={setGoalWaterInput}
-          onConfirmButtonPress={() => checkIsNumber(setWaterGoal)}
-          loading={isLoading}
-          clearGoal={() => setWaterGoal(0)}
-          title="Drink your water, mister!"
-          question="How many glasses of water?"
-        />
-      </View>
-      <View style={style.equalSpace} />
+      <Text h2>Goals for</Text>
+      <Text h4>{user.email}</Text>
+      <GoalPrompt
+        goal={goalCaloriesInput}
+        setGoal={setGoalCaloriesInput}
+        onConfirmButtonPress={checkIsNumber}
+        loading={isLoading}
+        clearGoal={() => setCalorieGoal(0)}
+        title="Daily calorie goal"
+      />
+      <GoalPrompt
+        goal={goalWaterInput}
+        setGoal={setGoalWaterInput}
+        onConfirmButtonPress={() => checkIsNumber(setWaterGoal)}
+        loading={isLoading}
+        clearGoal={() => setWaterGoal(0)}
+        title="Daily water goal"
+      />
     </View>
   );
 }
 
 const style = StyleSheet.create({
   content: {
-    flex: 1,
-  },
-  equalSpace: {
     flex: 1,
   },
 });

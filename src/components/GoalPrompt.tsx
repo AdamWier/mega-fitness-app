@@ -11,11 +11,9 @@ const GoalPrompt = ({
   loading,
   clearGoal,
   title,
-  question,
 }) => (
   <View style={styles.overlayContentContainer}>
-    <Text h3>{title}</Text>
-    <Text h4>{question}</Text>
+    <Text h4>{title}</Text>
     <Input
       containerStyle={styles.inputContainer}
       value={goal}
@@ -50,7 +48,7 @@ GoalPrompt.propTypes = {
 
 const styles = StyleSheet.create({
   overlayContentContainer: {
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
   },
