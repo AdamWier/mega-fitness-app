@@ -247,6 +247,8 @@ function FoodJournalPage({
     isWeightOverlayLoading: isWeightOverlayLoading,
     onWeightSubmit: onWeightSubmit,
     weight: documents.day?.weight,
+    todaysWater: 45,
+    waterGoal: user.waterGoal,
   };
 
   const emptyItem = () =>

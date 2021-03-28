@@ -31,6 +31,8 @@ const DayHeader = ({
   weight,
   theme,
   clearGoal,
+  waterGoal,
+  todaysWater,
 }: DayHeaderProps) => {
   const totalCalories = foods ? foods.reduce(getTotal('calories'), 0) : 0;
 
@@ -81,7 +83,7 @@ const DayHeader = ({
         </View>
       </View>
       {!!weight && <Text>Weight recorded today: {weight}</Text>}
-      {goalCalories ? (
+      {goalCalories && (
         <View style={styles.statusBarContainer}>
           <Bar
             style={{ alignSelf: 'center' }}
@@ -99,7 +101,26 @@ const DayHeader = ({
             {totalCalories} out of {goalCalories} calories eaten
           </Text>
         </View>
-      ) : null}
+      )}
+      {waterGoal && (
+        <View style={styles.statusBarContainer}>
+          <Bar
+            style={{ alignSelf: 'center' }}
+            progress={Math.min(todaysWater / waterGoal, 1)}
+            color={
+              todaysWater / waterGoal <= 1
+                ? theme.colors.success
+                : theme.colors.danger
+            }
+            borderColor={theme.colors.text}
+            height={15}
+            width={250}
+          />
+          <Text>
+            {todaysWater} glasses out of {waterGoal} drunk
+          </Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -140,6 +161,8 @@ const propTypes = {
   setWeightInput: PropTypes.func.isRequired,
   isWeightOverlayLoading: PropTypes.bool.isRequired,
   weight: PropTypes.number,
+  waterGoal: PropTypes.number,
+  todaysWater: PropTypes.number,
 };
 
 DayHeader.propTypes = propTypes;
