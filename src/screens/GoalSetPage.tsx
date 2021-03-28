@@ -12,7 +12,7 @@ function GoalSetPage({ user, storeCalories }): JSX.Element {
   const [isLoading, toggleIsLoading] = useState(false);
   const [goalCaloriesInput, setGoalCaloriesInput] = useState('0');
 
-  const checkIsNumber = () => {
+  const checkIsNumber = (setGoal: (number: number) => void) => {
     const goalCaloriesNumber = Number(goalCaloriesInput);
     if (!goalCaloriesNumber || Number.isNaN(goalCaloriesNumber)) {
       Toast.showWithGravity('Please enter a number', Toast.SHORT, Toast.CENTER);
@@ -21,7 +21,7 @@ function GoalSetPage({ user, storeCalories }): JSX.Element {
     }
   };
 
-  const setGoal = async (goal: number): Promise<void> => {
+  const setCalorieGoal = async (goal: number): Promise<void> => {
     try {
       toggleIsLoading(true);
       await userDocumentService.updateCalorieGoal(user.uid, goal);
@@ -60,12 +60,23 @@ function GoalSetPage({ user, storeCalories }): JSX.Element {
         <Text h4>{user.email}</Text>
       </View>
       <View style={style.equalSpace}>
-        <GoalPrompt
-          goalCalories={goalCaloriesInput}
-          setGoalCalories={setGoalCaloriesInput}
+        {/* <GoalPrompt
+          goal={goalCaloriesInput}
+          setGoal={setGoalCaloriesInput}
           onConfirmButtonPress={checkIsNumber}
           loading={isLoading}
           clearGoal={() => setGoal(0)}
+          title="Let's set a goal!"
+          question="How many calories for today?"
+        /> */}
+        <GoalPrompt
+          goal={goalCaloriesInput}
+          setGoal={setGoalCaloriesInput}
+          onConfirmButtonPress={() => checkIsNumber(setCalorieGoal)}
+          loading={isLoading}
+          clearGoal={() => setCalorieGoal(0)}
+          title="Drink your water, mister!"
+          question="How many glasses of water?"
         />
       </View>
       <View style={style.equalSpace} />

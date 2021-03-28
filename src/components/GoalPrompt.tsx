@@ -5,19 +5,21 @@ import PropTypes from 'prop-types';
 
 const GoalPrompt = ({
   toggleIsOverlayVisible,
-  goalCalories,
-  setGoalCalories,
+  goal,
+  setGoal,
   onConfirmButtonPress,
   loading,
   clearGoal,
+  title,
+  question,
 }) => (
   <View style={styles.overlayContentContainer}>
-    <Text h3>Let's set a goal!</Text>
-    <Text h4>How many calories for today?</Text>
+    <Text h3>{title}</Text>
+    <Text h4>{question}</Text>
     <Input
       containerStyle={styles.inputContainer}
-      value={goalCalories}
-      onChangeText={(value) => setGoalCalories(value)}
+      value={goal}
+      onChangeText={(value) => setGoal(value)}
       keyboardType="number-pad"
     />
     {loading ? (
@@ -39,7 +41,7 @@ const GoalPrompt = ({
 
 GoalPrompt.propTypes = {
   toggleIsOverlayVisible: PropTypes.func,
-  goalCalories: PropTypes.string.isRequired,
+  goal: PropTypes.string.isRequired,
   setGoalCalories: PropTypes.func.isRequired,
   onConfirmButtonPress: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
