@@ -11,29 +11,35 @@ import { UserDocument } from '../Firebase/Documents/UserDocument';
 function GoalSetPage({ user, storeCalories }): JSX.Element {
   const [isLoading, toggleIsLoading] = useState(false);
   const [goalCaloriesInput, setGoalCaloriesInput] = useState('0');
+  const [goalWaterInput, setGoalWaterInput] = useState('0');
 
   const checkIsNumber = (setGoal: (number: number) => void) => {
     const goalCaloriesNumber = Number(goalCaloriesInput);
     if (!goalCaloriesNumber || Number.isNaN(goalCaloriesNumber)) {
       Toast.showWithGravity('Please enter a number', Toast.SHORT, Toast.CENTER);
     } else {
-      setGoal(goalCaloriesNumber);
+      try {
+        toggleIsLoading(true);
+        setGoal(goalCaloriesNumber);
+        toggleIsLoading(false);
+      } catch (e) {
+        Toast.showWithGravity(
+          "Your goal couldn't be saved",
+          Toast.SHORT,
+          Toast.CENTER
+        );
+      }
     }
   };
 
+  const setWaterGoal = async (goal: number) => {
+    await userDocumentService.updateWaterGoal(user.uid, goal);
+    setGoalWaterInput(goal.toString());
+  };
+
   const setCalorieGoal = async (goal: number): Promise<void> => {
-    try {
-      toggleIsLoading(true);
-      await userDocumentService.updateCalorieGoal(user.uid, goal);
-      setGoalCaloriesInput(goal.toString());
-      toggleIsLoading(false);
-    } catch (e) {
-      Toast.showWithGravity(
-        "Your goal couldn't be saved",
-        Toast.SHORT,
-        Toast.CENTER
-      );
-    }
+    await userDocumentService.updateCalorieGoal(user.uid, goal);
+    setGoalCaloriesInput(goal.toString());
   };
 
   useEffect(() => {
@@ -43,8 +49,8 @@ function GoalSetPage({ user, storeCalories }): JSX.Element {
 
     const unsubscribeUserListener = userDocumentService.getDocumentListener(
       user.uid,
-      (user: UserDocument) => {
-        storeCalories(user.goalCalories);
+      (userDocument: UserDocument) => {
+        storeCalories(userDocument.goalCalories);
       }
     );
     return () => {
@@ -60,21 +66,21 @@ function GoalSetPage({ user, storeCalories }): JSX.Element {
         <Text h4>{user.email}</Text>
       </View>
       <View style={style.equalSpace}>
-        {/* <GoalPrompt
+        <GoalPrompt
           goal={goalCaloriesInput}
           setGoal={setGoalCaloriesInput}
           onConfirmButtonPress={checkIsNumber}
           loading={isLoading}
-          clearGoal={() => setGoal(0)}
+          clearGoal={() => setCalorieGoal(0)}
           title="Let's set a goal!"
           question="How many calories for today?"
-        /> */}
+        />
         <GoalPrompt
-          goal={goalCaloriesInput}
-          setGoal={setGoalCaloriesInput}
-          onConfirmButtonPress={() => checkIsNumber(setCalorieGoal)}
+          goal={goalWaterInput}
+          setGoal={setGoalWaterInput}
+          onConfirmButtonPress={() => checkIsNumber(setWaterGoal)}
           loading={isLoading}
-          clearGoal={() => setCalorieGoal(0)}
+          clearGoal={() => setWaterGoal(0)}
           title="Drink your water, mister!"
           question="How many glasses of water?"
         />
