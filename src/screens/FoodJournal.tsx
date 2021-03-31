@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Alert, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Alert, StyleSheet } from 'react-native';
 import { withTheme, Text } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { container as UserContainer } from '../store/reducers/User';
@@ -13,6 +13,7 @@ import Toast from 'react-native-simple-toast';
 import DayHeader from '../components/DayHeader';
 import { mealDocumentService, dayDocumentService } from '../Firebase/index';
 import DayDocument from '../Firebase/Documents/DayDocument';
+import ActivityIndicator from '../components/ActivityIndicator';
 
 const reduceMealDocuments = (data: { [key: string]: any }[]) =>
   data.reduce((foodJournal, item) => {

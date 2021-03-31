@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Overlay, Text, Input } from 'react-native-elements';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import ActivityIndicator from './ActivityIndicator';
 import PropTypes from 'prop-types';
 
 const OverLayWithButton = ({

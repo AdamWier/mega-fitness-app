@@ -1,7 +1,8 @@
 import React from 'react';
 import { Text, Button, Input } from 'react-native-elements';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
+import ActivityIndicator from './ActivityIndicator';
 
 const GoalPrompt = ({
   toggleIsOverlayVisible,
@@ -12,7 +13,7 @@ const GoalPrompt = ({
   clearGoal,
   title,
 }) => (
-  <View style={styles.overlayContentContainer}>
+  <View style={styles.container}>
     <Text h4>{title}</Text>
     <Input
       containerStyle={styles.inputContainer}
@@ -47,7 +48,7 @@ GoalPrompt.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  overlayContentContainer: {
+  container: {
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
