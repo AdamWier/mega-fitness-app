@@ -57,7 +57,7 @@ const compareRows = (
 
 const emptyDocuments = {
   meals: [],
-  day: { id: null, goalCalories: null, weight: 0, water: 0 },
+  day: { id: null, goalCalories: null, weight: 0 },
 };
 
 function FoodJournalPage({
@@ -95,17 +95,6 @@ function FoodJournalPage({
       { text: 'No', onPress: () => null },
       { text: 'Yes', onPress: () => deleteMeal(documentId) },
     ]);
-  };
-
-  const onWaterChange = (glasses: number) => {
-    documents.day.id
-      ? dayDocumentService.updateWater(
-          currentDate,
-          glasses,
-          user.uid,
-          documents.day.id
-        )
-      : dayDocumentService.createWater(currentDate, glasses, user.uid);
   };
 
   const onWeightSubmit = async () => {
@@ -258,9 +247,6 @@ function FoodJournalPage({
     isWeightOverlayLoading: isWeightOverlayLoading,
     onWeightSubmit: onWeightSubmit,
     weight: documents.day?.weight,
-    todaysWater: documents.day?.water || 0,
-    waterGoal: user.waterGoal,
-    updateWaterGoal: onWaterChange,
   };
 
   const emptyItem = () =>

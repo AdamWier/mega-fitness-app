@@ -5,13 +5,11 @@ import { UserDocument } from '../../Firebase/Documents/UserDocument';
 
 export const LOGIN = 'LOGIN';
 const UPDATE_CALORIES = 'UPDATE_CALORIES';
-const UPDATE_WATER_GOAL = 'UPDATE_WATER_GOAL';
 
 export const initialState = {
   uid: null,
   email: null,
   goalCalories: 0,
-  waterGoal: 0,
 };
 
 export function login(
@@ -26,13 +24,6 @@ export function login(
 export function updateCalories(goalCalories: number) {
   return {
     type: UPDATE_CALORIES,
-    payload: goalCalories,
-  };
-}
-
-export function updateWaterGoal(goalCalories: number) {
-  return {
-    type: UPDATE_WATER_GOAL,
     payload: goalCalories,
   };
 }
@@ -52,11 +43,6 @@ export const userReducer = (
         ...state,
         goalCalories: action.payload,
       };
-    case UPDATE_WATER_GOAL:
-      return {
-        ...state,
-        waterGoal: action.payload,
-      };
     default:
       return state;
   }
@@ -71,7 +57,6 @@ const mapStateToProps = (state: {
 const mapDispatchToProps = (dispatch: Dispatch): { [key: string]: any } => ({
   storeLogin: (payload: UserDocument): any => dispatch(login(payload)),
   storeCalories: (payload: number) => dispatch(updateCalories(payload)),
-  storeWaterGoal: (payload: number) => dispatch(updateWaterGoal(payload)),
 });
 
 export const container = connect(mapStateToProps, mapDispatchToProps);

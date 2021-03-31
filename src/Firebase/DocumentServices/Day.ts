@@ -94,49 +94,6 @@ export default class DayService {
     });
   }
 
-  public createWater(
-    currentDate: Date,
-    water: number,
-    uid: string
-  ): Promise<void> {
-    const dayStartMoment = moment(currentDate).startOf('day');
-    const date = dayStartMoment.toDate();
-    const createdAt = new Date();
-    return this.firestore
-      .collection('days')
-      .doc(
-        uid +
-          '-' +
-          dayStartMoment.format('YYYY-MM-DD') +
-          '-' +
-          createdAt.getTime()
-      )
-      .set({
-        date,
-        water,
-        uid,
-        createdAt,
-        deleted: false,
-      });
-  }
-
-  public updateWater(
-    currentDate: Date,
-    water: number,
-    uid: string,
-    id: string
-  ): Promise<void> {
-    const date = moment(currentDate).startOf('day').toDate();
-    const updatedAt = new Date();
-    return this.firestore.collection('days').doc(id).update({
-      date,
-      water,
-      uid,
-      updatedAt,
-      deleted: false,
-    });
-  }
-
   public async findDocument(date: Date, uid: string): Promise<DayDocument> {
     const response = await this.getDocumentReference(date, uid).get();
     if (response.docs.length) {
@@ -147,7 +104,6 @@ export default class DayService {
       goalCalories: null,
       date: null,
       weight: null,
-      water: null,
     };
   }
 
@@ -235,7 +191,6 @@ export default class DayService {
       goalCalories: data.goalCalories,
       date: data.date.toDate(),
       weight: data.weight,
-      water: data.water,
     };
   }
 }

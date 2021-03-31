@@ -33,14 +33,6 @@ export default class UserService {
     });
   }
 
-  public updateWaterGoal(uid: string, waterGoal: number): Promise<void> {
-    const updatedAt = new Date();
-    return this.firestore.collection('users').doc(uid).update({
-      waterGoal,
-      updatedAt,
-    });
-  }
-
   public getDocumentListener(uid: string, updateCallback: Function): Function {
     return this.firestore
       .collection('users')

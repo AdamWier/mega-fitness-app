@@ -12,7 +12,6 @@ describe('user reducer', () => {
       uid: '1',
       email: 'nightcrawler@xmen.com',
       goalCalories: 0,
-      waterGoal: 0,
     };
     const expectedAction = {
       type: LOGIN,
@@ -28,12 +27,7 @@ describe('user reducer', () => {
 
   it('should store new user information', () => {
     expect.assertions(1);
-    const payload = {
-      uid: '2',
-      email: 'gambit@xmen.com',
-      goalCalories: 0,
-      waterGoal: 0,
-    };
+    const payload = { uid: '2', email: 'gambit@xmen.com', goalCalories: 0 };
     expect(
       userReducer(initialState, {
         type: LOGIN,
