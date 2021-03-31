@@ -85,7 +85,7 @@ const DayHeader = ({
         </View>
       </View>
       {!!weight && <Text>Weight recorded today: {weight}</Text>}
-      {waterGoal && (
+      {!!waterGoal && (
         <View style={styles.statusBarContainer}>
           <View style={styles.waterGoalContainer}>
             <UpDownButtons
@@ -107,7 +107,7 @@ const DayHeader = ({
           </Text>
         </View>
       )}
-      {goalCalories && (
+      {!!goalCalories && (
         <View style={styles.statusBarContainer}>
           <Bar
             style={{ alignSelf: 'center' }}
