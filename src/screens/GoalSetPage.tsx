@@ -9,7 +9,8 @@ import CustomHeader from '../components/Header';
 import { UserDocument } from '../Firebase/Documents/UserDocument';
 
 function GoalSetPage({ user, storeCalories, storeWaterGoal }): JSX.Element {
-  const [isLoading, toggleIsLoading] = useState(false);
+  const [isCalorieLoading, toggleIsCalorieLoading] = useState(false);
+  const [isWaterLoading, toggleIsWaterLoading] = useState(false);
   const [goalCaloriesInput, setGoalCaloriesInput] = useState('0');
   const [goalWaterInput, setGoalWaterInput] = useState('0');
 
@@ -21,28 +22,38 @@ function GoalSetPage({ user, storeCalories, storeWaterGoal }): JSX.Element {
     if (!goalInputNumber || Number.isNaN(goalInputNumber)) {
       Toast.showWithGravity('Please enter a number', Toast.SHORT, Toast.CENTER);
     } else {
-      try {
-        toggleIsLoading(true);
-        setGoal(goalInputNumber);
-        toggleIsLoading(false);
-      } catch (e) {
-        Toast.showWithGravity(
-          "Your goal couldn't be saved",
-          Toast.SHORT,
-          Toast.CENTER
-        );
-      }
+      setGoal(goalInputNumber);
     }
   };
 
   const setWaterGoal = async (goal: number) => {
-    await userDocumentService.updateWaterGoal(user.uid, goal);
-    setGoalWaterInput(goal.toString());
+    try {
+      toggleIsWaterLoading(true);
+      await userDocumentService.updateWaterGoal(user.uid, goal);
+      setGoalWaterInput(goal.toString());
+      toggleIsWaterLoading(false);
+    } catch (e) {
+      Toast.showWithGravity(
+        "Your water goal couldn't be saved",
+        Toast.SHORT,
+        Toast.CENTER
+      );
+    }
   };
 
   const setCalorieGoal = async (goal: number): Promise<void> => {
-    await userDocumentService.updateCalorieGoal(user.uid, goal);
-    setGoalCaloriesInput(goal.toString());
+    try {
+      toggleIsCalorieLoading(true);
+      await userDocumentService.updateCalorieGoal(user.uid, goal);
+      setGoalCaloriesInput(goal.toString());
+      toggleIsCalorieLoading(false);
+    } catch (e) {
+      Toast.showWithGravity(
+        "Your calorie goal couldn't be saved",
+        Toast.SHORT,
+        Toast.CENTER
+      );
+    }
   };
 
   useEffect(() => {
@@ -78,7 +89,7 @@ function GoalSetPage({ user, storeCalories, storeWaterGoal }): JSX.Element {
         onConfirmButtonPress={() =>
           processGoal(goalCaloriesInput, setCalorieGoal)
         }
-        loading={isLoading}
+        loading={isCalorieLoading}
         clearGoal={() => setCalorieGoal(0)}
         title="Daily calorie goal"
       />
@@ -86,7 +97,7 @@ function GoalSetPage({ user, storeCalories, storeWaterGoal }): JSX.Element {
         goal={goalWaterInput}
         setGoal={setGoalWaterInput}
         onConfirmButtonPress={() => processGoal(goalWaterInput, setWaterGoal)}
-        loading={isLoading}
+        loading={isWaterLoading}
         clearGoal={() => setWaterGoal(0)}
         title="Daily water goal"
       />
