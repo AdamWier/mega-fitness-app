@@ -3,4 +3,5 @@ export default interface DayDocument {
   goalCalories: number;
   date: Date;
   weight: number;
+  water: number;
 }
