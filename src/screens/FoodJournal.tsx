@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Alert, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Alert, StyleSheet } from 'react-native';
 import { withTheme, Text } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { container as UserContainer } from '../store/reducers/User';
@@ -13,6 +13,7 @@ import Toast from 'react-native-simple-toast';
 import DayHeader from '../components/DayHeader';
 import { mealDocumentService, dayDocumentService } from '../Firebase/index';
 import DayDocument from '../Firebase/Documents/DayDocument';
+import ActivityIndicator from '../components/ActivityIndicator';
 
 const reduceMealDocuments = (data: { [key: string]: any }[]) =>
   data.reduce((foodJournal, item) => {
@@ -57,7 +58,7 @@ const compareRows = (
 
 const emptyDocuments = {
   meals: [],
-  day: { id: null, goalCalories: null, weight: 0 },
+  day: { id: null, goalCalories: null, weight: 0, water: 0 },
 };
 
 function FoodJournalPage({
@@ -95,6 +96,17 @@ function FoodJournalPage({
       { text: 'No', onPress: () => null },
       { text: 'Yes', onPress: () => deleteMeal(documentId) },
     ]);
+  };
+
+  const onWaterChange = (glasses: number) => {
+    documents.day.id
+      ? dayDocumentService.updateWater(
+          currentDate,
+          glasses,
+          user.uid,
+          documents.day.id
+        )
+      : dayDocumentService.createWater(currentDate, glasses, user.uid);
   };
 
   const onWeightSubmit = async () => {
@@ -247,6 +259,9 @@ function FoodJournalPage({
     isWeightOverlayLoading: isWeightOverlayLoading,
     onWeightSubmit: onWeightSubmit,
     weight: documents.day?.weight,
+    todaysWater: documents.day?.water || 0,
+    waterGoal: user.waterGoal,
+    updateWaterGoal: onWaterChange,
   };
 
   const emptyItem = () =>

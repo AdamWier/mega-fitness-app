@@ -13,7 +13,7 @@ export default [
     name: 'GoalSetPage',
     component: GoalSetPage,
     options: {
-      title: 'Set a calorie goal',
+      title: 'Set goals',
     },
   },
   {

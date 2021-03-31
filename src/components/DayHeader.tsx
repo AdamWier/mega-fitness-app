@@ -7,6 +7,7 @@ import { Bar } from 'react-native-progress';
 import { getTotal } from '../utilities';
 import { withTheme } from 'react-native-elements';
 import { container } from '../store/reducers/User';
+import UpDownButtons from './UpDownButtons';
 
 const DayHeader = ({
   goalCalories,
@@ -31,6 +32,9 @@ const DayHeader = ({
   weight,
   theme,
   clearGoal,
+  waterGoal,
+  todaysWater,
+  updateWaterGoal,
 }: DayHeaderProps) => {
   const totalCalories = foods ? foods.reduce(getTotal('calories'), 0) : 0;
 
@@ -81,7 +85,29 @@ const DayHeader = ({
         </View>
       </View>
       {!!weight && <Text>Weight recorded today: {weight}</Text>}
-      {goalCalories ? (
+      {!!waterGoal && (
+        <View style={styles.statusBarContainer}>
+          <View style={styles.waterGoalContainer}>
+            <UpDownButtons
+              total={todaysWater}
+              onValueChange={updateWaterGoal}
+              hideInput={true}
+            />
+            <Bar
+              style={{ flexShrink: 1, alignSelf: 'center' }}
+              progress={Math.min(todaysWater / waterGoal, 1)}
+              color={theme.colors.info}
+              borderColor={theme.colors.text}
+              height={15}
+              width={250}
+            />
+          </View>
+          <Text>
+            {todaysWater} glasses out of {waterGoal} drunk
+          </Text>
+        </View>
+      )}
+      {!!goalCalories && (
         <View style={styles.statusBarContainer}>
           <Bar
             style={{ alignSelf: 'center' }}
@@ -99,7 +125,7 @@ const DayHeader = ({
             {totalCalories} out of {goalCalories} calories eaten
           </Text>
         </View>
-      ) : null}
+      )}
     </View>
   );
 };
@@ -108,6 +134,7 @@ const styles = StyleSheet.create({
   buttonsContainer: { flexDirection: 'row', justifyContent: 'space-around' },
   buttonContainer: { flexGrow: 1 },
   statusBarContainer: { padding: 10 },
+  waterGoalContainer: { flexDirection: 'row' },
 });
 
 const propTypes = {
@@ -130,6 +157,7 @@ const propTypes = {
       success: PropTypes.string,
       danger: PropTypes.string,
       text: PropTypes.string,
+      info: PropTypes.string,
     }),
   }).isRequired,
   onWeightButtonPress: PropTypes.func.isRequired,
@@ -140,6 +168,9 @@ const propTypes = {
   setWeightInput: PropTypes.func.isRequired,
   isWeightOverlayLoading: PropTypes.bool.isRequired,
   weight: PropTypes.number,
+  waterGoal: PropTypes.number,
+  todaysWater: PropTypes.number,
+  updateWaterGoal: PropTypes.func,
 };
 
 DayHeader.propTypes = propTypes;

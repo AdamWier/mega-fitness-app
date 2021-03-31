@@ -5,13 +5,7 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import {
-  View,
-  FlatList,
-  StyleSheet,
-  Alert,
-  ActivityIndicator,
-} from 'react-native';
+import { View, FlatList, StyleSheet, Alert } from 'react-native';
 import {
   Text,
   SearchBar,
@@ -27,6 +21,7 @@ import Toast from 'react-native-simple-toast';
 import SwitchGroup from '../components/SwitchGroup';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { useDebounceCallback } from '@react-hook/debounce';
+import ActivityIndicator from '../components/ActivityIndicator';
 
 export default function Search({ navigation }): JSX.Element {
   const USDAapi = new USDAApiImpl();
