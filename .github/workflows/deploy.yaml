@@ -28,6 +28,8 @@ jobs:
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
       id: extract_branch
     - name: Publish to Expo
+      env:
+        NODE_OPTIONS: --max_old_space_size=4096
       run: expo publish --release-channel ${{ steps.extract_branch.outputs.branch }}
     - name: Generate jks
       run: expo fetch:android:keystore
