@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Text } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
-import { container } from '../store/reducers/User';
+import { container, UserContainerProps } from '../store/reducers/User';
 import GoalPrompt from '../components/GoalPrompt';
 import Toast from 'react-native-simple-toast';
 import { userDocumentService } from '../Firebase';
@@ -63,7 +63,6 @@ function GoalSetPage({
   };
 
   useEffect(() => {
-    if (!user) return;
     user.goalCalories && setGoalCaloriesInput(user.goalCalories.toString());
     user.waterGoal && setGoalWaterInput(user.waterGoal.toString());
 
@@ -77,13 +76,19 @@ function GoalSetPage({
     return () => {
       unsubscribeUserListener();
     };
-  }, [user, storeCalories, storeWaterGoal]);
+  }, [
+    user.uid,
+    user.goalCalories,
+    user.waterGoal,
+    storeCalories,
+    storeWaterGoal,
+  ]);
 
   return (
     <View style={style.content}>
       <CustomHeader title="Calorie goal" />
       <Text h2>Goals for</Text>
-      <Text h4>{user?.email}</Text>
+      <Text h4>{user.email}</Text>
       <GoalPrompt
         goal={goalCaloriesInput}
         setGoal={setGoalCaloriesInput}
@@ -112,10 +117,9 @@ const style = StyleSheet.create({
   },
 });
 
-interface GoalSetPageProps {
-  user?: UserDocument;
+type GoalSetPageProps = {
   storeCalories: (calories: number) => void;
   storeWaterGoal: (water: number) => void;
-}
+} & UserContainerProps;
 
 export default container(GoalSetPage);

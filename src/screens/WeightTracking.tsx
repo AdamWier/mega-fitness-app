@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { container } from '../store/reducers/User';
+import { container, UserContainerProps } from '../store/reducers/User';
 import CustomHeader from '../components/CustomHeader';
 import moment from 'moment';
 import { dayDocumentService } from '../Firebase/index';
 import MonthPicker from '../components/MonthPicker';
 import WeightGraph from '../components/WeightGraph';
 import { Text } from 'react-native-elements';
-import { UserDocument } from '../Firebase/Documents/UserDocument';
 
 interface Record {
   x: string;
@@ -20,7 +19,7 @@ const emptyReport = {
   averageWeight: null,
 };
 
-function WeightTracking({ user }: WeightTrackingProps) {
+function WeightTracking({ user }: UserContainerProps) {
   const [selectedMonth, setSelectedMonth] = useState('');
   const [weightReport, setWeightReport] = useState(emptyReport);
 
@@ -28,7 +27,7 @@ function WeightTracking({ user }: WeightTrackingProps) {
     setSelectedMonth(value);
     if (value) {
       const beginningOfMonth = moment(`2020-${value}-01`).toDate();
-      const records = user?.uid
+      const records = user.uid
         ? await dayDocumentService.findByMonth(beginningOfMonth, user.uid)
         : [];
       if (records.length) {
@@ -112,9 +111,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 });
-
-interface WeightTrackingProps {
-  user?: UserDocument;
-}
 
 export default container(WeightTracking);

@@ -32,7 +32,7 @@ function Navigation({ user, storeLogin }: {} & UserContainerProps) {
 
   return (
     <NavigationContainer theme={navTheme}>
-      {user?.uid ? <LoggedInDrawer /> : <LoggedOutStack />}
+      {user.uid ? <LoggedInDrawer /> : <LoggedOutStack />}
     </NavigationContainer>
   );
 }

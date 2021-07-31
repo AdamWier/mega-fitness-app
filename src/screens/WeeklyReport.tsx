@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { container } from '../store/reducers/User';
+import { container, UserContainerProps } from '../store/reducers/User';
 import CustomHeader from '../components/CustomHeader';
 import moment from 'moment';
 import { mealDocumentService, dayDocumentService } from '../Firebase/index';
@@ -9,9 +9,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { createWeeklyReport } from '../utilities';
 import WeeklyGoalChart from '../components/WeeklyGoalsChart';
 import WeekSelector from '../components/WeekSelector';
-import { UserDocument } from '../Firebase/Documents/UserDocument';
 
-function WeeklyReport({ user }: WeeklyReportProps) {
+function WeeklyReport({ user }: UserContainerProps) {
   const [period, setPeriod] = useState({});
   const [report, setReport] = useState({
     graphData: [] as ReturnType<typeof createWeeklyReport>['graphData'],
@@ -20,7 +19,7 @@ function WeeklyReport({ user }: WeeklyReportProps) {
 
   useEffect(() => {
     (async function getReport() {
-      if (!user?.uid) return;
+      if (!user.uid) return;
       const mealDocuments = await mealDocumentService.findByWeek(
         moment(Object.keys(period)[0]).toDate(),
         user.uid
@@ -31,7 +30,7 @@ function WeeklyReport({ user }: WeeklyReportProps) {
       );
       setReport(createWeeklyReport(mealDocuments, dayDocuments));
     })();
-  }, [period, user]);
+  }, [period, user.uid]);
 
   return (
     <View style={style.content}>
@@ -68,9 +67,5 @@ const style = StyleSheet.create({
     flex: 1,
   },
 });
-
-interface WeeklyReportProps {
-  user?: UserDocument;
-}
 
 export default container(WeeklyReport);

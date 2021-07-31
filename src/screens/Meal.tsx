@@ -16,7 +16,10 @@ import {
 import { Button, Text, withTheme, Input, Divider } from 'react-native-elements';
 import FoodCard from '../components/FoodCard';
 import { container as MealContainer } from '../store/reducers/MealDocument';
-import { container as UserContainer } from '../store/reducers/User';
+import {
+  container as UserContainer,
+  UserContainerProps,
+} from '../store/reducers/User';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import TotalCard from '../components/TotalCard';
 import moment from 'moment';
@@ -26,7 +29,6 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { FoodJournalStackParams } from '../Navigation/FoodJournalStack/Screens';
 import { MyTheme } from '../StyleSheet';
 import MealDocument from '../Firebase/Documents/MealDocument';
-import { UserDocument } from '../Firebase/Documents/UserDocument';
 
 function Meal({
   navigation,
@@ -284,12 +286,11 @@ const styles = StyleSheet.create({
   },
 });
 
-interface MealProps {
+type MealProps = {
   navigation: StackNavigationProp<FoodJournalStackParams, 'Meal'>;
   theme: MyTheme;
   mealDocument: MealDocument;
   updateMealDocument: (value: MealDocument) => void;
-  user?: UserDocument;
-}
+} & UserContainerProps;
 
 export default UserContainer(MealContainer(withTheme(Meal)));

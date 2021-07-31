@@ -13,7 +13,6 @@ export interface InitialState {
   email?: string;
   goalCalories: number;
   waterGoal: number;
-  user?: UserDocument;
 }
 
 export const initialState: InitialState = {

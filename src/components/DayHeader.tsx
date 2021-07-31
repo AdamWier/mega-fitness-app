@@ -9,7 +9,7 @@ import { container } from '../store/reducers/User';
 import UpDownButtons from './UpDownButtons';
 import { AddedFood } from '../Firebase/Documents/MealDocument';
 import { MyTheme } from '../StyleSheet';
-import { UserDocument } from '../Firebase/Documents/UserDocument';
+import { UserContainerProps } from '../store/reducers/User';
 
 const DayHeader = ({
   goalCalories,
@@ -47,7 +47,7 @@ const DayHeader = ({
           containerStyle={styles.buttonContainer}
           icon={<Icon name="add-circle" />}
           onPress={() =>
-            user?.uid &&
+            user.uid &&
             handleMealPress({
               id: '',
               eatenAt: getNewEatenAt(),
@@ -140,12 +140,11 @@ const styles = StyleSheet.create({
   waterGoalContainer: { flexDirection: 'row' },
 });
 
-interface DayHeaderProps {
+type DayHeaderProps = {
   goalCalories?: number;
   foods: AddedFood[];
   handleMealPress: (meal: any) => void;
   getNewEatenAt: () => Date;
-  user?: UserDocument;
   onGoalButtonPress: () => void;
   isGoalOverlayVisible: boolean;
   toggleIsGoalOverlayVisible: (value: boolean) => void;
@@ -166,6 +165,6 @@ interface DayHeaderProps {
   waterGoal?: number;
   todaysWater: number;
   updateWaterGoal: (value: number) => void;
-}
+} & UserContainerProps;
 
 export default container(withTheme(DayHeader));

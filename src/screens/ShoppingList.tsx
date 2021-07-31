@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { container } from '../store/reducers/User';
+import { container, UserContainerProps } from '../store/reducers/User';
 import CustomHeader from '../components/CustomHeader';
 import { ScrollView } from 'react-native-gesture-handler';
 import { mealDocumentService, shoppingListDocumentService } from '../Firebase';
@@ -8,9 +8,8 @@ import ShoppingListCard from '../components/ShoppingListCard';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 import { Text, Icon, Button } from 'react-native-elements';
-import { UserDocument } from '../Firebase/Documents/UserDocument';
 
-function ShoppingList({ user }: ShoppingListProps) {
+function ShoppingList({ user }: UserContainerProps) {
   const [period, setPeriod] = useState<{
     start: Date | null;
     end: Date | null;
@@ -83,7 +82,7 @@ function ShoppingList({ user }: ShoppingListProps) {
   const generateList = useCallback(
     async (id?: string | null) => {
       const mealDocuments =
-        user && period.start && period.end
+        period.start && period.end
           ? await mealDocumentService.findByDateRange(
               period.start,
               period.end,
@@ -116,7 +115,7 @@ function ShoppingList({ user }: ShoppingListProps) {
       );
       setList({ items: reorderedFoods, id });
     },
-    [period.start, period.end, user]
+    [period.start, period.end, user.uid]
   );
 
   useEffect(() => {
@@ -203,9 +202,5 @@ const style = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-interface ShoppingListProps {
-  user?: UserDocument;
-}
 
 export default container(ShoppingList);

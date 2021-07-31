@@ -42,7 +42,7 @@ export default class AuthService {
         password
       );
       if (credentials.user) {
-        const uid = credentials.user?.uid;
+        const uid = credentials.user.uid;
         const user = { uid, email };
         await this.user.create(user);
         return user;
