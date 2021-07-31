@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Text, Input, Button, withTheme } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
 import { authService } from '../Firebase';
 import { container } from '../store/reducers/User';
+import { MyTheme } from '../StyleSheet';
+import { UserDocument } from '../Firebase/Documents/UserDocument';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { LoggedOutStackParams } from '../Navigation/LoggedOutStack/Screens';
 
-function Login({ navigation, storeLogin, theme }): JSX.Element {
+function Login({ navigation, storeLogin, theme }: LoginProps) {
   const [loginDetails, setLoginDetails] = useState({
     email: '',
     password: '',
@@ -27,7 +30,7 @@ function Login({ navigation, storeLogin, theme }): JSX.Element {
     const { email, password } = loginDetails;
     if (email && password) {
       try {
-        const user = await authService.login(email, password);
+        const user = (await authService.login(email, password)) as any;
         storeLogin(user);
       } catch ({ message }) {
         toggleLoading(false);
@@ -81,14 +84,10 @@ const style = StyleSheet.create({
   },
 });
 
-Login.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func.isRequired,
-  }).isRequired,
-  storeLogin: PropTypes.func.isRequired,
-  theme: PropTypes.shape({
-    colors: PropTypes.object.isRequired,
-  }).isRequired,
-};
+interface LoginProps {
+  navigation: StackNavigationProp<LoggedOutStackParams, 'Login'>;
+  storeLogin: (info: Partial<UserDocument>) => void;
+  theme: MyTheme;
+}
 
 export default container(withTheme(Login));

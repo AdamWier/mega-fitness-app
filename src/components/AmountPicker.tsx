@@ -1,19 +1,19 @@
 import React from 'react';
 import { Picker } from 'react-native';
 import { withTheme } from 'react-native-elements';
-import PropTypes from 'prop-types';
+import { MyTheme } from '../StyleSheet';
 
 function AmountPicker({
   amounts,
   theme,
   selectedValue,
   onValueChange,
-}): JSX.Element {
+}: AmountPickerProps) {
   return (
     <Picker
       prompt="Choose your measurement"
       selectedValue={selectedValue}
-      onValueChange={(value): void => onValueChange(value)}
+      onValueChange={onValueChange}
     >
       {amounts.map(({ description }, index) => {
         const label =
@@ -31,13 +31,11 @@ function AmountPicker({
   );
 }
 
-AmountPicker.propTypes = {
-  amounts: PropTypes.arrayOf(PropTypes.object).isRequired,
-  theme: PropTypes.shape({
-    colors: PropTypes.object.isRequired,
-  }).isRequired,
-  selectedValue: PropTypes.string.isRequired,
-  onValueChange: PropTypes.func.isRequired,
-};
+interface AmountPickerProps {
+  amounts: any[];
+  theme: MyTheme;
+  selectedValue: string;
+  onValueChange: (value: string) => void;
+}
 
 export default withTheme(AmountPicker);

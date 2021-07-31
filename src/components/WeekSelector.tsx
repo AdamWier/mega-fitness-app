@@ -1,16 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment';
-import { CalendarList } from 'react-native-calendars';
+import { CalendarList, PeriodMarkingProps } from 'react-native-calendars';
 import { withTheme, Text } from 'react-native-elements';
 import { View, StyleSheet, Alert } from 'react-native';
+import { MyTheme } from '../StyleSheet';
 
 function WeekSelector({
   theme,
   period,
   setPeriod,
-  shouldConfirm,
-}): JSX.Element {
+  shouldConfirm = false,
+}: WeekSelectorProps) {
   const onDayPress = async (date: { [key: string]: any }) => {
     if (shouldConfirm) {
       return Alert.alert(
@@ -82,16 +82,11 @@ const style = StyleSheet.create({
   },
 });
 
-WeekSelector.propTypes = {
-  period: PropTypes.objectOf(
-    PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool]))
-  ),
-  setPeriod: PropTypes.func.isRequired,
-  shouldConfirm: PropTypes.bool,
-};
-
-WeekSelector.defaultProps = {
-  shouldConfirm: false,
-};
+interface WeekSelectorProps {
+  period: PeriodMarkingProps['markedDates'];
+  setPeriod: (week: PeriodMarkingProps['markedDates']) => void;
+  shouldConfirm: boolean;
+  theme: MyTheme;
+}
 
 export default withTheme(WeekSelector);

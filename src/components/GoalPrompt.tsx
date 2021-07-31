@@ -1,7 +1,6 @@
 import React from 'react';
 import { Text, Button, Input } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
 import ActivityIndicator from './ActivityIndicator';
 
 const GoalPrompt = ({
@@ -12,7 +11,7 @@ const GoalPrompt = ({
   loading,
   clearGoal,
   title,
-}) => (
+}: GoalPromptProps) => (
   <View style={styles.container}>
     <Text h4>{title}</Text>
     <Input
@@ -38,14 +37,15 @@ const GoalPrompt = ({
   </View>
 );
 
-GoalPrompt.propTypes = {
-  toggleIsOverlayVisible: PropTypes.func,
-  goal: PropTypes.string.isRequired,
-  setGoalCalories: PropTypes.func.isRequired,
-  onConfirmButtonPress: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired,
-  clearGoal: PropTypes.func.isRequired,
-};
+interface GoalPromptProps {
+  toggleIsOverlayVisible?: (value: boolean) => void;
+  goal?: string;
+  onConfirmButtonPress: () => void;
+  loading: boolean;
+  clearGoal: () => void;
+  setGoal: (value: string) => void;
+  title: string;
+}
 
 const styles = StyleSheet.create({
   container: {

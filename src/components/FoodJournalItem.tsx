@@ -3,15 +3,20 @@ import { Card, Text, Button, Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { View, StyleSheet } from 'react-native';
 import { withTheme } from 'react-native-elements';
-import PropTypes from 'prop-types';
 import moment from 'moment';
+import { MyTheme } from '../StyleSheet';
 
 const getTotalCalories = (
   accumulator: number,
   currentValue: { [key: string]: any }
 ): number => accumulator + currentValue.calories;
 
-const FoodJournalItem = ({ document, onMealPress, onDeletePress, theme }) => (
+const FoodJournalItem = ({
+  document,
+  onMealPress,
+  onDeletePress,
+  theme,
+}: FoodJournalItemProps) => (
   <Card key={document.id}>
     <View
       style={{
@@ -49,12 +54,12 @@ const FoodJournalItem = ({ document, onMealPress, onDeletePress, theme }) => (
   </Card>
 );
 
-FoodJournalItem.propTypes = {
-  document: PropTypes.object.isRequired,
-  onMealPress: PropTypes.func.isRequired,
-  onDeletePress: PropTypes.func.isRequired,
-  theme: PropTypes.object.isRequired,
-};
+interface FoodJournalItemProps {
+  document: any;
+  onMealPress: (document: any) => void;
+  onDeletePress: (id: string) => void;
+  theme: MyTheme;
+}
 
 const styles = StyleSheet.create({
   text: { textAlign: 'left' },

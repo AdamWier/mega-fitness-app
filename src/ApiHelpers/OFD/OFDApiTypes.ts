@@ -79,6 +79,7 @@ export interface OFDFood {
     sugars_value?: number;
     ['saturated-fat']?: number;
     ['energy-kcal_value']?: number;
+    ['energy-kj_value']?: number;
     sugars?: number;
     alcohol?: number;
     alcohol_100g?: number;

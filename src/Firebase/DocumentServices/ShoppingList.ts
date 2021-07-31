@@ -12,7 +12,7 @@ export default class ShoppingListService {
     end: Date,
     list: { [key: string]: any },
     uid: string
-  ): Promise<string | null> {
+  ) {
     const createdAt = new Date();
     const id = `${uid} - ${moment(start).format(
       'YYYY-MM-DD'
@@ -49,11 +49,7 @@ export default class ShoppingListService {
     });
   }
 
-  public async findDocument(
-    start: Date,
-    end: Date,
-    uid: string
-  ): Promise<{ id: string; items: { [key: string]: any } }> {
+  public async findDocument(start: Date, end: Date, uid: string) {
     const response = await this.getDocumentReference(start, end, uid).get();
     if (response.docs.length) {
       return response.docs.map(this.mapDocuments)[0];
@@ -76,9 +72,7 @@ export default class ShoppingListService {
   }
 
   mapDocuments(
-    document: firebase.firestore.QueryDocumentSnapshot<
-      firebase.firestore.DocumentData
-    >
+    document: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>
   ): any {
     const data = document.data();
     return {

@@ -5,9 +5,9 @@ import { authService } from '../Firebase';
 import { container } from '../store/reducers/User';
 import { useNavigation } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-import PropTypes, { InferProps } from 'prop-types';
+import { UserDocument } from '../Firebase/Documents/UserDocument';
 
-function CustomHeader({ title, storeLogin }: CustomHeader) {
+function CustomHeader({ title, storeLogin }: CustomHeaderProps) {
   const navigation = useNavigation<DrawerNavigationProp<{}>>();
 
   const logout = () => {
@@ -17,7 +17,7 @@ function CustomHeader({ title, storeLogin }: CustomHeader) {
         text: 'Yes',
         onPress: () => {
           authService.logout();
-          storeLogin({ uid: null, email: null });
+          storeLogin({});
         },
       },
     ]);
@@ -56,13 +56,9 @@ const style = StyleSheet.create({
   },
 });
 
-const propTypes = {
-  title: PropTypes.string.isRequired,
-  storeLogin: PropTypes.func.isRequired,
-};
-
-CustomHeader.propTypes = propTypes;
-
-type CustomHeader = InferProps<typeof propTypes>;
+interface CustomHeaderProps {
+  title: string;
+  storeLogin: (userInfo: Partial<UserDocument>) => void;
+}
 
 export default container(CustomHeader);

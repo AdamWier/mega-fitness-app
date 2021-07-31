@@ -142,13 +142,7 @@ export default class DayService {
     if (response.docs.length) {
       return response.docs.map(this.mapDocuments)[0];
     }
-    return {
-      id: null,
-      goalCalories: null,
-      date: null,
-      weight: null,
-      water: null,
-    };
+    return {};
   }
 
   public getDocumentListener(
@@ -225,9 +219,7 @@ export default class DayService {
   }
 
   private mapDocuments(
-    document: firebase.firestore.QueryDocumentSnapshot<
-      firebase.firestore.DocumentData
-    >
+    document: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>
   ): DayDocument {
     const data = document.data();
     return {

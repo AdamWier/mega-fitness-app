@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Toast from 'react-native-simple-toast';
-import { BarCodeScanner } from 'expo-barcode-scanner';
+import { BarCodeEvent, BarCodeScanner } from 'expo-barcode-scanner';
 import OFDApiImpl from '../ApiHelpers/OFD/OFDApi';
-import PropTypes from 'prop-types';
 import { useFocusEffect } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { FoodJournalStackParams } from '../Navigation/FoodJournalStack/Screens';
 
-export default function BarCodeScannerScreen({ navigation }) {
+export default function BarCodeScannerScreen({
+  navigation,
+}: BarCodeScannerScreenProps) {
   const [isFocused, toggleIsFocused] = useState(false);
 
-  const handleBarCodeScanned = async ({ data }) => {
+  const handleBarCodeScanned = async ({ data }: BarCodeEvent) => {
     try {
       const OFDApi = new OFDApiImpl();
       const details = await OFDApi.barcodeSearch(data);
@@ -47,8 +50,6 @@ export default function BarCodeScannerScreen({ navigation }) {
   ) : null;
 }
 
-BarCodeScannerScreen.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func.isRequired,
-  }).isRequired,
-};
+interface BarCodeScannerScreenProps {
+  navigation: StackNavigationProp<FoodJournalStackParams, 'BarCodeScanner'>;
+}

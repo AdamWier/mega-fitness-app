@@ -1,7 +1,7 @@
 import { Theme } from 'react-native-elements';
 import { DefaultTheme } from '@react-navigation/native';
 
-interface MyTheme extends Theme {
+export interface MyTheme extends Theme {
   colors: { [key: string]: string };
 }
 
@@ -22,7 +22,7 @@ export const navTheme = {
   colors,
 };
 
-export const theme = {
+export const theme: MyTheme = {
   Text: {
     style: {
       color: colors.text,
@@ -103,4 +103,4 @@ export const theme = {
     },
   },
   colors,
-} as MyTheme;
+};

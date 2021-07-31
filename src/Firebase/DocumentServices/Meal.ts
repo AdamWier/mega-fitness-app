@@ -48,7 +48,7 @@ export default class MealService {
       });
   }
 
-  public delete(id: string): Promise<void> {
+  public delete(id: string) {
     const updatedAt = new Date();
     return this.firestore.collection('meals').doc(id).update({
       deleted: true,
@@ -56,10 +56,7 @@ export default class MealService {
     });
   }
 
-  public async findByDate(
-    currentDate: Date,
-    uid: string
-  ): Promise<{ [key: string]: any }[]> {
+  public async findByDate(currentDate: Date, uid: string) {
     const response = await this.getByDateRef(currentDate, uid).get();
     if (response.docs.length) {
       return response.docs.map(this.mapDocuments);
@@ -71,17 +68,14 @@ export default class MealService {
     currentDate: Date,
     uid: string,
     updateCallback: Function
-  ): Function {
+  ) {
     return this.getByDateRef(currentDate, uid).onSnapshot((snapshot) => {
       const updatedDocs = snapshot.docs.map(this.mapDocuments);
       updateCallback(updatedDocs);
     });
   }
 
-  private getByDateRef(
-    currentDate: Date,
-    uid: string
-  ): firebase.firestore.Query<firebase.firestore.DocumentData> {
+  private getByDateRef(currentDate: Date, uid: string) {
     const start = moment(currentDate).startOf('day');
     const end = moment(start).endOf('day');
     return this.firestore
@@ -92,10 +86,7 @@ export default class MealService {
       .where('deleted', '==', false);
   }
 
-  public async findByWeek(
-    beginningOfWeek: Date,
-    uid: string
-  ): Promise<{ [key: string]: any }[]> {
+  public async findByWeek(beginningOfWeek: Date, uid: string) {
     const response = await this.getByWeekRef(beginningOfWeek, uid).get();
     if (response.docs.length) {
       return response.docs.map(this.mapDocuments);
@@ -143,10 +134,8 @@ export default class MealService {
   }
 
   private mapDocuments(
-    document: firebase.firestore.QueryDocumentSnapshot<
-      firebase.firestore.DocumentData
-    >
-  ): { [key: string]: any } {
+    document: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>
+  ) {
     const data = document.data();
     const { eatenAt, meal, name } = data;
     return {

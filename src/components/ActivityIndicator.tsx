@@ -1,18 +1,15 @@
 import React from 'react';
 import { ActivityIndicator as AI } from 'react-native';
 import { withTheme } from 'react-native-elements';
-import PropTypes, { InferProps } from 'prop-types';
+import { MyTheme } from '../StyleSheet';
 
-function ActivityIndicator({
-  theme,
-  size,
-}: InferProps<typeof ActivityIndicator.propTypes>) {
+function ActivityIndicator({ theme, size }: ActivityIndicatorProps) {
   return <AI size={size} color={theme.colors.success} />;
 }
 
-ActivityIndicator.propTypes = {
-  size: PropTypes.oneOf([PropTypes.number, 'small', 'large']),
-  theme: PropTypes.objectOf(PropTypes.any).isRequired,
-};
+interface ActivityIndicatorProps {
+  size?: number | 'small' | 'large';
+  theme: MyTheme;
+}
 
 export default withTheme(ActivityIndicator);

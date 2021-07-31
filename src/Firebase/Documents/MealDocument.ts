@@ -16,5 +16,5 @@ export interface AddedFood {
   carbs: number;
   amount: number;
   name: string;
-  portionDiscription: string;
+  portionDescription: string;
 }

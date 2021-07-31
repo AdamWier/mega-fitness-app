@@ -1,22 +1,30 @@
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { Dispatch } from 'redux';
-import PropTypes from 'prop-types';
 import { UserDocument } from '../../Firebase/Documents/UserDocument';
 
 export const LOGIN = 'LOGIN';
 const UPDATE_CALORIES = 'UPDATE_CALORIES';
 const UPDATE_WATER_GOAL = 'UPDATE_WATER_GOAL';
 
-export const initialState = {
-  uid: null,
-  email: null,
+export type UserContainerProps = ConnectedProps<typeof container>;
+
+export interface InitialState {
+  uid?: string;
+  email?: string;
+  goalCalories: number;
+  waterGoal: number;
+  user?: UserDocument;
+}
+
+export const initialState: InitialState = {
   goalCalories: 0,
   waterGoal: 0,
 };
 
-export function login(
-  userInfo: UserDocument
-): { type: string; payload: typeof initialState } {
+export function login(userInfo: Partial<UserDocument>): {
+  type: string;
+  payload: Partial<typeof initialState>;
+} {
   return {
     type: LOGIN,
     payload: userInfo,
@@ -40,7 +48,7 @@ export function updateWaterGoal(goalCalories: number) {
 export const userReducer = (
   state = initialState,
   action: { type: string; payload: typeof initialState }
-): { [key: string]: any } => {
+) => {
   switch (action.type) {
     case LOGIN:
       return {
@@ -62,24 +70,14 @@ export const userReducer = (
   }
 };
 
-const mapStateToProps = (state: {
-  [key: string]: any;
-}): { [key: string]: any } => ({
+const mapStateToProps = (state: InitialState) => ({
   user: state.user,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch): { [key: string]: any } => ({
-  storeLogin: (payload: UserDocument): any => dispatch(login(payload)),
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  storeLogin: (payload: Partial<UserDocument>): any => dispatch(login(payload)),
   storeCalories: (payload: number) => dispatch(updateCalories(payload)),
   storeWaterGoal: (payload: number) => dispatch(updateWaterGoal(payload)),
 });
 
 export const container = connect(mapStateToProps, mapDispatchToProps);
-
-export const UserPropTypes = {
-  user: PropTypes.shape({
-    uid: PropTypes.string,
-    email: PropTypes.string,
-    goalCalories: PropTypes.number,
-  }).isRequired,
-};

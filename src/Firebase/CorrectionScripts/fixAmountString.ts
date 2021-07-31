@@ -19,7 +19,7 @@ collectionRef.get().then((snapshot) => {
         const data = document.data();
         return t.update(document.ref, {
           ...data,
-          meal: data.meal.map((food) =>
+          meal: data?.meal.map((food: any) =>
             food.amount ? { ...food, amount: Number(food.amount) } : food
           ),
         });

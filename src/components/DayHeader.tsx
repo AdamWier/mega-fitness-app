@@ -1,13 +1,15 @@
 import React from 'react';
 import { Button, Text, Icon } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
-import PropTypes, { InferProps } from 'prop-types';
 import OverlayWithButton from './OverlayWithButton';
 import { Bar } from 'react-native-progress';
 import { getTotal } from '../utilities';
 import { withTheme } from 'react-native-elements';
 import { container } from '../store/reducers/User';
 import UpDownButtons from './UpDownButtons';
+import { AddedFood } from '../Firebase/Documents/MealDocument';
+import { MyTheme } from '../StyleSheet';
+import { UserDocument } from '../Firebase/Documents/UserDocument';
 
 const DayHeader = ({
   goalCalories,
@@ -45,8 +47,9 @@ const DayHeader = ({
           containerStyle={styles.buttonContainer}
           icon={<Icon name="add-circle" />}
           onPress={() =>
+            user?.uid &&
             handleMealPress({
-              id: null,
+              id: '',
               eatenAt: getNewEatenAt(),
               meal: [],
               name: '',
@@ -137,44 +140,32 @@ const styles = StyleSheet.create({
   waterGoalContainer: { flexDirection: 'row' },
 });
 
-const propTypes = {
-  goalCalories: PropTypes.number,
-  foods: PropTypes.array,
-  handleMealPress: PropTypes.func.isRequired,
-  getNewEatenAt: PropTypes.func.isRequired,
-  user: PropTypes.shape({ uid: PropTypes.string, email: PropTypes.string })
-    .isRequired,
-  onGoalButtonPress: PropTypes.func.isRequired,
-  isGoalOverlayVisible: PropTypes.bool.isRequired,
-  toggleIsGoalOverlayVisible: PropTypes.func.isRequired,
-  goalCaloriesInput: PropTypes.string.isRequired,
-  setGoalCaloriesInput: PropTypes.func.isRequired,
-  onGoalSubmit: PropTypes.func.isRequired,
-  isGoalOverlayLoading: PropTypes.bool.isRequired,
-  clearGoal: PropTypes.func.isRequired,
-  theme: PropTypes.shape({
-    colors: PropTypes.shape({
-      success: PropTypes.string,
-      danger: PropTypes.string,
-      text: PropTypes.string,
-      info: PropTypes.string,
-    }),
-  }).isRequired,
-  onWeightButtonPress: PropTypes.func.isRequired,
-  isWeightOverlayVisible: PropTypes.bool.isRequired,
-  toggleIsWeightOverlayVisible: PropTypes.func.isRequired,
-  onWeightSubmit: PropTypes.func.isRequired,
-  weightInput: PropTypes.string.isRequired,
-  setWeightInput: PropTypes.func.isRequired,
-  isWeightOverlayLoading: PropTypes.bool.isRequired,
-  weight: PropTypes.number,
-  waterGoal: PropTypes.number,
-  todaysWater: PropTypes.number,
-  updateWaterGoal: PropTypes.func,
-};
-
-DayHeader.propTypes = propTypes;
-
-type DayHeaderProps = InferProps<typeof propTypes>;
+interface DayHeaderProps {
+  goalCalories?: number;
+  foods: AddedFood[];
+  handleMealPress: (meal: any) => void;
+  getNewEatenAt: () => Date;
+  user?: UserDocument;
+  onGoalButtonPress: () => void;
+  isGoalOverlayVisible: boolean;
+  toggleIsGoalOverlayVisible: (value: boolean) => void;
+  goalCaloriesInput: string;
+  setGoalCaloriesInput: (value: string) => void;
+  onGoalSubmit: () => void;
+  isGoalOverlayLoading: boolean;
+  clearGoal: () => void;
+  theme: MyTheme;
+  onWeightButtonPress: () => void;
+  isWeightOverlayVisible: boolean;
+  toggleIsWeightOverlayVisible: (value: boolean) => void;
+  onWeightSubmit: () => void;
+  weightInput: string;
+  setWeightInput: (value: string) => void;
+  isWeightOverlayLoading: boolean;
+  weight?: number;
+  waterGoal?: number;
+  todaysWater: number;
+  updateWaterGoal: (value: number) => void;
+}
 
 export default container(withTheme(DayHeader));

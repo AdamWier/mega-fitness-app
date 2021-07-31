@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
   VictoryChart,
   VictoryTheme,
@@ -7,8 +6,9 @@ import {
   VictoryGroup,
   VictoryBar,
 } from 'victory-native';
+import { createWeeklyReport } from '../utilities';
 
-function WeeklyGoalChart({ graphData }): JSX.Element {
+function WeeklyGoalChart({ graphData }: WeeklyGoalChartProps): JSX.Element {
   const axisStyle = {
     grid: { stroke: null },
     ticks: { size: 0 },
@@ -36,8 +36,8 @@ function WeeklyGoalChart({ graphData }): JSX.Element {
   );
 }
 
-WeeklyGoalChart.propTypes = {
-  graphData: PropTypes.array.isRequired,
-};
+interface WeeklyGoalChartProps {
+  graphData: ReturnType<typeof createWeeklyReport>['graphData'];
+}
 
 export default WeeklyGoalChart;

@@ -1,11 +1,15 @@
 import React from 'react';
 import { Text } from 'react-native-elements';
 import { View } from 'react-native';
-import PropTypes from 'prop-types';
 import { withTheme } from 'react-native-elements';
 import { Picker } from 'react-native';
+import { MyTheme } from '../StyleSheet';
 
-function MonthPicker({ selectedMonth, onValueChange, theme }): JSX.Element {
+function MonthPicker({
+  selectedMonth,
+  onValueChange,
+  theme,
+}: MonthPickerProps): JSX.Element {
   return (
     <View>
       <Text h4>Select a month</Text>
@@ -32,9 +36,10 @@ function MonthPicker({ selectedMonth, onValueChange, theme }): JSX.Element {
   );
 }
 
-MonthPicker.propTypes = {
-  selectedMonth: PropTypes.string.isRequired,
-  onValueChange: PropTypes.func.isRequired,
-};
+interface MonthPickerProps {
+  selectedMonth: string;
+  onValueChange: (value: any) => Promise<void>;
+  theme: MyTheme;
+}
 
 export default withTheme(MonthPicker);

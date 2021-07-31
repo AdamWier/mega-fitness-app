@@ -1,6 +1,5 @@
 import React from 'react';
 import { Card, Text, CheckBox, Button, Icon } from 'react-native-elements';
-import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 import UpDownButtons from './UpDownButtons';
 
@@ -10,7 +9,7 @@ export default function ShoppingListCard({
   toggleCheckBox,
   refreshList,
   saveList,
-}): JSX.Element {
+}: ShoppingListCardProps) {
   return (
     <Card
       title={
@@ -43,7 +42,7 @@ export default function ShoppingListCard({
               <View style={style.subItem}>
                 <UpDownButtons
                   total={list[food][portion].amount}
-                  onValueChange={(updatedNumber: string) =>
+                  onValueChange={(updatedNumber) =>
                     !list[food][portion].checked &&
                     updateAmount(food, portion, updatedNumber)
                   }
@@ -58,19 +57,17 @@ export default function ShoppingListCard({
   );
 }
 
-ShoppingListCard.propTypes = {
-  list: PropTypes.objectOf(
-    PropTypes.objectOf(
-      PropTypes.objectOf(
-        PropTypes.oneOfType([PropTypes.number, PropTypes.bool])
-      )
-    )
-  ).isRequired,
-  updateAmount: PropTypes.func.isRequired,
-  toggleCheckBox: PropTypes.func.isRequired,
-  refreshList: PropTypes.func.isRequired,
-  saveList: PropTypes.func.isRequired,
-};
+interface ShoppingListCardProps {
+  list: { [key: string]: any };
+  updateAmount: (
+    food: string,
+    portion: string,
+    updatedNumber: string | number | null
+  ) => void;
+  toggleCheckBox: (food: string, portion: string, isChecked: boolean) => void;
+  refreshList: () => void;
+  saveList: () => void;
+}
 
 const style = StyleSheet.create({
   heading: {
