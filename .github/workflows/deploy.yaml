@@ -43,7 +43,7 @@ jobs:
         EXPO_ANDROID_KEY_PASSWORD: ${{ secrets.KeyPassword }}
       run: turtle build:android -t apk -o ./mega-fitness-app.apk --keystore-path mega-fitness-app.jks --keystore-alias ${{ secrets.KeyAlias }} --release-channel ${{ steps.extract_branch.outputs.branch }}
     - name: Setup gcloud
-      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      uses: google-github-actions/setup-gcloud@master
       with:
         service_account_key: ${{ secrets.FirebaseKey }}
         project_id: ${{ secrets.GcloudProject }}
