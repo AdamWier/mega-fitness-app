@@ -95,14 +95,14 @@ export default class OFDApi {
     });
   }
 
-  public async barcodeSearch(barcode: string): Promise<FoodDetails | null> {
+  public async barcodeSearch(barcode: string) {
     const result = await (
       await fetch(this.getBarcodeSearchURI(barcode))
     ).json();
     return result.product ? this.adaptResult(result.product) : null;
   }
 
-  public async getDetails(foodId: string): Promise<FoodDetails | null> {
+  public async getDetails(foodId: string) {
     const result: OFDDetailsResult = await (
       await fetch(this.getDetailsURI(foodId))
     ).json();
@@ -151,10 +151,11 @@ export default class OFDApi {
         portions,
       };
     }
+    return;
   }
 
-  private getNutrient(food: OFDFood, nutrient: NutrientName): number {
-    return food.nutriments[`${nutrient}`] / 100;
+  private getNutrient(food: OFDFood, nutrient: NutrientName) {
+    return Number(food.nutriments[nutrient]) / 100;
   }
 
   private getPortions(product: OFDFood): FormattedPortion[] {

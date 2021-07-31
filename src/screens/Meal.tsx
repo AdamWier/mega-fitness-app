@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  RefObject,
+} from 'react';
 import {
   View,
   ScrollView,
@@ -8,7 +14,6 @@ import {
   BackHandler,
 } from 'react-native';
 import { Button, Text, withTheme, Input, Divider } from 'react-native-elements';
-import PropTypes from 'prop-types';
 import FoodCard from '../components/FoodCard';
 import { container as MealContainer } from '../store/reducers/MealDocument';
 import { container as UserContainer } from '../store/reducers/User';
@@ -17,6 +22,11 @@ import TotalCard from '../components/TotalCard';
 import moment from 'moment';
 import { useFocusEffect } from '@react-navigation/native';
 import { mealDocumentService, dayDocumentService } from '../Firebase';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { FoodJournalStackParams } from '../Navigation/FoodJournalStack/Screens';
+import { MyTheme } from '../StyleSheet';
+import MealDocument from '../Firebase/Documents/MealDocument';
+import { UserDocument } from '../Firebase/Documents/UserDocument';
 
 function Meal({
   navigation,
@@ -24,14 +34,14 @@ function Meal({
   mealDocument,
   updateMealDocument,
   user,
-}): JSX.Element {
-  const mealNameInput = useRef(null);
+}: MealProps) {
+  const mealNameInput = useRef<Input>();
 
   const { meal, eatenAt, name, id } = mealDocument;
 
   const [displayMealCalendar, toggleDisplayMealCalendar] = useState(false);
   const [displayCopyCalendar, toggleDisplayCopyCalendar] = useState(false);
-  const [expandedCard, changeExpandedCard] = useState(null);
+  const [expandedCard, changeExpandedCard] = useState<number | null>(null);
 
   navigation.setOptions({
     title: name || 'New meal',
@@ -48,6 +58,7 @@ function Meal({
   };
 
   const saveMeal = async (): Promise<void> => {
+    if (!user) return;
     try {
       if (id) {
         await mealDocumentService.update(meal, name, user.uid, eatenAt, id);
@@ -90,7 +101,7 @@ function Meal({
 
   const deleteMeal = async () => {
     try {
-      await mealDocumentService.delete(id);
+      id && (await mealDocumentService.delete(id));
       navigation.navigate('Food Journal');
     } catch (e) {
       console.log(e);
@@ -106,7 +117,7 @@ function Meal({
 
   const copyMeal = async (input: Date) => {
     toggleDisplayCopyCalendar(false);
-    await mealDocumentService.create(meal, name, user.uid, input);
+    user && (await mealDocumentService.create(meal, name, user.uid, input));
   };
 
   const onBackPress = () => {
@@ -118,7 +129,7 @@ function Meal({
   };
 
   const blurInput = useCallback(() => {
-    mealNameInput.current && mealNameInput.current.blur();
+    mealNameInput?.current?.blur();
   }, []);
 
   useEffect(() => {
@@ -149,7 +160,7 @@ function Meal({
             name: input,
           })
         }
-        ref={mealNameInput}
+        ref={mealNameInput as RefObject<Input>}
         containerStyle={styles.input}
       />
       <Button
@@ -211,7 +222,7 @@ function Meal({
 
           <Divider />
 
-          {meal.map((food: { [key: string]: any }, index: number) => {
+          {meal.map((food, index) => {
             const isExpandedCard = index === expandedCard;
             return (
               <FoodCard
@@ -273,20 +284,12 @@ const styles = StyleSheet.create({
   },
 });
 
-Meal.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func.isRequired,
-    setOptions: PropTypes.func.isRequired,
-  }).isRequired,
-  theme: PropTypes.shape({
-    colors: PropTypes.object.isRequired,
-  }).isRequired,
-  mealDocument: PropTypes.object.isRequired,
-  updateMealDocument: PropTypes.func.isRequired,
-  user: PropTypes.shape({
-    uid: PropTypes.string,
-    email: PropTypes.string,
-  }).isRequired,
-};
+interface MealProps {
+  navigation: StackNavigationProp<FoodJournalStackParams, 'Meal'>;
+  theme: MyTheme;
+  mealDocument: MealDocument;
+  updateMealDocument: (value: MealDocument) => void;
+  user?: UserDocument;
+}
 
 export default UserContainer(MealContainer(withTheme(Meal)));

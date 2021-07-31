@@ -14,9 +14,7 @@ export default class UserService {
     });
   }
 
-  public async getDocument(
-    uid: string
-  ): Promise<firebase.firestore.DocumentData> {
+  public async getDocument(uid: string) {
     const response = await this.firestore
       .collection('users')
       .where('uid', '==', uid)

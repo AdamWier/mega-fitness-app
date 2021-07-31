@@ -3,6 +3,16 @@ import Search from '../../screens/Search';
 import Details from '../../screens/Details';
 import Meal from '../../screens/Meal';
 import BarCodeScanner from '../../screens/BarCodeScanner';
+import { RouteProp } from '@react-navigation/native';
+import { FoodDetails } from '../../ApiHelpers/CommonAPITypes';
+
+export type FoodJournalStackParams = {
+  ['Food Journal']: undefined;
+  BarCodeScanner: undefined;
+  Meal: undefined;
+  Search: undefined;
+  Details: { details: FoodDetails };
+};
 
 export default [
   {
@@ -27,7 +37,11 @@ export default [
   {
     name: 'Details',
     component: Details,
-    options: ({ route }): { [key: string]: string } => ({
+    options: ({
+      route,
+    }: {
+      route: RouteProp<FoodJournalStackParams, 'Details'>;
+    }) => ({
       title: route.params.details.name,
     }),
   },

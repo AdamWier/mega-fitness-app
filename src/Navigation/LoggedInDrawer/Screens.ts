@@ -4,6 +4,14 @@ import WeeklyReport from '../../screens/WeeklyReport';
 import WeightTracking from '../../screens/WeightTracking';
 import ShoppingList from '../../screens/ShoppingList';
 
+export type LoggedInDrawerParams = {
+  ['Food Journal']: undefined;
+  GoalSetPage: undefined;
+  ['Weekly Reports']: undefined;
+  ['Weight tracking']: undefined;
+  ['Shopping Lists']: undefined;
+};
+
 export default [
   {
     name: 'Food Journal',

@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Button, Icon, Input } from 'react-native-elements';
-import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 
-const UpDownButtons: React.FC<any> = ({ total, onValueChange, hideInput }) => {
-  const [input, setInput] = useState(null);
+const UpDownButtons = ({
+  total,
+  onValueChange,
+  hideInput,
+}: UpDownButtonsProps) => {
+  const [input, setInput] = useState<string | null>(null);
 
   const handleInputBox = (value: string) => {
     const decimals = value.split('').filter((char) => char === '.');
@@ -45,14 +48,11 @@ const UpDownButtons: React.FC<any> = ({ total, onValueChange, hideInput }) => {
   );
 };
 
-UpDownButtons.propTypes = {
-  total: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  onValueChange: PropTypes.func,
-};
-
-UpDownButtons.defaultProps = {
-  onValueChange: null,
-};
+interface UpDownButtonsProps {
+  total: number;
+  onValueChange: (value: any) => void;
+  hideInput?: boolean;
+}
 
 const styles = StyleSheet.create({
   row: {

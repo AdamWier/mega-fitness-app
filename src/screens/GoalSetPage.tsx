@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Text } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
-import { container, UserPropTypes } from '../store/reducers/User';
+import { container } from '../store/reducers/User';
 import GoalPrompt from '../components/GoalPrompt';
 import Toast from 'react-native-simple-toast';
 import { userDocumentService } from '../Firebase';
-import CustomHeader from '../components/Header';
+import CustomHeader from '../components/CustomHeader';
 import { UserDocument } from '../Firebase/Documents/UserDocument';
 
-function GoalSetPage({ user, storeCalories, storeWaterGoal }): JSX.Element {
+function GoalSetPage({
+  user,
+  storeCalories,
+  storeWaterGoal,
+}: GoalSetPageProps) {
   const [isCalorieLoading, toggleIsCalorieLoading] = useState(false);
   const [isWaterLoading, toggleIsWaterLoading] = useState(false);
   const [goalCaloriesInput, setGoalCaloriesInput] = useState('0');
@@ -28,6 +32,7 @@ function GoalSetPage({ user, storeCalories, storeWaterGoal }): JSX.Element {
 
   const setWaterGoal = async (goal: number) => {
     try {
+      if (!user) return;
       toggleIsWaterLoading(true);
       await userDocumentService.updateWaterGoal(user.uid, goal);
       setGoalWaterInput(goal.toString());
@@ -43,6 +48,7 @@ function GoalSetPage({ user, storeCalories, storeWaterGoal }): JSX.Element {
 
   const setCalorieGoal = async (goal: number): Promise<void> => {
     try {
+      if (!user) return;
       toggleIsCalorieLoading(true);
       await userDocumentService.updateCalorieGoal(user.uid, goal);
       setGoalCaloriesInput(goal.toString());
@@ -57,6 +63,7 @@ function GoalSetPage({ user, storeCalories, storeWaterGoal }): JSX.Element {
   };
 
   useEffect(() => {
+    if (!user) return;
     user.goalCalories && setGoalCaloriesInput(user.goalCalories.toString());
     user.waterGoal && setGoalWaterInput(user.waterGoal.toString());
 
@@ -70,19 +77,13 @@ function GoalSetPage({ user, storeCalories, storeWaterGoal }): JSX.Element {
     return () => {
       unsubscribeUserListener();
     };
-  }, [
-    user.uid,
-    user.goalCalories,
-    user.waterGoal,
-    storeCalories,
-    storeWaterGoal,
-  ]);
+  }, [user, storeCalories, storeWaterGoal]);
 
   return (
     <View style={style.content}>
       <CustomHeader title="Calorie goal" />
       <Text h2>Goals for</Text>
-      <Text h4>{user.email}</Text>
+      <Text h4>{user?.email}</Text>
       <GoalPrompt
         goal={goalCaloriesInput}
         setGoal={setGoalCaloriesInput}
@@ -111,8 +112,10 @@ const style = StyleSheet.create({
   },
 });
 
-GoalSetPage.propTypes = {
-  ...UserPropTypes,
-};
+interface GoalSetPageProps {
+  user?: UserDocument;
+  storeCalories: (calories: number) => void;
+  storeWaterGoal: (water: number) => void;
+}
 
 export default container(GoalSetPage);

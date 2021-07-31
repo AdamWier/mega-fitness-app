@@ -64,9 +64,9 @@ export default class USDAApi {
     nutrient: NutrientName
   ): number {
     return (
-      food.foodNutrients.find(
+      (food.foodNutrients?.find(
         (foodNutrient) => foodNutrient.nutrient.name === nutrient
-      ).amount / 100
+      )?.amount || 0) / 100
     );
   }
 
@@ -78,14 +78,16 @@ export default class USDAApi {
       return 1;
     }
     if (b.score - a.score === 0) {
-      return parseInt(a.ndbNumber, 10) - parseInt(b.ndbNumber, 10);
+      return (
+        parseInt(a.ndbNumber || '0', 10) - parseInt(b.ndbNumber || '0', 10)
+      );
     }
     return b.score - a.score;
   }
 
   private getPortions(food: USDAFoodDetailsResult): FormattedPortion[] {
     return [
-      ...food.foodPortions.map((portion) => ({
+      ...(food.foodPortions || []).map((portion) => ({
         weight: portion.gramWeight,
         description: portion.modifier,
       })),

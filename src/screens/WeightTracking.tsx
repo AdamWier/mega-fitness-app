@@ -1,22 +1,26 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
 import { container } from '../store/reducers/User';
-import CustomHeader from '../components/Header';
+import CustomHeader from '../components/CustomHeader';
 import moment from 'moment';
 import { dayDocumentService } from '../Firebase/index';
 import MonthPicker from '../components/MonthPicker';
 import WeightGraph from '../components/WeightGraph';
 import { Text } from 'react-native-elements';
+import { UserDocument } from '../Firebase/Documents/UserDocument';
 
+interface Record {
+  x: string;
+  y: any;
+}
 const emptyReport = {
-  records: [],
+  records: [] as Record[],
   minWeight: null,
   maxWeight: null,
   averageWeight: null,
 };
 
-function WeightTracking({ user }): JSX.Element {
+function WeightTracking({ user }: WeightTrackingProps) {
   const [selectedMonth, setSelectedMonth] = useState('');
   const [weightReport, setWeightReport] = useState(emptyReport);
 
@@ -24,10 +28,9 @@ function WeightTracking({ user }): JSX.Element {
     setSelectedMonth(value);
     if (value) {
       const beginningOfMonth = moment(`2020-${value}-01`).toDate();
-      const records = await dayDocumentService.findByMonth(
-        beginningOfMonth,
-        user.uid
-      );
+      const records = user?.uid
+        ? await dayDocumentService.findByMonth(beginningOfMonth, user.uid)
+        : [];
       if (records.length) {
         const weights = records
           .filter((record) => !!record.weight)
@@ -110,12 +113,8 @@ const styles = StyleSheet.create({
   },
 });
 
-WeightTracking.propTypes = {
-  user: PropTypes.shape({
-    uid: PropTypes.string,
-    email: PropTypes.string,
-    goalCalories: PropTypes.number,
-  }).isRequired,
-};
+interface WeightTrackingProps {
+  user?: UserDocument;
+}
 
 export default container(WeightTracking);

@@ -12,7 +12,7 @@ const payload = [
     fats: 5,
     name: 'Mystery Meat',
     protein: 20,
-    portionDiscription: 'gram',
+    portionDescription: 'gram',
     amount: 10,
   },
 ];

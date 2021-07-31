@@ -1,10 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Alert, StyleSheet } from 'react-native';
 import { withTheme, Text } from 'react-native-elements';
-import PropTypes from 'prop-types';
-import { container as UserContainer } from '../store/reducers/User';
-import { container as MealContainer } from '../store/reducers/MealDocument';
-import MealDocument from '../Firebase/Documents/MealDocument';
+import {
+  container as UserContainer,
+  UserContainerProps,
+} from '../store/reducers/User';
+import {
+  container as MealContainer,
+  MealContainerProps,
+} from '../store/reducers/MealDocument';
+import MealDocument, { AddedFood } from '../Firebase/Documents/MealDocument';
 import { Agenda } from 'react-native-calendars';
 import FoodJournalItem from '../components/FoodJournalItem';
 import TotalCard from '../components/TotalCard';
@@ -14,6 +19,9 @@ import DayHeader from '../components/DayHeader';
 import { mealDocumentService, dayDocumentService } from '../Firebase/index';
 import DayDocument from '../Firebase/Documents/DayDocument';
 import ActivityIndicator from '../components/ActivityIndicator';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { FoodJournalStackParams } from '../Navigation/FoodJournalStack/Screens';
+import { MyTheme } from '../StyleSheet';
 
 const reduceMealDocuments = (data: { [key: string]: any }[]) =>
   data.reduce((foodJournal, item) => {
@@ -58,7 +66,7 @@ const compareRows = (
 
 const emptyDocuments = {
   meals: [],
-  day: { id: null, goalCalories: null, weight: 0, water: 0 },
+  day: { weight: 0, water: 0 },
 };
 
 function FoodJournalPage({
@@ -66,9 +74,10 @@ function FoodJournalPage({
   theme,
   user,
   updateMealDocument,
-}): JSX.Element {
+}: FoodJournalPageProps) {
   const [isDayLoading, setIsDayLoading] = useState(true);
-  const [documents, setDocuments] = useState(emptyDocuments);
+  const [documents, setDocuments] =
+    useState<{ meals: any; day: DayDocument }>(emptyDocuments);
   const [currentDate, setCurrentDate] = useState(
     moment().startOf('day').toDate()
   );
@@ -77,9 +86,8 @@ function FoodJournalPage({
   const [goalCaloriesInput, setGoalCaloriesInput] = useState('0');
   const [isGoalOverlayLoading, setIsGoalOverlayLoading] = useState(false);
 
-  const [isWeightOverlayVisible, toggleIsWeightOverlayVisible] = useState(
-    false
-  );
+  const [isWeightOverlayVisible, toggleIsWeightOverlayVisible] =
+    useState(false);
   const [weightInput, setWeightInput] = useState('0');
   const [isWeightOverlayLoading, setIsWeightOverlayLoading] = useState(false);
 
@@ -99,14 +107,15 @@ function FoodJournalPage({
   };
 
   const onWaterChange = (glasses: number) => {
-    documents.day.id
+    documents.day.id && user?.uid
       ? dayDocumentService.updateWater(
           currentDate,
           glasses,
           user.uid,
           documents.day.id
         )
-      : dayDocumentService.createWater(currentDate, glasses, user.uid);
+      : user?.uid &&
+        dayDocumentService.createWater(currentDate, glasses, user.uid);
   };
 
   const onWeightSubmit = async () => {
@@ -116,7 +125,7 @@ function FoodJournalPage({
     } else {
       try {
         setIsWeightOverlayLoading(true);
-        if (documents.day.id) {
+        if (documents.day.id && user?.uid) {
           await dayDocumentService.updateWeight(
             currentDate,
             weightNumber,
@@ -124,11 +133,12 @@ function FoodJournalPage({
             documents.day.id
           );
         } else {
-          await dayDocumentService.createWeight(
-            currentDate,
-            weightNumber,
-            user.uid
-          );
+          user?.uid &&
+            (await dayDocumentService.createWeight(
+              currentDate,
+              weightNumber,
+              user.uid
+            ));
         }
         setGoalCaloriesInput('0');
         toggleIsWeightOverlayVisible(false);
@@ -155,7 +165,7 @@ function FoodJournalPage({
   const setGoalCalories = async (goal: number) => {
     try {
       setIsGoalOverlayLoading(true);
-      if (documents.day.id) {
+      if (documents.day.id && user?.uid) {
         await dayDocumentService.updateGoal(
           currentDate,
           goal,
@@ -163,7 +173,8 @@ function FoodJournalPage({
           documents.day.id
         );
       } else {
-        await dayDocumentService.createGoal(currentDate, goal, user.uid);
+        user?.uid &&
+          (await dayDocumentService.createGoal(currentDate, goal, user.uid));
       }
       toggleIsGoalOverlayVisible(false);
     } catch (e) {
@@ -176,7 +187,7 @@ function FoodJournalPage({
     setIsGoalOverlayLoading(false);
   };
 
-  const handleMealPress = (document: MealDocument) => {
+  const handleMealPress = (document: AddedFood[]) => {
     updateMealDocument(document);
     navigation.navigate('Meal');
   };
@@ -195,9 +206,17 @@ function FoodJournalPage({
       try {
         setIsDayLoading(true);
         setDocuments(emptyDocuments);
-        const meals = await mealDocumentService.findByDate(date, user.uid);
-        const day = await dayDocumentService.findDocument(date, user.uid);
-        setDocuments((documents) => ({ ...documents, meals, day }));
+        const meals =
+          user?.uid && (await mealDocumentService.findByDate(date, user.uid));
+        const day =
+          user?.uid && (await dayDocumentService.findDocument(date, user.uid));
+        meals &&
+          day &&
+          setDocuments((currentDocuments) => ({
+            ...currentDocuments,
+            meals,
+            day,
+          }));
         setCurrentDate(date);
         setIsDayLoading(false);
       } catch (e) {
@@ -206,41 +225,45 @@ function FoodJournalPage({
         setIsDayLoading(false);
       }
     },
-    [user.uid]
+    [user]
   );
 
   useEffect(() => {
     onDayPress(currentDate);
-    const unsubscribeMealsByDateListener = mealDocumentService.getFindByDateListener(
-      currentDate,
-      user.uid,
-      (meals: { [key: string]: any }[]) => {
-        setDocuments((documents) => ({
-          ...documents,
-          meals,
-        }));
-      }
-    );
-    const unsubscribeDayListener = dayDocumentService.getDocumentListener(
-      currentDate,
-      user.uid,
-      (day: DayDocument) => {
-        setDocuments((documents) => ({
-          ...documents,
-          day,
-        }));
-      }
-    );
+    const unsubscribeMealsByDateListener =
+      user?.uid &&
+      mealDocumentService.getFindByDateListener(
+        currentDate,
+        user.uid,
+        (meals: MealDocument[]) => {
+          setDocuments((currentDocuments) => ({
+            ...currentDocuments,
+            meals,
+          }));
+        }
+      );
+    const unsubscribeDayListener =
+      user?.uid &&
+      dayDocumentService.getDocumentListener(
+        currentDate,
+        user.uid,
+        (day: DayDocument) => {
+          setDocuments((currentDocuments) => ({
+            ...currentDocuments,
+            day,
+          }));
+        }
+      );
     return () => {
       setDocuments(emptyDocuments);
-      unsubscribeMealsByDateListener();
-      unsubscribeDayListener();
+      unsubscribeMealsByDateListener && unsubscribeMealsByDateListener();
+      unsubscribeDayListener && unsubscribeDayListener();
     };
-  }, [onDayPress, currentDate, user.uid]);
+  }, [onDayPress, currentDate, user]);
 
   const dayHeaderProps = {
-    foods: documents.meals.flatMap((document) => document.meal),
-    goalCalories: documents.day?.goalCalories ?? user.goalCalories,
+    foods: documents.meals.flatMap((document: any) => document.meal),
+    goalCalories: documents.day?.goalCalories ?? user?.goalCalories,
     handleMealPress: handleMealPress,
     getNewEatenAt: getNewEatenAt,
     goalCaloriesInput: goalCaloriesInput,
@@ -260,7 +283,7 @@ function FoodJournalPage({
     onWeightSubmit: onWeightSubmit,
     weight: documents.day?.weight,
     todaysWater: documents.day?.water || 0,
-    waterGoal: user.waterGoal,
+    waterGoal: user?.waterGoal,
     updateWaterGoal: onWaterChange,
   };
 
@@ -274,12 +297,12 @@ function FoodJournalPage({
       </View>
     );
 
-  const renderItem = (item: { [key: string]: any }, isFirstItem: boolean) =>
+  const renderItem = (item: MealDocument, isFirstItem: boolean) =>
     isFirstItem ? (
       <View>
         <DayHeader {...dayHeaderProps} />
         <TotalCard
-          foods={documents.meals.flatMap((document) => document.meal)}
+          foods={documents.meals.flatMap((document: any) => document.meal)}
         />
         <FoodJournalItem
           document={item}
@@ -331,15 +354,10 @@ const styles = StyleSheet.create({
   },
 });
 
-FoodJournalPage.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func.isRequired,
-    setOptions: PropTypes.func.isRequired,
-  }).isRequired,
-  theme: PropTypes.shape({
-    colors: PropTypes.object.isRequired,
-  }).isRequired,
-  updateMealDocument: PropTypes.func.isRequired,
-};
+type FoodJournalPageProps = {
+  navigation: StackNavigationProp<FoodJournalStackParams, 'Food Journal'>;
+  theme: MyTheme;
+} & UserContainerProps &
+  MealContainerProps;
 
 export default MealContainer(UserContainer(withTheme(FoodJournalPage)));
