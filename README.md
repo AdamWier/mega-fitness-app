@@ -19,8 +19,8 @@ The idea for this app came from the dissatisfaction I had with other meal and ex
 
 ### Bootstrap the project
 1. Fork the repo
-2. [Install yarn if necessary](https://classic.yarnpkg.com/en/docs/install/)
-3. Run ``yarn`` in the root directory
+2. [Install yarn if necessary](https://classic.yarnpkg.com/en/docs/install/) (Npm is not recommended)
+3. Run ``yarn`` in the root directory (It's optional but recommended to add ``--network-timeout 100000``)
 4. Create a file named ``.env`` in the root directory
 5. Copy and past the following into the file: 
 ```
