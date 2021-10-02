@@ -4,73 +4,32 @@ import { withTheme, Text } from 'react-native-elements';
 import {
   container as UserContainer,
   UserContainerProps,
-} from '../store/reducers/User';
+} from '../../store/reducers/User';
 import {
   container as MealContainer,
   MealContainerProps,
-} from '../store/reducers/MealDocument';
-import MealDocument, { AddedFood } from '../Firebase/Documents/MealDocument';
+} from '../../store/reducers/MealDocument';
+import MealDocument, { AddedFood } from '../../Firebase/Documents/MealDocument';
 import { Agenda } from 'react-native-calendars';
-import FoodJournalItem from '../components/FoodJournalItem';
-import TotalCard from '../components/TotalCard';
+import FoodJournalItem from '../../components/FoodJournalItem';
+import TotalCard from '../../components/TotalCard';
 import moment from 'moment';
 import Toast from 'react-native-simple-toast';
-import DayHeader from '../components/DayHeader';
-import { mealDocumentService, dayDocumentService } from '../Firebase/index';
-import DayDocument from '../Firebase/Documents/DayDocument';
-import ActivityIndicator from '../components/ActivityIndicator';
+import DayHeader from './DayHeader/DayHeader';
+import { mealDocumentService, dayDocumentService } from '../../Firebase/index';
+import DayDocument from '../../Firebase/Documents/DayDocument';
+import ActivityIndicator from '../../components/ActivityIndicator';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
   FoodJournalStackParams,
   FoodJournalStackScreens,
-} from '../Navigation/FoodJournalStack/Screens';
-import { MyTheme } from '../StyleSheet';
-
-const reduceMealDocuments = (data: { [key: string]: any }[]) =>
-  data.reduce((foodJournal, item) => {
-    const { eatenAt } = item;
-    const key = moment(eatenAt).format('YYYY-MM-DD');
-    if (foodJournal.hasOwnProperty(key)) {
-      foodJournal[key].push(item);
-    } else foodJournal[key] = [item];
-    return foodJournal;
-  }, {});
-
-const constructFoodJournalItems = (
-  documentsToFormat: { [key: string]: any }[],
-  date: Date
-) => {
-  if (documentsToFormat && documentsToFormat.length) {
-    return reduceMealDocuments(documentsToFormat);
-  } else {
-    return {
-      [moment(date).format('YYYY-MM-DD')]: [],
-    };
-  }
-};
-
-const compareRows = (
-  r1: { [key: string]: any },
-  r2: { [key: string]: any }
-) => {
-  return (
-    r1.meal.reduce(
-      (prev: { [key: string]: any }, next: { [key: string]: any }) =>
-        prev.calories + next.calories,
-      0
-    ) !==
-    r2.meal.reduce(
-      (prev: { [key: string]: any }, next: { [key: string]: any }) =>
-        prev.calories + next.calories,
-      0
-    )
-  );
-};
-
-const emptyDocuments = {
-  meals: [],
-  day: { weight: 0, water: 0 },
-};
+} from '../../Navigation/FoodJournalStack/Screens';
+import { MyTheme } from '../../StyleSheet';
+import {
+  compareRows,
+  constructFoodJournalItems,
+  emptyDocuments,
+} from './FoodJournalLogic';
 
 function FoodJournalPage({
   navigation,

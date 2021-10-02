@@ -4,7 +4,7 @@ import WeeklyReport from '../../screens/WeeklyReport';
 import WeightTracking from '../../screens/WeightTracking';
 import ShoppingList from '../../screens/ShoppingList';
 
-export const enum LoggedInDrawerScreens {
+export enum LoggedInDrawerScreens {
   FoodJournal = 'FoodJournal',
   GoalSetPage = 'GoalSetPage',
   WeeklyReports = 'WeeklyReports',

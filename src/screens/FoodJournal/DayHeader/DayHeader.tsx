@@ -1,15 +1,15 @@
 import React from 'react';
 import { Button, Text, Icon } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
-import OverlayWithButton from './OverlayWithButton';
+import OverlayWithButton from '../../../components/OverlayWithButton';
 import { Bar } from 'react-native-progress';
-import { getTotal } from '../utilities';
+import { getTotal } from '../../../utilities';
 import { withTheme } from 'react-native-elements';
-import { container } from '../store/reducers/User';
-import UpDownButtons from './UpDownButtons';
-import { AddedFood } from '../Firebase/Documents/MealDocument';
-import { MyTheme } from '../StyleSheet';
-import { UserContainerProps } from '../store/reducers/User';
+import { container } from '../../../store/reducers/User';
+import UpDownButtons from '../../../components/UpDownButtons';
+import { AddedFood } from '../../../Firebase/Documents/MealDocument';
+import { MyTheme } from '../../../StyleSheet';
+import { UserContainerProps } from '../../../store/reducers/User';
 
 const DayHeader = ({
   goalCalories,
@@ -88,14 +88,14 @@ const DayHeader = ({
         </View>
       </View>
       {!!weight && <Text>Weight recorded today: {weight}</Text>}
-      {!!waterGoal && (
-        <View style={styles.statusBarContainer}>
-          <View style={styles.waterGoalContainer}>
-            <UpDownButtons
-              total={todaysWater}
-              onValueChange={updateWaterGoal}
-              hideInput={true}
-            />
+      <View style={styles.statusBarContainer}>
+        <View style={styles.waterGoalContainer}>
+          <UpDownButtons
+            total={todaysWater}
+            onValueChange={updateWaterGoal}
+            hideInput={true}
+          />
+          {!!waterGoal && (
             <Bar
               style={{ flexShrink: 1, alignSelf: 'center' }}
               progress={Math.min(todaysWater / waterGoal, 1)}
@@ -104,12 +104,12 @@ const DayHeader = ({
               height={15}
               width={250}
             />
-          </View>
-          <Text>
-            {todaysWater} glasses out of {waterGoal} drunk
-          </Text>
+          )}
         </View>
-      )}
+        <Text>
+          {todaysWater} glasses out of {waterGoal} drunk
+        </Text>
+      </View>
       {!!goalCalories && (
         <View style={styles.statusBarContainer}>
           <Bar
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   buttonsContainer: { flexDirection: 'row', justifyContent: 'space-around' },
   buttonContainer: { flexGrow: 1 },
   statusBarContainer: { padding: 10 },
-  waterGoalContainer: { flexDirection: 'row' },
+  waterGoalContainer: { flexDirection: 'row', justifyContent: 'center' },
 });
 
 type DayHeaderProps = {

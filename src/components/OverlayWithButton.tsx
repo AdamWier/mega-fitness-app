@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Overlay, Text, Input } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
-import ActivityIndicator from './ActivityIndicator';
+import ActivityIndicator from '../components/ActivityIndicator';
 
 const OverLayWithButton = ({
   onButtonPress,
