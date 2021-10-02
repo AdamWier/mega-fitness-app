@@ -1,6 +1,7 @@
 import moment from 'moment';
+import MealDocument from '../../Firebase/Documents/MealDocument';
 
-const reduceMealDocuments = (data: { [key: string]: any }[]) =>
+const reduceMealDocuments = (data: MealDocument[]) =>
   data.reduce((foodJournal, item) => {
     const { eatenAt } = item;
     const key = moment(eatenAt).format('YYYY-MM-DD');
@@ -8,10 +9,10 @@ const reduceMealDocuments = (data: { [key: string]: any }[]) =>
       foodJournal[key].push(item);
     } else foodJournal[key] = [item];
     return foodJournal;
-  }, {});
+  }, {} as Record<string, MealDocument[]>);
 
 export const constructFoodJournalItems = (
-  documentsToFormat: { [key: string]: any }[],
+  documentsToFormat: MealDocument[],
   date: Date
 ) => {
   if (documentsToFormat && documentsToFormat.length) {
@@ -23,21 +24,11 @@ export const constructFoodJournalItems = (
   }
 };
 
-export const compareRows = (
-  r1: { [key: string]: any },
-  r2: { [key: string]: any }
-) => {
+export const compareRows = (r1: MealDocument, r2: MealDocument) => {
+  console.log('rrrr', r1, r2);
   return (
-    r1.meal.reduce(
-      (prev: { [key: string]: any }, next: { [key: string]: any }) =>
-        prev.calories + next.calories,
-      0
-    ) !==
-    r2.meal.reduce(
-      (prev: { [key: string]: any }, next: { [key: string]: any }) =>
-        prev.calories + next.calories,
-      0
-    )
+    r1.meal.reduce((total, food) => total + food.calories, 0) !==
+    r2.meal.reduce((total, food) => total + food.calories, 0)
   );
 };
 
