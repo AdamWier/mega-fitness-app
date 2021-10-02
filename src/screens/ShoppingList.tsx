@@ -59,7 +59,7 @@ function ShoppingList({ user }: UserContainerProps) {
   };
 
   const saveList = async () => {
-    if (!user) return;
+    if (!user.uid) return;
     if (list.id) {
       shoppingListDocumentService.updateShoppingList(list, user.uid);
     } else {
@@ -81,6 +81,7 @@ function ShoppingList({ user }: UserContainerProps) {
 
   const generateList = useCallback(
     async (id?: string | null) => {
+      if (!user.uid) return;
       const mealDocuments =
         period.start && period.end
           ? await mealDocumentService.findByDateRange(
@@ -120,16 +121,15 @@ function ShoppingList({ user }: UserContainerProps) {
 
   useEffect(() => {
     (async function findOrGenerateList() {
-      if (period.start && period.end) {
-        const savedList =
-          user &&
-          (await shoppingListDocumentService.findDocument(
-            period.start,
-            period.end,
-            user.uid
-          ));
-        savedList ? setList(savedList) : generateList(null);
-      }
+      if (!period.start || !period.end || !user.uid) return;
+      const savedList =
+        user &&
+        (await shoppingListDocumentService.findDocument(
+          period.start,
+          period.end,
+          user.uid
+        ));
+      savedList ? setList(savedList) : generateList(null);
     })();
   }, [generateList, period.start, period.end, user]);
 

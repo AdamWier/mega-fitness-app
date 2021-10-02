@@ -2,12 +2,14 @@ import React from 'react';
 import { Header, Button, Icon, Text } from 'react-native-elements';
 import { Alert, StyleSheet, StatusBar } from 'react-native';
 import { authService } from '../Firebase';
-import { container } from '../store/reducers/User';
+import { container, UserContainerProps } from '../store/reducers/User';
 import { useNavigation } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { UserDocument } from '../Firebase/Documents/UserDocument';
 
-function CustomHeader({ title, storeLogin }: CustomHeaderProps) {
+function CustomHeader({
+  title,
+  storeLogout,
+}: CustomHeaderProps & UserContainerProps) {
   const navigation = useNavigation<DrawerNavigationProp<{}>>();
 
   const logout = () => {
@@ -17,7 +19,7 @@ function CustomHeader({ title, storeLogin }: CustomHeaderProps) {
         text: 'Yes',
         onPress: () => {
           authService.logout();
-          storeLogin({});
+          storeLogout();
         },
       },
     ]);
@@ -58,7 +60,6 @@ const style = StyleSheet.create({
 
 interface CustomHeaderProps {
   title: string;
-  storeLogin: (userInfo: Partial<UserDocument>) => void;
 }
 
 export default container(CustomHeader);

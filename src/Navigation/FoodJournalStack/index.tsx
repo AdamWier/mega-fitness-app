@@ -15,7 +15,7 @@ import {
 const Stack = createStackNavigator();
 
 function Navigation({
-  storeLogin,
+  storeLogout,
   navigation,
 }: UserContainerProps & {
   navigation: DrawerNavigationProp<
@@ -30,7 +30,7 @@ function Navigation({
         text: 'Yes',
         onPress: () => {
           authService.logout();
-          storeLogin({ uid: undefined, email: undefined });
+          storeLogout();
         },
       },
     ]);
