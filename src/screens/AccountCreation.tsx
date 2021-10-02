@@ -5,7 +5,10 @@ import { authService } from '../Firebase';
 import { container } from '../store/reducers/User';
 import { UserDocument } from '../Firebase/Documents/UserDocument';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { FoodJournalStackParams } from '../Navigation/FoodJournalStack/Screens';
+import {
+  FoodJournalStackParams,
+  FoodJournalStackScreens,
+} from '../Navigation/FoodJournalStack/Screens';
 
 function AccountCreation({ navigation, storeLogin }: AccountCreationProps) {
   const [signUpDetails, setSignUpDetails] = useState({
@@ -38,7 +41,7 @@ function AccountCreation({ navigation, storeLogin }: AccountCreationProps) {
           signUpDetails.password
         );
         storeLogin(user);
-        navigation.navigate('Food Journal');
+        navigation.navigate(FoodJournalStackScreens.FoodJournal);
       } catch (message) {
         toggleLoading(false);
         updateErrors([message]);
@@ -89,7 +92,10 @@ const style = StyleSheet.create({
 });
 
 interface AccountCreationProps {
-  navigation: StackNavigationProp<FoodJournalStackParams, 'Food Journal'>;
+  navigation: StackNavigationProp<
+    FoodJournalStackParams,
+    FoodJournalStackScreens.FoodJournal
+  >;
   storeLogin: (user: Partial<UserDocument>) => void;
 }
 

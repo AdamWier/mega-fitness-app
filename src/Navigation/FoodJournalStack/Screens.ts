@@ -6,12 +6,20 @@ import BarCodeScanner from '../../screens/BarCodeScanner';
 import { RouteProp } from '@react-navigation/native';
 import { FoodDetails } from '../../ApiHelpers/CommonAPITypes';
 
+export enum FoodJournalStackScreens {
+  FoodJournal = 'FoodJournal',
+  BarCodeScanner = 'BarCodeScanner',
+  Meal = 'Meal',
+  Search = 'Search',
+  Details = 'Details',
+}
+
 export type FoodJournalStackParams = {
-  ['Food Journal']: undefined;
-  BarCodeScanner: undefined;
-  Meal: undefined;
-  Search: undefined;
-  Details: { details: FoodDetails };
+  [FoodJournalStackScreens.FoodJournal]: undefined;
+  [FoodJournalStackScreens.BarCodeScanner]: undefined;
+  [FoodJournalStackScreens.Meal]: undefined;
+  [FoodJournalStackScreens.Search]: undefined;
+  [FoodJournalStackScreens.Details]: { details: FoodDetails };
 };
 
 export default [
@@ -40,7 +48,7 @@ export default [
     options: ({
       route,
     }: {
-      route: RouteProp<FoodJournalStackParams, 'Details'>;
+      route: RouteProp<FoodJournalStackParams, FoodJournalStackScreens.Details>;
     }) => ({
       title: route.params.details.name,
     }),

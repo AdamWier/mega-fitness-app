@@ -6,7 +6,10 @@ import { container } from '../store/reducers/User';
 import { MyTheme } from '../StyleSheet';
 import { UserDocument } from '../Firebase/Documents/UserDocument';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { LoggedOutStackParams } from '../Navigation/LoggedOutStack/Screens';
+import {
+  LoggedOutStackParams,
+  LoggedOutStackScreens,
+} from '../Navigation/LoggedOutStack/Screens';
 
 function Login({ navigation, storeLogin, theme }: LoginProps) {
   const [loginDetails, setLoginDetails] = useState({
@@ -63,7 +66,7 @@ function Login({ navigation, storeLogin, theme }: LoginProps) {
       <Button
         title="Create an account"
         onPress={(): void => {
-          navigation.navigate('Account Creation');
+          navigation.navigate(LoggedOutStackScreens.AccountCreation);
         }}
         buttonStyle={{
           backgroundColor: theme.colors.info,
@@ -85,7 +88,10 @@ const style = StyleSheet.create({
 });
 
 interface LoginProps {
-  navigation: StackNavigationProp<LoggedOutStackParams, 'Login'>;
+  navigation: StackNavigationProp<
+    LoggedOutStackParams,
+    LoggedOutStackScreens.Login
+  >;
   storeLogin: (info: Partial<UserDocument>) => void;
   theme: MyTheme;
 }

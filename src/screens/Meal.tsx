@@ -26,7 +26,10 @@ import moment from 'moment';
 import { useFocusEffect } from '@react-navigation/native';
 import { mealDocumentService, dayDocumentService } from '../Firebase';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { FoodJournalStackParams } from '../Navigation/FoodJournalStack/Screens';
+import {
+  FoodJournalStackParams,
+  FoodJournalStackScreens,
+} from '../Navigation/FoodJournalStack/Screens';
 import { MyTheme } from '../StyleSheet';
 import MealDocument from '../Firebase/Documents/MealDocument';
 
@@ -80,7 +83,7 @@ function Meal({
           }
         }
       }
-      navigation.navigate('Food Journal');
+      navigation.navigate(FoodJournalStackScreens.FoodJournal);
     } catch (e) {
       console.log(e);
     }
@@ -104,7 +107,7 @@ function Meal({
   const deleteMeal = async () => {
     try {
       id && (await mealDocumentService.delete(id));
-      navigation.navigate('Food Journal');
+      navigation.navigate(FoodJournalStackScreens.FoodJournal);
     } catch (e) {
       console.log(e);
     }
@@ -124,7 +127,7 @@ function Meal({
 
   const onBackPress = () => {
     if (meal.length) {
-      askToSave(() => navigation.navigate('Food Journal'));
+      askToSave(() => navigation.navigate(FoodJournalStackScreens.FoodJournal));
       return true;
     }
     return false;
@@ -167,7 +170,9 @@ function Meal({
       />
       <Button
         title="Add a food"
-        onPress={(): void => navigation.navigate('Search')}
+        onPress={(): void =>
+          navigation.navigate(FoodJournalStackScreens.Search)
+        }
         buttonStyle={{
           backgroundColor: theme.colors.warning,
         }}
@@ -287,7 +292,10 @@ const styles = StyleSheet.create({
 });
 
 type MealProps = {
-  navigation: StackNavigationProp<FoodJournalStackParams, 'Meal'>;
+  navigation: StackNavigationProp<
+    FoodJournalStackParams,
+    FoodJournalStackScreens.Meal
+  >;
   theme: MyTheme;
   mealDocument: MealDocument;
   updateMealDocument: (value: MealDocument) => void;
