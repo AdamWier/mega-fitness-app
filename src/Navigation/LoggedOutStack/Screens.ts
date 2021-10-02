@@ -1,18 +1,23 @@
 import AccountCreation from '../../screens/AccountCreation';
 import Login from '../../screens/Login';
 
+export enum LoggedOutStackScreens {
+  Login = 'Login',
+  AccountCreation = 'AccountCreation',
+}
+
 export type LoggedOutStackParams = {
-  Login: undefined;
-  ['Account Creation']: undefined;
+  [LoggedOutStackScreens.Login]: undefined;
+  [LoggedOutStackScreens.AccountCreation]: undefined;
 };
 
 export default [
   {
-    name: 'Login',
+    name: LoggedOutStackScreens.Login,
     component: Login,
   },
   {
-    name: 'Account Creation',
+    name: LoggedOutStackScreens.AccountCreation,
     component: AccountCreation,
     options: {
       title: 'Account Creation',

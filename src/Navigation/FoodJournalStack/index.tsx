@@ -7,7 +7,10 @@ import { authService } from '../../Firebase';
 import { Button, Icon } from 'react-native-elements';
 import { Alert } from 'react-native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { LoggedInDrawerParams } from '../LoggedInDrawer/Screens';
+import {
+  LoggedInDrawerParams,
+  LoggedInDrawerScreens,
+} from '../LoggedInDrawer/Screens';
 
 const Stack = createStackNavigator();
 
@@ -15,7 +18,10 @@ function Navigation({
   storeLogin,
   navigation,
 }: UserContainerProps & {
-  navigation: DrawerNavigationProp<LoggedInDrawerParams, 'Food Journal'>;
+  navigation: DrawerNavigationProp<
+    LoggedInDrawerParams,
+    LoggedInDrawerScreens.FoodJournal
+  >;
 }): JSX.Element {
   const logout = () => {
     Alert.alert('Log out', 'Do you want to log out?', [

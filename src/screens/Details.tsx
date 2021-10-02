@@ -6,7 +6,10 @@ import FoodCard from '../components/FoodCard';
 import { container } from '../store/reducers/MealDocument';
 import { FoodDetails, FormattedPortion } from '../ApiHelpers/CommonAPITypes';
 import { StackNavigationProp } from '@react-navigation/stack/lib/typescript/src';
-import { FoodJournalStackParams } from '../Navigation/FoodJournalStack/Screens';
+import {
+  FoodJournalStackParams,
+  FoodJournalStackScreens,
+} from '../Navigation/FoodJournalStack/Screens';
 import { ConnectedProps } from 'react-redux';
 import { RouteProp } from '@react-navigation/native';
 
@@ -75,7 +78,7 @@ function Details({
           },
         ],
       });
-      navigation.navigate('Meal');
+      navigation.navigate(FoodJournalStackScreens.Meal);
     } else {
       Alert.alert('Warning', 'You must enter a valid amount.');
     }
@@ -120,8 +123,11 @@ function Details({
 }
 
 interface DetailsProps {
-  navigation: StackNavigationProp<FoodJournalStackParams, 'Details'>;
-  route: RouteProp<FoodJournalStackParams, 'Details'>;
+  navigation: StackNavigationProp<
+    FoodJournalStackParams,
+    FoodJournalStackScreens.Details
+  >;
+  route: RouteProp<FoodJournalStackParams, FoodJournalStackScreens.Details>;
 }
 
 export default container(Details);

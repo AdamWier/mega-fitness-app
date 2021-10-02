@@ -20,7 +20,10 @@ import { mealDocumentService, dayDocumentService } from '../Firebase/index';
 import DayDocument from '../Firebase/Documents/DayDocument';
 import ActivityIndicator from '../components/ActivityIndicator';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { FoodJournalStackParams } from '../Navigation/FoodJournalStack/Screens';
+import {
+  FoodJournalStackParams,
+  FoodJournalStackScreens,
+} from '../Navigation/FoodJournalStack/Screens';
 import { MyTheme } from '../StyleSheet';
 
 const reduceMealDocuments = (data: { [key: string]: any }[]) =>
@@ -189,7 +192,7 @@ function FoodJournalPage({
 
   const handleMealPress = (document: AddedFood[]) => {
     updateMealDocument(document);
-    navigation.navigate('Meal');
+    navigation.navigate(FoodJournalStackScreens.Meal);
   };
 
   const getNewEatenAt = () => {
@@ -355,7 +358,10 @@ const styles = StyleSheet.create({
 });
 
 type FoodJournalPageProps = {
-  navigation: StackNavigationProp<FoodJournalStackParams, 'Food Journal'>;
+  navigation: StackNavigationProp<
+    FoodJournalStackParams,
+    FoodJournalStackScreens.FoodJournal
+  >;
   theme: MyTheme;
 } & UserContainerProps &
   MealContainerProps;
