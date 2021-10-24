@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { navTheme } from '../StyleSheet';
 import { container } from '../store/reducers/User';
@@ -9,26 +9,20 @@ import { UserDocument } from '../Firebase/Documents/UserDocument';
 import { UserContainerProps } from '../store/reducers/User';
 
 function Navigation({ user, storeLogin }: {} & UserContainerProps) {
-  const [unsubscribe, setUnsubscribe] = useState<firebase.Unsubscribe>();
-
   const getCurrentUserCallback = useCallback(
     async () =>
-      setUnsubscribe(
-        await authService.getCurrentUser((receivedUser: UserDocument) => {
-          if (receivedUser) {
-            storeLogin(receivedUser);
-          }
-        })
-      ),
+      await authService.getCurrentUser((receivedUser: UserDocument) => {
+        if (receivedUser) {
+          storeLogin(receivedUser);
+        }
+      }),
     [storeLogin]
   );
 
   useEffect(() => {
+    // Do not unsubscribe or we'll lose the user
     getCurrentUserCallback();
-    return () => {
-      unsubscribe && unsubscribe();
-    };
-  }, [getCurrentUserCallback, unsubscribe]);
+  }, [getCurrentUserCallback]);
 
   return (
     <NavigationContainer theme={navTheme}>
