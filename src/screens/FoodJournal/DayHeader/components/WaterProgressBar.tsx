@@ -10,7 +10,7 @@ import { UserContainerProps } from '../../../../store/reducers/User';
 
 const WaterProgressBar = ({
   theme,
-  waterGoal,
+  user,
   todaysWater,
   updateWaterGoal,
 }: WaterProgressBarProps) => {
@@ -22,10 +22,10 @@ const WaterProgressBar = ({
           onValueChange={updateWaterGoal}
           hideInput={true}
         />
-        {!!waterGoal && (
+        {!!user.waterGoal && (
           <Bar
             style={{ flexShrink: 1, alignSelf: 'center' }}
-            progress={Math.min(todaysWater / waterGoal, 1)}
+            progress={Math.min(todaysWater / user.waterGoal, 1)}
             color={theme.colors.info}
             borderColor={theme.colors.text}
             height={15}
@@ -34,7 +34,7 @@ const WaterProgressBar = ({
         )}
       </View>
       <Text>
-        {todaysWater} glasses out of {waterGoal} drunk
+        {todaysWater} glasses out of {user.waterGoal} drunk
       </Text>
     </View>
   );
@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
 
 type WaterProgressBarProps = {
   theme: MyTheme;
-  waterGoal?: number;
   todaysWater: number;
   updateWaterGoal: (value: number) => void;
 } & UserContainerProps;

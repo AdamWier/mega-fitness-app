@@ -6,10 +6,10 @@ import { Bar } from 'react-native-progress';
 import { getTotal } from '../../../utilities';
 import { withTheme } from 'react-native-elements';
 import { container } from '../../../store/reducers/User';
-import UpDownButtons from '../../../components/UpDownButtons';
 import { AddedFood } from '../../../Firebase/Documents/MealDocument';
 import { MyTheme } from '../../../StyleSheet';
 import { UserContainerProps } from '../../../store/reducers/User';
+import WaterProgressBar from './components/WaterProgressBar';
 
 const DayHeader = ({
   goalCalories,
@@ -34,7 +34,6 @@ const DayHeader = ({
   weight,
   theme,
   clearGoal,
-  waterGoal,
   todaysWater,
   updateWaterGoal,
 }: DayHeaderProps) => {
@@ -89,26 +88,10 @@ const DayHeader = ({
       </View>
       {!!weight && <Text>Weight recorded today: {weight}</Text>}
       <View style={styles.statusBarContainer}>
-        <View style={styles.waterGoalContainer}>
-          <UpDownButtons
-            total={todaysWater}
-            onValueChange={updateWaterGoal}
-            hideInput={true}
-          />
-          {!!waterGoal && (
-            <Bar
-              style={{ flexShrink: 1, alignSelf: 'center' }}
-              progress={Math.min(todaysWater / waterGoal, 1)}
-              color={theme.colors.info}
-              borderColor={theme.colors.text}
-              height={15}
-              width={250}
-            />
-          )}
-        </View>
-        <Text>
-          {todaysWater} glasses out of {waterGoal} drunk
-        </Text>
+        <WaterProgressBar
+          todaysWater={todaysWater}
+          updateWaterGoal={updateWaterGoal}
+        />
       </View>
       {!!goalCalories && (
         <View style={styles.statusBarContainer}>

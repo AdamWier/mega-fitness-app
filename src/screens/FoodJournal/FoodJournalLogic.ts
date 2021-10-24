@@ -25,7 +25,6 @@ export const constructFoodJournalItems = (
 };
 
 export const compareRows = (r1: MealDocument, r2: MealDocument) => {
-  console.log('rrrr', r1, r2);
   return (
     r1.meal.reduce((total, food) => total + food.calories, 0) !==
     r2.meal.reduce((total, food) => total + food.calories, 0)

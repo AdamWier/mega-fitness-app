@@ -245,7 +245,6 @@ function FoodJournalPage({
     onWeightSubmit: onWeightSubmit,
     weight: documents.day?.weight,
     todaysWater: documents.day?.water || 0,
-    waterGoal: user.waterGoal,
     updateWaterGoal: onWaterChange,
   };
 
