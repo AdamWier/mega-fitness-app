@@ -63,7 +63,7 @@ function Meal({
   };
 
   const saveMeal = async (): Promise<void> => {
-    if (!user) return;
+    if (!user.uid) return;
     try {
       if (id) {
         await mealDocumentService.update(meal, name, user.uid, eatenAt, id);
@@ -122,7 +122,7 @@ function Meal({
 
   const copyMeal = async (input: Date) => {
     toggleDisplayCopyCalendar(false);
-    user && (await mealDocumentService.create(meal, name, user.uid, input));
+    user.uid && (await mealDocumentService.create(meal, name, user.uid, input));
   };
 
   const onBackPress = () => {

@@ -1,4 +1,4 @@
-import FoodJournal from '../../screens/FoodJournal';
+import FoodJournal from '../../screens/FoodJournal/FoodJournal';
 import Search from '../../screens/Search';
 import Details from '../../screens/Details';
 import Meal from '../../screens/Meal';

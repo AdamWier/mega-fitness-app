@@ -1,3 +1,4 @@
+import { firestore } from 'firebase';
 import { connect, ConnectedProps } from 'react-redux';
 import { Dispatch } from 'redux';
 import { UserDocument } from '../../Firebase/Documents/UserDocument';
@@ -5,12 +6,14 @@ import { UserDocument } from '../../Firebase/Documents/UserDocument';
 export const LOGIN = 'LOGIN';
 const UPDATE_CALORIES = 'UPDATE_CALORIES';
 const UPDATE_WATER_GOAL = 'UPDATE_WATER_GOAL';
+const LOGOUT = 'LOGOUT';
 
 export type UserContainerProps = ConnectedProps<typeof container>;
 
 export interface InitialState {
   uid?: string;
   email?: string;
+  updatedAt?: firestore.Timestamp;
   goalCalories: number;
   waterGoal: number;
 }
@@ -22,11 +25,21 @@ export const initialState: InitialState = {
 
 export function login(userInfo: Partial<UserDocument>): {
   type: string;
-  payload: Partial<typeof initialState>;
+  payload: Partial<InitialState>;
 } {
   return {
     type: LOGIN,
     payload: userInfo,
+  };
+}
+
+export function logout(): {
+  type: string;
+  payload: InitialState;
+} {
+  return {
+    type: LOGOUT,
+    payload: initialState,
   };
 }
 
@@ -64,17 +77,20 @@ export const userReducer = (
         ...state,
         waterGoal: action.payload,
       };
+    case LOGOUT:
+      return action.payload;
     default:
       return state;
   }
 };
 
-const mapStateToProps = (state: InitialState) => ({
-  user: state.user,
+const mapStateToProps = ({ user }: { user: InitialState }) => ({
+  user,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   storeLogin: (payload: Partial<UserDocument>): any => dispatch(login(payload)),
+  storeLogout: () => dispatch(logout()),
   storeCalories: (payload: number) => dispatch(updateCalories(payload)),
   storeWaterGoal: (payload: number) => dispatch(updateWaterGoal(payload)),
 });

@@ -32,7 +32,7 @@ function GoalSetPage({
 
   const setWaterGoal = async (goal: number) => {
     try {
-      if (!user) return;
+      if (!user.uid) return;
       toggleIsWaterLoading(true);
       await userDocumentService.updateWaterGoal(user.uid, goal);
       setGoalWaterInput(goal.toString());
@@ -48,7 +48,7 @@ function GoalSetPage({
 
   const setCalorieGoal = async (goal: number): Promise<void> => {
     try {
-      if (!user) return;
+      if (!user.uid) return;
       toggleIsCalorieLoading(true);
       await userDocumentService.updateCalorieGoal(user.uid, goal);
       setGoalCaloriesInput(goal.toString());
@@ -65,6 +65,7 @@ function GoalSetPage({
   useEffect(() => {
     user.goalCalories && setGoalCaloriesInput(user.goalCalories.toString());
     user.waterGoal && setGoalWaterInput(user.waterGoal.toString());
+    if (!user.uid) return;
 
     const unsubscribeUserListener = userDocumentService.getDocumentListener(
       user.uid,

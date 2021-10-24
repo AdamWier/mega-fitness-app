@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, Button, Input } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
-import ActivityIndicator from './ActivityIndicator';
+import ActivityIndicator from '../components/ActivityIndicator';
 
 const GoalPrompt = ({
   toggleIsOverlayVisible,

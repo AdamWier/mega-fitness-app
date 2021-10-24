@@ -16,9 +16,7 @@ function Login({ navigation, storeLogin, theme }: LoginProps) {
     email: '',
     password: '',
   });
-
   const [isLoading, toggleLoading] = useState(false);
-
   const [error, updateError] = useState('');
 
   const updateLoginDetails = (value: string, field: string): void => {
@@ -31,17 +29,18 @@ function Login({ navigation, storeLogin, theme }: LoginProps) {
   const login = async (): Promise<void> => {
     toggleLoading(true);
     const { email, password } = loginDetails;
-    if (email && password) {
-      try {
-        const user = (await authService.login(email, password)) as any;
-        storeLogin(user);
-      } catch ({ message }) {
-        toggleLoading(false);
-        updateError(message);
-      }
-    } else {
+    if (!email || !password) {
       toggleLoading(false);
-      updateError('Please enter your email and password.');
+      return updateError('Please enter your email and password.');
+    }
+
+    try {
+      const user = await authService.login(email, password);
+      storeLogin(user);
+      toggleLoading(false);
+    } catch ({ message }) {
+      toggleLoading(false);
+      updateError(message);
     }
   };
 

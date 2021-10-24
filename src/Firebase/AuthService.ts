@@ -28,7 +28,8 @@ export default class AuthService {
       email.trim(),
       password
     );
-    return { uid: user?.uid, email: user?.email };
+    const userDocument = user ? await this.user.getDocument(user.uid) : null;
+    return userDocument || {};
   }
 
   public async logout(): Promise<void> {
