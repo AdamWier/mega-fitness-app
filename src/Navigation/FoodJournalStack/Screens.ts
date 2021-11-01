@@ -5,6 +5,8 @@ import Meal from '../../screens/Meal';
 import BarCodeScanner from '../../screens/BarCodeScanner';
 import { RouteProp } from '@react-navigation/native';
 import { FoodDetails } from '../../ApiHelpers/CommonAPITypes';
+import { ComponentType } from 'react';
+import { StackNavigationOptions } from '@react-navigation/stack';
 
 export enum FoodJournalStackScreens {
   FoodJournal = 'FoodJournal',
@@ -22,35 +24,45 @@ export type FoodJournalStackParams = {
   [FoodJournalStackScreens.Details]: { details: FoodDetails };
 };
 
-export default [
+type DynmaicOptions = ({
+  route,
+}: {
+  route: RouteProp<FoodJournalStackParams, FoodJournalStackScreens.Details>;
+}) => StackNavigationOptions;
+
+type Screen = {
+  name: FoodJournalStackScreens;
+  component: ComponentType<any>;
+  options?: DynmaicOptions | ReturnType<DynmaicOptions>;
+};
+
+const screens: Screen[] = [
   {
-    name: 'Food Journal',
+    name: FoodJournalStackScreens.FoodJournal,
     component: FoodJournal,
   },
   {
-    name: 'BarCodeScanner',
+    name: FoodJournalStackScreens.BarCodeScanner,
     component: BarCodeScanner,
     options: {
       title: 'Bar Code Scanner',
     },
   },
   {
-    name: 'Meal',
+    name: FoodJournalStackScreens.Meal,
     component: Meal,
   },
   {
-    name: 'Search',
+    name: FoodJournalStackScreens.Search,
     component: Search,
   },
   {
-    name: 'Details',
+    name: FoodJournalStackScreens.Details,
     component: Details,
-    options: ({
-      route,
-    }: {
-      route: RouteProp<FoodJournalStackParams, FoodJournalStackScreens.Details>;
-    }) => ({
+    options: ({ route }) => ({
       title: route.params.details.name,
     }),
   },
 ];
+
+export default screens;
