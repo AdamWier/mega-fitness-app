@@ -7,23 +7,26 @@ import LoggedOutStack from './LoggedOutStack';
 import LoggedInDrawer from './LoggedInDrawer';
 import { UserDocument } from '../Firebase/Documents/UserDocument';
 import { UserContainerProps } from '../store/reducers/User';
-import { StackNavigationOptions } from '@react-navigation/stack';
 
-type DynmaicOptions<StackParams extends Record<string, object | undefined>> = ({
+type DynmaicOptions<
+  NavigationParams extends Record<string, object | undefined>,
+  NavigationOptions
+> = ({
   route,
 }: {
-  route: RouteProp<StackParams, keyof StackParams>;
-}) => StackNavigationOptions;
+  route: RouteProp<NavigationParams, keyof NavigationParams>;
+}) => NavigationOptions;
 
 export type Screen<
   ScreensEnum,
-  StackParams extends Record<string, object | undefined>
+  NavigationParams extends Record<string, object | undefined>,
+  NavigationOptions
 > = {
   name: ScreensEnum;
   component: ComponentType<any>;
   options?:
-    | DynmaicOptions<StackParams>
-    | ReturnType<DynmaicOptions<StackParams>>;
+    | DynmaicOptions<NavigationParams, NavigationOptions>
+    | ReturnType<DynmaicOptions<NavigationParams, NavigationOptions>>;
 };
 
 function Navigation({ user, storeLogin }: {} & UserContainerProps) {

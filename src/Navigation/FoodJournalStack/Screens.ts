@@ -5,6 +5,7 @@ import Meal from '../../screens/Meal';
 import BarCodeScanner from '../../screens/BarCodeScanner';
 import { FoodDetails } from '../../ApiHelpers/CommonAPITypes';
 import { Screen } from '../index';
+import { StackNavigationOptions } from '@react-navigation/stack';
 
 export enum FoodJournalStackScreenNames {
   FoodJournal = 'FoodJournal',
@@ -24,7 +25,8 @@ export type FoodJournalStackParams = {
 
 type FoodJournalStackScreen = Screen<
   FoodJournalStackScreenNames,
-  FoodJournalStackParams
+  FoodJournalStackParams,
+  StackNavigationOptions
 >;
 
 const screens: FoodJournalStackScreen[] = [
