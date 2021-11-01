@@ -7,7 +7,7 @@ import { UserDocument } from '../Firebase/Documents/UserDocument';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
   FoodJournalStackParams,
-  FoodJournalStackScreens,
+  FoodJournalStackScreenNames,
 } from '../Navigation/FoodJournalStack/Screens';
 
 function AccountCreation({ navigation, storeLogin }: AccountCreationProps) {
@@ -41,7 +41,7 @@ function AccountCreation({ navigation, storeLogin }: AccountCreationProps) {
           signUpDetails.password
         );
         storeLogin(user);
-        navigation.navigate(FoodJournalStackScreens.FoodJournal);
+        navigation.navigate(FoodJournalStackScreenNames.FoodJournal);
       } catch (message) {
         toggleLoading(false);
         updateErrors([message]);
@@ -94,7 +94,7 @@ const style = StyleSheet.create({
 interface AccountCreationProps {
   navigation: StackNavigationProp<
     FoodJournalStackParams,
-    FoodJournalStackScreens.FoodJournal
+    FoodJournalStackScreenNames.FoodJournal
   >;
   storeLogin: (user: Partial<UserDocument>) => void;
 }

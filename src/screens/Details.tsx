@@ -8,7 +8,7 @@ import { FoodDetails, FormattedPortion } from '../ApiHelpers/CommonAPITypes';
 import { StackNavigationProp } from '@react-navigation/stack/lib/typescript/src';
 import {
   FoodJournalStackParams,
-  FoodJournalStackScreens,
+  FoodJournalStackScreenNames,
 } from '../Navigation/FoodJournalStack/Screens';
 import { ConnectedProps } from 'react-redux';
 import { RouteProp } from '@react-navigation/native';
@@ -78,7 +78,7 @@ function Details({
           },
         ],
       });
-      navigation.navigate(FoodJournalStackScreens.Meal);
+      navigation.navigate(FoodJournalStackScreenNames.Meal);
     } else {
       Alert.alert('Warning', 'You must enter a valid amount.');
     }
@@ -125,9 +125,9 @@ function Details({
 interface DetailsProps {
   navigation: StackNavigationProp<
     FoodJournalStackParams,
-    FoodJournalStackScreens.Details
+    FoodJournalStackScreenNames.Details
   >;
-  route: RouteProp<FoodJournalStackParams, FoodJournalStackScreens.Details>;
+  route: RouteProp<FoodJournalStackParams, FoodJournalStackScreenNames.Details>;
 }
 
 export default container(Details);

@@ -3,12 +3,10 @@ import Search from '../../screens/Search';
 import Details from '../../screens/Details';
 import Meal from '../../screens/Meal';
 import BarCodeScanner from '../../screens/BarCodeScanner';
-import { RouteProp } from '@react-navigation/native';
 import { FoodDetails } from '../../ApiHelpers/CommonAPITypes';
-import { ComponentType } from 'react';
-import { StackNavigationOptions } from '@react-navigation/stack';
+import { Screen } from '../index';
 
-export enum FoodJournalStackScreens {
+export enum FoodJournalStackScreenNames {
   FoodJournal = 'FoodJournal',
   BarCodeScanner = 'BarCodeScanner',
   Meal = 'Meal',
@@ -17,50 +15,43 @@ export enum FoodJournalStackScreens {
 }
 
 export type FoodJournalStackParams = {
-  [FoodJournalStackScreens.FoodJournal]: undefined;
-  [FoodJournalStackScreens.BarCodeScanner]: undefined;
-  [FoodJournalStackScreens.Meal]: undefined;
-  [FoodJournalStackScreens.Search]: undefined;
-  [FoodJournalStackScreens.Details]: { details: FoodDetails };
+  [FoodJournalStackScreenNames.FoodJournal]: undefined;
+  [FoodJournalStackScreenNames.BarCodeScanner]: undefined;
+  [FoodJournalStackScreenNames.Meal]: undefined;
+  [FoodJournalStackScreenNames.Search]: undefined;
+  [FoodJournalStackScreenNames.Details]: { details: FoodDetails };
 };
 
-type DynmaicOptions = ({
-  route,
-}: {
-  route: RouteProp<FoodJournalStackParams, FoodJournalStackScreens.Details>;
-}) => StackNavigationOptions;
+type FoodJournalStackScreen = Screen<
+  FoodJournalStackScreenNames,
+  FoodJournalStackParams
+>;
 
-type Screen = {
-  name: FoodJournalStackScreens;
-  component: ComponentType<any>;
-  options?: DynmaicOptions | ReturnType<DynmaicOptions>;
-};
-
-const screens: Screen[] = [
+const screens: FoodJournalStackScreen[] = [
   {
-    name: FoodJournalStackScreens.FoodJournal,
+    name: FoodJournalStackScreenNames.FoodJournal,
     component: FoodJournal,
   },
   {
-    name: FoodJournalStackScreens.BarCodeScanner,
+    name: FoodJournalStackScreenNames.BarCodeScanner,
     component: BarCodeScanner,
     options: {
       title: 'Bar Code Scanner',
     },
   },
   {
-    name: FoodJournalStackScreens.Meal,
+    name: FoodJournalStackScreenNames.Meal,
     component: Meal,
   },
   {
-    name: FoodJournalStackScreens.Search,
+    name: FoodJournalStackScreenNames.Search,
     component: Search,
   },
   {
-    name: FoodJournalStackScreens.Details,
+    name: FoodJournalStackScreenNames.Details,
     component: Details,
     options: ({ route }) => ({
-      title: route.params.details.name,
+      title: route.params?.details.name,
     }),
   },
 ];

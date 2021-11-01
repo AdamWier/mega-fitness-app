@@ -28,7 +28,7 @@ import { mealDocumentService, dayDocumentService } from '../Firebase';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
   FoodJournalStackParams,
-  FoodJournalStackScreens,
+  FoodJournalStackScreenNames,
 } from '../Navigation/FoodJournalStack/Screens';
 import { MyTheme } from '../StyleSheet';
 import MealDocument from '../Firebase/Documents/MealDocument';
@@ -83,7 +83,7 @@ function Meal({
           }
         }
       }
-      navigation.navigate(FoodJournalStackScreens.FoodJournal);
+      navigation.navigate(FoodJournalStackScreenNames.FoodJournal);
     } catch (e) {
       console.log(e);
     }
@@ -107,7 +107,7 @@ function Meal({
   const deleteMeal = async () => {
     try {
       id && (await mealDocumentService.delete(id));
-      navigation.navigate(FoodJournalStackScreens.FoodJournal);
+      navigation.navigate(FoodJournalStackScreenNames.FoodJournal);
     } catch (e) {
       console.log(e);
     }
@@ -127,7 +127,9 @@ function Meal({
 
   const onBackPress = () => {
     if (meal.length) {
-      askToSave(() => navigation.navigate(FoodJournalStackScreens.FoodJournal));
+      askToSave(() =>
+        navigation.navigate(FoodJournalStackScreenNames.FoodJournal)
+      );
       return true;
     }
     return false;
@@ -171,7 +173,7 @@ function Meal({
       <Button
         title="Add a food"
         onPress={(): void =>
-          navigation.navigate(FoodJournalStackScreens.Search)
+          navigation.navigate(FoodJournalStackScreenNames.Search)
         }
         buttonStyle={{
           backgroundColor: theme.colors.warning,
@@ -294,7 +296,7 @@ const styles = StyleSheet.create({
 type MealProps = {
   navigation: StackNavigationProp<
     FoodJournalStackParams,
-    FoodJournalStackScreens.Meal
+    FoodJournalStackScreenNames.Meal
   >;
   theme: MyTheme;
   mealDocument: MealDocument;

@@ -22,7 +22,7 @@ import ActivityIndicator from '../../components/ActivityIndicator';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
   FoodJournalStackParams,
-  FoodJournalStackScreens,
+  FoodJournalStackScreenNames,
 } from '../../Navigation/FoodJournalStack/Screens';
 import { MyTheme } from '../../StyleSheet';
 import {
@@ -151,7 +151,7 @@ function FoodJournalPage({
 
   const handleMealPress = (document: AddedFood[]) => {
     updateMealDocument(document);
-    navigation.navigate(FoodJournalStackScreens.Meal);
+    navigation.navigate(FoodJournalStackScreenNames.Meal);
   };
 
   const getNewEatenAt = () => {
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
 type FoodJournalPageProps = {
   navigation: StackNavigationProp<
     FoodJournalStackParams,
-    FoodJournalStackScreens.FoodJournal
+    FoodJournalStackScreenNames.FoodJournal
   >;
   theme: MyTheme;
 } & UserContainerProps &
