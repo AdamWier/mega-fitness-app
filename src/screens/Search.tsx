@@ -23,7 +23,7 @@ import { useDebounceCallback } from '@react-hook/debounce';
 import ActivityIndicator from '../components/ActivityIndicator';
 import {
   FoodJournalStackParams,
-  FoodJournalStackScreens,
+  FoodJournalStackScreenNames,
 } from '../Navigation/FoodJournalStack/Screens';
 import { StackNavigationProp } from '@react-navigation/stack';
 
@@ -43,7 +43,7 @@ export default function Search({ navigation }: SearchProps) {
   const scanBarcode = async () => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
     if (status === 'granted') {
-      navigation.navigate(FoodJournalStackScreens.Search);
+      navigation.navigate(FoodJournalStackScreenNames.Search);
     } else {
       Alert.prompt('You cannot search by barcode without camera access.');
     }
@@ -106,7 +106,7 @@ export default function Search({ navigation }: SearchProps) {
       }
 
       if (details) {
-        navigation.navigate(FoodJournalStackScreens.Details, { details });
+        navigation.navigate(FoodJournalStackScreenNames.Details, { details });
       } else {
         showNotEnoughDetailsToast();
       }
@@ -217,6 +217,6 @@ const styles = StyleSheet.create({
 interface SearchProps {
   navigation: StackNavigationProp<
     FoodJournalStackParams,
-    FoodJournalStackScreens.Search
+    FoodJournalStackScreenNames.Search
   >;
 }

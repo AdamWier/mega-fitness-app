@@ -1,26 +1,36 @@
+import { StackNavigationOptions } from '@react-navigation/stack';
 import AccountCreation from '../../screens/AccountCreation';
 import Login from '../../screens/Login';
+import { Screen } from '../index';
 
-export enum LoggedOutStackScreens {
+export enum LoggedOutStackScreenNames {
   Login = 'Login',
   AccountCreation = 'AccountCreation',
 }
 
-export type LoggedOutStackParams = {
-  [LoggedOutStackScreens.Login]: undefined;
-  [LoggedOutStackScreens.AccountCreation]: undefined;
-};
+export type LoggedOutStackParams = Record<
+  LoggedOutStackScreenNames,
+  undefined | object
+>;
 
-export default [
+type LoggedOutStackScreens = Screen<
+  LoggedOutStackScreenNames,
+  LoggedOutStackParams,
+  StackNavigationOptions
+>;
+
+const screens: LoggedOutStackScreens[] = [
   {
-    name: LoggedOutStackScreens.Login,
+    name: LoggedOutStackScreenNames.Login,
     component: Login,
   },
   {
-    name: LoggedOutStackScreens.AccountCreation,
+    name: LoggedOutStackScreenNames.AccountCreation,
     component: AccountCreation,
     options: {
       title: 'Account Creation',
     },
   },
 ];
+
+export default screens;

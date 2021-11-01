@@ -7,7 +7,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
   FoodJournalStackParams,
-  FoodJournalStackScreens,
+  FoodJournalStackScreenNames,
 } from '../Navigation/FoodJournalStack/Screens';
 
 export default function BarCodeScannerScreen({
@@ -20,14 +20,14 @@ export default function BarCodeScannerScreen({
       const OFDApi = new OFDApiImpl();
       const details = await OFDApi.barcodeSearch(data);
       if (details) {
-        navigation.navigate(FoodJournalStackScreens.Details, { details });
+        navigation.navigate(FoodJournalStackScreenNames.Details, { details });
       } else {
         Toast.showWithGravity(
           'This food does not have enough information',
           Toast.SHORT,
           Toast.CENTER
         );
-        navigation.navigate(FoodJournalStackScreens.Search);
+        navigation.navigate(FoodJournalStackScreenNames.Search);
       }
     } catch (e) {
       Toast.showWithGravity(
@@ -35,7 +35,7 @@ export default function BarCodeScannerScreen({
         Toast.SHORT,
         Toast.CENTER
       );
-      navigation.navigate(FoodJournalStackScreens.Search);
+      navigation.navigate(FoodJournalStackScreenNames.Search);
     }
   };
 
@@ -56,6 +56,6 @@ export default function BarCodeScannerScreen({
 interface BarCodeScannerScreenProps {
   navigation: StackNavigationProp<
     FoodJournalStackParams,
-    FoodJournalStackScreens.BarCodeScanner
+    FoodJournalStackScreenNames.BarCodeScanner
   >;
 }

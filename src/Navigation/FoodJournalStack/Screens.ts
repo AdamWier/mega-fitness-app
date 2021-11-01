@@ -3,10 +3,11 @@ import Search from '../../screens/Search';
 import Details from '../../screens/Details';
 import Meal from '../../screens/Meal';
 import BarCodeScanner from '../../screens/BarCodeScanner';
-import { RouteProp } from '@react-navigation/native';
 import { FoodDetails } from '../../ApiHelpers/CommonAPITypes';
+import { Screen } from '../index';
+import { StackNavigationOptions } from '@react-navigation/stack';
 
-export enum FoodJournalStackScreens {
+export enum FoodJournalStackScreenNames {
   FoodJournal = 'FoodJournal',
   BarCodeScanner = 'BarCodeScanner',
   Meal = 'Meal',
@@ -15,42 +16,46 @@ export enum FoodJournalStackScreens {
 }
 
 export type FoodJournalStackParams = {
-  [FoodJournalStackScreens.FoodJournal]: undefined;
-  [FoodJournalStackScreens.BarCodeScanner]: undefined;
-  [FoodJournalStackScreens.Meal]: undefined;
-  [FoodJournalStackScreens.Search]: undefined;
-  [FoodJournalStackScreens.Details]: { details: FoodDetails };
+  [FoodJournalStackScreenNames.FoodJournal]: undefined;
+  [FoodJournalStackScreenNames.BarCodeScanner]: undefined;
+  [FoodJournalStackScreenNames.Meal]: undefined;
+  [FoodJournalStackScreenNames.Search]: undefined;
+  [FoodJournalStackScreenNames.Details]: { details: FoodDetails };
 };
 
-export default [
+type FoodJournalStackScreen = Screen<
+  FoodJournalStackScreenNames,
+  FoodJournalStackParams,
+  StackNavigationOptions
+>;
+
+const screens: FoodJournalStackScreen[] = [
   {
-    name: 'Food Journal',
+    name: FoodJournalStackScreenNames.FoodJournal,
     component: FoodJournal,
   },
   {
-    name: 'BarCodeScanner',
+    name: FoodJournalStackScreenNames.BarCodeScanner,
     component: BarCodeScanner,
     options: {
       title: 'Bar Code Scanner',
     },
   },
   {
-    name: 'Meal',
+    name: FoodJournalStackScreenNames.Meal,
     component: Meal,
   },
   {
-    name: 'Search',
+    name: FoodJournalStackScreenNames.Search,
     component: Search,
   },
   {
-    name: 'Details',
+    name: FoodJournalStackScreenNames.Details,
     component: Details,
-    options: ({
-      route,
-    }: {
-      route: RouteProp<FoodJournalStackParams, FoodJournalStackScreens.Details>;
-    }) => ({
-      title: route.params.details.name,
+    options: ({ route }) => ({
+      title: route.params?.details.name,
     }),
   },
 ];
+
+export default screens;

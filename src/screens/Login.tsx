@@ -8,7 +8,7 @@ import { UserDocument } from '../Firebase/Documents/UserDocument';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
   LoggedOutStackParams,
-  LoggedOutStackScreens,
+  LoggedOutStackScreenNames,
 } from '../Navigation/LoggedOutStack/Screens';
 
 function Login({ navigation, storeLogin, theme }: LoginProps) {
@@ -65,7 +65,7 @@ function Login({ navigation, storeLogin, theme }: LoginProps) {
       <Button
         title="Create an account"
         onPress={(): void => {
-          navigation.navigate(LoggedOutStackScreens.AccountCreation);
+          navigation.navigate(LoggedOutStackScreenNames.AccountCreation);
         }}
         buttonStyle={{
           backgroundColor: theme.colors.info,
@@ -89,7 +89,7 @@ const style = StyleSheet.create({
 interface LoginProps {
   navigation: StackNavigationProp<
     LoggedOutStackParams,
-    LoggedOutStackScreens.Login
+    LoggedOutStackScreenNames.Login
   >;
   storeLogin: (info: Partial<UserDocument>) => void;
   theme: MyTheme;
