@@ -8,8 +8,8 @@ import { Screen } from '../index';
 import { StackNavigationOptions } from '@react-navigation/stack';
 
 export enum FoodJournalStackScreenNames {
-  FoodJournal = 'FoodJournal',
-  BarCodeScanner = 'BarCodeScanner',
+  FoodJournal = 'Food Journal',
+  BarCodeScanner = 'Bar Code Scanner',
   Meal = 'Meal',
   Search = 'Search',
   Details = 'Details',

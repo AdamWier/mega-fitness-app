@@ -7,11 +7,11 @@ import { Screen } from '../index';
 import { DrawerNavigationOptions } from '@react-navigation/drawer';
 
 export enum LoggedInDrawerScreenNames {
-  FoodJournal = 'FoodJournal',
-  GoalSetPage = 'GoalSetPage',
-  WeeklyReports = 'WeeklyReports',
-  WeightTracking = 'WeightTracking',
-  ShoppingLists = 'ShoppingLists',
+  FoodJournal = 'Food Journal',
+  GoalSetPage = 'Goal Set Page',
+  WeeklyReports = 'Weekly Reports',
+  WeightTracking = 'Weight Tracking',
+  ShoppingLists = 'Shopping Lists',
 }
 
 export type LoggedInDrawerParams = Record<
