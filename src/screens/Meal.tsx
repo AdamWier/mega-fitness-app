@@ -4,6 +4,7 @@ import React, {
   useRef,
   useCallback,
   RefObject,
+  useLayoutEffect,
 } from 'react';
 import {
   View,
@@ -47,10 +48,6 @@ function Meal({
   const [displayMealCalendar, toggleDisplayMealCalendar] = useState(false);
   const [displayCopyCalendar, toggleDisplayCopyCalendar] = useState(false);
   const [expandedCard, changeExpandedCard] = useState<number | null>(null);
-
-  navigation.setOptions({
-    title: name || 'New meal',
-  });
 
   const removeFoodFromMeal = (mealIndex: number): void => {
     const newMeal = meal.filter(
@@ -155,6 +152,12 @@ function Meal({
 
     return () => backHandler.remove();
   });
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: name || 'New meal',
+    });
+  }, [navigation, name]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
