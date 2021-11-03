@@ -43,7 +43,7 @@ export default function Search({ navigation }: SearchProps) {
   const scanBarcode = async () => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
     if (status === 'granted') {
-      navigation.navigate(FoodJournalStackScreenNames.Search);
+      navigation.navigate(FoodJournalStackScreenNames.BarCodeScanner);
     } else {
       Alert.prompt('You cannot search by barcode without camera access.');
     }

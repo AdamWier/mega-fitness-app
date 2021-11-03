@@ -2,11 +2,40 @@ import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { navTheme } from '../../StyleSheet';
 import screens from './Screens';
-import CustomHeader from '../../components/CustomHeader';
+import { authService } from '../../Firebase';
+import { Button, Icon } from 'react-native-elements';
+import { Alert } from 'react-native';
+import { container, UserContainerProps } from '../../store/reducers/User';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import {
+  LoggedInDrawerParams,
+  LoggedInDrawerScreenNames,
+} from '../LoggedInDrawer/Screens';
 
 const Stack = createStackNavigator();
 
-function Navigation(): JSX.Element {
+function Navigation({
+  storeLogout,
+  navigation,
+}: UserContainerProps & {
+  navigation: DrawerNavigationProp<
+    LoggedInDrawerParams,
+    LoggedInDrawerScreenNames.FoodJournal
+  >;
+}): JSX.Element {
+  const logout = () => {
+    Alert.alert('Log out', 'Do you want to log out?', [
+      { text: 'No', onPress: () => null },
+      {
+        text: 'Yes',
+        onPress: () => {
+          authService.logout();
+          storeLogout();
+        },
+      },
+    ]);
+  };
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -17,7 +46,18 @@ function Navigation(): JSX.Element {
           color: navTheme.colors.text,
         },
         headerTintColor: navTheme.colors.text,
-        header: () => <CustomHeader title="Calorie goal" />,
+        headerLeft: () => (
+          <Button
+            icon={<Icon name={'menu'} />}
+            onPress={() => navigation.toggleDrawer()}
+          />
+        ),
+        headerRight: () => (
+          <Button
+            icon={<Icon name={'power-settings-new'} />}
+            onPress={logout}
+          />
+        ),
       }}
     >
       {screens.map((screen, index) => (
@@ -32,4 +72,4 @@ function Navigation(): JSX.Element {
   );
 }
 
-export default Navigation;
+export default container(Navigation);

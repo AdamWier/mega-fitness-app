@@ -5,7 +5,7 @@ import { Screen } from '../index';
 
 export enum LoggedOutStackScreenNames {
   Login = 'Login',
-  AccountCreation = 'AccountCreation',
+  AccountCreation = 'Account Creation',
 }
 
 export type LoggedOutStackParams = Record<
