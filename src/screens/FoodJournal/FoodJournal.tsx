@@ -25,11 +25,8 @@ import {
   FoodJournalStackScreenNames,
 } from '../../Navigation/FoodJournalStack/Screens';
 import { MyTheme } from '../../StyleSheet';
-import {
-  compareRows,
-  constructFoodJournalItems,
-  emptyDocuments,
-} from './FoodJournalLogic';
+import { constructFoodJournalItems, emptyDocuments } from './FoodJournalLogic';
+import { getTotal } from '../../utilities';
 
 function FoodJournalPage({
   navigation,
@@ -39,7 +36,7 @@ function FoodJournalPage({
 }: FoodJournalPageProps) {
   const [isDayLoading, setIsDayLoading] = useState(true);
   const [documents, setDocuments] =
-    useState<{ meals: any; day: DayDocument }>(emptyDocuments);
+    useState<{ meals: MealDocument[]; day: DayDocument }>(emptyDocuments);
   const [currentDate, setCurrentDate] = useState(
     moment().startOf('day').toDate()
   );
@@ -224,7 +221,9 @@ function FoodJournalPage({
   }, [onDayPress, currentDate, user.uid]);
 
   const dayHeaderProps = {
-    foods: documents.meals.flatMap((document: any) => document.meal),
+    totalCalories: documents.meals
+      .flatMap((document) => document.meal)
+      .reduce(getTotal('calories'), 0),
     goalCalories: documents.day?.goalCalories ?? user.goalCalories,
     handleMealPress: handleMealPress,
     getNewEatenAt: getNewEatenAt,
@@ -291,7 +290,7 @@ function FoodJournalPage({
       renderItem={renderItem}
       renderEmptyData={() => <ActivityIndicator size="large" />}
       renderEmptyDate={emptyItem}
-      rowHasChanged={compareRows}
+      rowHasChanged={() => true}
       markedDates={{}}
       theme={{
         agendaDayTextColor: theme.colors.text,

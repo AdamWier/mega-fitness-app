@@ -24,13 +24,6 @@ export const constructFoodJournalItems = (
   }
 };
 
-export const compareRows = (r1: MealDocument, r2: MealDocument) => {
-  return (
-    r1.meal.reduce((total, food) => total + food.calories, 0) !==
-    r2.meal.reduce((total, food) => total + food.calories, 0)
-  );
-};
-
 export const emptyDocuments = {
   meals: [],
   day: { weight: 0, water: 0 },
