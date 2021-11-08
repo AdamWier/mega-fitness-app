@@ -3,17 +3,15 @@ import { Button, Text, Icon } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
 import OverlayWithButton from '../../../components/OverlayWithButton';
 import { Bar } from 'react-native-progress';
-import { getTotal } from '../../../utilities';
 import { withTheme } from 'react-native-elements';
 import { container } from '../../../store/reducers/User';
-import { AddedFood } from '../../../Firebase/Documents/MealDocument';
 import { MyTheme } from '../../../StyleSheet';
 import { UserContainerProps } from '../../../store/reducers/User';
 import WaterProgressBar from './components/WaterProgressBar';
 
 const DayHeader = ({
   goalCalories,
-  foods,
+  totalCalories,
   handleMealPress,
   getNewEatenAt,
   user,
@@ -37,8 +35,6 @@ const DayHeader = ({
   todaysWater,
   updateWaterGoal,
 }: DayHeaderProps) => {
-  const totalCalories = foods ? foods.reduce(getTotal('calories'), 0) : 0;
-
   return (
     <View>
       <View style={styles.buttonsContainer}>
@@ -125,7 +121,7 @@ const styles = StyleSheet.create({
 
 type DayHeaderProps = {
   goalCalories?: number;
-  foods: AddedFood[];
+  totalCalories: number;
   handleMealPress: (meal: any) => void;
   getNewEatenAt: () => Date;
   onGoalButtonPress: () => void;

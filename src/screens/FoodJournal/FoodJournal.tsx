@@ -26,10 +26,10 @@ import {
 } from '../../Navigation/FoodJournalStack/Screens';
 import { MyTheme } from '../../StyleSheet';
 import {
-  compareRows,
   constructFoodJournalItems,
   emptyDocuments,
 } from './FoodJournalLogic';
+import { getTotal } from '../../utilities';
 
 function FoodJournalPage({
   navigation,
@@ -224,7 +224,7 @@ function FoodJournalPage({
   }, [onDayPress, currentDate, user.uid]);
 
   const dayHeaderProps = {
-    foods: documents.meals.flatMap((document: any) => document.meal),
+    totalCalories: documents.meals.flatMap((document) => document.meal).reduce(getTotal('calories'), 0),
     goalCalories: documents.day?.goalCalories ?? user.goalCalories,
     handleMealPress: handleMealPress,
     getNewEatenAt: getNewEatenAt,
