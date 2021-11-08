@@ -39,7 +39,7 @@ function FoodJournalPage({
 }: FoodJournalPageProps) {
   const [isDayLoading, setIsDayLoading] = useState(true);
   const [documents, setDocuments] =
-    useState<{ meals: any; day: DayDocument }>(emptyDocuments);
+    useState<{ meals: MealDocument[]; day: DayDocument }>(emptyDocuments);
   const [currentDate, setCurrentDate] = useState(
     moment().startOf('day').toDate()
   );

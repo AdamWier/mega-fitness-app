@@ -1,9 +1,6 @@
 export default interface MealDocument {
   meal: Array<AddedFood>;
   eatenAt: Date;
-  createdAt: Date;
-  deleted: boolean;
-  uid: string;
   name: string;
   updatedAt?: string;
   id?: string;
