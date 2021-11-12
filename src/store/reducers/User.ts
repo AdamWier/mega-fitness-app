@@ -10,7 +10,7 @@ const LOGOUT = 'LOGOUT';
 
 export type UserContainerProps = ConnectedProps<typeof container>;
 
-export interface InitialState {
+interface UserState {
   uid?: string;
   email?: string;
   updatedAt?: Timestamp;
@@ -18,14 +18,14 @@ export interface InitialState {
   waterGoal: number;
 }
 
-export const initialState: InitialState = {
+export const initialState: UserState = {
   goalCalories: 0,
   waterGoal: 0,
 };
 
 export function login(userInfo: Partial<UserDocument>): {
   type: string;
-  payload: Partial<InitialState>;
+  payload: Partial<UserState>;
 } {
   return {
     type: LOGIN,
@@ -35,7 +35,7 @@ export function login(userInfo: Partial<UserDocument>): {
 
 export function logout(): {
   type: string;
-  payload: InitialState;
+  payload: UserState;
 } {
   return {
     type: LOGOUT,
@@ -43,14 +43,14 @@ export function logout(): {
   };
 }
 
-export function updateCalories(goalCalories: number) {
+function updateCalories(goalCalories: number) {
   return {
     type: UPDATE_CALORIES,
     payload: goalCalories,
   };
 }
 
-export function updateWaterGoal(goalCalories: number) {
+function updateWaterGoal(goalCalories: number) {
   return {
     type: UPDATE_WATER_GOAL,
     payload: goalCalories,
@@ -59,7 +59,7 @@ export function updateWaterGoal(goalCalories: number) {
 
 export const userReducer = (
   state = initialState,
-  action: { type: string; payload: typeof initialState }
+  action: { type: string; payload: UserState }
 ) => {
   switch (action.type) {
     case LOGIN:
@@ -84,7 +84,7 @@ export const userReducer = (
   }
 };
 
-const mapStateToProps = ({ user }: { user: InitialState }) => ({
+const mapStateToProps = ({ user }: { user: UserState }) => ({
   user,
 });
 

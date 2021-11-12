@@ -32,7 +32,7 @@ describe('user reducer', () => {
     expect(mealReducer(undefined, [])).toStrictEqual(initialState);
   });
 
-  it('should store new user information', () => {
+  it('should store new meal information', () => {
     expect.assertions(1);
     expect(
       mealReducer(initialState, {

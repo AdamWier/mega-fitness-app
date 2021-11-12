@@ -9,7 +9,7 @@ import {
   container as MealContainer,
   MealContainerProps,
 } from '../../store/reducers/MealDocument';
-import MealDocument, { AddedFood } from '../../Firebase/Documents/MealDocument';
+import MealDocument from '../../Firebase/Documents/MealDocument';
 import { Agenda } from 'react-native-calendars';
 import FoodJournalItem from '../../components/FoodJournalItem';
 import TotalCard from '../../components/TotalCard';
@@ -146,7 +146,7 @@ function FoodJournalPage({
     setIsGoalOverlayLoading(false);
   };
 
-  const handleMealPress = (document: AddedFood[]) => {
+  const handleMealPress = (document: MealDocument) => {
     updateMealDocument(document);
     navigation.navigate(FoodJournalStackScreenNames.Meal);
   };

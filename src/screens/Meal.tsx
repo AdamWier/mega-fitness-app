@@ -16,7 +16,10 @@ import {
 } from 'react-native';
 import { Button, Text, withTheme, Input, Divider } from 'react-native-elements';
 import FoodCard from '../components/FoodCard';
-import { container as MealContainer } from '../store/reducers/MealDocument';
+import {
+  container as MealContainer,
+  MealContainerProps,
+} from '../store/reducers/MealDocument';
 import {
   container as UserContainer,
   UserContainerProps,
@@ -32,7 +35,6 @@ import {
   FoodJournalStackScreenNames,
 } from '../Navigation/FoodJournalStack/Screens';
 import { MyTheme } from '../StyleSheet';
-import MealDocument from '../Firebase/Documents/MealDocument';
 
 function Meal({
   navigation,
@@ -43,24 +45,26 @@ function Meal({
 }: MealProps) {
   const mealNameInput = useRef<Input>();
 
-  const { meal, eatenAt, name, id } = mealDocument;
+  const { meal, eatenAt, name, id } = mealDocument || {};
 
   const [displayMealCalendar, toggleDisplayMealCalendar] = useState(false);
   const [displayCopyCalendar, toggleDisplayCopyCalendar] = useState(false);
   const [expandedCard, changeExpandedCard] = useState<number | null>(null);
 
   const removeFoodFromMeal = (mealIndex: number): void => {
-    const newMeal = meal.filter(
+    const newMeal = meal?.filter(
       (mealItem: { [key: string]: any }, index: number) => index !== mealIndex
     );
-    updateMealDocument({
-      ...mealDocument,
-      meal: newMeal,
-    });
+    newMeal &&
+      mealDocument &&
+      updateMealDocument({
+        ...mealDocument,
+        meal: newMeal,
+      });
   };
 
   const saveMeal = async (): Promise<void> => {
-    if (!user.uid) return;
+    if (!user.uid || !meal || !name || !eatenAt) return;
     try {
       if (id) {
         await mealDocumentService.update(meal, name, user.uid, eatenAt, id);
@@ -88,10 +92,11 @@ function Meal({
 
   const setDate = (input: Date) => {
     toggleDisplayMealCalendar(false);
-    updateMealDocument({
-      ...mealDocument,
-      eatenAt: input,
-    });
+    mealDocument &&
+      updateMealDocument({
+        ...mealDocument,
+        eatenAt: input,
+      });
   };
 
   const askToSave = (cancelCallback?: Function): void => {
@@ -119,11 +124,14 @@ function Meal({
 
   const copyMeal = async (input: Date) => {
     toggleDisplayCopyCalendar(false);
-    user.uid && (await mealDocumentService.create(meal, name, user.uid, input));
+    user.uid &&
+      meal &&
+      name &&
+      (await mealDocumentService.create(meal, name, user.uid, input));
   };
 
   const onBackPress = () => {
-    if (meal.length) {
+    if (meal?.length) {
       askToSave(() =>
         navigation.navigate(FoodJournalStackScreenNames.FoodJournal)
       );
@@ -165,6 +173,7 @@ function Meal({
         placeholder="Enter meal name"
         value={name}
         onChangeText={(input) =>
+          mealDocument &&
           updateMealDocument({
             ...mealDocument,
             name: input,
@@ -183,7 +192,7 @@ function Meal({
         }}
         containerStyle={styles.addButtonContainer}
       />
-      {meal.length ? (
+      {meal?.length ? (
         <View>
           <Button
             title={`Eaten: ${moment(eatenAt).format(
@@ -302,8 +311,7 @@ type MealProps = {
     FoodJournalStackScreenNames.Meal
   >;
   theme: MyTheme;
-  mealDocument: MealDocument;
-  updateMealDocument: (value: MealDocument) => void;
-} & UserContainerProps;
+} & UserContainerProps &
+  MealContainerProps;
 
 export default UserContainer(MealContainer(withTheme(Meal)));

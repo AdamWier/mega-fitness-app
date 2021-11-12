@@ -62,11 +62,11 @@ function Details({
 
   const addFood = () => {
     const { calories, protein, fats, carbs } = currentCalculations;
-    if (amountIsCorrect()) {
+    if (amountIsCorrect() && mealDocument) {
       updateMealDocument({
         ...mealDocument,
         meal: [
-          ...mealDocument.meal,
+          ...(mealDocument?.meal || []),
           {
             name: details.name,
             amount: Number(amount),
