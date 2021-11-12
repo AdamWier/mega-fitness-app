@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Button, Icon, Input } from 'react-native-elements';
-import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 
-const UpDownButtons: React.FC<any> = ({ total, onValueChange }) => {
-  const [input, setInput] = useState(null);
+const UpDownButtons = ({
+  total,
+  onValueChange,
+  hideInput,
+}: UpDownButtonsProps) => {
+  const [input, setInput] = useState<string | null>(null);
 
   const handleInputBox = (value: string) => {
     const decimals = value.split('').filter((char) => char === '.');
@@ -32,25 +35,24 @@ const UpDownButtons: React.FC<any> = ({ total, onValueChange }) => {
         disabled={Number(total) <= 0}
         icon={<Icon name="arrow-drop-down" />}
       />
-      <Input
-        containerStyle={styles.inputContainer}
-        onChangeText={handleInputBox}
-        value={input || total?.toString() || '0'}
-        inputStyle={styles.input}
-        keyboardType="number-pad"
-      />
+      {!hideInput && (
+        <Input
+          containerStyle={styles.inputContainer}
+          onChangeText={handleInputBox}
+          value={input || total?.toString() || '0'}
+          inputStyle={styles.input}
+          keyboardType="number-pad"
+        />
+      )}
     </View>
   );
 };
 
-UpDownButtons.propTypes = {
-  total: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  onValueChange: PropTypes.func,
-};
-
-UpDownButtons.defaultProps = {
-  onValueChange: null,
-};
+interface UpDownButtonsProps {
+  total: number;
+  onValueChange: (value: any) => void;
+  hideInput?: boolean;
+}
 
 const styles = StyleSheet.create({
   row: {
@@ -58,7 +60,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginVertical: 5,
-    marginHorizontal: 10,
+    marginHorizontal: 5,
   },
   button: {
     margin: 0,

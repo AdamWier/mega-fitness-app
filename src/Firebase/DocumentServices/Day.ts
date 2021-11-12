@@ -1,15 +1,14 @@
 import moment from 'moment';
-import Day from './Day';
-import DayDocument from '../../Documents/DayDocument';
+import DayDocument from '../Documents/DayDocument';
 
-export default class DayImpl implements Day {
+export default class DayService {
   firestore: firebase.firestore.Firestore;
 
   constructor(firestore: firebase.firestore.Firestore) {
     this.firestore = firestore;
   }
 
-  createGoal(
+  public createGoal(
     currentDate: Date,
     goalCalories: number,
     uid: string
@@ -35,7 +34,7 @@ export default class DayImpl implements Day {
       });
   }
 
-  updateGoal(
+  public updateGoal(
     currentDate: Date,
     goalCalories: number,
     uid: string,
@@ -52,7 +51,11 @@ export default class DayImpl implements Day {
     });
   }
 
-  createWeight(currentDate: Date, weight: number, uid: string): Promise<void> {
+  public createWeight(
+    currentDate: Date,
+    weight: number,
+    uid: string
+  ): Promise<void> {
     const dayStartMoment = moment(currentDate).startOf('day');
     const date = dayStartMoment.toDate();
     const createdAt = new Date();
@@ -74,7 +77,7 @@ export default class DayImpl implements Day {
       });
   }
 
-  updateWeight(
+  public updateWeight(
     currentDate: Date,
     weight: number,
     uid: string,
@@ -91,20 +94,58 @@ export default class DayImpl implements Day {
     });
   }
 
-  async findDocument(date: Date, uid: string): Promise<DayDocument> {
+  public createWater(
+    currentDate: Date,
+    water: number,
+    uid: string
+  ): Promise<void> {
+    const dayStartMoment = moment(currentDate).startOf('day');
+    const date = dayStartMoment.toDate();
+    const createdAt = new Date();
+    return this.firestore
+      .collection('days')
+      .doc(
+        uid +
+          '-' +
+          dayStartMoment.format('YYYY-MM-DD') +
+          '-' +
+          createdAt.getTime()
+      )
+      .set({
+        date,
+        water,
+        uid,
+        createdAt,
+        deleted: false,
+      });
+  }
+
+  public updateWater(
+    currentDate: Date,
+    water: number,
+    uid: string,
+    id: string
+  ): Promise<void> {
+    const date = moment(currentDate).startOf('day').toDate();
+    const updatedAt = new Date();
+    return this.firestore.collection('days').doc(id).update({
+      date,
+      water,
+      uid,
+      updatedAt,
+      deleted: false,
+    });
+  }
+
+  public async findDocument(date: Date, uid: string): Promise<DayDocument> {
     const response = await this.getDocumentReference(date, uid).get();
     if (response.docs.length) {
       return response.docs.map(this.mapDocuments)[0];
     }
-    return {
-      id: null,
-      goalCalories: null,
-      date: null,
-      weight: null,
-    };
+    return {};
   }
 
-  getDocumentListener(
+  public getDocumentListener(
     date: Date,
     uid: string,
     updateCallback: Function
@@ -115,7 +156,7 @@ export default class DayImpl implements Day {
     });
   }
 
-  getDocumentReference(
+  private getDocumentReference(
     date: Date,
     uid: string
   ): firebase.firestore.Query<firebase.firestore.DocumentData> {
@@ -127,7 +168,7 @@ export default class DayImpl implements Day {
       .limit(1);
   }
 
-  async findByWeek(
+  public async findByWeek(
     beginningOfWeek: Date,
     uid: string
   ): Promise<{ [key: string]: any }[]> {
@@ -138,7 +179,7 @@ export default class DayImpl implements Day {
     return [];
   }
 
-  getByWeekRef(
+  private getByWeekRef(
     beginningOfWeek: Date,
     uid: string
   ): firebase.firestore.Query<firebase.firestore.DocumentData> {
@@ -152,7 +193,7 @@ export default class DayImpl implements Day {
       .where('deleted', '==', false);
   }
 
-  async findByMonth(
+  public async findByMonth(
     beginningOfMonth: Date,
     uid: string
   ): Promise<{ [key: string]: any }[]> {
@@ -163,7 +204,7 @@ export default class DayImpl implements Day {
     return [];
   }
 
-  getByMonthRef(
+  private getByMonthRef(
     beginningOfWeek: Date,
     uid: string
   ): firebase.firestore.Query<firebase.firestore.DocumentData> {
@@ -177,10 +218,8 @@ export default class DayImpl implements Day {
       .where('deleted', '==', false);
   }
 
-  mapDocuments(
-    document: firebase.firestore.QueryDocumentSnapshot<
-      firebase.firestore.DocumentData
-    >
+  private mapDocuments(
+    document: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>
   ): DayDocument {
     const data = document.data();
     return {
@@ -188,6 +227,7 @@ export default class DayImpl implements Day {
       goalCalories: data.goalCalories,
       date: data.date.toDate(),
       weight: data.weight,
+      water: data.water,
     };
   }
 }

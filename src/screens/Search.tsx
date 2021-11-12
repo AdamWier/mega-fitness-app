@@ -1,17 +1,11 @@
 import React, {
   useState,
   useRef,
-  MutableRefObject,
   useEffect,
   useCallback,
+  RefObject,
 } from 'react';
-import {
-  View,
-  FlatList,
-  StyleSheet,
-  Alert,
-  ActivityIndicator,
-} from 'react-native';
+import { View, FlatList, StyleSheet, Alert } from 'react-native';
 import {
   Text,
   SearchBar,
@@ -19,32 +13,37 @@ import {
   ListItem,
   Divider,
 } from 'react-native-elements';
-import PropTypes from 'prop-types';
-import USDAApiImpl from '../ApiHelpers/USDA/USDAApiImpl';
-import OFDApiImpl from '../ApiHelpers/OFD/OFDApiImpl';
+import USDAApiImpl from '../ApiHelpers/USDA/USDAApi';
+import OFDApiImpl from '../ApiHelpers/OFD/OFDApi';
 import { FoodResult, FoodDetails } from '../ApiHelpers/CommonAPITypes';
 import Toast from 'react-native-simple-toast';
 import SwitchGroup from '../components/SwitchGroup';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { useDebounceCallback } from '@react-hook/debounce';
+import ActivityIndicator from '../components/ActivityIndicator';
+import {
+  FoodJournalStackParams,
+  FoodJournalStackScreenNames,
+} from '../Navigation/FoodJournalStack/Screens';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-export default function Search({ navigation }): JSX.Element {
+export default function Search({ navigation }: SearchProps) {
   const USDAapi = new USDAApiImpl();
   const OFDApi = new OFDApiImpl();
 
   const [searchText, updateSearchText] = useState('');
-  const [results, updateResults] = useState(null);
+  const [results, updateResults] = useState<FoodResult[]>([]);
   const [page, updatePage] = useState(0);
   const [loadingState, setLoadingState] = useState(false);
   const [isFranceLocale, setIsFranceLocale] = useState(true);
   const [shouldUseOFD, setShouldUseOFD] = useState(true);
   const [isAtEndOfResults, setEnd] = useState(false);
-  const foodList: MutableRefObject<FlatList<FoodResult>> = useRef();
+  const foodList = useRef<FlatList<FoodResult>>();
 
   const scanBarcode = async () => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
     if (status === 'granted') {
-      navigation.navigate('BarCodeScanner');
+      navigation.navigate(FoodJournalStackScreenNames.BarCodeScanner);
     } else {
       Alert.prompt('You cannot search by barcode without camera access.');
     }
@@ -94,7 +93,7 @@ export default function Search({ navigation }): JSX.Element {
 
   const goToFoodDetails = async (api: string, id: string): Promise<void> => {
     try {
-      let details: FoodDetails;
+      let details: FoodDetails | undefined | null;
       switch (api) {
         case 'Open Food Data':
           details = await OFDApi.getDetails(id);
@@ -107,7 +106,7 @@ export default function Search({ navigation }): JSX.Element {
       }
 
       if (details) {
-        navigation.navigate('Details', { details });
+        navigation.navigate(FoodJournalStackScreenNames.Details, { details });
       } else {
         showNotEnoughDetailsToast();
       }
@@ -172,7 +171,7 @@ export default function Search({ navigation }): JSX.Element {
       {!loadingState && results ? (
         results.length ? (
           <FlatList
-            ref={foodList}
+            ref={foodList as RefObject<FlatList>}
             data={results}
             keyExtractor={(item): string => item.id}
             renderItem={({ item }: { item: FoodResult }): JSX.Element => (
@@ -215,8 +214,9 @@ const styles = StyleSheet.create({
   },
 });
 
-Search.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func.isRequired,
-  }).isRequired,
-};
+interface SearchProps {
+  navigation: StackNavigationProp<
+    FoodJournalStackParams,
+    FoodJournalStackScreenNames.Search
+  >;
+}

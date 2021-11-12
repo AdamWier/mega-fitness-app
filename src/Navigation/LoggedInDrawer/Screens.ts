@@ -3,29 +3,52 @@ import GoalSetPage from '../../screens/GoalSetPage';
 import WeeklyReport from '../../screens/WeeklyReport';
 import WeightTracking from '../../screens/WeightTracking';
 import ShoppingList from '../../screens/ShoppingList';
+import { Screen } from '../index';
+import { DrawerNavigationOptions } from '@react-navigation/drawer';
 
-export default [
+export enum LoggedInDrawerScreenNames {
+  FoodJournal = 'Food Journal',
+  GoalSetPage = 'Goal Set Page',
+  WeeklyReports = 'Weekly Reports',
+  WeightTracking = 'Weight Tracking',
+  ShoppingLists = 'Shopping Lists',
+}
+
+export type LoggedInDrawerParams = Record<
+  LoggedInDrawerScreenNames,
+  undefined | object
+>;
+
+type LoggedInDrawerScreen = Screen<
+  LoggedInDrawerScreenNames,
+  LoggedInDrawerParams,
+  DrawerNavigationOptions
+>;
+
+const screens: LoggedInDrawerScreen[] = [
   {
-    name: 'Food Journal',
+    name: LoggedInDrawerScreenNames.FoodJournal,
     component: FoodJournalStack,
   },
   {
-    name: 'GoalSetPage',
+    name: LoggedInDrawerScreenNames.GoalSetPage,
     component: GoalSetPage,
     options: {
-      title: 'Set a calorie goal',
+      title: 'Set goals',
     },
   },
   {
-    name: 'Weekly Reports',
+    name: LoggedInDrawerScreenNames.WeeklyReports,
     component: WeeklyReport,
   },
   {
-    name: 'Weight tracking',
+    name: LoggedInDrawerScreenNames.WeightTracking,
     component: WeightTracking,
   },
   {
-    name: 'Shopping Lists',
+    name: LoggedInDrawerScreenNames.ShoppingLists,
     component: ShoppingList,
   },
 ];
+
+export default screens;

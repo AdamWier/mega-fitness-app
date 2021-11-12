@@ -1,11 +1,13 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-const UPDATE_MEAL_DOCUMENT = 'UPDATE_MEAL_DOCUMENT';
+export const UPDATE_MEAL_DOCUMENT = 'UPDATE_MEAL_DOCUMENT';
 
-const initalState = [];
+export const initialState = {
+  mealDocument: undefined as any,
+};
 
-function updateMealDocument(mealDocument: any): { type: string; payload: any } {
+export function updateMealDocument(mealDocument: any) {
   return {
     type: UPDATE_MEAL_DOCUMENT,
     payload: mealDocument,
@@ -13,9 +15,9 @@ function updateMealDocument(mealDocument: any): { type: string; payload: any } {
 }
 
 export const mealReducer = (
-  state = initalState,
+  state = initialState,
   action: { type: string; payload: any }
-): { [key: string]: any } => {
+) => {
   switch (action.type) {
     case UPDATE_MEAL_DOCUMENT:
       return action.payload;
@@ -24,15 +26,15 @@ export const mealReducer = (
   }
 };
 
-const mapStateToProps = (state: {
-  [key: string]: any;
-}): { [key: string]: any } => ({
+const mapStateToProps = (state: typeof initialState) => ({
   mealDocument: state.mealDocument,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch): { [key: string]: any } => ({
-  updateMealDocument: (payload: Array<any>): any =>
-    dispatch(updateMealDocument(payload)),
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  updateMealDocument: (payload: any) => dispatch(updateMealDocument(payload)),
 });
+
+export type MealContainerProps = typeof initialState &
+  ReturnType<typeof mapDispatchToProps>;
 
 export const container = connect(mapStateToProps, mapDispatchToProps);

@@ -1,16 +1,28 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import PropTypes from 'prop-types';
 import { navTheme } from '../../StyleSheet';
 import screens from './Screens';
-import { container } from '../../store/reducers/User';
 import { authService } from '../../Firebase';
 import { Button, Icon } from 'react-native-elements';
 import { Alert } from 'react-native';
+import { container, UserContainerProps } from '../../store/reducers/User';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import {
+  LoggedInDrawerParams,
+  LoggedInDrawerScreenNames,
+} from '../LoggedInDrawer/Screens';
 
 const Stack = createStackNavigator();
 
-function Navigation({ storeLogin, navigation }): JSX.Element {
+function Navigation({
+  storeLogout,
+  navigation,
+}: UserContainerProps & {
+  navigation: DrawerNavigationProp<
+    LoggedInDrawerParams,
+    LoggedInDrawerScreenNames.FoodJournal
+  >;
+}): JSX.Element {
   const logout = () => {
     Alert.alert('Log out', 'Do you want to log out?', [
       { text: 'No', onPress: () => null },
@@ -18,7 +30,7 @@ function Navigation({ storeLogin, navigation }): JSX.Element {
         text: 'Yes',
         onPress: () => {
           authService.logout();
-          storeLogin({ uid: null, email: null });
+          storeLogout();
         },
       },
     ]);
@@ -52,16 +64,12 @@ function Navigation({ storeLogin, navigation }): JSX.Element {
         <Stack.Screen
           name={screen.name}
           component={screen.component}
-          options={screen.options}
+          options={screen.options as any}
           key={index}
         />
       ))}
     </Stack.Navigator>
   );
 }
-
-Navigation.propTypes = {
-  storeLogin: PropTypes.func.isRequired,
-};
 
 export default container(Navigation);

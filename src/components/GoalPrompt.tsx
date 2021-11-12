@@ -1,23 +1,23 @@
 import React from 'react';
 import { Text, Button, Input } from 'react-native-elements';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
-import PropTypes from 'prop-types';
+import { View, StyleSheet } from 'react-native';
+import ActivityIndicator from '../components/ActivityIndicator';
 
 const GoalPrompt = ({
   toggleIsOverlayVisible,
-  goalCalories,
-  setGoalCalories,
+  goal,
+  setGoal,
   onConfirmButtonPress,
   loading,
   clearGoal,
-}) => (
-  <View style={styles.overlayContentContainer}>
-    <Text h3>Let's set a goal!</Text>
-    <Text h4>How many calories for today?</Text>
+  title,
+}: GoalPromptProps) => (
+  <View style={styles.container}>
+    <Text h4>{title}</Text>
     <Input
       containerStyle={styles.inputContainer}
-      value={goalCalories}
-      onChangeText={(value) => setGoalCalories(value)}
+      value={goal}
+      onChangeText={(value) => setGoal(value)}
       keyboardType="number-pad"
     />
     {loading ? (
@@ -37,18 +37,19 @@ const GoalPrompt = ({
   </View>
 );
 
-GoalPrompt.propTypes = {
-  toggleIsOverlayVisible: PropTypes.func,
-  goalCalories: PropTypes.string.isRequired,
-  setGoalCalories: PropTypes.func.isRequired,
-  onConfirmButtonPress: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired,
-  clearGoal: PropTypes.func.isRequired,
-};
+interface GoalPromptProps {
+  toggleIsOverlayVisible?: (value: boolean) => void;
+  goal?: string;
+  onConfirmButtonPress: () => void;
+  loading: boolean;
+  clearGoal: () => void;
+  setGoal: (value: string) => void;
+  title: string;
+}
 
 const styles = StyleSheet.create({
-  overlayContentContainer: {
-    justifyContent: 'space-around',
+  container: {
+    justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
   },

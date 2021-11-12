@@ -1,4 +1,11 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  RefObject,
+  useLayoutEffect,
+} from 'react';
 import {
   View,
   ScrollView,
@@ -8,15 +15,24 @@ import {
   BackHandler,
 } from 'react-native';
 import { Button, Text, withTheme, Input, Divider } from 'react-native-elements';
-import PropTypes from 'prop-types';
 import FoodCard from '../components/FoodCard';
 import { container as MealContainer } from '../store/reducers/MealDocument';
-import { container as UserContainer } from '../store/reducers/User';
+import {
+  container as UserContainer,
+  UserContainerProps,
+} from '../store/reducers/User';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import TotalCard from '../components/TotalCard';
 import moment from 'moment';
 import { useFocusEffect } from '@react-navigation/native';
 import { mealDocumentService, dayDocumentService } from '../Firebase';
+import { StackNavigationProp } from '@react-navigation/stack';
+import {
+  FoodJournalStackParams,
+  FoodJournalStackScreenNames,
+} from '../Navigation/FoodJournalStack/Screens';
+import { MyTheme } from '../StyleSheet';
+import MealDocument from '../Firebase/Documents/MealDocument';
 
 function Meal({
   navigation,
@@ -24,18 +40,14 @@ function Meal({
   mealDocument,
   updateMealDocument,
   user,
-}): JSX.Element {
-  const mealNameInput = useRef(null);
+}: MealProps) {
+  const mealNameInput = useRef<Input>();
 
   const { meal, eatenAt, name, id } = mealDocument;
 
   const [displayMealCalendar, toggleDisplayMealCalendar] = useState(false);
   const [displayCopyCalendar, toggleDisplayCopyCalendar] = useState(false);
-  const [expandedCard, changeExpandedCard] = useState(null);
-
-  navigation.setOptions({
-    title: name || 'New meal',
-  });
+  const [expandedCard, changeExpandedCard] = useState<number | null>(null);
 
   const removeFoodFromMeal = (mealIndex: number): void => {
     const newMeal = meal.filter(
@@ -48,6 +60,7 @@ function Meal({
   };
 
   const saveMeal = async (): Promise<void> => {
+    if (!user.uid) return;
     try {
       if (id) {
         await mealDocumentService.update(meal, name, user.uid, eatenAt, id);
@@ -67,7 +80,7 @@ function Meal({
           }
         }
       }
-      navigation.navigate('Food Journal');
+      navigation.navigate(FoodJournalStackScreenNames.FoodJournal);
     } catch (e) {
       console.log(e);
     }
@@ -90,8 +103,8 @@ function Meal({
 
   const deleteMeal = async () => {
     try {
-      await mealDocumentService.delete(id);
-      navigation.navigate('Food Journal');
+      id && (await mealDocumentService.delete(id));
+      navigation.navigate(FoodJournalStackScreenNames.FoodJournal);
     } catch (e) {
       console.log(e);
     }
@@ -106,19 +119,21 @@ function Meal({
 
   const copyMeal = async (input: Date) => {
     toggleDisplayCopyCalendar(false);
-    await mealDocumentService.create(meal, name, user.uid, input);
+    user.uid && (await mealDocumentService.create(meal, name, user.uid, input));
   };
 
   const onBackPress = () => {
     if (meal.length) {
-      askToSave(() => navigation.navigate('Food Journal'));
+      askToSave(() =>
+        navigation.navigate(FoodJournalStackScreenNames.FoodJournal)
+      );
       return true;
     }
     return false;
   };
 
   const blurInput = useCallback(() => {
-    mealNameInput.current && mealNameInput.current.blur();
+    mealNameInput?.current?.blur();
   }, []);
 
   useEffect(() => {
@@ -138,6 +153,12 @@ function Meal({
     return () => backHandler.remove();
   });
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: name || 'New meal',
+    });
+  }, [navigation, name]);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Input
@@ -149,12 +170,14 @@ function Meal({
             name: input,
           })
         }
-        ref={mealNameInput}
+        ref={mealNameInput as RefObject<Input>}
         containerStyle={styles.input}
       />
       <Button
         title="Add a food"
-        onPress={(): void => navigation.navigate('Search')}
+        onPress={(): void =>
+          navigation.navigate(FoodJournalStackScreenNames.Search)
+        }
         buttonStyle={{
           backgroundColor: theme.colors.warning,
         }}
@@ -211,7 +234,7 @@ function Meal({
 
           <Divider />
 
-          {meal.map((food: { [key: string]: any }, index: number) => {
+          {meal.map((food, index) => {
             const isExpandedCard = index === expandedCard;
             return (
               <FoodCard
@@ -273,20 +296,14 @@ const styles = StyleSheet.create({
   },
 });
 
-Meal.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func.isRequired,
-    setOptions: PropTypes.func.isRequired,
-  }).isRequired,
-  theme: PropTypes.shape({
-    colors: PropTypes.object.isRequired,
-  }).isRequired,
-  mealDocument: PropTypes.object.isRequired,
-  updateMealDocument: PropTypes.func.isRequired,
-  user: PropTypes.shape({
-    uid: PropTypes.string,
-    email: PropTypes.string,
-  }).isRequired,
-};
+type MealProps = {
+  navigation: StackNavigationProp<
+    FoodJournalStackParams,
+    FoodJournalStackScreenNames.Meal
+  >;
+  theme: MyTheme;
+  mealDocument: MealDocument;
+  updateMealDocument: (value: MealDocument) => void;
+} & UserContainerProps;
 
 export default UserContainer(MealContainer(withTheme(Meal)));

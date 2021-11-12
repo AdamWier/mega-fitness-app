@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
-import { container } from '../store/reducers/User';
-import CustomHeader from '../components/Header';
+import { container, UserContainerProps } from '../store/reducers/User';
+import CustomHeader from '../components/CustomHeader';
 import moment from 'moment';
 import { mealDocumentService, dayDocumentService } from '../Firebase/index';
 import FoodCard from '../components/FoodCard';
@@ -11,15 +10,16 @@ import { createWeeklyReport } from '../utilities';
 import WeeklyGoalChart from '../components/WeeklyGoalsChart';
 import WeekSelector from '../components/WeekSelector';
 
-function WeeklyReport({ user }): JSX.Element {
+function WeeklyReport({ user }: UserContainerProps) {
   const [period, setPeriod] = useState({});
   const [report, setReport] = useState({
-    graphData: [],
+    graphData: [] as ReturnType<typeof createWeeklyReport>['graphData'],
     averages: { calories: 0, protein: 0, fats: 0, carbs: 0 },
   });
 
   useEffect(() => {
     (async function getReport() {
+      if (!user.uid) return;
       const mealDocuments = await mealDocumentService.findByWeek(
         moment(Object.keys(period)[0]).toDate(),
         user.uid
@@ -67,13 +67,5 @@ const style = StyleSheet.create({
     flex: 1,
   },
 });
-
-WeeklyReport.propTypes = {
-  user: PropTypes.shape({
-    uid: PropTypes.string,
-    email: PropTypes.string,
-    goalCalories: PropTypes.number,
-  }).isRequired,
-};
 
 export default container(WeeklyReport);

@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import { Text, Input, Button } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
 import { authService } from '../Firebase';
 import { container } from '../store/reducers/User';
+import { UserDocument } from '../Firebase/Documents/UserDocument';
+import { StackNavigationProp } from '@react-navigation/stack';
+import {
+  FoodJournalStackParams,
+  FoodJournalStackScreenNames,
+} from '../Navigation/FoodJournalStack/Screens';
 
-function AccountCreation({ navigation, storeLogin }): JSX.Element {
+function AccountCreation({ navigation, storeLogin }: AccountCreationProps) {
   const [signUpDetails, setSignUpDetails] = useState({
     email: '',
     password: '',
@@ -14,7 +19,7 @@ function AccountCreation({ navigation, storeLogin }): JSX.Element {
 
   const [isLoading, toggleLoading] = useState(false);
 
-  const [errors, updateErrors] = useState([]);
+  const [errors, updateErrors] = useState<string[]>([]);
 
   const updateSignUpDetails = (value: string, field: string): void => {
     setSignUpDetails((state) => ({
@@ -36,7 +41,7 @@ function AccountCreation({ navigation, storeLogin }): JSX.Element {
           signUpDetails.password
         );
         storeLogin(user);
-        navigation.navigate('Food Journal');
+        navigation.navigate(FoodJournalStackScreenNames.FoodJournal);
       } catch (message) {
         toggleLoading(false);
         updateErrors([message]);
@@ -86,11 +91,12 @@ const style = StyleSheet.create({
   },
 });
 
-AccountCreation.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func.isRequired,
-  }).isRequired,
-  storeLogin: PropTypes.func.isRequired,
-};
+interface AccountCreationProps {
+  navigation: StackNavigationProp<
+    FoodJournalStackParams,
+    FoodJournalStackScreenNames.FoodJournal
+  >;
+  storeLogin: (user: Partial<UserDocument>) => void;
+}
 
 export default container(AccountCreation);

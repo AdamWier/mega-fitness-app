@@ -1,7 +1,6 @@
 import React from 'react';
 import { Text, Icon, Tooltip } from 'react-native-elements';
 import { View, StyleSheet, Switch } from 'react-native';
-import PropTypes from 'prop-types';
 
 const SwitchGroup = ({
   switchText,
@@ -10,7 +9,7 @@ const SwitchGroup = ({
   toolTipText,
   toolTipHeight,
   iconName,
-}) => (
+}: SwitchGroupProps) => (
   <View style={styles.switchGroupContainer}>
     <View style={styles.emptyContainer} />
     {switchText ? <Text style={styles.textContainer}>{switchText}</Text> : null}
@@ -24,21 +23,14 @@ const SwitchGroup = ({
   </View>
 );
 
-SwitchGroup.propTypes = {
-  switchText: PropTypes.string,
-  value: PropTypes.bool.isRequired,
-  onValueChange: PropTypes.func.isRequired,
-  toolTipText: PropTypes.string,
-  toolTipHeight: PropTypes.number,
-  iconName: PropTypes.string,
-};
-
-SwitchGroup.defaultProps = {
-  switchText: null,
-  toolTipText: null,
-  toolTipHeight: null,
-  iconName: null,
-};
+interface SwitchGroupProps {
+  switchText: string;
+  value: boolean;
+  onValueChange: (value: boolean) => void;
+  toolTipText: string;
+  toolTipHeight: number;
+  iconName: string;
+}
 
 const styles = StyleSheet.create({
   screenContainer: {

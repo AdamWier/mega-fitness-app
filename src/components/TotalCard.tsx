@@ -1,11 +1,11 @@
 import React from 'react';
 import { Card } from 'react-native-elements';
-import PropTypes from 'prop-types';
 import TotalListItem from '../components/TotalListItem';
 import { View, StyleSheet } from 'react-native';
 import { getTotal } from '../utilities';
+import { AddedFood } from '../Firebase/Documents/MealDocument';
 
-function TotalCard({ foods }): JSX.Element {
+function TotalCard({ foods }: TotalCardProps): JSX.Element {
   const getTotals = (): {
     calories: number;
     protein: number;
@@ -61,9 +61,9 @@ function TotalCard({ foods }): JSX.Element {
   );
 }
 
-TotalCard.propTypes = {
-  foods: PropTypes.array.isRequired,
-};
+interface TotalCardProps {
+  foods: AddedFood[];
+}
 
 const styles = StyleSheet.create({
   containerStyle: {

@@ -1,27 +1,35 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from 'react-native-elements';
 import { ScrollView, Alert } from 'react-native';
-import PropTypes from 'prop-types';
 import AmountPicker from '../components/AmountPicker';
 import FoodCard from '../components/FoodCard';
 import { container } from '../store/reducers/MealDocument';
-import { FormattedPortion } from '../ApiHelpers/CommonAPITypes';
+import { FoodDetails, FormattedPortion } from '../ApiHelpers/CommonAPITypes';
+import { StackNavigationProp } from '@react-navigation/stack/lib/typescript/src';
+import {
+  FoodJournalStackParams,
+  FoodJournalStackScreenNames,
+} from '../Navigation/FoodJournalStack/Screens';
+import { ConnectedProps } from 'react-redux';
+import { RouteProp } from '@react-navigation/native';
 
 function Details({
   navigation,
   route,
   mealDocument,
   updateMealDocument,
-}): JSX.Element {
+}: DetailsProps & ConnectedProps<typeof container>) {
   const { details } = route.params;
 
   const [amount, changeAmount] = useState('1');
   const [currentPortion, changePortion] = useState(details.portions[0]);
 
   const calculateNutrient = useCallback(
-    (nutrient: string): number =>
+    (nutrient: keyof FoodDetails): number =>
       Number(amount)
-        ? Math.round(details[nutrient] * Number(amount) * currentPortion.weight)
+        ? Math.round(
+            Number(details[nutrient]) * Number(amount) * currentPortion.weight
+          )
         : 0,
     [amount, currentPortion.weight, details]
   );
@@ -52,7 +60,7 @@ function Details({
     return amount !== '' && amount !== '0' && !!Number(amount);
   };
 
-  const addFood = (): void => {
+  const addFood = () => {
     const { calories, protein, fats, carbs } = currentCalculations;
     if (amountIsCorrect()) {
       updateMealDocument({
@@ -70,7 +78,7 @@ function Details({
           },
         ],
       });
-      navigation.navigate('Meal');
+      navigation.navigate(FoodJournalStackScreenNames.Meal);
     } else {
       Alert.alert('Warning', 'You must enter a valid amount.');
     }
@@ -100,7 +108,7 @@ function Details({
             const newPortion = details.portions.find(
               (portion: FormattedPortion) => selection === portion.description
             );
-            changePortion(newPortion);
+            newPortion && changePortion(newPortion);
           }}
         />
       </FoodCard>
@@ -114,15 +122,12 @@ function Details({
   );
 }
 
-Details.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func.isRequired,
-  }).isRequired,
-  route: PropTypes.shape({
-    params: PropTypes.object.isRequired,
-  }).isRequired,
-  mealDocument: PropTypes.object.isRequired,
-  updateMealDocument: PropTypes.func.isRequired,
-};
+interface DetailsProps {
+  navigation: StackNavigationProp<
+    FoodJournalStackParams,
+    FoodJournalStackScreenNames.Details
+  >;
+  route: RouteProp<FoodJournalStackParams, FoodJournalStackScreenNames.Details>;
+}
 
 export default container(Details);

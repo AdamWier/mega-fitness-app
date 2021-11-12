@@ -28,6 +28,8 @@ jobs:
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
       id: extract_branch
     - name: Publish to Expo
+      env:
+        NODE_OPTIONS: --max_old_space_size=4096
       run: expo publish --release-channel ${{ steps.extract_branch.outputs.branch }}
     - name: Generate jks
       run: expo fetch:android:keystore
@@ -43,7 +45,7 @@ jobs:
         EXPO_ANDROID_KEY_PASSWORD: ${{ secrets.KeyPassword }}
       run: turtle build:android -t apk -o ./mega-fitness-app.apk --keystore-path mega-fitness-app.jks --keystore-alias ${{ secrets.KeyAlias }} --release-channel ${{ steps.extract_branch.outputs.branch }}
     - name: Setup gcloud
-      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      uses: google-github-actions/setup-gcloud@master
       with:
         service_account_key: ${{ secrets.FirebaseKey }}
         project_id: ${{ secrets.GcloudProject }}

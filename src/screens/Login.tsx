@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
 import { Text, Input, Button, withTheme } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
 import { authService } from '../Firebase';
 import { container } from '../store/reducers/User';
+import { MyTheme } from '../StyleSheet';
+import { UserDocument } from '../Firebase/Documents/UserDocument';
+import { StackNavigationProp } from '@react-navigation/stack';
+import {
+  LoggedOutStackParams,
+  LoggedOutStackScreenNames,
+} from '../Navigation/LoggedOutStack/Screens';
 
-function Login({ navigation, storeLogin, theme }): JSX.Element {
+function Login({ navigation, storeLogin, theme }: LoginProps) {
   const [loginDetails, setLoginDetails] = useState({
     email: '',
     password: '',
   });
-
   const [isLoading, toggleLoading] = useState(false);
-
   const [error, updateError] = useState('');
 
   const updateLoginDetails = (value: string, field: string): void => {
@@ -25,17 +29,18 @@ function Login({ navigation, storeLogin, theme }): JSX.Element {
   const login = async (): Promise<void> => {
     toggleLoading(true);
     const { email, password } = loginDetails;
-    if (email && password) {
-      try {
-        const user = await authService.login(email, password);
-        storeLogin(user);
-      } catch ({ message }) {
-        toggleLoading(false);
-        updateError(message);
-      }
-    } else {
+    if (!email || !password) {
       toggleLoading(false);
-      updateError('Please enter your email and password.');
+      return updateError('Please enter your email and password.');
+    }
+
+    try {
+      const user = await authService.login(email, password);
+      storeLogin(user);
+      toggleLoading(false);
+    } catch ({ message }) {
+      toggleLoading(false);
+      updateError(message);
     }
   };
 
@@ -60,7 +65,7 @@ function Login({ navigation, storeLogin, theme }): JSX.Element {
       <Button
         title="Create an account"
         onPress={(): void => {
-          navigation.navigate('Account Creation');
+          navigation.navigate(LoggedOutStackScreenNames.AccountCreation);
         }}
         buttonStyle={{
           backgroundColor: theme.colors.info,
@@ -81,14 +86,13 @@ const style = StyleSheet.create({
   },
 });
 
-Login.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func.isRequired,
-  }).isRequired,
-  storeLogin: PropTypes.func.isRequired,
-  theme: PropTypes.shape({
-    colors: PropTypes.object.isRequired,
-  }).isRequired,
-};
+interface LoginProps {
+  navigation: StackNavigationProp<
+    LoggedOutStackParams,
+    LoggedOutStackScreenNames.Login
+  >;
+  storeLogin: (info: Partial<UserDocument>) => void;
+  theme: MyTheme;
+}
 
 export default container(withTheme(Login));

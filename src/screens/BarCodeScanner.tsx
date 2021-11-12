@@ -1,27 +1,33 @@
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Toast from 'react-native-simple-toast';
-import { BarCodeScanner } from 'expo-barcode-scanner';
-import OFDApiImpl from '../ApiHelpers/OFD/OFDApiImpl';
-import PropTypes from 'prop-types';
+import { BarCodeEvent, BarCodeScanner } from 'expo-barcode-scanner';
+import OFDApiImpl from '../ApiHelpers/OFD/OFDApi';
 import { useFocusEffect } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import {
+  FoodJournalStackParams,
+  FoodJournalStackScreenNames,
+} from '../Navigation/FoodJournalStack/Screens';
 
-export default function BarCodeScannerScreen({ navigation }) {
+export default function BarCodeScannerScreen({
+  navigation,
+}: BarCodeScannerScreenProps) {
   const [isFocused, toggleIsFocused] = useState(false);
 
-  const handleBarCodeScanned = async ({ data }) => {
+  const handleBarCodeScanned = async ({ data }: BarCodeEvent) => {
     try {
       const OFDApi = new OFDApiImpl();
       const details = await OFDApi.barcodeSearch(data);
       if (details) {
-        navigation.navigate('Details', { details });
+        navigation.navigate(FoodJournalStackScreenNames.Details, { details });
       } else {
         Toast.showWithGravity(
           'This food does not have enough information',
           Toast.SHORT,
           Toast.CENTER
         );
-        navigation.navigate('Search');
+        navigation.navigate(FoodJournalStackScreenNames.Search);
       }
     } catch (e) {
       Toast.showWithGravity(
@@ -29,7 +35,7 @@ export default function BarCodeScannerScreen({ navigation }) {
         Toast.SHORT,
         Toast.CENTER
       );
-      navigation.navigate('Search');
+      navigation.navigate(FoodJournalStackScreenNames.Search);
     }
   };
 
@@ -47,8 +53,9 @@ export default function BarCodeScannerScreen({ navigation }) {
   ) : null;
 }
 
-BarCodeScannerScreen.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func.isRequired,
-  }).isRequired,
-};
+interface BarCodeScannerScreenProps {
+  navigation: StackNavigationProp<
+    FoodJournalStackParams,
+    FoodJournalStackScreenNames.BarCodeScanner
+  >;
+}

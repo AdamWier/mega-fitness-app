@@ -1,33 +1,49 @@
-import React, { useEffect, useCallback, useMemo } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import PropTypes from 'prop-types';
+import React, { useEffect, useCallback, ComponentType } from 'react';
+import { NavigationContainer, RouteProp } from '@react-navigation/native';
 import { navTheme } from '../StyleSheet';
 import { container } from '../store/reducers/User';
 import { authService } from '../Firebase';
 import LoggedOutStack from './LoggedOutStack';
 import LoggedInDrawer from './LoggedInDrawer';
+import { UserDocument } from '../Firebase/Documents/UserDocument';
+import { UserContainerProps } from '../store/reducers/User';
 
-function Navigation({ user, storeLogin }): JSX.Element {
+type DynmaicOptions<
+  NavigationParams extends Record<string, object | undefined>,
+  NavigationOptions
+> = ({
+  route,
+}: {
+  route: RouteProp<NavigationParams, keyof NavigationParams>;
+}) => NavigationOptions;
+
+export type Screen<
+  ScreensEnum,
+  NavigationParams extends Record<string, object | undefined>,
+  NavigationOptions
+> = {
+  name: ScreensEnum;
+  component: ComponentType<any>;
+  options?:
+    | DynmaicOptions<NavigationParams, NavigationOptions>
+    | ReturnType<DynmaicOptions<NavigationParams, NavigationOptions>>;
+};
+
+function Navigation({ user, storeLogin }: {} & UserContainerProps) {
   const getCurrentUserCallback = useCallback(
-    () =>
-      authService.getCurrentUser(
-        (receivedUser: { uid: string; email: string }) => {
-          if (receivedUser) {
-            storeLogin(receivedUser);
-          }
+    async () =>
+      await authService.getCurrentUser((receivedUser: UserDocument) => {
+        if (receivedUser) {
+          storeLogin(receivedUser);
         }
-      ),
+      }),
     [storeLogin]
   );
 
-  const unsubscribe = useMemo(() => getCurrentUserCallback(), [
-    getCurrentUserCallback,
-  ]);
-
   useEffect(() => {
+    // Do not unsubscribe or we'll lose the user
     getCurrentUserCallback();
-    return async () => (await unsubscribe)();
-  }, [getCurrentUserCallback, unsubscribe]);
+  }, [getCurrentUserCallback]);
 
   return (
     <NavigationContainer theme={navTheme}>
@@ -35,13 +51,5 @@ function Navigation({ user, storeLogin }): JSX.Element {
     </NavigationContainer>
   );
 }
-
-Navigation.propTypes = {
-  user: PropTypes.shape({
-    uid: PropTypes.string,
-    email: PropTypes.string,
-  }).isRequired,
-  storeLogin: PropTypes.func.isRequired,
-};
 
 export default container(Navigation);

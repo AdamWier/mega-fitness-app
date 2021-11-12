@@ -3,7 +3,6 @@
     "name": "Mega fitness app",
     "slug": "mega-fitness-app",
     "privacy": "public",
-    "sdkVersion": "36.0.0",
     "platforms": [
       "android"
     ],

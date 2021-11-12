@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Overlay, Text, Input } from 'react-native-elements';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
+import { View, StyleSheet } from 'react-native';
+import ActivityIndicator from '../components/ActivityIndicator';
 
 const OverLayWithButton = ({
   onButtonPress,
@@ -14,7 +14,7 @@ const OverLayWithButton = ({
   header,
   icon,
   onClear,
-}) => (
+}: OverLayWithButtonProps) => (
   <View>
     <Button icon={icon} onPress={onButtonPress} />
     <Overlay
@@ -46,18 +46,18 @@ const OverLayWithButton = ({
   </View>
 );
 
-OverLayWithButton.propTypes = {
-  onButtonPress: PropTypes.func.isRequired,
-  isOverlayVisible: PropTypes.bool.isRequired,
-  toggleIsOverlayVisible: PropTypes.func.isRequired,
-  inputValue: PropTypes.string.isRequired,
-  setInputValue: PropTypes.func.isRequired,
-  onConfirmButtonPress: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired,
-  header: PropTypes.string.isRequired,
-  icon: PropTypes.element.isRequired,
-  onClear: PropTypes.func,
-};
+interface OverLayWithButtonProps {
+  onButtonPress: () => void;
+  isOverlayVisible: boolean;
+  toggleIsOverlayVisible: (value: boolean) => void;
+  inputValue: string;
+  setInputValue: (value: string) => void;
+  onConfirmButtonPress: () => void;
+  loading: boolean;
+  header: string;
+  icon: JSX.Element;
+  onClear?: (value: any) => void;
+}
 
 const styles = StyleSheet.create({
   overlayContentContainer: {

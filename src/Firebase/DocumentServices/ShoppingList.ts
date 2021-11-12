@@ -1,19 +1,18 @@
 import moment from 'moment';
-import ShoppingList from './ShoppingList';
 
-export default class ShoppingListDocumentServiceImpl implements ShoppingList {
+export default class ShoppingListService {
   firestore: firebase.firestore.Firestore;
 
   constructor(firestore: firebase.firestore.Firestore) {
     this.firestore = firestore;
   }
 
-  async createShoppingList(
+  public async createShoppingList(
     start: Date,
     end: Date,
     list: { [key: string]: any },
     uid: string
-  ): Promise<string | null> {
+  ) {
     const createdAt = new Date();
     const id = `${uid} - ${moment(start).format(
       'YYYY-MM-DD'
@@ -35,7 +34,10 @@ export default class ShoppingListDocumentServiceImpl implements ShoppingList {
     }
   }
 
-  updateShoppingList(list: { [key: string]: any }, uid: string): Promise<void> {
+  public updateShoppingList(
+    list: { [key: string]: any },
+    uid: string
+  ): Promise<void> {
     const modifiedAt = new Date();
     const { id, items } = list;
 
@@ -47,11 +49,7 @@ export default class ShoppingListDocumentServiceImpl implements ShoppingList {
     });
   }
 
-  async findDocument(
-    start: Date,
-    end: Date,
-    uid: string
-  ): Promise<{ id: string; items: { [key: string]: any } }> {
+  public async findDocument(start: Date, end: Date, uid: string) {
     const response = await this.getDocumentReference(start, end, uid).get();
     if (response.docs.length) {
       return response.docs.map(this.mapDocuments)[0];
@@ -74,9 +72,7 @@ export default class ShoppingListDocumentServiceImpl implements ShoppingList {
   }
 
   mapDocuments(
-    document: firebase.firestore.QueryDocumentSnapshot<
-      firebase.firestore.DocumentData
-    >
+    document: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>
   ): any {
     const data = document.data();
     return {

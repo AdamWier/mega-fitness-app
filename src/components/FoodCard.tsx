@@ -1,6 +1,5 @@
 import React from 'react';
 import { Card } from 'react-native-elements';
-import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import TotalListItem from '../components/TotalListItem';
 
@@ -15,7 +14,7 @@ export default function FoodCard({
   onAmountChange,
   expanded,
   children,
-}): JSX.Element {
+}: FoodCardProps) {
   return (
     <Card title={name}>
       <TotalListItem label="Calories:" total={calories} chevron={false} />
@@ -40,26 +39,15 @@ export default function FoodCard({
   );
 }
 
-FoodCard.propTypes = {
-  name: PropTypes.string.isRequired,
-  calories: PropTypes.string.isRequired,
-  protein: PropTypes.string.isRequired,
-  carbs: PropTypes.string.isRequired,
-  fats: PropTypes.string.isRequired,
-  amount: PropTypes.string,
-  amountDescription: PropTypes.string,
-  onAmountChange: PropTypes.func,
-  expanded: PropTypes.bool,
-  children: PropTypes.oneOfType([
-    PropTypes.node,
-    PropTypes.arrayOf(PropTypes.node),
-  ]),
-};
-
-FoodCard.defaultProps = {
-  children: null,
-  amountDescription: null,
-  onAmountChange: null,
-  expanded: false,
-  amount: null,
-};
+interface FoodCardProps {
+  name: string;
+  calories: string;
+  protein: string;
+  carbs: string;
+  fats: string;
+  amount?: string;
+  amountDescription?: string;
+  onAmountChange?: (value: string) => void;
+  expanded: boolean;
+  children?: React.ReactNode;
+}

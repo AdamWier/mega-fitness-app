@@ -12,6 +12,8 @@ web-report/
 .env*
 yarn-error.log
 src/Firebase/CorrectionScripts/*.json
+coverage/
+tests/__snapshots__
 
 # macOS
 .DS_Store
