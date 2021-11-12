@@ -23,7 +23,7 @@ describe('user reducer', () => {
 
   it('should return the initial state', () => {
     expect.assertions(1);
-    expect(userReducer(undefined, {} as any)).toStrictEqual(initialState);
+    expect(userReducer(undefined, {})).toStrictEqual(initialState);
   });
 
   it('should store new user information', () => {
