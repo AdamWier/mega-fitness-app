@@ -40,36 +40,38 @@ export default class AuthService {
     return this.auth.signOut();
   }
 
-  public async createUser(email: string, password: string) {
+  public async createUser(email: string, password: string, passwordConfirmation: string) {
     try {
+      this.checkUserDetails(email, password, passwordConfirmation);
       const credentials = await createUserWithEmailAndPassword(
         this.auth,
         email.trim(),
         password
       );
-      if (credentials.user) {
-        const uid = credentials.user.uid;
-        const user = { uid, email };
-        await this.user.create(user);
-        return user;
+      if (!credentials.user) {
+        throw ['There was an issue creating your account.'];
       }
-      throw 'There was an issue creating your account.';
+      const uid = credentials.user.uid;
+      const user = { uid, email };
+      await this.user.create(user);
+      return user;
     } catch (e) {
-      throw 'There was an issue creating your account.';
+      throw ['There was an issue creating your account.'];
     }
   }
 
-  public checkUserDetails(userInformation: {
-    email: string;
-    password: string;
-    passwordConfirmation: string;
-  }): string[] {
-    const { email, password, passwordConfirmation } = userInformation;
+  private checkUserDetails(
+    email: string,
+    password: string,
+    passwordConfirmation: string
+  ) {
     const errors = [
       ...this.verifyEmail(email.trim()),
       ...this.verifyPassword(password, passwordConfirmation),
     ];
-    return errors;
+    if (errors.length) {
+      throw errors;
+    }
   }
 
   private verifyPassword(
@@ -78,7 +80,7 @@ export default class AuthService {
   ): string[] {
     const errors = [];
     if (!password) {
-      errors.push('You must enter a password');
+      errors.push('You must enter a password.');
       return errors;
     }
     if (password !== passwordConfirmation) {

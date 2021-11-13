@@ -30,22 +30,17 @@ function AccountCreation({ navigation, storeLogin }: AccountCreationProps) {
 
   const createAcount = async (): Promise<void> => {
     toggleLoading(true);
-    const errorsMessages = authService.checkUserDetails(signUpDetails);
-    if (errorsMessages.length) {
+    try {
+      const user = await authService.createUser(
+        signUpDetails.email,
+        signUpDetails.password,
+        signUpDetails.passwordConfirmation
+      );
+      storeLogin(user);
+      navigation.navigate(FoodJournalStackScreenNames.FoodJournal);
+    } catch (message) {
       toggleLoading(false);
-      updateErrors(errorsMessages);
-    } else {
-      try {
-        const user = await authService.createUser(
-          signUpDetails.email,
-          signUpDetails.password
-        );
-        storeLogin(user);
-        navigation.navigate(FoodJournalStackScreenNames.FoodJournal);
-      } catch (message) {
-        toggleLoading(false);
-        updateErrors([message]);
-      }
+      updateErrors([message]);
     }
   };
 
