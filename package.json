@@ -19,6 +19,7 @@
     "collectCoverage": true,
     "collectCoverageFrom": [
       "**/*.{js,jsx,ts,tsx}",
+      "!**/main.js",
       "!**/coverage/**",
       "!**/node_modules/**",
       "!**/babel.config.js",
