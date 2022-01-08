@@ -111,5 +111,6 @@
   "private": true,
   "resolutions": {
     "d3-array": "2.3.3"
-  }
+  },
+  "packageManager": "yarn@3.1.1"
 }
