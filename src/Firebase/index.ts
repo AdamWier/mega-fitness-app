@@ -1,4 +1,6 @@
-import firebase from 'firebase';
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 import 'firebase/firestore';
 import {
   FIREBASE_API_KEY,
@@ -21,20 +23,14 @@ const firebaseConfig = {
   storageBucket: FIREBASE_STORAGE_BUCKET,
 };
 
-!firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
+// eslint-disable-next-line jest/require-hook
+initializeApp(firebaseConfig);
 
-export const dayDocumentService = new DayDocumentService(firebase.firestore());
-export const mealDocumentService = new MealDocumentService(
-  firebase.firestore()
-);
-export const userDocumentService = new UserDocumentService(
-  firebase.firestore()
-);
+export const dayDocumentService = new DayDocumentService(getFirestore());
+export const mealDocumentService = new MealDocumentService(getFirestore());
+export const userDocumentService = new UserDocumentService(getFirestore());
 export const shoppingListDocumentService = new ShoppingListDocumentService(
-  firebase.firestore()
+  getFirestore()
 );
 
-export const authService = new AuthService(
-  firebase.auth(),
-  userDocumentService
-);
+export const authService = new AuthService(getAuth(), userDocumentService);
