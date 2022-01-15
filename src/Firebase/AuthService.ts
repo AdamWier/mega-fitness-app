@@ -1,19 +1,22 @@
-import firebase from 'firebase';
+import {
+  Auth,
+  Unsubscribe,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from 'firebase/auth';
 import User from './DocumentServices/User';
 
 export default class AuthService {
-  private auth: firebase.auth.Auth;
+  private auth: Auth;
 
   private user: User;
 
-  constructor(auth: firebase.auth.Auth, user: User) {
+  constructor(auth: Auth, user: User) {
     this.auth = auth;
     this.user = user;
   }
 
-  public async getCurrentUser(
-    callback: Function
-  ): Promise<firebase.Unsubscribe> {
+  public async getCurrentUser(callback: Function): Promise<Unsubscribe> {
     return this.auth.onAuthStateChanged(async (user) => {
       if (user) {
         const document = await this.user.getDocument(user.uid);
@@ -24,7 +27,8 @@ export default class AuthService {
   }
 
   public async login(email: string, password: string) {
-    const { user } = await this.auth.signInWithEmailAndPassword(
+    const { user } = await signInWithEmailAndPassword(
+      this.auth,
       email.trim(),
       password
     );
@@ -38,7 +42,8 @@ export default class AuthService {
 
   public async createUser(email: string, password: string) {
     try {
-      const credentials = await this.auth.createUserWithEmailAndPassword(
+      const credentials = await createUserWithEmailAndPassword(
+        this.auth,
         email.trim(),
         password
       );
