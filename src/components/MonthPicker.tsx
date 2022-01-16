@@ -16,7 +16,7 @@ function MonthPicker({
       <Picker selectedValue={selectedMonth} onValueChange={onValueChange}>
         <Picker.Item
           label="Choose a month"
-          value={null}
+          value={undefined}
           color={theme.colors.info}
         />
         <Picker.Item label="January" value="01" color={theme.colors.info} />
