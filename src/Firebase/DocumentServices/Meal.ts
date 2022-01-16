@@ -1,10 +1,18 @@
+import {
+  DocumentData,
+  Firestore,
+  onSnapshot,
+  Query,
+  QueryDocumentSnapshot,
+  QuerySnapshot,
+  where,
+} from 'firebase/firestore';
 import moment from 'moment';
+import DocumentService from './DocumentService';
 
-export default class MealService {
-  firestore: firebase.firestore.Firestore;
-
-  constructor(firestore: firebase.firestore.Firestore) {
-    this.firestore = firestore;
+export default class MealService extends DocumentService {
+  constructor(firestore: Firestore) {
+    super(firestore, 'meals');
   }
 
   public create(
@@ -14,17 +22,15 @@ export default class MealService {
     eatenAt: Date
   ): Promise<void> {
     const createdAt = new Date();
-    return this.firestore
-      .collection('meals')
-      .doc(uid + '-' + createdAt.getTime() + '-' + name)
-      .set({
-        meal,
-        name: name || 'Untitled',
-        uid,
-        eatenAt,
-        createdAt,
-        deleted: false,
-      });
+    const id = uid + '-' + createdAt.getTime() + '-' + name;
+    return this.setDoc(id, {
+      meal,
+      name: name || 'Untitled',
+      uid,
+      eatenAt,
+      createdAt,
+      deleted: false,
+    });
   }
 
   public update(
@@ -35,29 +41,27 @@ export default class MealService {
     id: string
   ): Promise<void> {
     const updatedAt = new Date();
-    return this.firestore
-      .collection('meals')
-      .doc(id)
-      .update({
-        meal,
-        eatenAt,
-        deleted: false,
-        uid,
-        name: name || 'Untitled',
-        updatedAt,
-      });
+    return this.updateDoc(id, {
+      meal,
+      eatenAt,
+      deleted: false,
+      uid,
+      name: name || 'Untitled',
+      updatedAt,
+    });
   }
 
   public delete(id: string) {
     const updatedAt = new Date();
-    return this.firestore.collection('meals').doc(id).update({
+    return this.updateDoc(id, {
       deleted: true,
       updatedAt,
     });
   }
 
   public async findByDate(currentDate: Date, uid: string) {
-    const response = await this.getByDateRef(currentDate, uid).get();
+    const ref = this.getByDateRef(currentDate, uid);
+    const response = await this.query(ref);
     if (response.docs.length) {
       return response.docs.map(this.mapDocuments);
     }
@@ -69,25 +73,29 @@ export default class MealService {
     uid: string,
     updateCallback: Function
   ) {
-    return this.getByDateRef(currentDate, uid).onSnapshot((snapshot) => {
-      const updatedDocs = snapshot.docs.map(this.mapDocuments);
-      updateCallback(updatedDocs);
-    });
+    return onSnapshot(
+      this.getByDateRef(currentDate, uid),
+      (snapshot: QuerySnapshot<DocumentData>) => {
+        const updatedDocs = snapshot.docs.map(this.mapDocuments);
+        updateCallback(updatedDocs);
+      }
+    );
   }
 
   private getByDateRef(currentDate: Date, uid: string) {
     const start = moment(currentDate).startOf('day');
     const end = moment(start).endOf('day');
-    return this.firestore
-      .collection('meals')
-      .where('eatenAt', '>=', start.toDate())
-      .where('eatenAt', '<', end.toDate())
-      .where('uid', '==', uid)
-      .where('deleted', '==', false);
+    return this.buildQuery([
+      where('eatenAt', '>=', start.toDate()),
+      where('eatenAt', '<', end.toDate()),
+      where('uid', '==', uid),
+      where('deleted', '==', false),
+    ]);
   }
 
   public async findByWeek(beginningOfWeek: Date, uid: string) {
-    const response = await this.getByWeekRef(beginningOfWeek, uid).get();
+    const ref = this.getByWeekRef(beginningOfWeek, uid);
+    const response = await this.query(ref);
     if (response.docs.length) {
       return response.docs.map(this.mapDocuments);
     }
@@ -97,15 +105,15 @@ export default class MealService {
   private getByWeekRef(
     beginningOfWeek: Date,
     uid: string
-  ): firebase.firestore.Query<firebase.firestore.DocumentData> {
+  ): Query<DocumentData> {
     const start = moment(beginningOfWeek).startOf('isoWeek');
     const end = start.clone().endOf('isoWeek');
-    return this.firestore
-      .collection('meals')
-      .where('eatenAt', '>=', start.toDate())
-      .where('eatenAt', '<', end.toDate())
-      .where('uid', '==', uid)
-      .where('deleted', '==', false);
+    return this.buildQuery([
+      where('eatenAt', '>=', start.toDate()),
+      where('eatenAt', '<', end.toDate()),
+      where('uid', '==', uid),
+      where('deleted', '==', false),
+    ]);
   }
 
   public async findByDateRange(
@@ -113,7 +121,8 @@ export default class MealService {
     end: Date,
     uid: string
   ): Promise<{ [key: string]: any }[]> {
-    const response = await this.getByDateRangeRef(start, end, uid).get();
+    const ref = this.getByDateRangeRef(start, end, uid);
+    const response = await this.query(ref);
     if (response.docs.length) {
       return response.docs.map(this.mapDocuments);
     }
@@ -124,18 +133,16 @@ export default class MealService {
     start: Date,
     end: Date,
     uid: string
-  ): firebase.firestore.Query<firebase.firestore.DocumentData> {
-    return this.firestore
-      .collection('meals')
-      .where('eatenAt', '>=', start)
-      .where('eatenAt', '<=', end)
-      .where('uid', '==', uid)
-      .where('deleted', '==', false);
+  ): Query<DocumentData> {
+    return this.buildQuery([
+      where('eatenAt', '>=', start),
+      where('eatenAt', '<=', end),
+      where('uid', '==', uid),
+      where('deleted', '==', false),
+    ]);
   }
 
-  private mapDocuments(
-    document: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>
-  ) {
+  private mapDocuments(document: QueryDocumentSnapshot<DocumentData>) {
     const data = document.data();
     const { eatenAt, meal, name } = data;
     return {

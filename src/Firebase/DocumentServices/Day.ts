@@ -1,11 +1,21 @@
+import { Unsubscribe } from 'firebase/auth';
+import {
+  DocumentData,
+  Firestore,
+  limit,
+  onSnapshot,
+  Query,
+  QueryDocumentSnapshot,
+  QuerySnapshot,
+  where,
+} from 'firebase/firestore';
 import moment from 'moment';
 import DayDocument from '../Documents/DayDocument';
+import DocumentService from './DocumentService';
 
-export default class DayService {
-  firestore: firebase.firestore.Firestore;
-
-  constructor(firestore: firebase.firestore.Firestore) {
-    this.firestore = firestore;
+export default class DayService extends DocumentService {
+  constructor(firestore: Firestore) {
+    super(firestore, 'days');
   }
 
   public createGoal(
@@ -16,22 +26,17 @@ export default class DayService {
     const dayStartMoment = moment(currentDate).startOf('day');
     const date = dayStartMoment.toDate();
     const createdAt = new Date();
-    return this.firestore
-      .collection('days')
-      .doc(
-        uid +
-          '-' +
-          dayStartMoment.format('YYYY-MM-DD') +
-          '-' +
-          createdAt.getTime()
-      )
-      .set({
-        date,
-        goalCalories,
-        uid,
-        createdAt,
-        deleted: false,
-      });
+    const id = `${uid}-${dayStartMoment.format(
+      'YYYY-MM-DD'
+    )}-${createdAt.getTime()}`;
+
+    return this.setDoc(id, {
+      date,
+      goalCalories,
+      uid,
+      createdAt,
+      deleted: false,
+    });
   }
 
   public updateGoal(
@@ -42,7 +47,7 @@ export default class DayService {
   ): Promise<void> {
     const date = moment(currentDate).startOf('day').toDate();
     const updatedAt = new Date();
-    return this.firestore.collection('days').doc(id).update({
+    return this.updateDoc(id, {
       date,
       goalCalories,
       uid,
@@ -59,22 +64,16 @@ export default class DayService {
     const dayStartMoment = moment(currentDate).startOf('day');
     const date = dayStartMoment.toDate();
     const createdAt = new Date();
-    return this.firestore
-      .collection('days')
-      .doc(
-        uid +
-          '-' +
-          dayStartMoment.format('YYYY-MM-DD') +
-          '-' +
-          createdAt.getTime()
-      )
-      .set({
-        date,
-        weight,
-        uid,
-        createdAt,
-        deleted: false,
-      });
+    const id = `${uid}-${dayStartMoment.format(
+      'YYYY-MM-DD'
+    )}-${createdAt.getTime()}`;
+    return this.setDoc(id, {
+      date,
+      weight,
+      uid,
+      createdAt,
+      deleted: false,
+    });
   }
 
   public updateWeight(
@@ -85,7 +84,7 @@ export default class DayService {
   ): Promise<void> {
     const date = moment(currentDate).startOf('day').toDate();
     const updatedAt = new Date();
-    return this.firestore.collection('days').doc(id).update({
+    return this.updateDoc(id, {
       date,
       weight,
       uid,
@@ -102,22 +101,16 @@ export default class DayService {
     const dayStartMoment = moment(currentDate).startOf('day');
     const date = dayStartMoment.toDate();
     const createdAt = new Date();
-    return this.firestore
-      .collection('days')
-      .doc(
-        uid +
-          '-' +
-          dayStartMoment.format('YYYY-MM-DD') +
-          '-' +
-          createdAt.getTime()
-      )
-      .set({
-        date,
-        water,
-        uid,
-        createdAt,
-        deleted: false,
-      });
+    const id = `${uid}-${dayStartMoment.format(
+      'YYYY-MM-DD'
+    )}-${createdAt.getTime()}`;
+    return this.setDoc(id, {
+      date,
+      water,
+      uid,
+      createdAt,
+      deleted: false,
+    });
   }
 
   public updateWater(
@@ -128,7 +121,7 @@ export default class DayService {
   ): Promise<void> {
     const date = moment(currentDate).startOf('day').toDate();
     const updatedAt = new Date();
-    return this.firestore.collection('days').doc(id).update({
+    return this.updateDoc(id, {
       date,
       water,
       uid,
@@ -138,7 +131,8 @@ export default class DayService {
   }
 
   public async findDocument(date: Date, uid: string): Promise<DayDocument> {
-    const response = await this.getDocumentReference(date, uid).get();
+    const ref = this.getDocumentReference(date, uid);
+    const response = await this.query(ref);
     if (response.docs.length) {
       return response.docs.map(this.mapDocuments)[0];
     }
@@ -149,30 +143,31 @@ export default class DayService {
     date: Date,
     uid: string,
     updateCallback: Function
-  ): Function {
-    return this.getDocumentReference(date, uid).onSnapshot((snapshot) => {
-      const updatedDocs = snapshot.docs.map(this.mapDocuments)[0];
-      updateCallback(updatedDocs);
-    });
+  ): Unsubscribe {
+    return onSnapshot(
+      this.getDocumentReference(date, uid),
+      (snapshot: QuerySnapshot<DocumentData>) => {
+        const updatedDocs = snapshot.docs.map(this.mapDocuments)[0];
+        updateCallback(updatedDocs);
+      }
+    );
   }
 
-  private getDocumentReference(
-    date: Date,
-    uid: string
-  ): firebase.firestore.Query<firebase.firestore.DocumentData> {
-    return this.firestore
-      .collection('days')
-      .where('date', '==', moment(date).startOf('day').toDate())
-      .where('uid', '==', uid)
-      .where('deleted', '==', false)
-      .limit(1);
+  private getDocumentReference(date: Date, uid: string): Query<DocumentData> {
+    return this.buildQuery([
+      where('date', '==', moment(date).startOf('day').toDate()),
+      where('uid', '==', uid),
+      where('deleted', '==', false),
+      limit(1),
+    ]);
   }
 
   public async findByWeek(
     beginningOfWeek: Date,
     uid: string
   ): Promise<{ [key: string]: any }[]> {
-    const response = await this.getByWeekRef(beginningOfWeek, uid).get();
+    const ref = this.getByWeekRef(beginningOfWeek, uid);
+    const response = await this.query(ref);
     if (response.docs.length) {
       return response.docs.map(this.mapDocuments);
     }
@@ -182,22 +177,23 @@ export default class DayService {
   private getByWeekRef(
     beginningOfWeek: Date,
     uid: string
-  ): firebase.firestore.Query<firebase.firestore.DocumentData> {
+  ): Query<DocumentData> {
     const start = moment(beginningOfWeek).startOf('isoWeek');
     const end = start.clone().endOf('isoWeek');
-    return this.firestore
-      .collection('days')
-      .where('date', '>=', start.toDate())
-      .where('date', '<', end.toDate())
-      .where('uid', '==', uid)
-      .where('deleted', '==', false);
+    return this.buildQuery([
+      where('date', '>=', start.toDate()),
+      where('date', '<', end.toDate()),
+      where('uid', '==', uid),
+      where('deleted', '==', false),
+    ]);
   }
 
   public async findByMonth(
     beginningOfMonth: Date,
     uid: string
   ): Promise<{ [key: string]: any }[]> {
-    const response = await this.getByMonthRef(beginningOfMonth, uid).get();
+    const ref = this.getByMonthRef(beginningOfMonth, uid);
+    const response = await this.query(ref);
     if (response.docs.length) {
       return response.docs.map(this.mapDocuments);
     }
@@ -207,19 +203,19 @@ export default class DayService {
   private getByMonthRef(
     beginningOfWeek: Date,
     uid: string
-  ): firebase.firestore.Query<firebase.firestore.DocumentData> {
+  ): Query<DocumentData> {
     const start = moment(beginningOfWeek).startOf('month');
     const end = start.clone().endOf('month');
-    return this.firestore
-      .collection('days')
-      .where('date', '>=', start.toDate())
-      .where('date', '<', end.toDate())
-      .where('uid', '==', uid)
-      .where('deleted', '==', false);
+    return this.buildQuery([
+      where('date', '>=', start.toDate()),
+      where('date', '<', end.toDate()),
+      where('uid', '==', uid),
+      where('deleted', '==', false),
+    ]);
   }
 
   private mapDocuments(
-    document: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>
+    document: QueryDocumentSnapshot<DocumentData>
   ): DayDocument {
     const data = document.data();
     return {
