@@ -23,20 +23,7 @@ export default class DayService extends DocumentService {
     goalCalories: number,
     uid: string
   ): Promise<void> {
-    const dayStartMoment = moment(currentDate).startOf('day');
-    const date = dayStartMoment.toDate();
-    const createdAt = new Date();
-    const id = `${uid}-${dayStartMoment.format(
-      'YYYY-MM-DD'
-    )}-${createdAt.getTime()}`;
-
-    return this.setDoc(id, {
-      date,
-      goalCalories,
-      uid,
-      createdAt,
-      deleted: false,
-    });
+    return this.createDayDoc(currentDate, uid, 'goalCalories', goalCalories);
   }
 
   public updateGoal(
@@ -45,15 +32,13 @@ export default class DayService extends DocumentService {
     uid: string,
     id: string
   ): Promise<void> {
-    const date = moment(currentDate).startOf('day').toDate();
-    const updatedAt = new Date();
-    return this.updateDoc(id, {
-      date,
+    return this.updateDayDoc(
+      id,
+      'goalCalories',
       goalCalories,
       uid,
-      updatedAt,
-      deleted: false,
-    });
+      currentDate
+    );
   }
 
   public createWeight(
@@ -61,19 +46,7 @@ export default class DayService extends DocumentService {
     weight: number,
     uid: string
   ): Promise<void> {
-    const dayStartMoment = moment(currentDate).startOf('day');
-    const date = dayStartMoment.toDate();
-    const createdAt = new Date();
-    const id = `${uid}-${dayStartMoment.format(
-      'YYYY-MM-DD'
-    )}-${createdAt.getTime()}`;
-    return this.setDoc(id, {
-      date,
-      weight,
-      uid,
-      createdAt,
-      deleted: false,
-    });
+    return this.createDayDoc(currentDate, uid, 'weight', weight);
   }
 
   public updateWeight(
@@ -82,15 +55,7 @@ export default class DayService extends DocumentService {
     uid: string,
     id: string
   ): Promise<void> {
-    const date = moment(currentDate).startOf('day').toDate();
-    const updatedAt = new Date();
-    return this.updateDoc(id, {
-      date,
-      weight,
-      uid,
-      updatedAt,
-      deleted: false,
-    });
+    return this.updateDayDoc(id, 'weight', weight, uid, currentDate);
   }
 
   public createWater(
@@ -98,19 +63,7 @@ export default class DayService extends DocumentService {
     water: number,
     uid: string
   ): Promise<void> {
-    const dayStartMoment = moment(currentDate).startOf('day');
-    const date = dayStartMoment.toDate();
-    const createdAt = new Date();
-    const id = `${uid}-${dayStartMoment.format(
-      'YYYY-MM-DD'
-    )}-${createdAt.getTime()}`;
-    return this.setDoc(id, {
-      date,
-      water,
-      uid,
-      createdAt,
-      deleted: false,
-    });
+    return this.createDayDoc(currentDate, uid, 'water', water);
   }
 
   public updateWater(
@@ -119,24 +72,13 @@ export default class DayService extends DocumentService {
     uid: string,
     id: string
   ): Promise<void> {
-    const date = moment(currentDate).startOf('day').toDate();
-    const updatedAt = new Date();
-    return this.updateDoc(id, {
-      date,
-      water,
-      uid,
-      updatedAt,
-      deleted: false,
-    });
+    return this.updateDayDoc(id, 'water', water, uid, currentDate);
   }
 
   public async findDocument(date: Date, uid: string): Promise<DayDocument> {
     const ref = this.getDocumentReference(date, uid);
-    const response = await this.query(ref);
-    if (response.docs.length) {
-      return response.docs.map(this.mapDocuments)[0];
-    }
-    return {};
+    const documents = await this.handleReponse(ref, this.mapDocuments);
+    return documents.pop() || {};
   }
 
   public getDocumentListener(
@@ -166,20 +108,17 @@ export default class DayService extends DocumentService {
     beginningOfWeek: Date,
     uid: string
   ): Promise<{ [key: string]: any }[]> {
-    const ref = this.getByWeekRef(beginningOfWeek, uid);
-    const response = await this.query(ref);
-    if (response.docs.length) {
-      return response.docs.map(this.mapDocuments);
-    }
-    return [];
+    const ref = this.getByPeriodRef(beginningOfWeek, uid, 'isoWeek');
+    return this.handleReponse(ref, this.mapDocuments);
   }
 
-  private getByWeekRef(
-    beginningOfWeek: Date,
-    uid: string
+  private getByPeriodRef(
+    beginning: Date,
+    uid: string,
+    period: moment.unitOfTime.StartOf
   ): Query<DocumentData> {
-    const start = moment(beginningOfWeek).startOf('isoWeek');
-    const end = start.clone().endOf('isoWeek');
+    const start = moment(beginning).startOf(period);
+    const end = start.clone().endOf(period);
     return this.buildQuery([
       where('date', '>=', start.toDate()),
       where('date', '<', end.toDate()),
@@ -188,30 +127,9 @@ export default class DayService extends DocumentService {
     ]);
   }
 
-  public async findByMonth(
-    beginningOfMonth: Date,
-    uid: string
-  ): Promise<{ [key: string]: any }[]> {
-    const ref = this.getByMonthRef(beginningOfMonth, uid);
-    const response = await this.query(ref);
-    if (response.docs.length) {
-      return response.docs.map(this.mapDocuments);
-    }
-    return [];
-  }
-
-  private getByMonthRef(
-    beginningOfWeek: Date,
-    uid: string
-  ): Query<DocumentData> {
-    const start = moment(beginningOfWeek).startOf('month');
-    const end = start.clone().endOf('month');
-    return this.buildQuery([
-      where('date', '>=', start.toDate()),
-      where('date', '<', end.toDate()),
-      where('uid', '==', uid),
-      where('deleted', '==', false),
-    ]);
+  public async findByMonth(beginningOfMonth: Date, uid: string) {
+    const ref = this.getByPeriodRef(beginningOfMonth, uid, 'month');
+    return this.handleReponse(ref, this.mapDocuments);
   }
 
   private mapDocuments(
@@ -225,5 +143,45 @@ export default class DayService extends DocumentService {
       weight: data.weight,
       water: data.water,
     };
+  }
+
+  private createDayDoc(
+    currentDate: Date,
+    uid: string,
+    propertyToUpdate: keyof DayDocument,
+    newValue: any
+  ) {
+    const dayStartMoment = moment(currentDate).startOf('day');
+    const date = dayStartMoment.toDate();
+    const createdAt = new Date();
+    const id = `${uid}-${dayStartMoment.format(
+      'YYYY-MM-DD'
+    )}-${createdAt.getTime()}`;
+
+    return this.setDoc(id, {
+      date,
+      [propertyToUpdate]: newValue,
+      uid,
+      createdAt,
+      deleted: false,
+    });
+  }
+
+  private updateDayDoc(
+    id: string,
+    propertyToUpdate: keyof DayDocument,
+    newValue: any,
+    uid: string,
+    currentDate: Date
+  ) {
+    const date = moment(currentDate).startOf('day').toDate();
+    const updatedAt = new Date();
+    return this.updateDoc(id, {
+      date,
+      [propertyToUpdate]: newValue,
+      uid,
+      updatedAt,
+      deleted: false,
+    });
   }
 }

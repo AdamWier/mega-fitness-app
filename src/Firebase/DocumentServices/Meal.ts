@@ -8,6 +8,7 @@ import {
   where,
 } from 'firebase/firestore';
 import moment from 'moment';
+import MealDocument from '../Documents/MealDocument';
 import DocumentService from './DocumentService';
 
 export default class MealService extends DocumentService {
@@ -59,13 +60,15 @@ export default class MealService extends DocumentService {
     });
   }
 
-  public async findByDate(currentDate: Date, uid: string) {
+  public async findByDate(
+    currentDate: Date,
+    uid: string
+  ): Promise<MealDocument[]> {
     const ref = this.getByDateRef(currentDate, uid);
-    const response = await this.query(ref);
-    if (response.docs.length) {
-      return response.docs.map(this.mapDocuments);
-    }
-    return [];
+    return this.handleReponse(
+      ref,
+      this.mapDocuments
+    ) as unknown as MealDocument[];
   }
 
   public getFindByDateListener(
@@ -95,11 +98,7 @@ export default class MealService extends DocumentService {
 
   public async findByWeek(beginningOfWeek: Date, uid: string) {
     const ref = this.getByWeekRef(beginningOfWeek, uid);
-    const response = await this.query(ref);
-    if (response.docs.length) {
-      return response.docs.map(this.mapDocuments);
-    }
-    return [];
+    return this.handleReponse(ref, this.mapDocuments);
   }
 
   private getByWeekRef(
@@ -122,11 +121,7 @@ export default class MealService extends DocumentService {
     uid: string
   ): Promise<{ [key: string]: any }[]> {
     const ref = this.getByDateRangeRef(start, end, uid);
-    const response = await this.query(ref);
-    if (response.docs.length) {
-      return response.docs.map(this.mapDocuments);
-    }
-    return [];
+    return this.handleReponse(ref, this.mapDocuments);
   }
 
   private getByDateRangeRef(

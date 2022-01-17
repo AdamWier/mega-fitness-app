@@ -4,8 +4,10 @@ import {
   Firestore,
   limit,
   onSnapshot,
+  QueryDocumentSnapshot,
   where,
 } from 'firebase/firestore';
+import { UserDocument } from '../Documents/UserDocument';
 import DocumentService from './DocumentService';
 
 export default class UserService extends DocumentService {
@@ -24,8 +26,20 @@ export default class UserService extends DocumentService {
 
   public async getDocument(uid: string) {
     const ref = this.buildQuery([where('uid', '==', uid), limit(1)]);
-    const response = await this.query(ref);
-    return response.docs.length === 1 ? response.docs[0].data() : null;
+    const docs = await this.handleReponse(ref, this.mapDocuments);
+    return docs.pop() || null;
+  }
+
+  private mapDocuments(
+    document: QueryDocumentSnapshot<DocumentData>
+  ): UserDocument {
+    const data = document.data();
+    return {
+      email: data.email,
+      goalCalories: data.goalCalories,
+      uid: data.uid,
+      waterGoal: data.waterGoal,
+    };
   }
 
   public updateCalorieGoal(uid: string, goalCalories: number): Promise<void> {

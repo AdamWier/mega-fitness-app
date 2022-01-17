@@ -7,6 +7,7 @@ import {
   where,
 } from 'firebase/firestore';
 import moment from 'moment';
+import ShoppingListDocument from '../Documents/ShoppingListDocument';
 import DocumentService from './DocumentService';
 
 export default class ShoppingListService extends DocumentService {
@@ -56,13 +57,14 @@ export default class ShoppingListService extends DocumentService {
     });
   }
 
-  public async findDocument(start: Date, end: Date, uid: string) {
+  public async findDocument(
+    start: Date,
+    end: Date,
+    uid: string
+  ): Promise<ShoppingListDocument | null> {
     const ref = this.getDocumentReference(start, end, uid);
-    const response = await this.query(ref);
-    if (response.docs.length) {
-      return response.docs.map(this.mapDocuments)[0];
-    }
-    return null;
+    const docs = await this.handleReponse(ref, this.mapDocuments);
+    return (docs.pop() as unknown as ShoppingListDocument | undefined) || null;
   }
 
   getDocumentReference(
@@ -79,7 +81,9 @@ export default class ShoppingListService extends DocumentService {
     ]);
   }
 
-  mapDocuments(document: QueryDocumentSnapshot<DocumentData>) {
+  mapDocuments(
+    document: QueryDocumentSnapshot<DocumentData>
+  ): ShoppingListDocument {
     const data = document.data();
     return {
       id: document.id,

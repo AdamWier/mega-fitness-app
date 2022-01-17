@@ -8,6 +8,7 @@ import {
   query,
   Query,
   QueryConstraint,
+  QueryDocumentSnapshot,
   setDoc,
   updateDoc,
 } from 'firebase/firestore';
@@ -26,5 +27,18 @@ export default class DocumentService {
     setDoc(this.getDoc(id), document);
   protected buildQuery = (queryParts: QueryConstraint[]) =>
     query(this.collection, ...queryParts);
-  protected query = (query: Query<DocumentData>) => getDocs(query);
+  private query = (query: Query<DocumentData>) => getDocs(query);
+
+  protected handleReponse = async (
+    ref: Query<DocumentData>,
+    mapper: (
+      document: QueryDocumentSnapshot<DocumentData>
+    ) => Record<string, any>
+  ) => {
+    const response = await this.query(ref);
+    if (response.docs.length) {
+      return response.docs.map(mapper);
+    }
+    return [];
+  };
 }
