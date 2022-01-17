@@ -1,13 +1,23 @@
-export default class UserService {
-  firestore: firebase.firestore.Firestore;
+import {
+  DocumentData,
+  DocumentSnapshot,
+  Firestore,
+  limit,
+  onSnapshot,
+  QueryDocumentSnapshot,
+  where,
+} from 'firebase/firestore';
+import { UserDocument } from '../Documents/UserDocument';
+import DocumentService from './DocumentService';
 
-  constructor(firestore: firebase.firestore.Firestore) {
-    this.firestore = firestore;
+export default class UserService extends DocumentService {
+  constructor(firestore: Firestore) {
+    super(firestore, 'users');
   }
 
   public create({ uid, email }: { uid: string; email: string }): Promise<void> {
     const createdAt = new Date();
-    return this.firestore.collection('users').doc(uid).set({
+    return this.setDoc(uid, {
       uid,
       email,
       createdAt,
@@ -15,17 +25,26 @@ export default class UserService {
   }
 
   public async getDocument(uid: string) {
-    const response = await this.firestore
-      .collection('users')
-      .where('uid', '==', uid)
-      .limit(1)
-      .get();
-    return response.docs.length === 1 ? response.docs[0].data() : null;
+    const ref = this.buildQuery([where('uid', '==', uid), limit(1)]);
+    const docs = await this.handleReponse(ref, this.mapDocuments);
+    return docs.pop() || null;
+  }
+
+  private mapDocuments(
+    document: QueryDocumentSnapshot<DocumentData>
+  ): UserDocument {
+    const data = document.data();
+    return {
+      email: data.email,
+      goalCalories: data.goalCalories,
+      uid: data.uid,
+      waterGoal: data.waterGoal,
+    };
   }
 
   public updateCalorieGoal(uid: string, goalCalories: number): Promise<void> {
     const updatedAt = new Date();
-    return this.firestore.collection('users').doc(uid).update({
+    return this.updateDoc(uid, {
       goalCalories,
       updatedAt,
     });
@@ -33,18 +52,18 @@ export default class UserService {
 
   public updateWaterGoal(uid: string, waterGoal: number): Promise<void> {
     const updatedAt = new Date();
-    return this.firestore.collection('users').doc(uid).update({
+    return this.updateDoc(uid, {
       waterGoal,
       updatedAt,
     });
   }
 
   public getDocumentListener(uid: string, updateCallback: Function): Function {
-    return this.firestore
-      .collection('users')
-      .doc(uid)
-      .onSnapshot((snapshot) => {
+    return onSnapshot(
+      this.getDoc(uid),
+      (snapshot: DocumentSnapshot<DocumentData>) => {
         updateCallback(snapshot.data());
-      });
+      }
+    );
   }
 }

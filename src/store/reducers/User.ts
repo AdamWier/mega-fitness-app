@@ -1,4 +1,4 @@
-import { firestore } from 'firebase';
+import { Timestamp } from 'firebase/firestore';
 import { connect, ConnectedProps } from 'react-redux';
 import { Dispatch } from 'redux';
 import { UserDocument } from '../../Firebase/Documents/UserDocument';
@@ -13,7 +13,7 @@ export type UserContainerProps = ConnectedProps<typeof container>;
 export interface InitialState {
   uid?: string;
   email?: string;
-  updatedAt?: firestore.Timestamp;
+  updatedAt?: Timestamp;
   goalCalories: number;
   waterGoal: number;
 }

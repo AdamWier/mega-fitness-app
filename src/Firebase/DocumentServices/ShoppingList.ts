@@ -1,10 +1,18 @@
+import {
+  DocumentData,
+  Firestore,
+  limit,
+  Query,
+  QueryDocumentSnapshot,
+  where,
+} from 'firebase/firestore';
 import moment from 'moment';
+import ShoppingListDocument from '../Documents/ShoppingListDocument';
+import DocumentService from './DocumentService';
 
-export default class ShoppingListService {
-  firestore: firebase.firestore.Firestore;
-
-  constructor(firestore: firebase.firestore.Firestore) {
-    this.firestore = firestore;
+export default class ShoppingListService extends DocumentService {
+  constructor(firestore: Firestore) {
+    super(firestore, 'shoppingList');
   }
 
   public async createShoppingList(
@@ -20,7 +28,7 @@ export default class ShoppingListService {
     const { items } = list;
 
     try {
-      await this.firestore.collection('shoppingList').doc(id).set({
+      await this.setDoc(id, {
         start,
         end,
         items,
@@ -41,7 +49,7 @@ export default class ShoppingListService {
     const modifiedAt = new Date();
     const { id, items } = list;
 
-    return this.firestore.collection('shoppingList').doc(id).update({
+    return this.updateDoc(id, {
       items,
       uid,
       modifiedAt,
@@ -49,31 +57,33 @@ export default class ShoppingListService {
     });
   }
 
-  public async findDocument(start: Date, end: Date, uid: string) {
-    const response = await this.getDocumentReference(start, end, uid).get();
-    if (response.docs.length) {
-      return response.docs.map(this.mapDocuments)[0];
-    }
-    return null;
+  public async findDocument(
+    start: Date,
+    end: Date,
+    uid: string
+  ): Promise<ShoppingListDocument | null> {
+    const ref = this.getDocumentReference(start, end, uid);
+    const docs = await this.handleReponse(ref, this.mapDocuments);
+    return (docs.pop() as unknown as ShoppingListDocument | undefined) || null;
   }
 
   getDocumentReference(
     start: Date,
     end: Date,
     uid: string
-  ): firebase.firestore.Query<firebase.firestore.DocumentData> {
-    return this.firestore
-      .collection('shoppingList')
-      .where('start', '==', start)
-      .where('end', '==', end)
-      .where('uid', '==', uid)
-      .where('deleted', '==', false)
-      .limit(1);
+  ): Query<DocumentData> {
+    return this.buildQuery([
+      where('start', '==', start),
+      where('end', '==', end),
+      where('uid', '==', uid),
+      where('deleted', '==', false),
+      limit(1),
+    ]);
   }
 
   mapDocuments(
-    document: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>
-  ): any {
+    document: QueryDocumentSnapshot<DocumentData>
+  ): ShoppingListDocument {
     const data = document.data();
     return {
       id: document.id,

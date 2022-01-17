@@ -9,14 +9,14 @@ function MonthPicker({
   selectedMonth,
   onValueChange,
   theme,
-}: MonthPickerProps): JSX.Element {
+}: MonthPickerProps) {
   return (
     <View>
       <Text h4>Select a month</Text>
       <Picker selectedValue={selectedMonth} onValueChange={onValueChange}>
         <Picker.Item
           label="Choose a month"
-          value={null}
+          value={undefined}
           color={theme.colors.info}
         />
         <Picker.Item label="January" value="01" color={theme.colors.info} />
