@@ -11857,7 +11857,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-test-renderer@npm:~17.0.1":
+"react-test-renderer@npm:17, react-test-renderer@npm:~17.0.1":
   version: 17.0.2
   resolution: "react-test-renderer@npm:17.0.2"
   dependencies:
@@ -12369,6 +12369,7 @@ __metadata:
     react-native-svg: 12.1.1
     react-native-web: 0.17.1
     react-redux: ^7.2.0
+    react-test-renderer: 17
     redux: ^4.0.5
     typescript: ~4.3.5
     victory-native: ^34.3.0

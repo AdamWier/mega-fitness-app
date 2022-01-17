@@ -14,8 +14,7 @@
       "<rootDir>/tests/**/*.{js,jsx,ts,tsx}"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!victory-native)/",
-      "node_modules/(?!(jest-)?react-native|unimodules-permissions-interface|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|sentry-expo|native-base|victory-*)"
+      "node_modules/(?!victory-native)/"
     ],
     "collectCoverage": true,
     "collectCoverageFrom": [
@@ -107,6 +106,7 @@
     "jest-fetch-mock": "^3.0.3",
     "lint-staged": "^10.1.6",
     "prettier": "^2.0.2",
+    "react-test-renderer": "17",
     "typescript": "~4.3.5"
   },
   "private": true,
