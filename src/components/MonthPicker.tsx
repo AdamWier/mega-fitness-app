@@ -9,7 +9,7 @@ function MonthPicker({
   selectedMonth,
   onValueChange,
   theme,
-}: MonthPickerProps): JSX.Element {
+}: MonthPickerProps) {
   return (
     <View>
       <Text h4>Select a month</Text>

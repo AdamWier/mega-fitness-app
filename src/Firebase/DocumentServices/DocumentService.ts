@@ -27,7 +27,8 @@ export default class DocumentService {
     setDoc(this.getDoc(id), document);
   protected buildQuery = (queryParts: QueryConstraint[]) =>
     query(this.collection, ...queryParts);
-  private query = (query: Query<DocumentData>) => getDocs(query);
+  private executeQuery = (queryToExcute: Query<DocumentData>) =>
+    getDocs(queryToExcute);
 
   protected handleReponse = async (
     ref: Query<DocumentData>,
@@ -35,7 +36,7 @@ export default class DocumentService {
       document: QueryDocumentSnapshot<DocumentData>
     ) => Record<string, any>
   ) => {
-    const response = await this.query(ref);
+    const response = await this.executeQuery(ref);
     if (response.docs.length) {
       return response.docs.map(mapper);
     }
