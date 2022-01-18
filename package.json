@@ -54,7 +54,7 @@
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
-    "react-native-calendars": "https://github.com/AdamWier/react-native-calendars",
+    "react-native-calendars": "git+https://github.com/AdamWier/react-native-calendars",
     "react-native-dotenv": "^0.2.0",
     "react-native-elements": "^1.2.7",
     "react-native-gesture-handler": "~2.1.0",

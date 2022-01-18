@@ -15,9 +15,9 @@ jobs:
     - name: Set up node
       uses: actions/setup-node@v1
       with:
-        node-version: '12.13.1'
+        node-version: '16.13.1'
     - name: Install packages
-      run: yarn install --frozen-lockfile
+      run: yarn install
     - name: Create env file
       run: echo "${{ secrets.EnvFile }}" > .env
     - name: Set up expo cli
@@ -36,7 +36,7 @@ jobs:
     - name: Install turtle cli
       run: npm i -g turtle-cli
     - name: Set up turtle cli
-      run: turtle setup:android --sdk-version 36.0.0
+      run: turtle setup:android --sdk-version 44.0.0
     - name: Turtle build
       env: 
         EXPO_USERNAME: ${{ secrets.ExpoUsername }}
@@ -45,7 +45,7 @@ jobs:
         EXPO_ANDROID_KEY_PASSWORD: ${{ secrets.KeyPassword }}
       run: turtle build:android -t apk -o ./mega-fitness-app.apk --keystore-path mega-fitness-app.jks --keystore-alias ${{ secrets.KeyAlias }} --release-channel ${{ steps.extract_branch.outputs.branch }}
     - name: Setup gcloud
-      uses: google-github-actions/setup-gcloud@master
+      uses: google-github-actions/setup-gcloud@v0
       with:
         service_account_key: ${{ secrets.FirebaseKey }}
         project_id: ${{ secrets.GcloudProject }}
