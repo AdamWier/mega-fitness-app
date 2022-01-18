@@ -26,7 +26,7 @@ function WeightTracking({ user }: UserContainerProps) {
   const onValueChange = async (value: string) => {
     setSelectedMonth(value);
     if (value) {
-      const beginningOfMonth = moment(`2020-${value}-01`).toDate();
+      const beginningOfMonth = moment(`2022-${value}-01`).toDate();
       const records = user.uid
         ? await dayDocumentService.findByMonth(beginningOfMonth, user.uid)
         : [];
@@ -72,7 +72,7 @@ function WeightTracking({ user }: UserContainerProps) {
     records
       .filter((record) => record.weight)
       .map(({ date, weight }) => ({
-        x: moment(date).format('MMM D'),
+        x: date.getTime(),
         y: weight,
       }));
 
