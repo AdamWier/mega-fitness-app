@@ -14,11 +14,6 @@ function MonthPicker({
     <View>
       <Text h4>Select a month</Text>
       <Picker selectedValue={selectedMonth} onValueChange={onValueChange}>
-        <Picker.Item
-          label="Choose a month"
-          value={undefined}
-          color={theme.colors.info}
-        />
         <Picker.Item label="January" value="01" color={theme.colors.info} />
         <Picker.Item label="February" value="02" color={theme.colors.info} />
         <Picker.Item label="March" value="03" color={theme.colors.info} />
@@ -38,7 +33,7 @@ function MonthPicker({
 
 interface MonthPickerProps {
   selectedMonth: string;
-  onValueChange: (value: any) => Promise<void>;
+  onValueChange: (value: any) => void;
   theme: MyTheme;
 }
 

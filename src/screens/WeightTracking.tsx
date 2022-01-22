@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { container, UserContainerProps } from '../store/reducers/User';
 import CustomHeader from '../components/CustomHeader';
@@ -7,68 +7,77 @@ import { dayDocumentService } from '../Firebase/index';
 import MonthPicker from '../components/MonthPicker';
 import WeightGraph from '../components/WeightGraph';
 import { Text } from 'react-native-elements';
+import { useEffect } from 'react';
+import DayDocument from '../Firebase/Documents/DayDocument';
+import { useMemo } from 'react';
 
-interface Record {
-  x: string;
-  y: any;
+interface DataPoint {
+  x: number;
+  y: number | undefined;
 }
-const emptyReport = {
-  records: [] as Record[],
-  minWeight: null,
-  maxWeight: null,
-  averageWeight: null,
-};
+interface WeightReport {
+  records: DataPoint[];
+  minWeight: number;
+  maxWeight: number;
+  averageWeight: number;
+}
 
 function WeightTracking({ user }: UserContainerProps) {
-  const [selectedMonth, setSelectedMonth] = useState('');
-  const [weightReport, setWeightReport] = useState(emptyReport);
+  const currentMonth = useMemo(
+    () => (moment().month() + 1).toString().padStart(2, '0'),
+    []
+  );
+  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+  const [weightReport, setWeightReport] = useState<WeightReport>({
+    averageWeight: 0,
+    maxWeight: 0,
+    minWeight: 0,
+    records: [],
+  });
 
-  const onValueChange = async (value: string) => {
-    setSelectedMonth(value);
-    if (value) {
-      const beginningOfMonth = moment(`2022-${value}-01`).toDate();
+  const findMax = (past: number, current: number) => Math.max(past, current);
+
+  const findMin = (past: number, current: number) => Math.min(past, current);
+
+  const calculateAverage = (
+    accumulator: number,
+    currentValue: number,
+    index: number,
+    array: number[]
+  ) =>
+    index === array.length - 1
+      ? Math.round(((currentValue + accumulator) / array.length) * 10) / 10
+      : accumulator + currentValue;
+
+  const createDataPoints = useCallback((records: DayDocument[]) => {
+    const weights = records
+      .map((record) => record.weight)
+      .filter((weight): weight is number => !!weight);
+
+    return {
+      records: adaptRecordsForGraph(records),
+      minWeight: weights.reduce(findMin),
+      maxWeight: weights.reduce(findMax),
+      averageWeight: weights.reduce(calculateAverage),
+    };
+  }, []);
+
+  const getWeights = useCallback(
+    async (beginningOfMonth: Date) => {
       const records = user.uid
         ? await dayDocumentService.findByMonth(beginningOfMonth, user.uid)
         : [];
-      if (records.length) {
-        const weights = records
-          .filter((record) => !!record.weight)
-          .map((record) => record.weight);
-        const maxWeight =
-          weights.reduce(
-            (accumulator, currentValue) => Math.max(accumulator, currentValue),
-            0
-          ) || null;
-        const minWeight = maxWeight
-          ? weights.reduce((accumulator, currentValue) =>
-              Math.min(accumulator, currentValue)
-            )
-          : null;
-        const averageWeight =
-          weights.reduce(
-            (accumulator, currentValue, index, array) =>
-              index === array.length - 1
-                ? Math.round(
-                    ((currentValue + accumulator) / array.length) * 10
-                  ) / 10
-                : accumulator + currentValue,
-            0
-          ) || null;
-        setWeightReport({
-          records: adaptRecordsForGraph(records),
-          minWeight,
-          maxWeight,
-          averageWeight,
-        });
-      } else {
-        setWeightReport(emptyReport);
-      }
-    } else {
-      setWeightReport(emptyReport);
-    }
-  };
+      console.log(records);
+      setWeightReport(createDataPoints(records as DayDocument[]));
+    },
+    [setWeightReport, createDataPoints, user.uid]
+  );
 
-  const adaptRecordsForGraph = (records: { [key: string]: any }[]) =>
+  useEffect(() => {
+    getWeights(moment(`2022-${selectedMonth}-01`).toDate());
+  }, [getWeights, selectedMonth]);
+
+  const adaptRecordsForGraph = (records: DayDocument[]) =>
     records
       .filter((record) => record.weight)
       .map(({ date, weight }) => ({
@@ -80,7 +89,7 @@ function WeightTracking({ user }: UserContainerProps) {
     <View>
       <CustomHeader title="Weight tracking" />
       <MonthPicker
-        onValueChange={onValueChange}
+        onValueChange={setSelectedMonth}
         selectedMonth={selectedMonth}
       />
       <View style={styles.reportHeader}>
