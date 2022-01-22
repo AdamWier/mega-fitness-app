@@ -3,7 +3,7 @@ import { Text } from 'react-native-elements';
 import { View } from 'react-native';
 import { withTheme } from 'react-native-elements';
 import { Picker } from 'react-native';
-import { MyTheme } from '../StyleSheet';
+import { MyTheme } from '../../../StyleSheet';
 
 function MonthPicker({
   selectedMonth,

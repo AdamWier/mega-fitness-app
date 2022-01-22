@@ -1,7 +1,7 @@
 import FoodJournalStack from '../FoodJournalStack';
 import GoalSetPage from '../../screens/GoalSetPage';
 import WeeklyReport from '../../screens/WeeklyReport';
-import WeightTracking from '../../screens/WeightTracking';
+import WeightTracking from '../../screens/WeightTracking/WeightTracking';
 import ShoppingList from '../../screens/ShoppingList';
 import { Screen } from '../index';
 import { DrawerNavigationOptions } from '@react-navigation/drawer';
