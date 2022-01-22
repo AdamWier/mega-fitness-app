@@ -1,4 +1,5 @@
 import moment from 'moment';
+import DayDocument from '../../Firebase/Documents/DayDocument';
 import MealDocument from '../../Firebase/Documents/MealDocument';
 
 const reduceMealDocuments = (data: MealDocument[]) =>
@@ -25,6 +26,6 @@ export const constructFoodJournalItems = (
 };
 
 export const emptyDocuments = {
-  meals: [],
-  day: { weight: 0, water: 0 },
+  meals: [] as MealDocument[],
+  day: { weight: 0, water: 0 } as DayDocument,
 };

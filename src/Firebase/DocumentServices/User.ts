@@ -26,11 +26,11 @@ export default class UserService extends DocumentService {
 
   public async getDocument(uid: string) {
     const ref = this.buildQuery([where('uid', '==', uid), limit(1)]);
-    const docs = await this.handleReponse(ref, this.mapDocuments);
+    const docs = await this.handleReponse(ref);
     return docs.pop() || null;
   }
 
-  private mapDocuments(
+  protected mapDocuments(
     document: QueryDocumentSnapshot<DocumentData>
   ): UserDocument {
     const data = document.data();

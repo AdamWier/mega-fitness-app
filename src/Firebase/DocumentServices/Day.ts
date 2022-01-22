@@ -75,10 +75,10 @@ export default class DayService extends DocumentService {
     return this.updateDayDoc(id, 'water', water, uid, currentDate);
   }
 
-  public async findDocument(date: Date, uid: string): Promise<DayDocument> {
+  public async findDocument(date: Date, uid: string) {
     const ref = this.getDocumentReference(date, uid);
-    const documents = await this.handleReponse(ref, this.mapDocuments);
-    return documents.pop() || {};
+    const documents = await this.handleReponse(ref);
+    return (documents.pop() || {}) as DayDocument;
   }
 
   public getDocumentListener(
@@ -109,7 +109,7 @@ export default class DayService extends DocumentService {
     uid: string
   ): Promise<{ [key: string]: any }[]> {
     const ref = this.getByPeriodRef(beginningOfWeek, uid, 'isoWeek');
-    return this.handleReponse(ref, this.mapDocuments);
+    return this.handleReponse(ref);
   }
 
   private getByPeriodRef(
@@ -129,10 +129,10 @@ export default class DayService extends DocumentService {
 
   public async findByMonth(beginningOfMonth: Date, uid: string) {
     const ref = this.getByPeriodRef(beginningOfMonth, uid, 'month');
-    return this.handleReponse(ref, this.mapDocuments);
+    return this.handleReponse(ref);
   }
 
-  private mapDocuments(
+  protected mapDocuments(
     document: QueryDocumentSnapshot<DocumentData>
   ): DayDocument {
     const data = document.data();

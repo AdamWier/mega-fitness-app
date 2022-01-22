@@ -13,7 +13,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 
-export default class DocumentService {
+export default abstract class DocumentService {
   private collection: CollectionReference<DocumentData>;
 
   constructor(firestore: Firestore, collectionName: string) {
@@ -30,15 +30,14 @@ export default class DocumentService {
   private executeQuery = (queryToExcute: Query<DocumentData>) =>
     getDocs(queryToExcute);
 
-  protected handleReponse = async (
-    ref: Query<DocumentData>,
-    mapper: (
-      document: QueryDocumentSnapshot<DocumentData>
-    ) => Record<string, any>
-  ) => {
+  protected abstract mapDocuments(
+    document: QueryDocumentSnapshot<DocumentData>
+  ): Record<string, any>;
+
+  protected handleReponse = async (ref: Query<DocumentData>) => {
     const response = await this.executeQuery(ref);
     if (response.docs.length) {
-      return response.docs.map(mapper);
+      return response.docs.map(this.mapDocuments);
     }
     return [];
   };
