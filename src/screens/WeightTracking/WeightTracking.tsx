@@ -9,19 +9,7 @@ import WeightGraph from './components/WeightGraph';
 import { Text } from 'react-native-elements';
 import { useEffect } from 'react';
 import DayDocument from '../../Firebase/Documents/DayDocument';
-import { createDataPoints } from './WeightTrackerLogic';
-
-interface DataPoint {
-  x: number;
-  y: number | undefined;
-}
-
-interface WeightReport {
-  records: DataPoint[];
-  minWeight: number;
-  maxWeight: number;
-  averageWeight: number;
-}
+import { createDataPoints, WeightReport } from './WeightTrackerLogic';
 
 function WeightTracking({ user }: UserContainerProps) {
   const [selectedMonth, setSelectedMonth] = useState(
@@ -74,7 +62,7 @@ function WeightTracking({ user }: UserContainerProps) {
           <Text style={styles.weights}>{weightReport.minWeight}</Text>
         </View>
       </View>
-      <WeightGraph weightReport={weightReport} />
+      <WeightGraph weightReport={weightReport} getWeights={getWeights} />
     </View>
   );
 }

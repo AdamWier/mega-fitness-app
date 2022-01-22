@@ -1,10 +1,23 @@
 import DayDocument from '../../Firebase/Documents/DayDocument';
+interface DataPoint {
+  x: number;
+  y: number | undefined;
+}
 
-const findMax = (past: number, current: number) => Math.max(past, current);
+export interface WeightReport {
+  records: DataPoint[];
+  minWeight: number;
+  maxWeight: number;
+  averageWeight: number;
+}
 
-const findMin = (past: number, current: number) => Math.min(past, current);
+export const findMax = (past: number, current: number) =>
+  Math.max(past, current);
 
-const calculateAverage = (
+export const findMin = (past: number, current: number) =>
+  Math.min(past, current);
+
+export const calculateAverage = (
   accumulator: number,
   currentValue: number,
   index: number,
@@ -14,7 +27,7 @@ const calculateAverage = (
     ? Math.round(((currentValue + accumulator) / array.length) * 10) / 10
     : accumulator + currentValue;
 
-const adaptRecordsForGraph = (records: DayDocument[]) =>
+const adaptRecordsForGraph = (records: DayDocument[]): DataPoint[] =>
   records
     .filter((record) => record.weight)
     .map(({ date, weight }) => ({
@@ -22,7 +35,7 @@ const adaptRecordsForGraph = (records: DayDocument[]) =>
       y: weight,
     }));
 
-export const createDataPoints = (records: DayDocument[]) => {
+export const createDataPoints = (records: DayDocument[]): WeightReport => {
   const weights = records
     .map((record) => record.weight)
     .filter((weight): weight is number => !!weight);

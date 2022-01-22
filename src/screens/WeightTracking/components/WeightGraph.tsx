@@ -10,19 +10,31 @@ import {
   VictoryLine,
   VictoryZoomContainer,
 } from 'victory-native';
+import {
+  calculateAverage,
+  findMax,
+  findMin,
+  WeightReport,
+} from '../WeightTrackerLogic';
 
-function WeightGraph({ weightReport }: WeightGraphProps) {
+function WeightGraph({ weightReport, getWeights }: WeightGraphProps) {
   const axisStyle: VictoryAxisCommonProps['style'] = {
     grid: { stroke: 0 },
     ticks: { display: 'none' },
   };
 
-  const zoomDomain: VictoryZoomContainerProps['zoomDomain'] = {
-    x: [
-      moment(new Date()).subtract(7, 'days').toDate().getTime(),
-      new Date().getTime(),
-    ],
-  };
+  const zoomDomain: VictoryZoomContainerProps['zoomDomain'] = weightReport
+    .records.length
+    ? {
+        x: [
+          weightReport.records.map(({ x }) => x).reduce(calculateAverage),
+          weightReport.records
+            .map(({ x }) => x)
+            .concat(0)
+            .reduce(findMax),
+        ],
+      }
+    : { x: [0, 0] };
 
   return weightReport.records.length > 2 ? (
     <VictoryChart
@@ -32,7 +44,9 @@ function WeightGraph({ weightReport }: WeightGraphProps) {
         <VictoryZoomContainer
           zoomDimension="x"
           zoomDomain={zoomDomain}
-          onZoomDomainChange={(value: any) => console.log(value)}
+          onZoomDomainChange={(value) => {
+            getWeights(moment(new Date(value.x[0])).subtract(5, 'd').toDate());
+          }}
           allowZoom={false}
         />
       }
@@ -45,6 +59,16 @@ function WeightGraph({ weightReport }: WeightGraphProps) {
       <VictoryLine
         data={weightReport.records}
         domain={{
+          x: [
+            weightReport.records
+              .map(({ x }) => x)
+              .concat(Infinity)
+              .reduce(findMin),
+            weightReport.records
+              .map(({ x }) => x)
+              .concat(0)
+              .reduce(findMax),
+          ],
           y: [
             Math.floor(weightReport.minWeight * 0.9),
             Math.floor(weightReport.maxWeight * 1.1),
@@ -58,7 +82,8 @@ function WeightGraph({ weightReport }: WeightGraphProps) {
 }
 
 interface WeightGraphProps {
-  weightReport: Record<string, any>;
+  weightReport: WeightReport;
+  getWeights: (date: Date) => void;
 }
 
 export default WeightGraph;
