@@ -1,7 +1,6 @@
 import moment from 'moment';
-import React from 'react';
-import { View } from 'react-native';
-import { VictoryZoomContainerProps } from 'victory';
+import React, { useState } from 'react';
+import { DomainPropType, DomainTuple } from 'victory';
 import { VictoryAxisCommonProps } from 'victory-core';
 import {
   VictoryChart,
@@ -10,33 +9,59 @@ import {
   VictoryLine,
   VictoryZoomContainer,
 } from 'victory-native';
-import {
-  calculateAverage,
-  findMax,
-  findMin,
-  WeightReport,
-} from '../WeightTrackerLogic';
+import { findMax, findMin, WeightReport } from '../WeightTrackerLogic';
 
 function WeightGraph({ weightReport, getWeights }: WeightGraphProps) {
+  type Domain = { x: DomainTuple; y: DomainTuple };
+
+  const nowTime = new Date().getTime();
+  const minDate = weightReport.records
+    .map(({ x }) => x)
+    .concat(Infinity)
+    .reduce(findMin);
+  const applicableDate = Number.isNaN(minDate) && !isFinite(minDate);
+  const yDomain: DomainTuple = [
+    Math.floor(weightReport.minWeight * 0.9) || 50,
+    Math.floor(weightReport.maxWeight * 1.1) || 100,
+  ];
+
+  const initalZoomDomains: Record<string, Domain> = {
+    true: {
+      x: [
+        minDate,
+        weightReport.records
+          .map(({ x }) => x)
+          .concat(0)
+          .reduce(findMax),
+      ],
+      y: yDomain,
+    },
+    false: {
+      x: [moment(new Date()).subtract(7, 'days').valueOf(), nowTime],
+      y: yDomain,
+    },
+  };
+
+  const [zoomDomain, setZoomDomain] = useState<Domain>(
+    initalZoomDomains[(!!weightReport.records.length).toString()]
+  );
+
   const axisStyle: VictoryAxisCommonProps['style'] = {
     grid: { stroke: 0 },
     ticks: { display: 'none' },
   };
 
-  const zoomDomain: VictoryZoomContainerProps['zoomDomain'] = weightReport
-    .records.length
-    ? {
-        x: [
-          weightReport.records.map(({ x }) => x).reduce(calculateAverage),
-          weightReport.records
-            .map(({ x }) => x)
-            .concat(0)
-            .reduce(findMax),
-        ],
-      }
-    : { x: [0, 0] };
+  const domain: DomainPropType = {
+    x: [
+      moment(applicableDate ? minDate : nowTime)
+        .subtract(360, 'days')
+        .valueOf(),
+      nowTime,
+    ],
+    y: yDomain,
+  };
 
-  return weightReport.records.length > 2 ? (
+  return (
     <VictoryChart
       animate
       theme={VictoryTheme.material}
@@ -44,8 +69,9 @@ function WeightGraph({ weightReport, getWeights }: WeightGraphProps) {
         <VictoryZoomContainer
           zoomDimension="x"
           zoomDomain={zoomDomain}
-          onZoomDomainChange={(value) => {
-            getWeights(moment(new Date(value.x[0])).subtract(5, 'd').toDate());
+          onZoomDomainChange={({ x }) => {
+            setZoomDomain({ x, y: yDomain });
+            getWeights(moment(new Date(x[0])).toDate());
           }}
           allowZoom={false}
         />
@@ -56,28 +82,8 @@ function WeightGraph({ weightReport, getWeights }: WeightGraphProps) {
         tickFormat={(x) => moment(new Date(x)).format('MMM D')}
       />
       <VictoryAxis dependentAxis style={axisStyle} />
-      <VictoryLine
-        data={weightReport.records}
-        domain={{
-          x: [
-            weightReport.records
-              .map(({ x }) => x)
-              .concat(Infinity)
-              .reduce(findMin),
-            weightReport.records
-              .map(({ x }) => x)
-              .concat(0)
-              .reduce(findMax),
-          ],
-          y: [
-            Math.floor(weightReport.minWeight * 0.9),
-            Math.floor(weightReport.maxWeight * 1.1),
-          ],
-        }}
-      />
+      <VictoryLine data={weightReport.records} domain={domain} />
     </VictoryChart>
-  ) : (
-    <View />
   );
 }
 

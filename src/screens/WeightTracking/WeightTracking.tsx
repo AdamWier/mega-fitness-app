@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
+import ActivityIndicator from '../../components/ActivityIndicator';
 import { container, UserContainerProps } from '../../store/reducers/User';
 import CustomHeader from '../../components/CustomHeader';
 import moment from 'moment';
@@ -10,11 +11,13 @@ import { Text } from 'react-native-elements';
 import { useEffect } from 'react';
 import DayDocument from '../../Firebase/Documents/DayDocument';
 import { createDataPoints, WeightReport } from './WeightTrackerLogic';
+import { useDebounceCallback } from '@react-hook/debounce';
 
 function WeightTracking({ user }: UserContainerProps) {
   const [selectedMonth, setSelectedMonth] = useState(
     (moment().month() + 1).toString().padStart(2, '0')
   );
+  const [isLoading, toggleIsLoading] = useState(true);
 
   const [weightReport, setWeightReport] = useState<WeightReport>({
     averageWeight: 0,
@@ -25,16 +28,25 @@ function WeightTracking({ user }: UserContainerProps) {
 
   const createDataPointsCallback = useCallback(createDataPoints, []);
 
-  const getWeights = useCallback(
-    async (beginningOfMonth: Date) => {
-      const records = (
-        user.uid
-          ? await dayDocumentService.findByMonth(beginningOfMonth, user.uid)
-          : []
-      ) as DayDocument[];
-      setWeightReport(createDataPointsCallback(records));
-    },
-    [setWeightReport, createDataPointsCallback, user.uid]
+  const getWeights = useDebounceCallback(
+    useCallback(
+      async (beginningOfMonth: Date) => {
+        toggleIsLoading(true);
+        const records = (
+          user.uid
+            ? await dayDocumentService.findLastThiryDays(
+                beginningOfMonth,
+                user.uid
+              )
+            : []
+        ) as DayDocument[];
+        records.length > 2 &&
+          setWeightReport(createDataPointsCallback(records));
+        toggleIsLoading(false);
+      },
+      [setWeightReport, createDataPointsCallback, user.uid]
+    ),
+    500
   );
 
   useEffect(() => {
@@ -63,6 +75,7 @@ function WeightTracking({ user }: UserContainerProps) {
         </View>
       </View>
       <WeightGraph weightReport={weightReport} getWeights={getWeights} />
+      {isLoading && <ActivityIndicator size="large" />}
     </View>
   );
 }

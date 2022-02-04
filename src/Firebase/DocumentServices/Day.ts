@@ -108,27 +108,28 @@ export default class DayService extends DocumentService {
     beginningOfWeek: Date,
     uid: string
   ): Promise<{ [key: string]: any }[]> {
-    const ref = this.getByPeriodRef(beginningOfWeek, uid, 'isoWeek');
+    const endOfWeek = moment(beginningOfWeek).clone().endOf('isoWeek').toDate();
+    const ref = this.getByPeriodRef(beginningOfWeek, uid, endOfWeek);
     return this.handleReponse(ref);
   }
 
   private getByPeriodRef(
     beginning: Date,
     uid: string,
-    period: moment.unitOfTime.StartOf
+    end: Date
   ): Query<DocumentData> {
-    const start = moment(beginning).startOf(period);
-    const end = start.clone().endOf(period);
     return this.buildQuery([
-      where('date', '>=', start.toDate()),
-      where('date', '<', end.toDate()),
+      where('date', '>=', beginning),
+      where('date', '<', end),
       where('uid', '==', uid),
       where('deleted', '==', false),
     ]);
   }
 
-  public async findByMonth(beginningOfMonth: Date, uid: string) {
-    const ref = this.getByPeriodRef(beginningOfMonth, uid, 'month');
+  public async findLastThiryDays(beginning: Date, uid: string) {
+    const start = moment(beginning);
+    const end = start.clone().add(30, 'days').toDate();
+    const ref = this.getByPeriodRef(beginning, uid, end);
     return this.handleReponse(ref);
   }
 
