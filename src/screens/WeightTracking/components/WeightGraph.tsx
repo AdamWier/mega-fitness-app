@@ -20,10 +20,7 @@ function WeightGraph({ weightReport, getWeights }: WeightGraphProps) {
     .concat(Infinity)
     .reduce(findMin);
   const applicableDate = Number.isNaN(minDate) && !isFinite(minDate);
-  const yDomain: DomainTuple = [
-    Math.floor(weightReport.minWeight * 0.9) || 50,
-    Math.floor(weightReport.maxWeight * 1.1) || 100,
-  ];
+  const yDomain: DomainTuple = [50, 120];
 
   const initalZoomDomains: Record<string, Domain> = {
     true: {
@@ -37,7 +34,7 @@ function WeightGraph({ weightReport, getWeights }: WeightGraphProps) {
       y: yDomain,
     },
     false: {
-      x: [moment(new Date()).subtract(7, 'days').valueOf(), nowTime],
+      x: [moment(new Date()).subtract(14, 'days').valueOf(), nowTime],
       y: yDomain,
     },
   };
