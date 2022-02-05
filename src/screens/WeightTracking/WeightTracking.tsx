@@ -19,12 +19,7 @@ function WeightTracking({ user }: UserContainerProps) {
   );
   const [isLoading, toggleIsLoading] = useState(true);
 
-  const [weightReport, setWeightReport] = useState<WeightReport>({
-    averageWeight: 0,
-    maxWeight: 0,
-    minWeight: 0,
-    records: [],
-  });
+  const [weightReport, setWeightReport] = useState<WeightReport | undefined>();
 
   const createDataPointsCallback = useCallback(createDataPoints, []);
 
@@ -40,8 +35,9 @@ function WeightTracking({ user }: UserContainerProps) {
               )
             : []
         ) as DayDocument[];
-        records.length > 2 &&
-          setWeightReport(createDataPointsCallback(records));
+        setWeightReport(
+          records.length ? createDataPointsCallback(records) : undefined
+        );
         toggleIsLoading(false);
       },
       [setWeightReport, createDataPointsCallback, user.uid]
@@ -63,15 +59,17 @@ function WeightTracking({ user }: UserContainerProps) {
       <View style={styles.reportHeader}>
         <View>
           <Text style={styles.weights}>Max weight</Text>
-          <Text style={styles.weights}>{weightReport.maxWeight}</Text>
+          <Text style={styles.weights}>{weightReport?.maxWeight ?? '-'}</Text>
         </View>
         <View>
           <Text style={styles.weights}>Average weight</Text>
-          <Text style={styles.weights}>{weightReport.averageWeight}</Text>
+          <Text style={styles.weights}>
+            {weightReport?.averageWeight ?? '-'}
+          </Text>
         </View>
         <View>
           <Text style={styles.weights}>Min weight</Text>
-          <Text style={styles.weights}>{weightReport.minWeight}</Text>
+          <Text style={styles.weights}>{weightReport?.minWeight ?? '-'}</Text>
         </View>
       </View>
       <WeightGraph weightReport={weightReport} getWeights={getWeights} />

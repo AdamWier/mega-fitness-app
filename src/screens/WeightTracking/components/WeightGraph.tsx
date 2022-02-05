@@ -12,10 +12,11 @@ import {
 import { findMax, findMin, WeightReport } from '../WeightTrackerLogic';
 
 function WeightGraph({ weightReport, getWeights }: WeightGraphProps) {
+  const applicableRecords = weightReport?.records || [];
   type Domain = { x: DomainTuple; y: DomainTuple };
 
   const nowTime = new Date().getTime();
-  const minDate = weightReport.records
+  const minDate = applicableRecords
     .map(({ x }) => x)
     .concat(Infinity)
     .reduce(findMin);
@@ -26,7 +27,7 @@ function WeightGraph({ weightReport, getWeights }: WeightGraphProps) {
     true: {
       x: [
         minDate,
-        weightReport.records
+        applicableRecords
           .map(({ x }) => x)
           .concat(0)
           .reduce(findMax),
@@ -40,7 +41,7 @@ function WeightGraph({ weightReport, getWeights }: WeightGraphProps) {
   };
 
   const [zoomDomain, setZoomDomain] = useState<Domain>(
-    initalZoomDomains[(!!weightReport.records.length).toString()]
+    initalZoomDomains[(!!applicableRecords.length).toString()]
   );
 
   const axisStyle: VictoryAxisCommonProps['style'] = {
@@ -68,7 +69,7 @@ function WeightGraph({ weightReport, getWeights }: WeightGraphProps) {
           zoomDomain={zoomDomain}
           onZoomDomainChange={({ x }) => {
             setZoomDomain({ x, y: yDomain });
-            getWeights(moment(new Date(x[0])).toDate());
+            getWeights(new Date(x[0]));
           }}
           allowZoom={false}
         />
@@ -79,13 +80,13 @@ function WeightGraph({ weightReport, getWeights }: WeightGraphProps) {
         tickFormat={(x) => moment(new Date(x)).format('MMM D')}
       />
       <VictoryAxis dependentAxis style={axisStyle} />
-      <VictoryLine data={weightReport.records} domain={domain} />
+      <VictoryLine data={applicableRecords} domain={domain} />
     </VictoryChart>
   );
 }
 
 interface WeightGraphProps {
-  weightReport: WeightReport;
+  weightReport: WeightReport | undefined;
   getWeights: (date: Date) => void;
 }
 
