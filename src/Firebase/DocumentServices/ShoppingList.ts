@@ -63,11 +63,11 @@ export default class ShoppingListService extends DocumentService {
     uid: string
   ): Promise<ShoppingListDocument | null> {
     const ref = this.getDocumentReference(start, end, uid);
-    const docs = await this.handleReponse(ref, this.mapDocuments);
+    const docs = await this.handleReponse(ref);
     return (docs.pop() as unknown as ShoppingListDocument | undefined) || null;
   }
 
-  getDocumentReference(
+  private getDocumentReference(
     start: Date,
     end: Date,
     uid: string
@@ -81,7 +81,7 @@ export default class ShoppingListService extends DocumentService {
     ]);
   }
 
-  mapDocuments(
+  protected mapDocuments(
     document: QueryDocumentSnapshot<DocumentData>
   ): ShoppingListDocument {
     const data = document.data();

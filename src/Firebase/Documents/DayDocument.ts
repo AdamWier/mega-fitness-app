@@ -1,7 +1,7 @@
 export default interface DayDocument {
-  id?: string;
+  id: string;
   goalCalories?: number;
-  date?: Date;
+  date: Date;
   weight?: number;
   water?: number;
 }

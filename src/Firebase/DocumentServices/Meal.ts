@@ -65,10 +65,7 @@ export default class MealService extends DocumentService {
     uid: string
   ): Promise<MealDocument[]> {
     const ref = this.getByDateRef(currentDate, uid);
-    return this.handleReponse(
-      ref,
-      this.mapDocuments
-    ) as unknown as MealDocument[];
+    return this.handleReponse(ref) as unknown as MealDocument[];
   }
 
   public getFindByDateListener(
@@ -98,7 +95,7 @@ export default class MealService extends DocumentService {
 
   public async findByWeek(beginningOfWeek: Date, uid: string) {
     const ref = this.getByWeekRef(beginningOfWeek, uid);
-    return this.handleReponse(ref, this.mapDocuments);
+    return this.handleReponse(ref);
   }
 
   private getByWeekRef(
@@ -121,7 +118,7 @@ export default class MealService extends DocumentService {
     uid: string
   ): Promise<{ [key: string]: any }[]> {
     const ref = this.getByDateRangeRef(start, end, uid);
-    return this.handleReponse(ref, this.mapDocuments);
+    return this.handleReponse(ref);
   }
 
   private getByDateRangeRef(
@@ -137,7 +134,7 @@ export default class MealService extends DocumentService {
     ]);
   }
 
-  private mapDocuments(document: QueryDocumentSnapshot<DocumentData>) {
+  protected mapDocuments(document: QueryDocumentSnapshot<DocumentData>) {
     const data = document.data();
     const { eatenAt, meal, name } = data;
     return {

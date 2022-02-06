@@ -75,10 +75,10 @@ export default class DayService extends DocumentService {
     return this.updateDayDoc(id, 'water', water, uid, currentDate);
   }
 
-  public async findDocument(date: Date, uid: string): Promise<DayDocument> {
+  public async findDocument(date: Date, uid: string) {
     const ref = this.getDocumentReference(date, uid);
-    const documents = await this.handleReponse(ref, this.mapDocuments);
-    return documents.pop() || {};
+    const documents = await this.handleReponse(ref);
+    return (documents.pop() || {}) as DayDocument;
   }
 
   public getDocumentListener(
@@ -108,31 +108,32 @@ export default class DayService extends DocumentService {
     beginningOfWeek: Date,
     uid: string
   ): Promise<{ [key: string]: any }[]> {
-    const ref = this.getByPeriodRef(beginningOfWeek, uid, 'isoWeek');
-    return this.handleReponse(ref, this.mapDocuments);
+    const endOfWeek = moment(beginningOfWeek).clone().endOf('isoWeek').toDate();
+    const ref = this.getByPeriodRef(beginningOfWeek, uid, endOfWeek);
+    return this.handleReponse(ref);
   }
 
   private getByPeriodRef(
     beginning: Date,
     uid: string,
-    period: moment.unitOfTime.StartOf
+    end: Date
   ): Query<DocumentData> {
-    const start = moment(beginning).startOf(period);
-    const end = start.clone().endOf(period);
     return this.buildQuery([
-      where('date', '>=', start.toDate()),
-      where('date', '<', end.toDate()),
+      where('date', '>=', beginning),
+      where('date', '<', end),
       where('uid', '==', uid),
       where('deleted', '==', false),
     ]);
   }
 
-  public async findByMonth(beginningOfMonth: Date, uid: string) {
-    const ref = this.getByPeriodRef(beginningOfMonth, uid, 'month');
-    return this.handleReponse(ref, this.mapDocuments);
+  public async findLastThiryDays(beginning: Date, uid: string) {
+    const start = moment(beginning);
+    const end = start.clone().add(30, 'days').toDate();
+    const ref = this.getByPeriodRef(beginning, uid, end);
+    return this.handleReponse(ref);
   }
 
-  private mapDocuments(
+  protected mapDocuments(
     document: QueryDocumentSnapshot<DocumentData>
   ): DayDocument {
     const data = document.data();
