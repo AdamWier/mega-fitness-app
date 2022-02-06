@@ -69,7 +69,7 @@ function WeightGraph({ weightReport, getWeights }: WeightGraphProps) {
           zoomDomain={zoomDomain}
           onZoomDomainChange={({ x }) => {
             setZoomDomain({ x, y: yDomain });
-            getWeights(new Date(x[0]));
+            getWeights(new Date(x[1]));
           }}
           allowZoom={false}
         />

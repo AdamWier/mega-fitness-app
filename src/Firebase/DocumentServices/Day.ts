@@ -109,13 +109,13 @@ export default class DayService extends DocumentService {
     uid: string
   ): Promise<{ [key: string]: any }[]> {
     const endOfWeek = moment(beginningOfWeek).clone().endOf('isoWeek').toDate();
-    const ref = this.getByPeriodRef(beginningOfWeek, uid, endOfWeek);
+    const ref = this.getByPeriodRef(uid, beginningOfWeek, endOfWeek);
     return this.handleReponse(ref);
   }
 
   private getByPeriodRef(
-    beginning: Date,
     uid: string,
+    beginning: Date,
     end: Date
   ): Query<DocumentData> {
     return this.buildQuery([
@@ -126,10 +126,9 @@ export default class DayService extends DocumentService {
     ]);
   }
 
-  public async findLastThiryDays(beginning: Date, uid: string) {
-    const start = moment(beginning);
-    const end = start.clone().add(30, 'days').toDate();
-    const ref = this.getByPeriodRef(beginning, uid, end);
+  public async findLastThiryDays(date: Date, uid: string) {
+    const start = moment(date).clone().subtract(30, 'days').toDate();
+    const ref = this.getByPeriodRef(uid, start, date);
     return this.handleReponse(ref);
   }
 
