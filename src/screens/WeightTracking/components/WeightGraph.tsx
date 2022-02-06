@@ -21,7 +21,12 @@ function WeightGraph({ weightReport, getWeights }: WeightGraphProps) {
     .concat(Infinity)
     .reduce(findMin);
   const applicableDate = Number.isNaN(minDate) && !isFinite(minDate);
-  const yDomain: DomainTuple = [50, 120];
+  const yDomain: DomainTuple = weightReport
+    ? [
+        Math.floor(weightReport.minWeight * 0.95),
+        Math.floor(weightReport.maxWeight * 1.05),
+      ]
+    : [50, 120];
 
   const initalZoomDomains: Record<string, Domain> = {
     true: {
@@ -69,7 +74,7 @@ function WeightGraph({ weightReport, getWeights }: WeightGraphProps) {
           zoomDomain={zoomDomain}
           onZoomDomainChange={({ x }) => {
             setZoomDomain({ x, y: yDomain });
-            getWeights(new Date(x[0]));
+            getWeights(new Date(x[1]));
           }}
           allowZoom={false}
         />
@@ -80,7 +85,11 @@ function WeightGraph({ weightReport, getWeights }: WeightGraphProps) {
         tickFormat={(x) => moment(new Date(x)).format('MMM D')}
       />
       <VictoryAxis dependentAxis style={axisStyle} />
-      <VictoryLine data={applicableRecords} domain={domain} />
+      <VictoryLine
+        data={applicableRecords}
+        domain={domain}
+        labels={({ datum }) => datum.y}
+      />
     </VictoryChart>
   );
 }
