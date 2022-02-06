@@ -17,7 +17,7 @@ export const findMax = (past: number, current: number) =>
 export const findMin = (past: number, current: number) =>
   Math.min(past, current);
 
-export const calculateAverage = (
+const calculateAverage = (
   accumulator: number,
   currentValue: number,
   index: number,

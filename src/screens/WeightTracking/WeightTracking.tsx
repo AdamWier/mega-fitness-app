@@ -3,9 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import ActivityIndicator from '../../components/ActivityIndicator';
 import { container, UserContainerProps } from '../../store/reducers/User';
 import CustomHeader from '../../components/CustomHeader';
-import moment from 'moment';
 import { dayDocumentService } from '../../Firebase/index';
-import MonthPicker from './components/MonthPicker';
 import WeightGraph from './components/WeightGraph';
 import { Text } from 'react-native-elements';
 import { useEffect } from 'react';
@@ -14,9 +12,6 @@ import { createDataPoints, WeightReport } from './WeightTrackerLogic';
 import { useDebounceCallback } from '@react-hook/debounce';
 
 function WeightTracking({ user }: UserContainerProps) {
-  const [selectedMonth, setSelectedMonth] = useState(
-    (moment().month() + 1).toString().padStart(2, '0')
-  );
   const [isLoading, toggleIsLoading] = useState(true);
 
   const [weightReport, setWeightReport] = useState<WeightReport | undefined>();
@@ -46,16 +41,13 @@ function WeightTracking({ user }: UserContainerProps) {
   );
 
   useEffect(() => {
-    getWeights(moment(`2022-${selectedMonth}-01`).toDate());
-  }, [getWeights, selectedMonth]);
+    getWeights(new Date());
+  }, [getWeights]);
 
   return (
     <View>
       <CustomHeader title="Weight tracking" />
-      <MonthPicker
-        onValueChange={setSelectedMonth}
-        selectedMonth={selectedMonth}
-      />
+      <Text style={styles.explanation}>Slide right to see past dates</Text>
       <View style={styles.reportHeader}>
         <View>
           <Text style={styles.weights}>Max weight</Text>
@@ -82,9 +74,13 @@ const styles = StyleSheet.create({
   reportHeader: {
     flexDirection: 'row',
     justifyContent: 'space-around',
+    marginVertical: 30,
   },
   weights: {
     fontSize: 20,
+  },
+  explanation: {
+    marginVertical: 10,
   },
 });
 
