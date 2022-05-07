@@ -4,9 +4,8 @@ import USDASearchResult from '../../Fixtures/USDASearchResult.json';
 import USDADetailsByIdResult from '../../Fixtures/USDADetailsResult.json';
 
 describe('open Food Data Api', () => {
-  fetchMock.enableMocks();
-
   beforeEach(() => {
+    fetchMock.enableMocks();
     fetchMock.resetMocks();
   });
 

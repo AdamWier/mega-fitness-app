@@ -9,9 +9,8 @@ import OFDResultOnlyGrams from '../../Fixtures/OFDResultOnlyGrams.json';
 import OFDNoCalNoKJ from '../../Fixtures/OFDNoCalNoKJ.json';
 
 describe('open Food Data Api', () => {
-  fetchMock.enableMocks();
-
   beforeEach(() => {
+    fetchMock.enableMocks();
     fetchMock.resetMocks();
   });
 

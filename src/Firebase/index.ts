@@ -14,6 +14,7 @@ import DayDocumentService from './DocumentServices/Day';
 import MealDocumentService from './DocumentServices/Meal';
 import UserDocumentService from './DocumentServices/User';
 import ShoppingListDocumentService from './DocumentServices/ShoppingList';
+import FirebaseAuthService from './FirebaseAuthService';
 
 const firebaseConfig = {
   apiKey: FIREBASE_API_KEY,
@@ -26,6 +27,8 @@ const firebaseConfig = {
 // eslint-disable-next-line jest/require-hook
 initializeApp(firebaseConfig);
 
+const firebaseAuthService = new FirebaseAuthService(getAuth());
+
 export const dayDocumentService = new DayDocumentService(getFirestore());
 export const mealDocumentService = new MealDocumentService(getFirestore());
 export const userDocumentService = new UserDocumentService(getFirestore());
@@ -33,4 +36,7 @@ export const shoppingListDocumentService = new ShoppingListDocumentService(
   getFirestore()
 );
 
-export const authService = new AuthService(getAuth(), userDocumentService);
+export const authService = new AuthService(
+  firebaseAuthService,
+  userDocumentService
+);

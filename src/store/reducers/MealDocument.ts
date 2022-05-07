@@ -4,13 +4,7 @@ import MealDocument from '../../Firebase/Documents/MealDocument';
 
 export const UPDATE_MEAL_DOCUMENT = 'UPDATE_MEAL_DOCUMENT';
 
-interface MealState {
-  mealDocument?: MealDocument;
-}
-
-export const initialState: MealState = {
-  mealDocument: undefined,
-};
+export const initialState: Partial<MealDocument> = {};
 
 export function updateMealDocument(mealDocument: MealDocument) {
   return {
@@ -21,7 +15,7 @@ export function updateMealDocument(mealDocument: MealDocument) {
 
 export const mealReducer = (
   state = initialState,
-  action: { type: string; payload: MealState }
+  action: { type: string; payload: MealDocument }
 ) => {
   switch (action.type) {
     case UPDATE_MEAL_DOCUMENT:
@@ -31,7 +25,7 @@ export const mealReducer = (
   }
 };
 
-const mapStateToProps = (state: MealState) => ({
+const mapStateToProps = (state: any) => ({
   mealDocument: state.mealDocument,
 });
 
@@ -40,7 +34,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     dispatch(updateMealDocument(payload)),
 });
 
-export type MealContainerProps = MealState &
+export type MealContainerProps = MealDocument &
   ReturnType<typeof mapDispatchToProps>;
 
 export const container = connect(mapStateToProps, mapDispatchToProps);

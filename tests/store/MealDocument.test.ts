@@ -1,3 +1,4 @@
+import MealDocument from '../../src/Firebase/Documents/MealDocument';
 import {
   UPDATE_MEAL_DOCUMENT,
   updateMealDocument,
@@ -5,17 +6,19 @@ import {
   initialState,
 } from '../../src/store/reducers/MealDocument';
 
-const payload = [
-  {
-    calories: 100,
-    carbs: 10,
-    fats: 5,
-    name: 'Mystery Meat',
-    protein: 20,
-    portionDescription: 'gram',
-    amount: 10,
-  },
-];
+const payload = {
+  meal: [
+    {
+      calories: 100,
+      carbs: 10,
+      fats: 5,
+      name: 'Mystery Meat',
+      protein: 20,
+      portionDescription: 'gram',
+      amount: 10,
+    },
+  ],
+} as MealDocument;
 
 describe('user reducer', () => {
   it('should create an action to store the new meal document', () => {
@@ -29,7 +32,7 @@ describe('user reducer', () => {
 
   it('should return the initial state', () => {
     expect.assertions(1);
-    expect(mealReducer(undefined, [])).toStrictEqual(initialState);
+    expect(mealReducer(undefined, {} as any)).toStrictEqual(initialState);
   });
 
   it('should store new meal information', () => {

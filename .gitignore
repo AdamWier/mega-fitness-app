@@ -13,7 +13,6 @@ web-report/
 yarn-error.log
 src/Firebase/CorrectionScripts/*.json
 coverage/
-tests/__snapshots__
 .pnp.*
 .yarn/*
 !.yarn/patches
