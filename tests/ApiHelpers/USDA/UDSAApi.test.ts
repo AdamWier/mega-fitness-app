@@ -1,4 +1,4 @@
-import USDAApi from '../../../src/ApiHelpers/USDA/USDAApi';
+import USDAApi from '@/ApiHelpers/USDA/USDAApi';
 import fetchMock from 'jest-fetch-mock';
 import USDASearchResult from '../../Fixtures/USDASearchResult.json';
 import USDADetailsByIdResult from '../../Fixtures/USDADetailsResult.json';

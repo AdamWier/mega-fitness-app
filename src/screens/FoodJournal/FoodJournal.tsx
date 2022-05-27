@@ -4,29 +4,29 @@ import { withTheme, Text } from 'react-native-elements';
 import {
   container as UserContainer,
   UserContainerProps,
-} from '../../store/reducers/User';
+} from '@/store/reducers/User';
 import {
   container as MealContainer,
   MealContainerProps,
-} from '../../store/reducers/MealDocument';
-import MealDocument from '../../Firebase/Documents/MealDocument';
+} from '@/store/reducers/MealDocument';
+import MealDocument from '@/Firebase/Documents/MealDocument';
 import { Agenda } from 'react-native-calendars';
-import FoodJournalItem from '../../components/FoodJournalItem';
-import TotalCard from '../../components/TotalCard';
+import FoodJournalItem from '@/components/FoodJournalItem';
+import TotalCard from '@/components/TotalCard';
 import moment from 'moment';
 import Toast from 'react-native-simple-toast';
 import DayHeader from './DayHeader/DayHeader';
-import { mealDocumentService, dayDocumentService } from '../../Firebase/index';
-import DayDocument from '../../Firebase/Documents/DayDocument';
-import ActivityIndicator from '../../components/ActivityIndicator';
+import { mealDocumentService, dayDocumentService } from '@/Firebase/index';
+import DayDocument from '@/Firebase/Documents/DayDocument';
+import ActivityIndicator from '@/components/ActivityIndicator';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
   FoodJournalStackParams,
   FoodJournalStackScreenNames,
-} from '../../Navigation/FoodJournalStack/Screens';
-import { MyTheme } from '../../StyleSheet';
+} from '@/Navigation/FoodJournalStack/Screens';
+import { MyTheme } from '@/StyleSheet';
 import { constructFoodJournalItems, emptyDocuments } from './FoodJournalLogic';
-import { getTotal } from '../../utilities';
+import { getTotal } from '@/utilities';
 
 function FoodJournalPage({
   navigation,

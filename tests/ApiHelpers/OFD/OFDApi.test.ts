@@ -1,4 +1,4 @@
-import OFDApi from '../../../src/ApiHelpers/OFD/OFDApi';
+import OFDApi from '@/ApiHelpers/OFD/OFDApi';
 import fetchMock from 'jest-fetch-mock';
 import OFDSearchResult from '../../Fixtures/OFDSearchResponse.json';
 import OFDBarcodeSearchResult from '../../Fixtures/OFDBarcodeSearchResult.json';

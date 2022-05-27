@@ -1,10 +1,10 @@
-import MealDocument from '../../src/Firebase/Documents/MealDocument';
+import MealDocument from '@/Firebase/Documents/MealDocument';
 import {
   UPDATE_MEAL_DOCUMENT,
   updateMealDocument,
   mealReducer,
   initialState,
-} from '../../src/store/reducers/MealDocument';
+} from '@/store/reducers/MealDocument';
 
 const payload = {
   meal: [

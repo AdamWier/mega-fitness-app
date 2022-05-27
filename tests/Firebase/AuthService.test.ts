@@ -1,7 +1,7 @@
 /* eslint-disable jest/no-conditional-expect */
-import AuthService from '../../src/Firebase/AuthService';
-import FirebaseAuthService from '../../src/Firebase/FirebaseAuthService';
-import UserDocumentService from '../../src/Firebase/DocumentServices/User';
+import AuthService from '@/Firebase/AuthService';
+import FirebaseAuthService from '@/Firebase/FirebaseAuthService';
+import UserDocumentService from '@/Firebase/DocumentServices/User';
 
 describe('auth Service', () => {
   const firebaseAuthService = {

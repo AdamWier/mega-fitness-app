@@ -1,6 +1,6 @@
 import moment from 'moment';
-import DayDocument from '../../Firebase/Documents/DayDocument';
-import MealDocument from '../../Firebase/Documents/MealDocument';
+import DayDocument from '@/Firebase/Documents/DayDocument';
+import MealDocument from '@/Firebase/Documents/MealDocument';
 
 const reduceMealDocuments = (data: MealDocument[]) =>
   data.reduce((foodJournal, item) => {

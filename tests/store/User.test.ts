@@ -1,9 +1,4 @@
-import {
-  LOGIN,
-  login,
-  userReducer,
-  initialState,
-} from '../../src/store/reducers/User';
+import { LOGIN, login, userReducer, initialState } from '@/store/reducers/User';
 
 describe('user reducer', () => {
   it('should create an action to store user info', () => {

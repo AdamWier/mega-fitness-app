@@ -3,10 +3,10 @@ import { Text } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
 import { Bar } from 'react-native-progress';
 import { withTheme } from 'react-native-elements';
-import { container } from '../../../../store/reducers/User';
-import UpDownButtons from '../../../../components/UpDownButtons';
-import { MyTheme } from '../../../../StyleSheet';
-import { UserContainerProps } from '../../../../store/reducers/User';
+import { container } from '@/store/reducers/User';
+import UpDownButtons from '@/components/UpDownButtons';
+import { MyTheme } from '@/StyleSheet';
+import { UserContainerProps } from '@/store/reducers/User';
 
 const WaterProgressBar = ({
   theme,

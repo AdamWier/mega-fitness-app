@@ -1,4 +1,4 @@
-import { createWeeklyReport } from '../src/utilities';
+import { createWeeklyReport } from '@/utilities';
 
 describe('weekly report utils', () => {
   const mealDocuments = [

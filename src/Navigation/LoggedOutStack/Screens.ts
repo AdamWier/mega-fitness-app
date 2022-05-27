@@ -1,6 +1,6 @@
 import { StackNavigationOptions } from '@react-navigation/stack';
-import AccountCreation from '../../screens/AccountCreation';
-import Login from '../../screens/Login';
+import AccountCreation from '@/screens/AccountCreation';
+import Login from '@/screens/Login';
 import { Screen } from '../index';
 
 export enum LoggedOutStackScreenNames {

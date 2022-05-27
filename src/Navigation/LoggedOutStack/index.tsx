@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { navTheme } from '../../StyleSheet';
+import { navTheme } from '@/StyleSheet';
 import screens from './Screens';
 
 const Stack = createStackNavigator();

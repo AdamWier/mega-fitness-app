@@ -1,7 +1,7 @@
 import { Timestamp } from 'firebase/firestore';
 import { connect, ConnectedProps } from 'react-redux';
 import { Dispatch } from 'redux';
-import { UserDocument } from '../../Firebase/Documents/UserDocument';
+import { UserDocument } from '@/Firebase/Documents/UserDocument';
 
 export const LOGIN = 'LOGIN';
 const UPDATE_CALORIES = 'UPDATE_CALORIES';

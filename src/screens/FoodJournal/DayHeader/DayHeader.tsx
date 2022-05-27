@@ -1,12 +1,12 @@
 import React from 'react';
 import { Button, Text, Icon } from 'react-native-elements';
 import { View, StyleSheet } from 'react-native';
-import OverlayWithButton from '../../../components/OverlayWithButton';
+import OverlayWithButton from '@/components/OverlayWithButton';
 import { Bar } from 'react-native-progress';
 import { withTheme } from 'react-native-elements';
-import { container } from '../../../store/reducers/User';
-import { MyTheme } from '../../../StyleSheet';
-import { UserContainerProps } from '../../../store/reducers/User';
+import { container } from '@/store/reducers/User';
+import { MyTheme } from '@/StyleSheet';
+import { UserContainerProps } from '@/store/reducers/User';
 import WaterProgressBar from './components/WaterProgressBar';
 
 const DayHeader = ({

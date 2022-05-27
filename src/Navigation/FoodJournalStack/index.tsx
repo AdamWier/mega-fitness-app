@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { navTheme } from '../../StyleSheet';
+import { navTheme } from '@/StyleSheet';
 import screens from './Screens';
-import { authService } from '../../Firebase';
+import { authService } from '@/Firebase';
 import { Button, Icon } from 'react-native-elements';
 import { Alert } from 'react-native';
-import { container, UserContainerProps } from '../../store/reducers/User';
+import { container, UserContainerProps } from '@/store/reducers/User';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import {
   LoggedInDrawerParams,

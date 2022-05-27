@@ -1,7 +1,7 @@
 import * as React from 'react';
 import screens from './Screens';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { navTheme } from '../../StyleSheet';
+import { navTheme } from '@/StyleSheet';
 
 const Drawer = createDrawerNavigator();
 

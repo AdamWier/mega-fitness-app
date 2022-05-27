@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import ActivityIndicator from '../../components/ActivityIndicator';
-import { container, UserContainerProps } from '../../store/reducers/User';
-import CustomHeader from '../../components/CustomHeader';
-import { dayDocumentService } from '../../Firebase/index';
+import ActivityIndicator from '@/components/ActivityIndicator';
+import { container, UserContainerProps } from '@/store/reducers/User';
+import CustomHeader from '@/components/CustomHeader';
+import { dayDocumentService } from '@/Firebase/index';
 import WeightGraph from './components/WeightGraph';
 import { Text } from 'react-native-elements';
 import { useEffect } from 'react';
-import DayDocument from '../../Firebase/Documents/DayDocument';
+import DayDocument from '@/Firebase/Documents/DayDocument';
 import { createDataPoints, WeightReport } from './WeightTrackerLogic';
 import { useDebounceCallback } from '@react-hook/debounce';
 

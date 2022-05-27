@@ -1,4 +1,4 @@
-import DayDocument from '../../Firebase/Documents/DayDocument';
+import DayDocument from '@/Firebase/Documents/DayDocument';
 interface DataPoint {
   x: number;
   y: number | undefined;

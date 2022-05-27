@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import MealDocument from '../../Firebase/Documents/MealDocument';
+import MealDocument from '@/Firebase/Documents/MealDocument';
 
 export const UPDATE_MEAL_DOCUMENT = 'UPDATE_MEAL_DOCUMENT';
 
