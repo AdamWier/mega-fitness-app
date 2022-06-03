@@ -8,7 +8,7 @@ import {
   VictoryZoomContainer,
 } from 'victory-native';
 import { VictoryAxisCommonProps } from 'victory-core';
-import { WeightReport } from '../WeightTrackerLogic';
+import { WeightReport } from '../createDataPoints';
 import { useWeightGraph } from './UseWeightGraph';
 
 function WeightGraph({ weightReport, getWeights }: WeightGraphProps) {

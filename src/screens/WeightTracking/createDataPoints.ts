@@ -1,4 +1,6 @@
 import DayDocument from '@/Firebase/Documents/DayDocument';
+import { findMax, findMin } from '@/utilities';
+
 interface DataPoint {
   x: number;
   y: number | undefined;
@@ -10,12 +12,6 @@ export interface WeightReport {
   maxWeight: number;
   averageWeight: number;
 }
-
-export const findMax = (past: number, current: number) =>
-  Math.max(past, current);
-
-export const findMin = (past: number, current: number) =>
-  Math.min(past, current);
 
 const calculateAverage = (
   accumulator: number,

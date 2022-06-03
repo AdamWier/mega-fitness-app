@@ -1,48 +1,14 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import ActivityIndicator from '@/components/ActivityIndicator';
 import { container, UserContainerProps } from '@/store/reducers/User';
 import CustomHeader from '@/components/CustomHeader';
-import { dayDocumentService } from '@/Firebase/index';
 import WeightGraph from './components/WeightGraph';
 import { Text } from 'react-native-elements';
-import { useEffect } from 'react';
-import DayDocument from '@/Firebase/Documents/DayDocument';
-import { createDataPoints, WeightReport } from './WeightTrackerLogic';
-import { useDebounceCallback } from '@react-hook/debounce';
+import { useWeightTracking } from './UseWeightTracking';
 
 function WeightTracking({ user }: UserContainerProps) {
-  const [isLoading, toggleIsLoading] = useState(true);
-
-  const [weightReport, setWeightReport] = useState<WeightReport | undefined>();
-
-  const createDataPointsCallback = useCallback(createDataPoints, []);
-
-  const getWeights = useDebounceCallback(
-    useCallback(
-      async (beginningOfMonth: Date) => {
-        toggleIsLoading(true);
-        const records = (
-          user.uid
-            ? await dayDocumentService.findLastThiryDays(
-                beginningOfMonth,
-                user.uid
-              )
-            : []
-        ) as DayDocument[];
-        setWeightReport(
-          records.length ? createDataPointsCallback(records) : undefined
-        );
-        toggleIsLoading(false);
-      },
-      [setWeightReport, createDataPointsCallback, user.uid]
-    ),
-    500
-  );
-
-  useEffect(() => {
-    getWeights(new Date());
-  }, [getWeights]);
+  const { weightReport, getWeights, isLoading } = useWeightTracking(user);
 
   return (
     <View>

@@ -1,7 +1,8 @@
+import { findMax, findMin } from '@/utilities';
 import moment from 'moment';
 import { useState } from 'react';
 import { DomainPropType, DomainTuple } from 'victory';
-import { findMax, findMin, WeightReport } from '../WeightTrackerLogic';
+import { WeightReport } from '../createDataPoints';
 
 export type Domain = { x: DomainTuple; y: DomainTuple };
 

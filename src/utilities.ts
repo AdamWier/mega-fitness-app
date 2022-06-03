@@ -1,9 +1,15 @@
 import moment from 'moment';
 
-export const getTotal = (nutrient: string) => (
-  accumulator: number,
-  currentValue: { [key: string]: any }
-): number => accumulator + currentValue[nutrient];
+export const findMax = (past: number, current: number) =>
+  Math.max(past, current);
+
+export const findMin = (past: number, current: number) =>
+  Math.min(past, current);
+
+export const getTotal =
+  (nutrient: string) =>
+  (accumulator: number, currentValue: { [key: string]: any }): number =>
+    accumulator + currentValue[nutrient];
 
 export function createWeeklyReport(
   mealDocuments: { [key: string]: any }[],
