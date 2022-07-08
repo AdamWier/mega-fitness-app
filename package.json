@@ -50,7 +50,7 @@
     "expo": "^44.0.0",
     "expo-barcode-scanner": "~11.2.0",
     "firebase": "^9.6.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
