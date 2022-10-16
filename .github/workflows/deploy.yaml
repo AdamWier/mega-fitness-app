@@ -21,7 +21,7 @@ jobs:
     - name: Create env file
       run: echo "${{ secrets.EnvFile }}" > .env
     - name: Set up expo cli
-      run: npm i -g expo-cli
+      run: npm i -g expo-cli@5.0.3
     - name: Expo log in
       run: expo login -u ${{ secrets.ExpoUsername }} -p ${{ secrets.ExpoPassword }}
     - name: Extract branch name
