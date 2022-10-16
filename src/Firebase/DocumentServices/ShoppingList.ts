@@ -2,6 +2,7 @@ import {
   DocumentData,
   Firestore,
   limit,
+  orderBy,
   Query,
   QueryDocumentSnapshot,
   where,
@@ -67,6 +68,18 @@ export default class ShoppingListService extends DocumentService {
     return (docs.pop() as unknown as ShoppingListDocument | undefined) || null;
   }
 
+  public async findRecentShoppingLists(
+    uid: string
+  ): Promise<ShoppingListDocument[]> {
+    const ref = this.buildQuery([
+      where('uid', '==', uid),
+      orderBy('start', 'desc'),
+      limit(5),
+    ]);
+    const docs = (await this.handleReponse(ref)) as ShoppingListDocument[];
+    return docs;
+  }
+
   private getDocumentReference(
     start: Date,
     end: Date,
@@ -88,6 +101,8 @@ export default class ShoppingListService extends DocumentService {
     return {
       id: document.id,
       items: data.items,
+      start: data.start.toDate(),
+      end: data.end.toDate(),
     };
   }
 }
