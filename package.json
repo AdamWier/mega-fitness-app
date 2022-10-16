@@ -85,6 +85,7 @@
     "@types/react-redux": "^7.1.7",
     "@types/react-test-renderer": "^16.9.3",
     "@types/redux": "^3.6.0",
+    "@types/redux-mock-store": "^1.0.3",
     "@types/victory": "^33.1.4",
     "@typescript-eslint/eslint-plugin": "^2.23.0",
     "@typescript-eslint/parser": "^2.23.0",
@@ -110,6 +111,7 @@
     "lint-staged": "^10.1.6",
     "prettier": "^2.0.2",
     "react-test-renderer": "17",
+    "redux-mock-store": "^1.5.4",
     "typescript": "~4.3.5"
   },
   "private": true,

@@ -14,7 +14,7 @@ export const useWeightGraph = (weightReport: WeightReport) => {
     .concat(Infinity)
     .reduce(findMin);
 
-  const yDomain: DomainTuple = weightReport
+  const yDomain: DomainTuple = weightReport.records.length
     ? [
         Math.floor(weightReport.minWeight * 0.95),
         Math.floor(weightReport.maxWeight * 1.05),

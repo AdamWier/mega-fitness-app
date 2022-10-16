@@ -1,0 +1,5230 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<WeightTracking /> renders correctly 1`] = `
+<View>
+  <View
+    accessibilityIgnoresInvertColors={true}
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#2089dc",
+        "borderBottomColor": "#f2f2f2",
+        "borderBottomWidth": 0.5,
+        "flexDirection": "row",
+        "height": 64,
+        "justifyContent": "space-between",
+        "paddingHorizontal": 10,
+        "paddingTop": 20,
+      }
+    }
+  >
+    <Image
+      style={
+        Array [
+          Object {
+            "bottom": 0,
+            "left": 0,
+            "position": "absolute",
+            "right": 0,
+            "top": 0,
+          },
+          Object {
+            "height": 64,
+            "width": undefined,
+          },
+          undefined,
+        ]
+      }
+      testID="headerContainer"
+    />
+    <View
+      style={
+        Object {
+          "alignItems": "flex-start",
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "borderRadius": 3,
+          }
+        }
+      >
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "opacity": 1,
+            }
+          }
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "#2089dc",
+                "borderColor": "#2089dc",
+                "borderRadius": 3,
+                "borderWidth": 0,
+                "flexDirection": "row",
+                "justifyContent": "center",
+                "padding": 8,
+              }
+            }
+          >
+            <View>
+              <View
+                style={
+                  Object {
+                    "alignItems": "center",
+                    "backgroundColor": "transparent",
+                    "justifyContent": "center",
+                  }
+                }
+                theme={
+                  Object {
+                    "colors": Object {
+                      "disabled": "hsl(208, 8%, 90%)",
+                      "divider": "#bcbbc1",
+                      "error": "#ff190c",
+                      "grey0": "#393e42",
+                      "grey1": "#43484d",
+                      "grey2": "#5e6977",
+                      "grey3": "#86939e",
+                      "grey4": "#bdc6cf",
+                      "grey5": "#e1e8ee",
+                      "greyOutline": "#bbb",
+                      "platform": Object {
+                        "android": Object {
+                          "error": "#f44336",
+                          "primary": "#2196f3",
+                          "secondary": "#9C27B0",
+                          "success": "#4caf50",
+                          "warning": "#ffeb3b",
+                        },
+                        "ios": Object {
+                          "error": "#ff3b30",
+                          "primary": "#007aff",
+                          "secondary": "#5856d6",
+                          "success": "#4cd964",
+                          "warning": "#ffcc00",
+                        },
+                      },
+                      "primary": "#2089dc",
+                      "searchBg": "#303337",
+                      "secondary": "#8F0CE8",
+                      "success": "#52c41a",
+                      "warning": "#faad14",
+                    },
+                  }
+                }
+                underlayColor="white"
+              >
+                <Text />
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "flex-start",
+          "flex": 3,
+          "paddingHorizontal": 15,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "fontFamily": "sans-serif-medium",
+            "fontSize": 20,
+          }
+        }
+        theme={
+          Object {
+            "colors": Object {
+              "disabled": "hsl(208, 8%, 90%)",
+              "divider": "#bcbbc1",
+              "error": "#ff190c",
+              "grey0": "#393e42",
+              "grey1": "#43484d",
+              "grey2": "#5e6977",
+              "grey3": "#86939e",
+              "grey4": "#bdc6cf",
+              "grey5": "#e1e8ee",
+              "greyOutline": "#bbb",
+              "platform": Object {
+                "android": Object {
+                  "error": "#f44336",
+                  "primary": "#2196f3",
+                  "secondary": "#9C27B0",
+                  "success": "#4caf50",
+                  "warning": "#ffeb3b",
+                },
+                "ios": Object {
+                  "error": "#ff3b30",
+                  "primary": "#007aff",
+                  "secondary": "#5856d6",
+                  "success": "#4cd964",
+                  "warning": "#ffcc00",
+                },
+              },
+              "primary": "#2089dc",
+              "searchBg": "#303337",
+              "secondary": "#8F0CE8",
+              "success": "#52c41a",
+              "warning": "#faad14",
+            },
+          }
+        }
+      >
+        Weight tracking
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "flex-end",
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "borderRadius": 3,
+          }
+        }
+      >
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "opacity": 1,
+            }
+          }
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "#2089dc",
+                "borderColor": "#2089dc",
+                "borderRadius": 3,
+                "borderWidth": 0,
+                "flexDirection": "row",
+                "justifyContent": "center",
+                "padding": 8,
+              }
+            }
+          >
+            <View>
+              <View
+                style={
+                  Object {
+                    "alignItems": "center",
+                    "backgroundColor": "transparent",
+                    "justifyContent": "center",
+                  }
+                }
+                theme={
+                  Object {
+                    "colors": Object {
+                      "disabled": "hsl(208, 8%, 90%)",
+                      "divider": "#bcbbc1",
+                      "error": "#ff190c",
+                      "grey0": "#393e42",
+                      "grey1": "#43484d",
+                      "grey2": "#5e6977",
+                      "grey3": "#86939e",
+                      "grey4": "#bdc6cf",
+                      "grey5": "#e1e8ee",
+                      "greyOutline": "#bbb",
+                      "platform": Object {
+                        "android": Object {
+                          "error": "#f44336",
+                          "primary": "#2196f3",
+                          "secondary": "#9C27B0",
+                          "success": "#4caf50",
+                          "warning": "#ffeb3b",
+                        },
+                        "ios": Object {
+                          "error": "#ff3b30",
+                          "primary": "#007aff",
+                          "secondary": "#5856d6",
+                          "success": "#4cd964",
+                          "warning": "#ffcc00",
+                        },
+                      },
+                      "primary": "#2089dc",
+                      "searchBg": "#303337",
+                      "secondary": "#8F0CE8",
+                      "success": "#52c41a",
+                      "warning": "#faad14",
+                    },
+                  }
+                }
+                underlayColor="white"
+              >
+                <Text />
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+  <Text
+    style={
+      Object {
+        "marginVertical": 10,
+      }
+    }
+    theme={
+      Object {
+        "colors": Object {
+          "disabled": "hsl(208, 8%, 90%)",
+          "divider": "#bcbbc1",
+          "error": "#ff190c",
+          "grey0": "#393e42",
+          "grey1": "#43484d",
+          "grey2": "#5e6977",
+          "grey3": "#86939e",
+          "grey4": "#bdc6cf",
+          "grey5": "#e1e8ee",
+          "greyOutline": "#bbb",
+          "platform": Object {
+            "android": Object {
+              "error": "#f44336",
+              "primary": "#2196f3",
+              "secondary": "#9C27B0",
+              "success": "#4caf50",
+              "warning": "#ffeb3b",
+            },
+            "ios": Object {
+              "error": "#ff3b30",
+              "primary": "#007aff",
+              "secondary": "#5856d6",
+              "success": "#4cd964",
+              "warning": "#ffcc00",
+            },
+          },
+          "primary": "#2089dc",
+          "searchBg": "#303337",
+          "secondary": "#8F0CE8",
+          "success": "#52c41a",
+          "warning": "#faad14",
+        },
+      }
+    }
+  >
+    Slide right to see past dates
+  </Text>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+        "justifyContent": "space-around",
+        "marginVertical": 30,
+      }
+    }
+  >
+    <View>
+      <Text
+        style={
+          Object {
+            "fontSize": 20,
+          }
+        }
+        theme={
+          Object {
+            "colors": Object {
+              "disabled": "hsl(208, 8%, 90%)",
+              "divider": "#bcbbc1",
+              "error": "#ff190c",
+              "grey0": "#393e42",
+              "grey1": "#43484d",
+              "grey2": "#5e6977",
+              "grey3": "#86939e",
+              "grey4": "#bdc6cf",
+              "grey5": "#e1e8ee",
+              "greyOutline": "#bbb",
+              "platform": Object {
+                "android": Object {
+                  "error": "#f44336",
+                  "primary": "#2196f3",
+                  "secondary": "#9C27B0",
+                  "success": "#4caf50",
+                  "warning": "#ffeb3b",
+                },
+                "ios": Object {
+                  "error": "#ff3b30",
+                  "primary": "#007aff",
+                  "secondary": "#5856d6",
+                  "success": "#4cd964",
+                  "warning": "#ffcc00",
+                },
+              },
+              "primary": "#2089dc",
+              "searchBg": "#303337",
+              "secondary": "#8F0CE8",
+              "success": "#52c41a",
+              "warning": "#faad14",
+            },
+          }
+        }
+      >
+        Max weight
+      </Text>
+      <Text
+        style={
+          Object {
+            "fontSize": 20,
+          }
+        }
+        theme={
+          Object {
+            "colors": Object {
+              "disabled": "hsl(208, 8%, 90%)",
+              "divider": "#bcbbc1",
+              "error": "#ff190c",
+              "grey0": "#393e42",
+              "grey1": "#43484d",
+              "grey2": "#5e6977",
+              "grey3": "#86939e",
+              "grey4": "#bdc6cf",
+              "grey5": "#e1e8ee",
+              "greyOutline": "#bbb",
+              "platform": Object {
+                "android": Object {
+                  "error": "#f44336",
+                  "primary": "#2196f3",
+                  "secondary": "#9C27B0",
+                  "success": "#4caf50",
+                  "warning": "#ffeb3b",
+                },
+                "ios": Object {
+                  "error": "#ff3b30",
+                  "primary": "#007aff",
+                  "secondary": "#5856d6",
+                  "success": "#4cd964",
+                  "warning": "#ffcc00",
+                },
+              },
+              "primary": "#2089dc",
+              "searchBg": "#303337",
+              "secondary": "#8F0CE8",
+              "success": "#52c41a",
+              "warning": "#faad14",
+            },
+          }
+        }
+      >
+        -
+      </Text>
+    </View>
+    <View>
+      <Text
+        style={
+          Object {
+            "fontSize": 20,
+          }
+        }
+        theme={
+          Object {
+            "colors": Object {
+              "disabled": "hsl(208, 8%, 90%)",
+              "divider": "#bcbbc1",
+              "error": "#ff190c",
+              "grey0": "#393e42",
+              "grey1": "#43484d",
+              "grey2": "#5e6977",
+              "grey3": "#86939e",
+              "grey4": "#bdc6cf",
+              "grey5": "#e1e8ee",
+              "greyOutline": "#bbb",
+              "platform": Object {
+                "android": Object {
+                  "error": "#f44336",
+                  "primary": "#2196f3",
+                  "secondary": "#9C27B0",
+                  "success": "#4caf50",
+                  "warning": "#ffeb3b",
+                },
+                "ios": Object {
+                  "error": "#ff3b30",
+                  "primary": "#007aff",
+                  "secondary": "#5856d6",
+                  "success": "#4cd964",
+                  "warning": "#ffcc00",
+                },
+              },
+              "primary": "#2089dc",
+              "searchBg": "#303337",
+              "secondary": "#8F0CE8",
+              "success": "#52c41a",
+              "warning": "#faad14",
+            },
+          }
+        }
+      >
+        Average weight
+      </Text>
+      <Text
+        style={
+          Object {
+            "fontSize": 20,
+          }
+        }
+        theme={
+          Object {
+            "colors": Object {
+              "disabled": "hsl(208, 8%, 90%)",
+              "divider": "#bcbbc1",
+              "error": "#ff190c",
+              "grey0": "#393e42",
+              "grey1": "#43484d",
+              "grey2": "#5e6977",
+              "grey3": "#86939e",
+              "grey4": "#bdc6cf",
+              "grey5": "#e1e8ee",
+              "greyOutline": "#bbb",
+              "platform": Object {
+                "android": Object {
+                  "error": "#f44336",
+                  "primary": "#2196f3",
+                  "secondary": "#9C27B0",
+                  "success": "#4caf50",
+                  "warning": "#ffeb3b",
+                },
+                "ios": Object {
+                  "error": "#ff3b30",
+                  "primary": "#007aff",
+                  "secondary": "#5856d6",
+                  "success": "#4cd964",
+                  "warning": "#ffcc00",
+                },
+              },
+              "primary": "#2089dc",
+              "searchBg": "#303337",
+              "secondary": "#8F0CE8",
+              "success": "#52c41a",
+              "warning": "#faad14",
+            },
+          }
+        }
+      >
+        -
+      </Text>
+    </View>
+    <View>
+      <Text
+        style={
+          Object {
+            "fontSize": 20,
+          }
+        }
+        theme={
+          Object {
+            "colors": Object {
+              "disabled": "hsl(208, 8%, 90%)",
+              "divider": "#bcbbc1",
+              "error": "#ff190c",
+              "grey0": "#393e42",
+              "grey1": "#43484d",
+              "grey2": "#5e6977",
+              "grey3": "#86939e",
+              "grey4": "#bdc6cf",
+              "grey5": "#e1e8ee",
+              "greyOutline": "#bbb",
+              "platform": Object {
+                "android": Object {
+                  "error": "#f44336",
+                  "primary": "#2196f3",
+                  "secondary": "#9C27B0",
+                  "success": "#4caf50",
+                  "warning": "#ffeb3b",
+                },
+                "ios": Object {
+                  "error": "#ff3b30",
+                  "primary": "#007aff",
+                  "secondary": "#5856d6",
+                  "success": "#4cd964",
+                  "warning": "#ffcc00",
+                },
+              },
+              "primary": "#2089dc",
+              "searchBg": "#303337",
+              "secondary": "#8F0CE8",
+              "success": "#52c41a",
+              "warning": "#faad14",
+            },
+          }
+        }
+      >
+        Min weight
+      </Text>
+      <Text
+        style={
+          Object {
+            "fontSize": 20,
+          }
+        }
+        theme={
+          Object {
+            "colors": Object {
+              "disabled": "hsl(208, 8%, 90%)",
+              "divider": "#bcbbc1",
+              "error": "#ff190c",
+              "grey0": "#393e42",
+              "grey1": "#43484d",
+              "grey2": "#5e6977",
+              "grey3": "#86939e",
+              "grey4": "#bdc6cf",
+              "grey5": "#e1e8ee",
+              "greyOutline": "#bbb",
+              "platform": Object {
+                "android": Object {
+                  "error": "#f44336",
+                  "primary": "#2196f3",
+                  "secondary": "#9C27B0",
+                  "success": "#4caf50",
+                  "warning": "#ffeb3b",
+                },
+                "ios": Object {
+                  "error": "#ff3b30",
+                  "primary": "#007aff",
+                  "secondary": "#5856d6",
+                  "success": "#4cd964",
+                  "warning": "#ffcc00",
+                },
+              },
+              "primary": "#2089dc",
+              "searchBg": "#303337",
+              "secondary": "#8F0CE8",
+              "success": "#52c41a",
+              "warning": "#faad14",
+            },
+          }
+        }
+      >
+        -
+      </Text>
+    </View>
+  </View>
+  <View
+    className="VictoryContainer"
+    onMoveShouldSetResponder={[Function]}
+    onMoveShouldSetResponderCapture={[Function]}
+    onResponderEnd={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderReject={[Function]}
+    onResponderRelease={[Function]}
+    onResponderStart={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    onStartShouldSetResponderCapture={[Function]}
+    pointerEvents="box-none"
+    style={
+      Object {
+        "position": "relative",
+      }
+    }
+  >
+    <RNSVGSvgView
+      align="xMidYMid"
+      bbHeight={350}
+      bbWidth={750}
+      focusable={false}
+      height={350}
+      meetOrSlice={0}
+      minX={0}
+      minY={0}
+      onTouchEnd={[Function]}
+      onTouchMove={[Function]}
+      onTouchPinch={[Function]}
+      onTouchStart={[Function]}
+      role="img"
+      style={
+        Array [
+          Object {
+            "backgroundColor": "transparent",
+            "borderWidth": 0,
+          },
+          Object {
+            "height": "100%",
+            "width": "100%",
+          },
+          Object {
+            "flex": 0,
+            "height": 350,
+            "width": 750,
+          },
+        ]
+      }
+      vbHeight={350}
+      vbWidth={750}
+      width={750}
+    >
+      <RNSVGGroup>
+        <RNSVGGroup>
+          <RNSVGLine
+            fill={0}
+            propList={
+              Array [
+                "fill",
+                "stroke",
+                "strokeWidth",
+                "strokeLinecap",
+                "strokeLinejoin",
+              ]
+            }
+            stroke={4287669422}
+            strokeLinecap={1}
+            strokeLinejoin={1}
+            strokeWidth={2}
+            vectorEffect={1}
+            x1={50}
+            x2={700}
+            y1={300}
+            y2={300}
+          />
+          <RNSVGGroup>
+            <RNSVGLine
+              fill={null}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeDasharray",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={0}
+              strokeDasharray={
+                Array [
+                  "10",
+                  "5",
+                ]
+              }
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              vectorEffect={1}
+              x1={109.63162549603175}
+              x2={109.63162549603175}
+              y1={300}
+              y2={50}
+            />
+            <RNSVGLine
+              display="none"
+              fill={0}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeWidth",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={4287669422}
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              strokeWidth={1}
+              vectorEffect={1}
+              x1={109.63162549603175}
+              x2={109.63162549603175}
+              y1={300}
+              y2={305}
+            />
+            <RNSVGText
+              content={null}
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={Array []}
+              font={Object {}}
+              name="chart-axis-0-tickLabels-0"
+              rotate={Array []}
+              x={
+                Array [
+                  109.63162549603175,
+                ]
+              }
+              y={
+                Array [
+                  323.26,
+                ]
+              }
+            >
+              <RNSVGTSpan
+                content="May 22"
+                dx={
+                  Array [
+                    0,
+                  ]
+                }
+                dy={
+                  Array [
+                    0,
+                  ]
+                }
+                fill={4282735204}
+                font={
+                  Object {
+                    "fontFamily": "Roboto",
+                    "fontSize": 12,
+                    "letterSpacing": "normal",
+                    "textAnchor": "middle",
+                  }
+                }
+                propList={
+                  Array [
+                    "fill",
+                  ]
+                }
+                rotate={Array []}
+                x={
+                  Array [
+                    109.63162549603175,
+                  ]
+                }
+                y={Array []}
+              />
+            </RNSVGText>
+          </RNSVGGroup>
+          <RNSVGGroup>
+            <RNSVGLine
+              fill={null}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeDasharray",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={0}
+              strokeDasharray={
+                Array [
+                  "10",
+                  "5",
+                ]
+              }
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              vectorEffect={1}
+              x1={217.1051704695767}
+              x2={217.1051704695767}
+              y1={300}
+              y2={50}
+            />
+            <RNSVGLine
+              display="none"
+              fill={0}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeWidth",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={4287669422}
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              strokeWidth={1}
+              vectorEffect={1}
+              x1={217.1051704695767}
+              x2={217.1051704695767}
+              y1={300}
+              y2={305}
+            />
+            <RNSVGText
+              content={null}
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={Array []}
+              font={Object {}}
+              name="chart-axis-0-tickLabels-1"
+              rotate={Array []}
+              x={
+                Array [
+                  217.1051704695767,
+                ]
+              }
+              y={
+                Array [
+                  323.26,
+                ]
+              }
+            >
+              <RNSVGTSpan
+                content="May 24"
+                dx={
+                  Array [
+                    0,
+                  ]
+                }
+                dy={
+                  Array [
+                    0,
+                  ]
+                }
+                fill={4282735204}
+                font={
+                  Object {
+                    "fontFamily": "Roboto",
+                    "fontSize": 12,
+                    "letterSpacing": "normal",
+                    "textAnchor": "middle",
+                  }
+                }
+                propList={
+                  Array [
+                    "fill",
+                  ]
+                }
+                rotate={Array []}
+                x={
+                  Array [
+                    217.1051704695767,
+                  ]
+                }
+                y={Array []}
+              />
+            </RNSVGText>
+          </RNSVGGroup>
+          <RNSVGGroup>
+            <RNSVGLine
+              fill={null}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeDasharray",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={0}
+              strokeDasharray={
+                Array [
+                  "10",
+                  "5",
+                ]
+              }
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              vectorEffect={1}
+              x1={324.57871544312167}
+              x2={324.57871544312167}
+              y1={300}
+              y2={50}
+            />
+            <RNSVGLine
+              display="none"
+              fill={0}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeWidth",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={4287669422}
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              strokeWidth={1}
+              vectorEffect={1}
+              x1={324.57871544312167}
+              x2={324.57871544312167}
+              y1={300}
+              y2={305}
+            />
+            <RNSVGText
+              content={null}
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={Array []}
+              font={Object {}}
+              name="chart-axis-0-tickLabels-2"
+              rotate={Array []}
+              x={
+                Array [
+                  324.57871544312167,
+                ]
+              }
+              y={
+                Array [
+                  323.26,
+                ]
+              }
+            >
+              <RNSVGTSpan
+                content="May 26"
+                dx={
+                  Array [
+                    0,
+                  ]
+                }
+                dy={
+                  Array [
+                    0,
+                  ]
+                }
+                fill={4282735204}
+                font={
+                  Object {
+                    "fontFamily": "Roboto",
+                    "fontSize": 12,
+                    "letterSpacing": "normal",
+                    "textAnchor": "middle",
+                  }
+                }
+                propList={
+                  Array [
+                    "fill",
+                  ]
+                }
+                rotate={Array []}
+                x={
+                  Array [
+                    324.57871544312167,
+                  ]
+                }
+                y={Array []}
+              />
+            </RNSVGText>
+          </RNSVGGroup>
+          <RNSVGGroup>
+            <RNSVGLine
+              fill={null}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeDasharray",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={0}
+              strokeDasharray={
+                Array [
+                  "10",
+                  "5",
+                ]
+              }
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              vectorEffect={1}
+              x1={432.0522604166666}
+              x2={432.0522604166666}
+              y1={300}
+              y2={50}
+            />
+            <RNSVGLine
+              display="none"
+              fill={0}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeWidth",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={4287669422}
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              strokeWidth={1}
+              vectorEffect={1}
+              x1={432.0522604166666}
+              x2={432.0522604166666}
+              y1={300}
+              y2={305}
+            />
+            <RNSVGText
+              content={null}
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={Array []}
+              font={Object {}}
+              name="chart-axis-0-tickLabels-3"
+              rotate={Array []}
+              x={
+                Array [
+                  432.0522604166666,
+                ]
+              }
+              y={
+                Array [
+                  323.26,
+                ]
+              }
+            >
+              <RNSVGTSpan
+                content="May 29"
+                dx={
+                  Array [
+                    0,
+                  ]
+                }
+                dy={
+                  Array [
+                    0,
+                  ]
+                }
+                fill={4282735204}
+                font={
+                  Object {
+                    "fontFamily": "Roboto",
+                    "fontSize": 12,
+                    "letterSpacing": "normal",
+                    "textAnchor": "middle",
+                  }
+                }
+                propList={
+                  Array [
+                    "fill",
+                  ]
+                }
+                rotate={Array []}
+                x={
+                  Array [
+                    432.0522604166666,
+                  ]
+                }
+                y={Array []}
+              />
+            </RNSVGText>
+          </RNSVGGroup>
+          <RNSVGGroup>
+            <RNSVGLine
+              fill={null}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeDasharray",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={0}
+              strokeDasharray={
+                Array [
+                  "10",
+                  "5",
+                ]
+              }
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              vectorEffect={1}
+              x1={539.5258053902115}
+              x2={539.5258053902115}
+              y1={300}
+              y2={50}
+            />
+            <RNSVGLine
+              display="none"
+              fill={0}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeWidth",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={4287669422}
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              strokeWidth={1}
+              vectorEffect={1}
+              x1={539.5258053902115}
+              x2={539.5258053902115}
+              y1={300}
+              y2={305}
+            />
+            <RNSVGText
+              content={null}
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={Array []}
+              font={Object {}}
+              name="chart-axis-0-tickLabels-4"
+              rotate={Array []}
+              x={
+                Array [
+                  539.5258053902115,
+                ]
+              }
+              y={
+                Array [
+                  323.26,
+                ]
+              }
+            >
+              <RNSVGTSpan
+                content="May 31"
+                dx={
+                  Array [
+                    0,
+                  ]
+                }
+                dy={
+                  Array [
+                    0,
+                  ]
+                }
+                fill={4282735204}
+                font={
+                  Object {
+                    "fontFamily": "Roboto",
+                    "fontSize": 12,
+                    "letterSpacing": "normal",
+                    "textAnchor": "middle",
+                  }
+                }
+                propList={
+                  Array [
+                    "fill",
+                  ]
+                }
+                rotate={Array []}
+                x={
+                  Array [
+                    539.5258053902115,
+                  ]
+                }
+                y={Array []}
+              />
+            </RNSVGText>
+          </RNSVGGroup>
+          <RNSVGGroup>
+            <RNSVGLine
+              fill={null}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeDasharray",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={0}
+              strokeDasharray={
+                Array [
+                  "10",
+                  "5",
+                ]
+              }
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              vectorEffect={1}
+              x1={646.9993503637565}
+              x2={646.9993503637565}
+              y1={300}
+              y2={50}
+            />
+            <RNSVGLine
+              display="none"
+              fill={0}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeWidth",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={4287669422}
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              strokeWidth={1}
+              vectorEffect={1}
+              x1={646.9993503637565}
+              x2={646.9993503637565}
+              y1={300}
+              y2={305}
+            />
+            <RNSVGText
+              content={null}
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={Array []}
+              font={Object {}}
+              name="chart-axis-0-tickLabels-5"
+              rotate={Array []}
+              x={
+                Array [
+                  646.9993503637565,
+                ]
+              }
+              y={
+                Array [
+                  323.26,
+                ]
+              }
+            >
+              <RNSVGTSpan
+                content="Jun 2"
+                dx={
+                  Array [
+                    0,
+                  ]
+                }
+                dy={
+                  Array [
+                    0,
+                  ]
+                }
+                fill={4282735204}
+                font={
+                  Object {
+                    "fontFamily": "Roboto",
+                    "fontSize": 12,
+                    "letterSpacing": "normal",
+                    "textAnchor": "middle",
+                  }
+                }
+                propList={
+                  Array [
+                    "fill",
+                  ]
+                }
+                rotate={Array []}
+                x={
+                  Array [
+                    646.9993503637565,
+                  ]
+                }
+                y={Array []}
+              />
+            </RNSVGText>
+          </RNSVGGroup>
+        </RNSVGGroup>
+        <RNSVGGroup>
+          <RNSVGLine
+            fill={0}
+            propList={
+              Array [
+                "fill",
+                "stroke",
+                "strokeWidth",
+                "strokeLinecap",
+                "strokeLinejoin",
+              ]
+            }
+            stroke={4287669422}
+            strokeLinecap={1}
+            strokeLinejoin={1}
+            strokeWidth={2}
+            vectorEffect={1}
+            x1={50}
+            x2={50}
+            y1={50}
+            y2={300}
+          />
+          <RNSVGGroup>
+            <RNSVGLine
+              fill={null}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeDasharray",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={0}
+              strokeDasharray={
+                Array [
+                  "10",
+                  "5",
+                ]
+              }
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              vectorEffect={1}
+              x1={50}
+              x2={700}
+              y1={300}
+              y2={300}
+            />
+            <RNSVGLine
+              display="none"
+              fill={0}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeWidth",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={4287669422}
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              strokeWidth={1}
+              vectorEffect={1}
+              x1={50}
+              x2={45}
+              y1={300}
+              y2={300}
+            />
+            <RNSVGText
+              content={null}
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={Array []}
+              font={Object {}}
+              name="chart-axis-1-tickLabels-0"
+              rotate={Array []}
+              x={
+                Array [
+                  37,
+                ]
+              }
+              y={
+                Array [
+                  304.26,
+                ]
+              }
+            >
+              <RNSVGTSpan
+                content="50"
+                dx={
+                  Array [
+                    0,
+                  ]
+                }
+                dy={
+                  Array [
+                    0,
+                  ]
+                }
+                fill={4282735204}
+                font={
+                  Object {
+                    "fontFamily": "Roboto",
+                    "fontSize": 12,
+                    "letterSpacing": "normal",
+                    "textAnchor": "end",
+                  }
+                }
+                propList={
+                  Array [
+                    "fill",
+                  ]
+                }
+                rotate={Array []}
+                x={
+                  Array [
+                    37,
+                  ]
+                }
+                y={Array []}
+              />
+            </RNSVGText>
+          </RNSVGGroup>
+          <RNSVGGroup>
+            <RNSVGLine
+              fill={null}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeDasharray",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={0}
+              strokeDasharray={
+                Array [
+                  "10",
+                  "5",
+                ]
+              }
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              vectorEffect={1}
+              x1={50}
+              x2={700}
+              y1={264.28571428571433}
+              y2={264.28571428571433}
+            />
+            <RNSVGLine
+              display="none"
+              fill={0}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeWidth",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={4287669422}
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              strokeWidth={1}
+              vectorEffect={1}
+              x1={50}
+              x2={45}
+              y1={264.28571428571433}
+              y2={264.28571428571433}
+            />
+            <RNSVGText
+              content={null}
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={Array []}
+              font={Object {}}
+              name="chart-axis-1-tickLabels-1"
+              rotate={Array []}
+              x={
+                Array [
+                  37,
+                ]
+              }
+              y={
+                Array [
+                  268.5457142857143,
+                ]
+              }
+            >
+              <RNSVGTSpan
+                content="60"
+                dx={
+                  Array [
+                    0,
+                  ]
+                }
+                dy={
+                  Array [
+                    0,
+                  ]
+                }
+                fill={4282735204}
+                font={
+                  Object {
+                    "fontFamily": "Roboto",
+                    "fontSize": 12,
+                    "letterSpacing": "normal",
+                    "textAnchor": "end",
+                  }
+                }
+                propList={
+                  Array [
+                    "fill",
+                  ]
+                }
+                rotate={Array []}
+                x={
+                  Array [
+                    37,
+                  ]
+                }
+                y={Array []}
+              />
+            </RNSVGText>
+          </RNSVGGroup>
+          <RNSVGGroup>
+            <RNSVGLine
+              fill={null}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeDasharray",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={0}
+              strokeDasharray={
+                Array [
+                  "10",
+                  "5",
+                ]
+              }
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              vectorEffect={1}
+              x1={50}
+              x2={700}
+              y1={228.57142857142856}
+              y2={228.57142857142856}
+            />
+            <RNSVGLine
+              display="none"
+              fill={0}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeWidth",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={4287669422}
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              strokeWidth={1}
+              vectorEffect={1}
+              x1={50}
+              x2={45}
+              y1={228.57142857142856}
+              y2={228.57142857142856}
+            />
+            <RNSVGText
+              content={null}
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={Array []}
+              font={Object {}}
+              name="chart-axis-1-tickLabels-2"
+              rotate={Array []}
+              x={
+                Array [
+                  37,
+                ]
+              }
+              y={
+                Array [
+                  232.83142857142855,
+                ]
+              }
+            >
+              <RNSVGTSpan
+                content="70"
+                dx={
+                  Array [
+                    0,
+                  ]
+                }
+                dy={
+                  Array [
+                    0,
+                  ]
+                }
+                fill={4282735204}
+                font={
+                  Object {
+                    "fontFamily": "Roboto",
+                    "fontSize": 12,
+                    "letterSpacing": "normal",
+                    "textAnchor": "end",
+                  }
+                }
+                propList={
+                  Array [
+                    "fill",
+                  ]
+                }
+                rotate={Array []}
+                x={
+                  Array [
+                    37,
+                  ]
+                }
+                y={Array []}
+              />
+            </RNSVGText>
+          </RNSVGGroup>
+          <RNSVGGroup>
+            <RNSVGLine
+              fill={null}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeDasharray",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={0}
+              strokeDasharray={
+                Array [
+                  "10",
+                  "5",
+                ]
+              }
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              vectorEffect={1}
+              x1={50}
+              x2={700}
+              y1={192.85714285714283}
+              y2={192.85714285714283}
+            />
+            <RNSVGLine
+              display="none"
+              fill={0}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeWidth",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={4287669422}
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              strokeWidth={1}
+              vectorEffect={1}
+              x1={50}
+              x2={45}
+              y1={192.85714285714283}
+              y2={192.85714285714283}
+            />
+            <RNSVGText
+              content={null}
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={Array []}
+              font={Object {}}
+              name="chart-axis-1-tickLabels-3"
+              rotate={Array []}
+              x={
+                Array [
+                  37,
+                ]
+              }
+              y={
+                Array [
+                  197.11714285714282,
+                ]
+              }
+            >
+              <RNSVGTSpan
+                content="80"
+                dx={
+                  Array [
+                    0,
+                  ]
+                }
+                dy={
+                  Array [
+                    0,
+                  ]
+                }
+                fill={4282735204}
+                font={
+                  Object {
+                    "fontFamily": "Roboto",
+                    "fontSize": 12,
+                    "letterSpacing": "normal",
+                    "textAnchor": "end",
+                  }
+                }
+                propList={
+                  Array [
+                    "fill",
+                  ]
+                }
+                rotate={Array []}
+                x={
+                  Array [
+                    37,
+                  ]
+                }
+                y={Array []}
+              />
+            </RNSVGText>
+          </RNSVGGroup>
+          <RNSVGGroup>
+            <RNSVGLine
+              fill={null}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeDasharray",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={0}
+              strokeDasharray={
+                Array [
+                  "10",
+                  "5",
+                ]
+              }
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              vectorEffect={1}
+              x1={50}
+              x2={700}
+              y1={157.14285714285717}
+              y2={157.14285714285717}
+            />
+            <RNSVGLine
+              display="none"
+              fill={0}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeWidth",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={4287669422}
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              strokeWidth={1}
+              vectorEffect={1}
+              x1={50}
+              x2={45}
+              y1={157.14285714285717}
+              y2={157.14285714285717}
+            />
+            <RNSVGText
+              content={null}
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={Array []}
+              font={Object {}}
+              name="chart-axis-1-tickLabels-4"
+              rotate={Array []}
+              x={
+                Array [
+                  37,
+                ]
+              }
+              y={
+                Array [
+                  161.40285714285716,
+                ]
+              }
+            >
+              <RNSVGTSpan
+                content="90"
+                dx={
+                  Array [
+                    0,
+                  ]
+                }
+                dy={
+                  Array [
+                    0,
+                  ]
+                }
+                fill={4282735204}
+                font={
+                  Object {
+                    "fontFamily": "Roboto",
+                    "fontSize": 12,
+                    "letterSpacing": "normal",
+                    "textAnchor": "end",
+                  }
+                }
+                propList={
+                  Array [
+                    "fill",
+                  ]
+                }
+                rotate={Array []}
+                x={
+                  Array [
+                    37,
+                  ]
+                }
+                y={Array []}
+              />
+            </RNSVGText>
+          </RNSVGGroup>
+          <RNSVGGroup>
+            <RNSVGLine
+              fill={null}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeDasharray",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={0}
+              strokeDasharray={
+                Array [
+                  "10",
+                  "5",
+                ]
+              }
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              vectorEffect={1}
+              x1={50}
+              x2={700}
+              y1={121.42857142857142}
+              y2={121.42857142857142}
+            />
+            <RNSVGLine
+              display="none"
+              fill={0}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeWidth",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={4287669422}
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              strokeWidth={1}
+              vectorEffect={1}
+              x1={50}
+              x2={45}
+              y1={121.42857142857142}
+              y2={121.42857142857142}
+            />
+            <RNSVGText
+              content={null}
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={Array []}
+              font={Object {}}
+              name="chart-axis-1-tickLabels-5"
+              rotate={Array []}
+              x={
+                Array [
+                  37,
+                ]
+              }
+              y={
+                Array [
+                  125.68857142857142,
+                ]
+              }
+            >
+              <RNSVGTSpan
+                content="100"
+                dx={
+                  Array [
+                    0,
+                  ]
+                }
+                dy={
+                  Array [
+                    0,
+                  ]
+                }
+                fill={4282735204}
+                font={
+                  Object {
+                    "fontFamily": "Roboto",
+                    "fontSize": 12,
+                    "letterSpacing": "normal",
+                    "textAnchor": "end",
+                  }
+                }
+                propList={
+                  Array [
+                    "fill",
+                  ]
+                }
+                rotate={Array []}
+                x={
+                  Array [
+                    37,
+                  ]
+                }
+                y={Array []}
+              />
+            </RNSVGText>
+          </RNSVGGroup>
+          <RNSVGGroup>
+            <RNSVGLine
+              fill={null}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeDasharray",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={0}
+              strokeDasharray={
+                Array [
+                  "10",
+                  "5",
+                ]
+              }
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              vectorEffect={1}
+              x1={50}
+              x2={700}
+              y1={85.71428571428572}
+              y2={85.71428571428572}
+            />
+            <RNSVGLine
+              display="none"
+              fill={0}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeWidth",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={4287669422}
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              strokeWidth={1}
+              vectorEffect={1}
+              x1={50}
+              x2={45}
+              y1={85.71428571428572}
+              y2={85.71428571428572}
+            />
+            <RNSVGText
+              content={null}
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={Array []}
+              font={Object {}}
+              name="chart-axis-1-tickLabels-6"
+              rotate={Array []}
+              x={
+                Array [
+                  37,
+                ]
+              }
+              y={
+                Array [
+                  89.97428571428573,
+                ]
+              }
+            >
+              <RNSVGTSpan
+                content="110"
+                dx={
+                  Array [
+                    0,
+                  ]
+                }
+                dy={
+                  Array [
+                    0,
+                  ]
+                }
+                fill={4282735204}
+                font={
+                  Object {
+                    "fontFamily": "Roboto",
+                    "fontSize": 12,
+                    "letterSpacing": "normal",
+                    "textAnchor": "end",
+                  }
+                }
+                propList={
+                  Array [
+                    "fill",
+                  ]
+                }
+                rotate={Array []}
+                x={
+                  Array [
+                    37,
+                  ]
+                }
+                y={Array []}
+              />
+            </RNSVGText>
+          </RNSVGGroup>
+          <RNSVGGroup>
+            <RNSVGLine
+              fill={null}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeDasharray",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={0}
+              strokeDasharray={
+                Array [
+                  "10",
+                  "5",
+                ]
+              }
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              vectorEffect={1}
+              x1={50}
+              x2={700}
+              y1={50}
+              y2={50}
+            />
+            <RNSVGLine
+              display="none"
+              fill={0}
+              propList={
+                Array [
+                  "fill",
+                  "stroke",
+                  "strokeWidth",
+                  "strokeLinecap",
+                  "strokeLinejoin",
+                ]
+              }
+              stroke={4287669422}
+              strokeLinecap={1}
+              strokeLinejoin={1}
+              strokeWidth={1}
+              vectorEffect={1}
+              x1={50}
+              x2={45}
+              y1={50}
+              y2={50}
+            />
+            <RNSVGText
+              content={null}
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={Array []}
+              font={Object {}}
+              name="chart-axis-1-tickLabels-7"
+              rotate={Array []}
+              x={
+                Array [
+                  37,
+                ]
+              }
+              y={
+                Array [
+                  54.26,
+                ]
+              }
+            >
+              <RNSVGTSpan
+                content="120"
+                dx={
+                  Array [
+                    0,
+                  ]
+                }
+                dy={
+                  Array [
+                    0,
+                  ]
+                }
+                fill={4282735204}
+                font={
+                  Object {
+                    "fontFamily": "Roboto",
+                    "fontSize": 12,
+                    "letterSpacing": "normal",
+                    "textAnchor": "end",
+                  }
+                }
+                propList={
+                  Array [
+                    "fill",
+                  ]
+                }
+                rotate={Array []}
+                x={
+                  Array [
+                    37,
+                  ]
+                }
+                y={Array []}
+              />
+            </RNSVGText>
+          </RNSVGGroup>
+        </RNSVGGroup>
+        <RNSVGGroup
+          clipPath="victory-clip-4"
+        >
+          <RNSVGGroup>
+            <RNSVGDefs>
+              <RNSVGClipPath
+                name="victory-clip-4"
+              >
+                <RNSVGRect
+                  height={250}
+                  vectorEffect={1}
+                  width={0}
+                  x={50}
+                  y={50}
+                />
+              </RNSVGClipPath>
+            </RNSVGDefs>
+          </RNSVGGroup>
+          <RNSVGPath
+            d="M50,300L63,295L76,290L89,285L102,280L115,275.00000000000006L128,270.00000000000006L141,265.00000000000006L154,260.00000000000006L167,255.00000000000006L180,250.00000000000009L193,245.00000000000003L206,240L219,235L232.00000000000003,229.99999999999997L245,224.99999999999991L258,219.99999999999994L271,214.99999999999994L284,209.9999999999999L297,204.99999999999986L310,199.99999999999986L323,194.99999999999983L336,189.99999999999977L349,184.99999999999977L362,179.9999999999998L375,174.99999999999974L388,169.99999999999972L401,164.99999999999972L414.00000000000006,159.9999999999997L427,154.9999999999997L440,149.99999999999966L453,144.9999999999996L466,139.9999999999996L479,134.99999999999957L492.00000000000006,129.99999999999957L504.99999999999994,124.99999999999955L518,119.99999999999955L531,114.9999999999995L544,109.99999999999946L557,104.99999999999946L570,99.99999999999943L583,94.99999999999943L596,89.9999999999994L609,84.99999999999939L622,79.99999999999936L635,74.99999999999933L648,69.99999999999932L661,64.99999999999929L674,59.99999999999929L687,54.999999999999254L700,50"
+            fill={0}
+            opacity={1}
+            propList={
+              Array [
+                "fill",
+                "stroke",
+                "strokeWidth",
+              ]
+            }
+            stroke={4282735204}
+            strokeWidth={2}
+          />
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-0"
+            rotate={Array []}
+            x={
+              Array [
+                50,
+              ]
+            }
+            y={
+              Array [
+                290.26,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="50"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  50,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-1"
+            rotate={Array []}
+            x={
+              Array [
+                63,
+              ]
+            }
+            y={
+              Array [
+                285.26,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="51.4"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  63,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-2"
+            rotate={Array []}
+            x={
+              Array [
+                76,
+              ]
+            }
+            y={
+              Array [
+                280.26,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="52.8"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  76,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-3"
+            rotate={Array []}
+            x={
+              Array [
+                89,
+              ]
+            }
+            y={
+              Array [
+                275.26,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="54.199999999999996"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  89,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-4"
+            rotate={Array []}
+            x={
+              Array [
+                102,
+              ]
+            }
+            y={
+              Array [
+                270.26,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="55.599999999999994"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  102,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-5"
+            rotate={Array []}
+            x={
+              Array [
+                115,
+              ]
+            }
+            y={
+              Array [
+                265.26000000000005,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="56.99999999999999"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  115,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-6"
+            rotate={Array []}
+            x={
+              Array [
+                128,
+              ]
+            }
+            y={
+              Array [
+                260.26000000000005,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="58.39999999999999"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  128,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-7"
+            rotate={Array []}
+            x={
+              Array [
+                141,
+              ]
+            }
+            y={
+              Array [
+                255.26000000000005,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="59.79999999999999"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  141,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-8"
+            rotate={Array []}
+            x={
+              Array [
+                154,
+              ]
+            }
+            y={
+              Array [
+                250.26000000000005,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="61.19999999999999"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  154,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-9"
+            rotate={Array []}
+            x={
+              Array [
+                167,
+              ]
+            }
+            y={
+              Array [
+                245.26000000000005,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="62.59999999999999"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  167,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-10"
+            rotate={Array []}
+            x={
+              Array [
+                180,
+              ]
+            }
+            y={
+              Array [
+                240.26000000000008,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="63.999999999999986"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  180,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-11"
+            rotate={Array []}
+            x={
+              Array [
+                193,
+              ]
+            }
+            y={
+              Array [
+                235.26000000000002,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="65.39999999999999"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  193,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-12"
+            rotate={Array []}
+            x={
+              Array [
+                206,
+              ]
+            }
+            y={
+              Array [
+                230.26,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="66.8"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  206,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-13"
+            rotate={Array []}
+            x={
+              Array [
+                219,
+              ]
+            }
+            y={
+              Array [
+                225.26,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="68.2"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  219,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-14"
+            rotate={Array []}
+            x={
+              Array [
+                232.00000000000003,
+              ]
+            }
+            y={
+              Array [
+                220.25999999999996,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="69.60000000000001"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  232.00000000000003,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-15"
+            rotate={Array []}
+            x={
+              Array [
+                245,
+              ]
+            }
+            y={
+              Array [
+                215.2599999999999,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="71.00000000000001"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  245,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-16"
+            rotate={Array []}
+            x={
+              Array [
+                258,
+              ]
+            }
+            y={
+              Array [
+                210.25999999999993,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="72.40000000000002"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  258,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-17"
+            rotate={Array []}
+            x={
+              Array [
+                271,
+              ]
+            }
+            y={
+              Array [
+                205.25999999999993,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="73.80000000000003"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  271,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-18"
+            rotate={Array []}
+            x={
+              Array [
+                284,
+              ]
+            }
+            y={
+              Array [
+                200.25999999999988,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="75.20000000000003"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  284,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-19"
+            rotate={Array []}
+            x={
+              Array [
+                297,
+              ]
+            }
+            y={
+              Array [
+                195.25999999999985,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="76.60000000000004"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  297,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-20"
+            rotate={Array []}
+            x={
+              Array [
+                310,
+              ]
+            }
+            y={
+              Array [
+                190.25999999999985,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="78.00000000000004"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  310,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-21"
+            rotate={Array []}
+            x={
+              Array [
+                323,
+              ]
+            }
+            y={
+              Array [
+                185.25999999999982,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="79.40000000000005"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  323,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-22"
+            rotate={Array []}
+            x={
+              Array [
+                336,
+              ]
+            }
+            y={
+              Array [
+                180.25999999999976,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="80.80000000000005"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  336,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-23"
+            rotate={Array []}
+            x={
+              Array [
+                349,
+              ]
+            }
+            y={
+              Array [
+                175.25999999999976,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="82.20000000000006"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  349,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-24"
+            rotate={Array []}
+            x={
+              Array [
+                362,
+              ]
+            }
+            y={
+              Array [
+                170.2599999999998,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="83.60000000000007"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  362,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-25"
+            rotate={Array []}
+            x={
+              Array [
+                375,
+              ]
+            }
+            y={
+              Array [
+                165.25999999999974,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="85.00000000000007"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  375,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-26"
+            rotate={Array []}
+            x={
+              Array [
+                388,
+              ]
+            }
+            y={
+              Array [
+                160.2599999999997,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="86.40000000000008"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  388,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-27"
+            rotate={Array []}
+            x={
+              Array [
+                401,
+              ]
+            }
+            y={
+              Array [
+                155.2599999999997,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="87.80000000000008"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  401,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-28"
+            rotate={Array []}
+            x={
+              Array [
+                414.00000000000006,
+              ]
+            }
+            y={
+              Array [
+                150.25999999999968,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="89.20000000000009"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  414.00000000000006,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-29"
+            rotate={Array []}
+            x={
+              Array [
+                427,
+              ]
+            }
+            y={
+              Array [
+                145.25999999999968,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="90.6000000000001"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  427,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-30"
+            rotate={Array []}
+            x={
+              Array [
+                440,
+              ]
+            }
+            y={
+              Array [
+                140.25999999999965,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="92.0000000000001"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  440,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-31"
+            rotate={Array []}
+            x={
+              Array [
+                453,
+              ]
+            }
+            y={
+              Array [
+                135.2599999999996,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="93.4000000000001"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  453,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-32"
+            rotate={Array []}
+            x={
+              Array [
+                466,
+              ]
+            }
+            y={
+              Array [
+                130.2599999999996,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="94.80000000000011"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  466,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-33"
+            rotate={Array []}
+            x={
+              Array [
+                479,
+              ]
+            }
+            y={
+              Array [
+                125.25999999999958,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="96.20000000000012"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  479,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-34"
+            rotate={Array []}
+            x={
+              Array [
+                492.00000000000006,
+              ]
+            }
+            y={
+              Array [
+                120.25999999999958,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="97.60000000000012"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  492.00000000000006,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-35"
+            rotate={Array []}
+            x={
+              Array [
+                504.99999999999994,
+              ]
+            }
+            y={
+              Array [
+                115.25999999999955,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="99.00000000000013"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  504.99999999999994,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-36"
+            rotate={Array []}
+            x={
+              Array [
+                518,
+              ]
+            }
+            y={
+              Array [
+                110.25999999999955,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="100.40000000000013"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  518,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-37"
+            rotate={Array []}
+            x={
+              Array [
+                531,
+              ]
+            }
+            y={
+              Array [
+                105.25999999999951,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="101.80000000000014"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  531,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-38"
+            rotate={Array []}
+            x={
+              Array [
+                544,
+              ]
+            }
+            y={
+              Array [
+                100.25999999999947,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="103.20000000000014"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  544,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-39"
+            rotate={Array []}
+            x={
+              Array [
+                557,
+              ]
+            }
+            y={
+              Array [
+                95.25999999999947,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="104.60000000000015"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  557,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-40"
+            rotate={Array []}
+            x={
+              Array [
+                570,
+              ]
+            }
+            y={
+              Array [
+                90.25999999999944,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="106.00000000000016"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  570,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-41"
+            rotate={Array []}
+            x={
+              Array [
+                583,
+              ]
+            }
+            y={
+              Array [
+                85.25999999999944,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="107.40000000000016"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  583,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-42"
+            rotate={Array []}
+            x={
+              Array [
+                596,
+              ]
+            }
+            y={
+              Array [
+                80.25999999999941,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="108.80000000000017"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  596,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-43"
+            rotate={Array []}
+            x={
+              Array [
+                609,
+              ]
+            }
+            y={
+              Array [
+                75.2599999999994,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="110.20000000000017"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  609,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-44"
+            rotate={Array []}
+            x={
+              Array [
+                622,
+              ]
+            }
+            y={
+              Array [
+                70.25999999999937,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="111.60000000000018"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  622,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-45"
+            rotate={Array []}
+            x={
+              Array [
+                635,
+              ]
+            }
+            y={
+              Array [
+                65.25999999999934,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="113.00000000000018"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  635,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-46"
+            rotate={Array []}
+            x={
+              Array [
+                648,
+              ]
+            }
+            y={
+              Array [
+                60.259999999999316,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="114.40000000000019"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  648,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-47"
+            rotate={Array []}
+            x={
+              Array [
+                661,
+              ]
+            }
+            y={
+              Array [
+                55.25999999999929,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="115.8000000000002"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  661,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-48"
+            rotate={Array []}
+            x={
+              Array [
+                674,
+              ]
+            }
+            y={
+              Array [
+                50.25999999999929,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="117.2000000000002"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  674,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-49"
+            rotate={Array []}
+            x={
+              Array [
+                687,
+              ]
+            }
+            y={
+              Array [
+                45.25999999999925,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="118.60000000000021"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  687,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+          <RNSVGText
+            content={null}
+            dx={
+              Array [
+                0,
+              ]
+            }
+            dy={Array []}
+            font={Object {}}
+            name="chart-line-2-labels-50"
+            rotate={Array []}
+            x={
+              Array [
+                700,
+              ]
+            }
+            y={
+              Array [
+                40.26,
+              ]
+            }
+          >
+            <RNSVGTSpan
+              content="120"
+              dx={
+                Array [
+                  0,
+                ]
+              }
+              dy={
+                Array [
+                  0,
+                ]
+              }
+              fill={4282735204}
+              font={
+                Object {
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "letterSpacing": "normal",
+                  "textAnchor": "middle",
+                }
+              }
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              rotate={Array []}
+              x={
+                Array [
+                  700,
+                ]
+              }
+              y={Array []}
+            />
+          </RNSVGText>
+        </RNSVGGroup>
+      </RNSVGGroup>
+    </RNSVGSvgView>
+    <View
+      pointerEvents="box-none"
+      style={
+        Object {
+          "left": 0,
+          "position": "absolute",
+          "top": 0,
+          "zIndex": 99,
+        }
+      }
+    >
+      <RNSVGSvgView
+        align="xMidYMid"
+        bbHeight={350}
+        bbWidth={750}
+        focusable={false}
+        height={350}
+        meetOrSlice={0}
+        minX={0}
+        minY={0}
+        style={
+          Array [
+            Object {
+              "backgroundColor": "transparent",
+              "borderWidth": 0,
+            },
+            Object {
+              "height": "100%",
+              "overflow": "visible",
+              "width": "100%",
+            },
+            Object {
+              "flex": 0,
+              "height": 350,
+              "width": 750,
+            },
+          ]
+        }
+        vbHeight={350}
+        vbWidth={750}
+        width={750}
+      >
+        <RNSVGGroup />
+      </RNSVGSvgView>
+    </View>
+  </View>
+  <ActivityIndicator
+    animating={true}
+    color="#52c41a"
+    hidesWhenStopped={true}
+    size="large"
+  />
+</View>
+`;

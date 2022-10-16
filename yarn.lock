@@ -3454,6 +3454,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/redux-mock-store@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@types/redux-mock-store@npm:1.0.3"
+  dependencies:
+    redux: ^4.0.5
+  checksum: b8c76be560fb06c0b5fc8b8874001f0b0219a7a5d0bbbf8f06ebfc437a1300df49f079b30199a9fa99c738817145895a4f0297b8f614edadd1d9e110e917cd0a
+  languageName: node
+  linkType: hard
+
 "@types/redux@npm:^3.6.0":
   version: 3.6.31
   resolution: "@types/redux@npm:3.6.31"
@@ -11938,6 +11947,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"redux-mock-store@npm:^1.5.4":
+  version: 1.5.4
+  resolution: "redux-mock-store@npm:1.5.4"
+  dependencies:
+    lodash.isplainobject: ^4.0.6
+  checksum: 571eab2cca3e46321969025af865ddd780804c811be9db277fddf772d86e3ea67b4ef1b19ea3866417d41eb1b73605103020321f68cf68f379a52679a6823d12
+  languageName: node
+  linkType: hard
+
 "redux@npm:^4.0.0, redux@npm:^4.0.5":
   version: 4.1.2
   resolution: "redux@npm:4.1.2"
@@ -12313,6 +12331,7 @@ __metadata:
     "@types/react-redux": ^7.1.7
     "@types/react-test-renderer": ^16.9.3
     "@types/redux": ^3.6.0
+    "@types/redux-mock-store": ^1.0.3
     "@types/victory": ^33.1.4
     "@typescript-eslint/eslint-plugin": ^2.23.0
     "@typescript-eslint/parser": ^2.23.0
@@ -12359,6 +12378,7 @@ __metadata:
     react-redux: ^7.2.0
     react-test-renderer: 17
     redux: ^4.0.5
+    redux-mock-store: ^1.5.4
     typescript: ~4.3.5
     victory-native: ^34.3.0
   languageName: unknown
