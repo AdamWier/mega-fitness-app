@@ -7,7 +7,8 @@ import { mealDocumentService, shoppingListDocumentService } from '../Firebase';
 import ShoppingListCard from '../components/ShoppingListCard';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
-import { Text, Icon, Button } from 'react-native-elements';
+import { Text, Icon, Button, ListItem } from 'react-native-elements';
+import ShoppingListDocument from '../Firebase/Documents/ShoppingListDocument';
 
 function ShoppingList({ user }: UserContainerProps) {
   const [period, setPeriod] = useState<{
@@ -25,6 +26,9 @@ function ShoppingList({ user }: UserContainerProps) {
   }>({ id: null, items: {} });
   const [isVisible, setIsVisible] = useState(false);
   const [currentInput, setCurrentInput] = useState<null | Date>(null);
+  const [recentShoppingLists, setRecentShoppingLists] = useState<
+    ShoppingListDocument[]
+  >([]);
 
   const getPeriod = (input: Date) => {
     setIsVisible(false);
@@ -133,6 +137,15 @@ function ShoppingList({ user }: UserContainerProps) {
     })();
   }, [generateList, period.start, period.end, user]);
 
+  useEffect(() => {
+    (async function getLastFiveLists() {
+      if (!user.uid) return;
+      const loadedLists =
+        await shoppingListDocumentService.findRecentShoppingLists(user.uid);
+      setRecentShoppingLists(loadedLists);
+    })();
+  }, [user.uid]);
+
   return (
     <View style={style.content}>
       <CustomHeader title="Shopping Lists" />
@@ -169,6 +182,28 @@ function ShoppingList({ user }: UserContainerProps) {
             setIsVisible(true);
           }}
         />
+      </View>
+      <View>
+        {(!period.start || !period.end) &&
+          recentShoppingLists.map((list, index) => (
+            <ListItem
+              key={index}
+              onPress={() => {
+                setList(list), setPeriod({ start: list.start, end: list.end });
+              }}
+              leftElement={<Icon name="receipt-long" />}
+              title={
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Text>{`${moment(list.start).format('DD-MM-YYYY')} `}</Text>
+                  <Icon name="east" />
+                  <Text>{` ${moment(list.end).format('DD-MM-YYYY')}`}</Text>
+                </View>
+              }
+              chevron
+              topDivider
+              bottomDivider
+            />
+          ))}
       </View>
       <ScrollView style={style.listSpace}>
         {!!period.start &&
