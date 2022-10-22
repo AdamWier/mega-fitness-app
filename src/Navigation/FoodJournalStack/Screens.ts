@@ -20,7 +20,7 @@ export type FoodJournalStackParams = {
   [FoodJournalStackScreenNames.BarCodeScanner]: undefined;
   [FoodJournalStackScreenNames.Meal]: undefined;
   [FoodJournalStackScreenNames.Search]: undefined;
-  [FoodJournalStackScreenNames.Details]: { details: FoodDetails };
+  [FoodJournalStackScreenNames.Details]: { details: FoodDetails | null };
 };
 
 type FoodJournalStackScreen = Screen<
@@ -53,7 +53,7 @@ const screens: FoodJournalStackScreen[] = [
     name: FoodJournalStackScreenNames.Details,
     component: Details,
     options: ({ route }) => ({
-      title: route.params?.details.name,
+      title: route.params?.details?.name,
     }),
   },
 ];
