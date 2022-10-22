@@ -166,7 +166,7 @@ export default class OFDApi {
       },
     ];
     if (Number(product.serving_quantity)) {
-      portions.push({
+      portions.unshift({
         weight: Number(product.serving_quantity),
         description: `Portion (${product.serving_size})`,
       });

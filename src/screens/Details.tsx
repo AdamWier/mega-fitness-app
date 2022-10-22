@@ -115,12 +115,7 @@ function Details({
           }}
         />
       </FoodCard>
-      <Button
-        title="Add food"
-        onPress={(): void => {
-          addFood();
-        }}
-      />
+      <Button title="Add food" onPress={addFood} />
     </ScrollView>
   );
 }
