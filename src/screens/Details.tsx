@@ -99,6 +99,12 @@ function Details({
         amount={amount ? amount.toString() : ''}
         amountDescription={currentPortion.description}
         onAmountChange={(value) => changeAmount(value)}
+        onCalorieChange={(value) =>
+          updateCurrentCalculations((pastState) => ({
+            ...pastState,
+            calories: Number(value),
+          }))
+        }
         expanded
       >
         <AmountPicker
