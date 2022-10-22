@@ -28,7 +28,7 @@ function Details({
       amount: string,
       currentPortionWeight: number
     ) =>
-      (Number(amount)
+      (Number(amount) && details
         ? Math.round(
             Number(details[nutrient]) * Number(amount) * currentPortionWeight
           )
@@ -38,15 +38,17 @@ function Details({
   );
 
   const [amount, setAmount] = useState('1');
-  const [currentPortion, changePortion] = useState(details.portions[0]);
+  const [currentPortion, changePortion] = useState(details?.portions[0]);
   const [calories, setCalories] = useState(
-    calculateNutrient('calories', amount, currentPortion.weight)
+    calculateNutrient('calories', amount, currentPortion?.weight || 0)
   );
   const [protein, setProtein] = useState('0');
   const [carbs, setCarbs] = useState('0');
   const [fats, setFats] = useState('0');
+  const [name, setName] = useState(details?.name || '');
 
   const calculateAmountFromCalories = (caloriesAsString: string) => {
+    if (!details || !currentPortion) return '';
     const caloriesAsNumber = Number(caloriesAsString);
     return (
       Math.round(
@@ -69,7 +71,7 @@ function Details({
   };
 
   const onPortionChange = (selection: string): void => {
-    const newPortion = details.portions.find(
+    const newPortion = (details?.portions || []).find(
       (portion: FormattedPortion) => selection === portion.description
     );
     if (newPortion) {
@@ -79,6 +81,7 @@ function Details({
   };
 
   useEffect(() => {
+    if (!currentPortion) return;
     setProtein(calculateNutrient('protein', amount, currentPortion.weight));
     setCarbs(calculateNutrient('carbs', amount, currentPortion.weight));
     setFats(calculateNutrient('fats', amount, currentPortion.weight));
@@ -88,7 +91,7 @@ function Details({
     setProtein,
     setCarbs,
     setFats,
-    currentPortion.weight,
+    currentPortion,
   ]);
 
   const amountIsCorrect = () => {
@@ -102,9 +105,9 @@ function Details({
         meal: [
           ...mealDocument.meal,
           {
-            name: details.name,
+            name: name,
             amount: Number(amount),
-            portionDescription: currentPortion.description,
+            portionDescription: currentPortion?.description || '',
             calories: Number(calories),
             protein: Number(protein),
             fats: Number(fats),
@@ -121,24 +124,34 @@ function Details({
   return (
     <ScrollView>
       <FoodCard
-        name={details.name}
+        name={name}
         calories={calories}
         protein={protein}
         carbs={carbs}
         fats={fats}
         amount={amount}
-        amountDescription={currentPortion.description}
+        amountDescription={currentPortion?.description}
         onAmountChange={(value) =>
-          calculateCaloriesByAmount(value, currentPortion.weight)
+          !currentPortion
+            ? setAmount(value)
+            : calculateCaloriesByAmount(value, currentPortion.weight)
         }
-        onCalorieChange={calculateAmountByCalories}
+        onCalorieChange={(value) =>
+          !currentPortion ? setCalories(value) : calculateAmountByCalories
+        }
         expanded
+        onNameChange={!details ? setName : undefined}
+        onProteinChange={!details ? setProtein : undefined}
+        onCarbsChange={!details ? setCarbs : undefined}
+        onFatsChange={!details ? setFats : undefined}
       >
-        <AmountPicker
-          amounts={details.portions}
-          selectedValue={currentPortion.description}
-          onValueChange={onPortionChange}
-        />
+        {!!details && !!currentPortion ? (
+          <AmountPicker
+            amounts={details.portions}
+            selectedValue={currentPortion.description}
+            onValueChange={onPortionChange}
+          />
+        ) : null}
       </FoodCard>
       <Button title="Add food" onPress={addFood} />
     </ScrollView>

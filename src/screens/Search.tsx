@@ -130,12 +130,24 @@ export default function Search({ navigation }: SearchProps) {
     <View style={styles.screenContainer}>
       <View style={styles.titleContainer}>
         <Text h2>Search for a food</Text>
-        <Button
-          type="solid"
-          raised
-          title="Scan barcode"
-          onPress={scanBarcode}
-        />
+        <View style={styles.buttonBar}>
+          <Button
+            type="solid"
+            raised
+            title="Scan barcode"
+            onPress={scanBarcode}
+          />
+          <Button
+            type="solid"
+            raised
+            title="Add custom food"
+            onPress={() =>
+              navigation.navigate(FoodJournalStackScreenNames.Details, {
+                details: null,
+              })
+            }
+          />
+        </View>
       </View>
       <SearchBar
         value={searchText}
@@ -199,6 +211,9 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     alignItems: 'center',
+  },
+  buttonBar: {
+    flexDirection: 'row',
   },
   switchGroupContainer: {
     flexDirection: 'row',
