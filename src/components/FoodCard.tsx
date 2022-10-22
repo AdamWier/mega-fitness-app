@@ -12,12 +12,18 @@ export default function FoodCard({
   amount,
   amountDescription,
   onAmountChange,
+  onCalorieChange,
   expanded,
   children,
 }: FoodCardProps) {
   return (
     <Card title={name}>
-      <TotalListItem label="Calories:" total={calories} chevron={false} />
+      <TotalListItem
+        label="Calories:"
+        total={calories}
+        chevron={true}
+        onValueChange={onCalorieChange}
+      />
       {expanded ? (
         <View>
           <TotalListItem label="Protein:" total={protein} chevron={false} />
@@ -48,6 +54,7 @@ interface FoodCardProps {
   amount?: string;
   amountDescription?: string;
   onAmountChange?: (value: string) => void;
+  onCalorieChange?: (value: string) => void;
   expanded: boolean;
   children?: React.ReactNode;
 }
