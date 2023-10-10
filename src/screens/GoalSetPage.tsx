@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text } from 'react-native-elements';
+import { Text } from '@rneui/themed';
 import { View, StyleSheet } from 'react-native';
 import { container, UserContainerProps } from '../store/reducers/User';
 import GoalPrompt from '../components/GoalPrompt';
@@ -20,7 +20,7 @@ function GoalSetPage({
 
   const processGoal = (
     goalInput: string,
-    setGoal: (number: number) => void
+    setGoal: (number: number) => void,
   ) => {
     const goalInputNumber = Number(goalInput);
     if (!goalInputNumber || Number.isNaN(goalInputNumber)) {
@@ -41,7 +41,7 @@ function GoalSetPage({
       Toast.showWithGravity(
         "Your water goal couldn't be saved",
         Toast.SHORT,
-        Toast.CENTER
+        Toast.CENTER,
       );
     }
   };
@@ -57,7 +57,7 @@ function GoalSetPage({
       Toast.showWithGravity(
         "Your calorie goal couldn't be saved",
         Toast.SHORT,
-        Toast.CENTER
+        Toast.CENTER,
       );
     }
   };
@@ -72,7 +72,7 @@ function GoalSetPage({
       (userDocument: UserDocument) => {
         storeWaterGoal(userDocument.waterGoal);
         storeCalories(userDocument.goalCalories);
-      }
+      },
     );
     return () => {
       unsubscribeUserListener();

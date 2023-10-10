@@ -1,14 +1,13 @@
 import React from 'react';
-import { Picker } from 'react-native';
-import { withTheme } from 'react-native-elements';
-import { MyTheme } from '../StyleSheet';
+import { Picker } from '@react-native-picker/picker';
+import { useTheme, withTheme } from '@rneui/themed';
 
 function AmountPicker({
   amounts,
-  theme,
   selectedValue,
   onValueChange,
 }: AmountPickerProps) {
+  const { theme } = useTheme();
   return (
     <Picker
       prompt="Choose your measurement"
@@ -33,7 +32,6 @@ function AmountPicker({
 
 interface AmountPickerProps {
   amounts: any[];
-  theme: MyTheme;
   selectedValue: string;
   onValueChange: (value: string) => void;
 }

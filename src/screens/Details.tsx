@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from 'react-native-elements';
+import { Button } from '@rneui/themed';
 import { ScrollView, Alert } from 'react-native';
 import AmountPicker from '../components/AmountPicker';
 import FoodCard from '../components/FoodCard';
@@ -26,21 +26,21 @@ function Details({
     (
       nutrient: keyof FoodDetails,
       amount: string,
-      currentPortionWeight: number
+      currentPortionWeight: number,
     ) =>
       (Number(amount)
         ? Math.round(
-            Number(details[nutrient]) * Number(amount) * currentPortionWeight
+            Number(details[nutrient]) * Number(amount) * currentPortionWeight,
           )
         : 0
       ).toString(),
-    [details]
+    [details],
   );
 
   const [amount, setAmount] = useState('1');
   const [currentPortion, changePortion] = useState(details.portions[0]);
   const [calories, setCalories] = useState(
-    calculateNutrient('calories', amount, currentPortion.weight)
+    calculateNutrient('calories', amount, currentPortion.weight),
   );
   const [protein, setProtein] = useState('0');
   const [carbs, setCarbs] = useState('0');
@@ -50,14 +50,14 @@ function Details({
     const caloriesAsNumber = Number(caloriesAsString);
     return (
       Math.round(
-        (caloriesAsNumber / details.calories / currentPortion.weight) * 100
+        (caloriesAsNumber / details.calories / currentPortion.weight) * 100,
       ) / 100
     ).toString();
   };
 
   const calculateCaloriesByAmount = (
     value: string,
-    currentPortionWeight: number
+    currentPortionWeight: number,
   ) => {
     setAmount(value);
     setCalories(calculateNutrient('calories', value, currentPortionWeight));
@@ -70,7 +70,7 @@ function Details({
 
   const onPortionChange = (selection: string): void => {
     const newPortion = details.portions.find(
-      (portion: FormattedPortion) => selection === portion.description
+      (portion: FormattedPortion) => selection === portion.description,
     );
     if (newPortion) {
       changePortion(newPortion);

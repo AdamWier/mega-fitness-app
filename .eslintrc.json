@@ -17,7 +17,9 @@
         "jest/no-identical-title": "error",
         "jest/prefer-to-have-length": "warn",
         "jest/valid-expect": "error",
-        "jest/no-hooks": "off"
+        "jest/no-hooks": "off",
+        "@typescript-eslint/unbound-method": "off",
+        "jest/unbound-method": "off"
     },
     "env": {
         "jest/globals": true

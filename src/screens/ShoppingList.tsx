@@ -7,7 +7,7 @@ import { mealDocumentService, shoppingListDocumentService } from '../Firebase';
 import ShoppingListCard from '../components/ShoppingListCard';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
-import { Text, Icon, Button, ListItem } from 'react-native-elements';
+import { Text, Icon, Button, ListItem } from '@rneui/themed';
 import ShoppingListDocument from '../Firebase/Documents/ShoppingListDocument';
 
 function ShoppingList({ user }: UserContainerProps) {
@@ -55,7 +55,7 @@ function ShoppingList({ user }: UserContainerProps) {
   const toggleCheckBox = (
     food: string,
     portion: string,
-    isChecked: boolean
+    isChecked: boolean,
   ) => {
     const newFood = list.items[food];
     newFood[portion].checked = !isChecked;
@@ -73,7 +73,7 @@ function ShoppingList({ user }: UserContainerProps) {
               period.start,
               period.end,
               list,
-              user.uid
+              user.uid,
             )
           : undefined;
       setList((oldList) => ({
@@ -91,7 +91,7 @@ function ShoppingList({ user }: UserContainerProps) {
           ? await mealDocumentService.findByDateRange(
               period.start,
               period.end,
-              user.uid
+              user.uid,
             )
           : undefined;
       const foods = mealDocuments?.flatMap((document) => document.meal);
@@ -116,11 +116,11 @@ function ShoppingList({ user }: UserContainerProps) {
           }
           return accumulator;
         },
-        {}
+        {},
       );
       setList({ items: reorderedFoods, id });
     },
-    [period.start, period.end, user.uid]
+    [period.start, period.end, user.uid],
   );
 
   useEffect(() => {
@@ -131,7 +131,7 @@ function ShoppingList({ user }: UserContainerProps) {
         (await shoppingListDocumentService.findDocument(
           period.start,
           period.end,
-          user.uid
+          user.uid,
         ));
       savedList ? setList(savedList) : generateList(null);
     })();
@@ -191,18 +191,21 @@ function ShoppingList({ user }: UserContainerProps) {
               onPress={() => {
                 setList(list), setPeriod({ start: list.start, end: list.end });
               }}
-              leftElement={<Icon name="receipt-long" />}
-              title={
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Text>{`${moment(list.start).format('DD-MM-YYYY')} `}</Text>
-                  <Icon name="east" />
-                  <Text>{` ${moment(list.end).format('DD-MM-YYYY')}`}</Text>
-                </View>
-              }
-              chevron
               topDivider
               bottomDivider
-            />
+            >
+              <ListItem.Content>
+                <ListItem.Title>
+                  <ListItem.Chevron />
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Icon name="receipt-long" />
+                    <Text>{`${moment(list.start).format('DD-MM-YYYY')} `}</Text>
+                    <Icon name="east" />
+                    <Text>{` ${moment(list.end).format('DD-MM-YYYY')}`}</Text>
+                  </View>
+                </ListItem.Title>
+              </ListItem.Content>
+            </ListItem>
           ))}
       </View>
       <ScrollView style={style.listSpace}>

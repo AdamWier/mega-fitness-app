@@ -5,14 +5,14 @@ import { navTheme } from '../../StyleSheet';
 
 const Drawer = createDrawerNavigator();
 
-export default function LoggedInDrawer(): JSX.Element {
+export default function LoggedInDrawer() {
   return (
     <Drawer.Navigator
-      drawerContentOptions={{
-        style: {
+      screenOptions={{
+        drawerContentStyle: {
           backgroundColor: navTheme.colors.background,
         },
-        labelStyle: {
+        drawerLabelStyle: {
           color: navTheme.colors.text,
         },
       }}

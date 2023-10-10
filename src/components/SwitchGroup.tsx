@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, Icon, Tooltip } from 'react-native-elements';
+import { Text, Icon, Tooltip } from '@rneui/themed';
 import { View, StyleSheet, Switch } from 'react-native';
 
 const SwitchGroup = ({

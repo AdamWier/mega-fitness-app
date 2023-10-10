@@ -3,7 +3,6 @@ import React, {
   useEffect,
   useRef,
   useCallback,
-  RefObject,
   useLayoutEffect,
 } from 'react';
 import {
@@ -14,7 +13,7 @@ import {
   Keyboard,
   BackHandler,
 } from 'react-native';
-import { Button, Text, withTheme, Input, Divider } from 'react-native-elements';
+import { Button, Text, Input, Divider, useTheme } from '@rneui/themed';
 import FoodCard from '../components/FoodCard';
 import { container as MealContainer } from '../store/reducers/MealDocument';
 import {
@@ -31,17 +30,16 @@ import {
   FoodJournalStackParams,
   FoodJournalStackScreenNames,
 } from '../Navigation/FoodJournalStack/Screens';
-import { MyTheme } from '../StyleSheet';
 import MealDocument from '../Firebase/Documents/MealDocument';
 
 function Meal({
   navigation,
-  theme,
   mealDocument,
   updateMealDocument,
   user,
 }: MealProps) {
-  const mealNameInput = useRef<Input>();
+  const { theme } = useTheme();
+  const mealNameInput = useRef<any>();
 
   const { meal, eatenAt, name, id } = mealDocument;
 
@@ -51,7 +49,7 @@ function Meal({
 
   const removeFoodFromMeal = (mealIndex: number): void => {
     const newMeal = meal.filter(
-      (mealItem: { [key: string]: any }, index: number) => index !== mealIndex
+      (mealItem: { [key: string]: any }, index: number) => index !== mealIndex,
     );
     updateMealDocument({
       ...mealDocument,
@@ -69,13 +67,13 @@ function Meal({
         if (moment(eatenAt).isSame(new Date(), 'd')) {
           const dayDocument = await dayDocumentService.findDocument(
             eatenAt,
-            user.uid
+            user.uid,
           );
           if (user.goalCalories && !dayDocument.goalCalories) {
             await dayDocumentService.createGoal(
               eatenAt,
               user.goalCalories,
-              user.uid
+              user.uid,
             );
           }
         }
@@ -125,7 +123,7 @@ function Meal({
   const onBackPress = () => {
     if (meal.length) {
       askToSave(() =>
-        navigation.navigate(FoodJournalStackScreenNames.FoodJournal)
+        navigation.navigate(FoodJournalStackScreenNames.FoodJournal),
       );
       return true;
     }
@@ -147,7 +145,7 @@ function Meal({
   useFocusEffect(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
-      onBackPress
+      onBackPress,
     );
 
     return () => backHandler.remove();
@@ -170,7 +168,7 @@ function Meal({
             name: input,
           })
         }
-        ref={mealNameInput as RefObject<Input>}
+        ref={mealNameInput ?? null}
         containerStyle={styles.input}
       />
       <Button
@@ -187,7 +185,7 @@ function Meal({
         <View>
           <Button
             title={`Eaten: ${moment(eatenAt).format(
-              'dddd MMMM D, YYYY HH:mm'
+              'dddd MMMM D, YYYY HH:mm',
             )}`}
             onPress={() => toggleDisplayMealCalendar(true)}
           />
@@ -301,9 +299,8 @@ type MealProps = {
     FoodJournalStackParams,
     FoodJournalStackScreenNames.Meal
   >;
-  theme: MyTheme;
   mealDocument: MealDocument;
   updateMealDocument: (value: MealDocument) => void;
 } & UserContainerProps;
 
-export default UserContainer(MealContainer(withTheme(Meal)));
+export default UserContainer(MealContainer(Meal));

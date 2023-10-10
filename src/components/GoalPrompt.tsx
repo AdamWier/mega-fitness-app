@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, Button, Input } from 'react-native-elements';
+import { Text, Button, Input } from '@rneui/themed';
 import { View, StyleSheet } from 'react-native';
 import ActivityIndicator from '../components/ActivityIndicator';
 

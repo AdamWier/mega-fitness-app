@@ -1,16 +1,15 @@
 import React from 'react';
 import moment from 'moment';
 import { CalendarList, PeriodMarkingProps } from 'react-native-calendars';
-import { withTheme, Text } from 'react-native-elements';
+import { withTheme, Text, useTheme } from '@rneui/themed';
 import { View, StyleSheet, Alert } from 'react-native';
-import { MyTheme } from '../StyleSheet';
 
 function WeekSelector({
-  theme,
   period,
   setPeriod,
   shouldConfirm = false,
 }: WeekSelectorProps) {
+  const { theme } = useTheme();
   const onDayPress = async (date: { [key: string]: any }) => {
     if (shouldConfirm) {
       return Alert.alert(
@@ -19,7 +18,7 @@ function WeekSelector({
         [
           { text: 'Cancel', onPress: () => null },
           { text: 'OK', onPress: () => createNewWeek(date) },
-        ]
+        ],
       );
     }
     return createNewWeek(date);
@@ -86,7 +85,6 @@ interface WeekSelectorProps {
   period: PeriodMarkingProps['markedDates'];
   setPeriod: (week: PeriodMarkingProps['markedDates']) => void;
   shouldConfirm: boolean;
-  theme: MyTheme;
 }
 
 export default withTheme(WeekSelector);

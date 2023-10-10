@@ -6,13 +6,7 @@ import React, {
   RefObject,
 } from 'react';
 import { View, FlatList, StyleSheet, Alert } from 'react-native';
-import {
-  Text,
-  SearchBar,
-  Button,
-  ListItem,
-  Divider,
-} from 'react-native-elements';
+import { Text, SearchBar, Button, ListItem, Divider } from '@rneui/themed';
 import USDAApiImpl from '../ApiHelpers/USDA/USDAApi';
 import OFDApiImpl from '../ApiHelpers/OFD/OFDApi';
 import { FoodResult, FoodDetails } from '../ApiHelpers/CommonAPITypes';
@@ -81,14 +75,14 @@ export default function Search({ navigation }: SearchProps) {
     Toast.showWithGravity(
       'There was a network error',
       Toast.LONG,
-      Toast.CENTER
+      Toast.CENTER,
     );
 
   const showNotEnoughDetailsToast = () =>
     Toast.showWithGravity(
       "There isn't sufficient information for this food",
       Toast.SHORT,
-      Toast.CENTER
+      Toast.CENTER,
     );
 
   const goToFoodDetails = async (api: string, id: string): Promise<void> => {
@@ -117,7 +111,7 @@ export default function Search({ navigation }: SearchProps) {
 
   const debouncedHandleSubmit = useCallback(
     useDebounceCallback(handleSubmit, 500),
-    [searchText, shouldUseOFD, isFranceLocale]
+    [searchText, shouldUseOFD, isFranceLocale],
   );
 
   useEffect(() => {
@@ -174,13 +168,14 @@ export default function Search({ navigation }: SearchProps) {
             ref={foodList as RefObject<FlatList>}
             data={results}
             keyExtractor={(item): string => item.id}
-            renderItem={({ item }: { item: FoodResult }): JSX.Element => (
+            renderItem={({ item }: { item: FoodResult }) => (
               <ListItem
                 onPress={(): Promise<void> =>
                   goToFoodDetails(item.api, item.id)
                 }
-                title={item.description}
-              />
+              >
+                <ListItem.Title>{item.description}</ListItem.Title>
+              </ListItem>
             )}
             onEndReachedThreshold={0.5}
             onEndReached={() => !isAtEndOfResults && getResults(false)}

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Text, Input, Button, withTheme } from 'react-native-elements';
+import { Text, Input, Button, useTheme } from '@rneui/themed';
 import { View, StyleSheet } from 'react-native';
 import { authService } from '../Firebase';
 import { container } from '../store/reducers/User';
-import { MyTheme } from '../StyleSheet';
 import { UserDocument } from '../Firebase/Documents/UserDocument';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
@@ -11,7 +10,8 @@ import {
   LoggedOutStackScreenNames,
 } from '../Navigation/LoggedOutStack/Screens';
 
-function Login({ navigation, storeLogin, theme }: LoginProps) {
+function Login({ navigation, storeLogin }: LoginProps) {
+  const { theme } = useTheme();
   const [loginDetails, setLoginDetails] = useState({
     email: '',
     password: '',
@@ -38,7 +38,7 @@ function Login({ navigation, storeLogin, theme }: LoginProps) {
       const user = await authService.login(email, password);
       storeLogin(user);
       toggleLoading(false);
-    } catch ({ message }) {
+    } catch ({ message }: any) {
       toggleLoading(false);
       updateError(message);
     }
@@ -92,7 +92,6 @@ interface LoginProps {
     LoggedOutStackScreenNames.Login
   >;
   storeLogin: (info: Partial<UserDocument>) => void;
-  theme: MyTheme;
 }
 
-export default container(withTheme(Login));
+export default container(Login);
