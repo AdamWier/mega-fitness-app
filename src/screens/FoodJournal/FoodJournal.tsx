@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Alert, StyleSheet } from 'react-native';
-import { withTheme, Text } from 'react-native-elements';
+import { Text, useTheme } from '@rneui/themed';
 import {
   container as UserContainer,
   UserContainerProps,
@@ -24,21 +24,22 @@ import {
   FoodJournalStackParams,
   FoodJournalStackScreenNames,
 } from '../../Navigation/FoodJournalStack/Screens';
-import { MyTheme } from '../../StyleSheet';
 import { constructFoodJournalItems, emptyDocuments } from './FoodJournalLogic';
 import { getTotal } from '../../utilities';
 
 function FoodJournalPage({
   navigation,
-  theme,
   user,
   updateMealDocument,
 }: FoodJournalPageProps) {
+  const { theme } = useTheme();
   const [isDayLoading, setIsDayLoading] = useState(true);
-  const [documents, setDocuments] =
-    useState<{ meals: MealDocument[]; day: DayDocument }>(emptyDocuments);
+  const [documents, setDocuments] = useState<{
+    meals: MealDocument[];
+    day: DayDocument;
+  }>(emptyDocuments);
   const [currentDate, setCurrentDate] = useState(
-    moment().startOf('day').toDate()
+    moment().startOf('day').toDate(),
   );
 
   const [isGoalOverlayVisible, toggleIsGoalOverlayVisible] = useState(false);
@@ -71,7 +72,7 @@ function FoodJournalPage({
           currentDate,
           glasses,
           user.uid,
-          documents.day.id
+          documents.day.id,
         )
       : user.uid &&
         dayDocumentService.createWater(currentDate, glasses, user.uid);
@@ -89,14 +90,14 @@ function FoodJournalPage({
             currentDate,
             weightNumber,
             user.uid,
-            documents.day.id
+            documents.day.id,
           );
         } else {
           user.uid &&
             (await dayDocumentService.createWeight(
               currentDate,
               weightNumber,
-              user.uid
+              user.uid,
             ));
         }
         setGoalCaloriesInput('0');
@@ -105,7 +106,7 @@ function FoodJournalPage({
         Toast.showWithGravity(
           "Your goal couldn't be saved",
           Toast.SHORT,
-          Toast.CENTER
+          Toast.CENTER,
         );
       }
       setIsWeightOverlayLoading(false);
@@ -129,7 +130,7 @@ function FoodJournalPage({
           currentDate,
           goal,
           user.uid,
-          documents.day.id
+          documents.day.id,
         );
       } else {
         user.uid &&
@@ -140,7 +141,7 @@ function FoodJournalPage({
       Toast.showWithGravity(
         "Your goal couldn't be saved",
         Toast.SHORT,
-        Toast.CENTER
+        Toast.CENTER,
       );
     }
     setIsGoalOverlayLoading(false);
@@ -184,7 +185,7 @@ function FoodJournalPage({
         setIsDayLoading(false);
       }
     },
-    [user.uid]
+    [user.uid],
   );
 
   useEffect(() => {
@@ -199,7 +200,7 @@ function FoodJournalPage({
             ...currentDocuments,
             meals,
           }));
-        }
+        },
       );
     const unsubscribeDayListener =
       user.uid &&
@@ -211,7 +212,7 @@ function FoodJournalPage({
             ...currentDocuments,
             day,
           }));
-        }
+        },
       );
     return () => {
       setDocuments(emptyDocuments);
@@ -319,8 +320,7 @@ type FoodJournalPageProps = {
     FoodJournalStackParams,
     FoodJournalStackScreenNames.FoodJournal
   >;
-  theme: MyTheme;
 } & UserContainerProps &
   MealContainerProps;
 
-export default MealContainer(UserContainer(withTheme(FoodJournalPage)));
+export default MealContainer(UserContainer(FoodJournalPage));

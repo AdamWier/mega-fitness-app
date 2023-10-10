@@ -9,7 +9,12 @@ import {
   VictoryLine,
   VictoryZoomContainer,
 } from 'victory-native';
-import { findMax, findMin, WeightReport } from '../WeightTrackerLogic';
+import {
+  DataPoint,
+  findMax,
+  findMin,
+  WeightReport,
+} from '../WeightTrackerLogic';
 
 function WeightGraph({ weightReport, getWeights }: WeightGraphProps) {
   const applicableRecords = weightReport?.records || [];
@@ -46,7 +51,7 @@ function WeightGraph({ weightReport, getWeights }: WeightGraphProps) {
   };
 
   const [zoomDomain, setZoomDomain] = useState<Domain>(
-    initalZoomDomains[(!!applicableRecords.length).toString()]
+    initalZoomDomains[(!!applicableRecords.length).toString()],
   );
 
   const axisStyle: VictoryAxisCommonProps['style'] = {
@@ -88,7 +93,7 @@ function WeightGraph({ weightReport, getWeights }: WeightGraphProps) {
       <VictoryLine
         data={applicableRecords}
         domain={domain}
-        labels={({ datum }) => datum.y}
+        labels={({ datum }: { datum: DataPoint }) => datum.y || null}
       />
     </VictoryChart>
   );

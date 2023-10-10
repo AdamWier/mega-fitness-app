@@ -1,11 +1,11 @@
 import React from 'react';
-import { Card } from 'react-native-elements';
+import { Card, Text } from '@rneui/themed';
 import TotalListItem from '../components/TotalListItem';
 import { View, StyleSheet } from 'react-native';
 import { getTotal } from '../utilities';
 import { AddedFood } from '../Firebase/Documents/MealDocument';
 
-function TotalCard({ foods }: TotalCardProps): JSX.Element {
+function TotalCard({ foods }: TotalCardProps) {
   const getTotals = (): {
     calories: number;
     protein: number;
@@ -25,11 +25,10 @@ function TotalCard({ foods }: TotalCardProps): JSX.Element {
   };
 
   return (
-    <Card
-      containerStyle={styles.containerStyle}
-      titleStyle={styles.titleStyle}
-      title="Totals"
-    >
+    <Card containerStyle={styles.containerStyle}>
+      <Card.Title style={styles.titleStyle}>
+        <Text>Totals</Text>
+      </Card.Title>
       <View
         style={{
           flexDirection: 'row',

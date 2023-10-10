@@ -1,15 +1,14 @@
 import React from 'react';
 import { ActivityIndicator as AI } from 'react-native';
-import { withTheme } from 'react-native-elements';
-import { MyTheme } from '../StyleSheet';
+import { useTheme, withTheme } from '@rneui/themed';
 
-function ActivityIndicator({ theme, size }: ActivityIndicatorProps) {
+function ActivityIndicator({ size }: ActivityIndicatorProps) {
+  const { theme } = useTheme();
   return <AI size={size} color={theme.colors.success} />;
 }
 
 interface ActivityIndicatorProps {
   size?: number | 'small' | 'large';
-  theme: MyTheme;
 }
 
 export default withTheme(ActivityIndicator);

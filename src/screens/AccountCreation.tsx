@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, Input, Button } from 'react-native-elements';
+import { Text, Input, Button } from '@rneui/themed';
 import { View, StyleSheet } from 'react-native';
 import { authService } from '../Firebase';
 import { container } from '../store/reducers/User';
@@ -38,13 +38,13 @@ function AccountCreation({ navigation, storeLogin }: AccountCreationProps) {
       try {
         const user = await authService.createUser(
           signUpDetails.email,
-          signUpDetails.password
+          signUpDetails.password,
         );
         storeLogin(user);
         navigation.navigate(FoodJournalStackScreenNames.FoodJournal);
-      } catch (message) {
+      } catch (message: unknown) {
         toggleLoading(false);
-        updateErrors([message]);
+        updateErrors([message as string]);
       }
     }
   };

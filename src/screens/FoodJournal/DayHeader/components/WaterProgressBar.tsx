@@ -1,19 +1,17 @@
 import React from 'react';
-import { Text } from 'react-native-elements';
+import { Text, useTheme } from '@rneui/themed';
 import { View, StyleSheet } from 'react-native';
 import { Bar } from 'react-native-progress';
-import { withTheme } from 'react-native-elements';
 import { container } from '../../../../store/reducers/User';
 import UpDownButtons from '../../../../components/UpDownButtons';
-import { MyTheme } from '../../../../StyleSheet';
 import { UserContainerProps } from '../../../../store/reducers/User';
 
 const WaterProgressBar = ({
-  theme,
   user,
   todaysWater,
   updateWaterGoal,
 }: WaterProgressBarProps) => {
+  const { theme } = useTheme();
   return (
     <View style={styles.statusBarContainer}>
       <View style={styles.waterGoalContainer}>
@@ -46,9 +44,8 @@ const styles = StyleSheet.create({
 });
 
 type WaterProgressBarProps = {
-  theme: MyTheme;
   todaysWater: number;
   updateWaterGoal: (value: number) => void;
 } & UserContainerProps;
 
-export default container(withTheme(WaterProgressBar));
+export default container(WaterProgressBar);

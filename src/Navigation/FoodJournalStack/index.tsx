@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { navTheme } from '../../StyleSheet';
 import screens from './Screens';
 import { authService } from '../../Firebase';
-import { Button, Icon } from 'react-native-elements';
+import { Button, Icon } from '@rneui/themed';
 import { Alert } from 'react-native';
 import { container, UserContainerProps } from '../../store/reducers/User';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
@@ -22,7 +22,7 @@ function Navigation({
     LoggedInDrawerParams,
     LoggedInDrawerScreenNames.FoodJournal
   >;
-}): JSX.Element {
+}) {
   const logout = () => {
     Alert.alert('Log out', 'Do you want to log out?', [
       { text: 'No', onPress: () => null },

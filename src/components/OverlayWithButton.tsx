@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, Overlay, Text, Input } from 'react-native-elements';
+import { Button, Overlay, Text, Input } from '@rneui/themed';
 import { View, StyleSheet } from 'react-native';
 import ActivityIndicator from '../components/ActivityIndicator';
+import { IconNode } from '@rneui/base';
 
 const OverLayWithButton = ({
   onButtonPress,
@@ -55,7 +56,7 @@ interface OverLayWithButtonProps {
   onConfirmButtonPress: () => void;
   loading: boolean;
   header: string;
-  icon: JSX.Element;
+  icon: IconNode;
   onClear?: (value: any) => void;
 }
 

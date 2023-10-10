@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, Button, Icon, Text } from 'react-native-elements';
+import { Header, Button, Icon, Text } from '@rneui/themed';
 import { Alert, StyleSheet, StatusBar } from 'react-native';
 import { authService } from '../Firebase';
 import { container, UserContainerProps } from '../store/reducers/User';

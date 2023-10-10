@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Text, CheckBox, Button, Icon } from 'react-native-elements';
+import { Card, Text, CheckBox, Button, Icon } from '@rneui/themed';
 import { View, StyleSheet } from 'react-native';
 import UpDownButtons from './UpDownButtons';
 
@@ -11,8 +11,8 @@ export default function ShoppingListCard({
   saveList,
 }: ShoppingListCardProps) {
   return (
-    <Card
-      title={
+    <Card>
+      <Card.Title>
         <View style={style.headerContainer}>
           <View />
           <Text h4>Shopping List</Text>
@@ -21,8 +21,7 @@ export default function ShoppingListCard({
             <Button icon={<Icon name="autorenew" />} onPress={refreshList} />
           </View>
         </View>
-      }
-    >
+      </Card.Title>
       <View>
         {Object.keys(list).map((food) =>
           Object.keys(list[food]).map((portion) => (
@@ -50,7 +49,7 @@ export default function ShoppingListCard({
                 <Text>{portion}</Text>
               </View>
             </View>
-          ))
+          )),
         )}
       </View>
     </Card>
@@ -62,7 +61,7 @@ interface ShoppingListCardProps {
   updateAmount: (
     food: string,
     portion: string,
-    updatedNumber: string | number | null
+    updatedNumber: string | number | null,
   ) => void;
   toggleCheckBox: (food: string, portion: string, isChecked: boolean) => void;
   refreshList: () => void;

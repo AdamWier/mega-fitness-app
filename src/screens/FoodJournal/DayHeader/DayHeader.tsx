@@ -1,11 +1,9 @@
 import React from 'react';
-import { Button, Text, Icon } from 'react-native-elements';
+import { Button, Text, Icon, useTheme } from '@rneui/themed';
 import { View, StyleSheet } from 'react-native';
 import OverlayWithButton from '../../../components/OverlayWithButton';
 import { Bar } from 'react-native-progress';
-import { withTheme } from 'react-native-elements';
 import { container } from '../../../store/reducers/User';
-import { MyTheme } from '../../../StyleSheet';
 import { UserContainerProps } from '../../../store/reducers/User';
 import WaterProgressBar from './components/WaterProgressBar';
 
@@ -30,11 +28,11 @@ const DayHeader = ({
   setWeightInput,
   isWeightOverlayLoading,
   weight,
-  theme,
   clearGoal,
   todaysWater,
   updateWaterGoal,
 }: DayHeaderProps) => {
+  const { theme } = useTheme();
   return (
     <View>
       <View style={styles.buttonsContainer}>
@@ -132,7 +130,6 @@ type DayHeaderProps = {
   onGoalSubmit: () => void;
   isGoalOverlayLoading: boolean;
   clearGoal: () => void;
-  theme: MyTheme;
   onWeightButtonPress: () => void;
   isWeightOverlayVisible: boolean;
   toggleIsWeightOverlayVisible: (value: boolean) => void;
@@ -146,4 +143,4 @@ type DayHeaderProps = {
   updateWaterGoal: (value: number) => void;
 } & UserContainerProps;
 
-export default container(withTheme(DayHeader));
+export default container(DayHeader);

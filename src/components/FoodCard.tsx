@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from 'react-native-elements';
+import { Card } from '@rneui/themed';
 import { View } from 'react-native';
 import TotalListItem from '../components/TotalListItem';
 
@@ -17,7 +17,8 @@ export default function FoodCard({
   children,
 }: FoodCardProps) {
   return (
-    <Card title={name}>
+    <Card>
+      <Card.Title>{name}</Card.Title>
       <TotalListItem
         label="Calories:"
         total={calories}

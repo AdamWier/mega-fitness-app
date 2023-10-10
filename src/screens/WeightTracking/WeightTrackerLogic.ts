@@ -1,5 +1,5 @@
 import DayDocument from '../../Firebase/Documents/DayDocument';
-interface DataPoint {
+export interface DataPoint {
   x: number;
   y: number | undefined;
 }
@@ -21,7 +21,7 @@ const calculateAverage = (
   accumulator: number,
   currentValue: number,
   index: number,
-  array: number[]
+  array: number[],
 ) =>
   index === array.length - 1
     ? Math.round(((currentValue + accumulator) / array.length) * 10) / 10

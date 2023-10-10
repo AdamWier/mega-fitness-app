@@ -5,7 +5,7 @@ import { container, UserContainerProps } from '../../store/reducers/User';
 import CustomHeader from '../../components/CustomHeader';
 import { dayDocumentService } from '../../Firebase/index';
 import WeightGraph from './components/WeightGraph';
-import { Text } from 'react-native-elements';
+import { Text } from '@rneui/themed';
 import { useEffect } from 'react';
 import DayDocument from '../../Firebase/Documents/DayDocument';
 import { createDataPoints, WeightReport } from './WeightTrackerLogic';
@@ -26,18 +26,18 @@ function WeightTracking({ user }: UserContainerProps) {
           user.uid
             ? await dayDocumentService.findLastThiryDays(
                 beginningOfMonth,
-                user.uid
+                user.uid,
               )
             : []
         ) as DayDocument[];
         setWeightReport(
-          records.length ? createDataPointsCallback(records) : undefined
+          records.length ? createDataPointsCallback(records) : undefined,
         );
         toggleIsLoading(false);
       },
-      [setWeightReport, createDataPointsCallback, user.uid]
+      [setWeightReport, createDataPointsCallback, user.uid],
     ),
-    500
+    500,
   );
 
   useEffect(() => {

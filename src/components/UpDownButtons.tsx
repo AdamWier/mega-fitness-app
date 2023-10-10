@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Icon, Input } from 'react-native-elements';
+import { Button, Icon, Input } from '@rneui/themed';
 import { View, StyleSheet } from 'react-native';
 
 const UpDownButtons = ({
